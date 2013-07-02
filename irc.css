@@ -1,0 +1,28 @@
+/* CSS declarations go here */
+.nav-tabs > .active > a,
+.nav-tabs > .active:hover > a {
+  color: #FFF;
+  background-color: #0088cc;
+}
+.channels.nav, ul {
+  margin-bottom: 0;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+#say {
+  margin-top: 20px;
+  margin-bottom: -20px;
+}
+
+.messages > li > a {
+  color: #333;
+}
+
+form {
+  margin: 0;
+}
+
+#say, #say-input {
+  width: 100%;
+}

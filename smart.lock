@@ -1,0 +1,24 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "irc": {
+        "git": "https://github.com/knubie/meteor-node-irc.git",
+        "branch": "master"
+      },
+      "momentjs": {}
+    },
+    "packages": {
+      "irc": {
+        "git": "https://github.com/knubie/meteor-node-irc.git",
+        "branch": "master",
+        "commit": "4b25ab8ead745797861ec782ecdce3b4f418777e"
+      },
+      "momentjs": {
+        "git": "https://github.com/crapthings/meteor-momentjs.git",
+        "tag": "v2.0.0.1",
+        "commit": "2200ae0f0472164b7cc33dfd9b3ba729a7deb805"
+      }
+    }
+  }
+}

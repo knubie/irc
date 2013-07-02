@@ -1,0 +1,8 @@
+{
+  "packages": {
+    "irc": {
+      "git": "https://github.com/knubie/meteor-node-irc.git"
+    },
+    "momentjs": {}
+  }
+}

@@ -1,0 +1,103 @@
+<head>
+  <title>irc</title>
+</head>
+
+<body>
+  <div style="position: absolute; top:5px; right:5px;">
+    {{loginButtons align='right'}}
+  </div>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      {{> auth}}
+      {{> dashboard}}
+    </div>
+  </div>
+</body>
+
+<template name="auth">
+  {{#unless currentUser}}
+    <h2>Log in / Sign up</h2>
+    <form id="auth-form">
+      <input type="text" id="auth-nick" placeholder="Nick">
+      <input type="password" id="auth-pw" placeholder="Password">
+      <input type="submit" value="Go">
+    </form>
+  {{/unless}}
+</template>
+
+<template name="dashboard">
+  {{#if currentUser}}
+    {{#if connecting}}
+      Connecting..
+    {{/if}}
+    {{#unless connecting}}
+      {{> channels}}
+    {{/unless}}
+  {{/if}}
+</template>
+
+<template name="channels">
+  <div class="span3">
+    <ul class="channels nav nav-pills nav-stacked">
+      {{#each channels}}
+        {{> channel}}
+      {{/each}}
+      <li>
+        <a>
+          <form id="new-channel">
+            <input type="text" style="width: calc(100% - 12px)" id="new-channel-name" placeholder="Add Channel">
+          </form>
+        </a>
+      </li>
+    </ul>
+  </div>
+  {{#if channel_selected}}
+    {{> messages}}
+  {{/if}}
+</template>
+
+<template name="channel">
+  <li class="{{active}}">
+    <a href="#">
+      {{name}}
+      <!--<i class="icon-chevron-right pull-right"></i>-->
+      <button type="button" class="close">&times;</button>
+      <span class="badge badge-info pull-right">{{alert_count}}</span>
+    </a>
+  </li>
+</template>
+
+<template name="messages">
+  <div class="controls span6">
+    <form id="say">
+      <input type="text" class="span6" id="say-input" placeholder="{{channel}}">
+    </form>
+    <ul class="messages-alerts nav nav-tabs nav-stacked">
+      {{#each messages_alerts}}
+        {{> message_alert}}
+      {{/each}}
+    </ul>
+    <ul class="messages nav nav-tabs nav-stacked">
+      {{#each messages}}
+        {{> message}}
+      {{/each}}
+    </ul>
+  </div>
+</template>
+
+<template name="message">
+  <li><a class="{{alert_class}}">
+    <strong>{{from}}</strong> <small class="muted">{{to}}</small>
+    <small class="muted pull-right">{{relativeTime}}</small>
+    <p>{{text}}</p>
+  </a></li>
+</template>
+
+<template name="message_alert">
+  <li><a class="alert-info">
+    <strong>{{from}}</strong> <small class="muted">{{to}}</small>
+    <button type="button" class="close">&times;</button>
+    <small class="muted pull-right">{{relativeTime}}</small>
+    <p>{{text}}</p>
+  </a></li>
+</template>
