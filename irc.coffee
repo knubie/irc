@@ -1,3 +1,7 @@
+#TODO: Add ignore option.
+#TODO: Linkerize urls.
+#TODO: Differentiate your own messages.
+#TODO: Add quick reply to messages.
 Channels = new Meteor.Collection 'channels'
 Channels.allow
   insert: (userId, channel) ->
