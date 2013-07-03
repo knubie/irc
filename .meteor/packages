@@ -6,9 +6,9 @@
 autopublish
 preserve-inputs
 coffeescript
-bootstrap
 accounts-password
 accounts-ui
 irc
 jquery
 insecure
+bootstrap

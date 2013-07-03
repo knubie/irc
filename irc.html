@@ -37,20 +37,16 @@
 </template>
 
 <template name="channels">
-  <div class="span3">
-    <ul class="channels nav nav-pills nav-stacked">
-      {{#each channels}}
-        {{> channel}}
-      {{/each}}
-      <li>
-        <a>
-          <form id="new-channel">
-            <input type="text" style="width: calc(100% - 12px)" id="new-channel-name" placeholder="Add Channel">
-          </form>
-        </a>
-      </li>
-    </ul>
-  </div>
+  <ul class="channels nav nav-stacked">
+    <li class="new-channel-li">
+      <form id="new-channel">
+        <input type="text" id="new-channel-name" placeholder="Add Channel">
+      </form>
+    </li>
+    {{#each channels}}
+      {{> channel}}
+    {{/each}}
+  </ul>
   {{#if channel_selected}}
     {{> messages}}
   {{/if}}
@@ -68,7 +64,7 @@
 </template>
 
 <template name="messages">
-  <div class="controls span6">
+  <div class="messages-container">
     <form id="say">
       <input type="text" class="span6" id="say-input" placeholder="{{channel}}">
     </form>
@@ -77,7 +73,7 @@
         {{> message_alert}}
       {{/each}}
     </ul>
-    <ul class="messages nav nav-tabs nav-stacked">
+    <ul class="messages nav nav-stacked">
       {{#each messages}}
         {{> message}}
       {{/each}}
@@ -86,11 +82,11 @@
 </template>
 
 <template name="message">
-  <li><a class="{{alert_class}}">
+  <li class="{{alert_class}}">
     <strong>{{from}}</strong> <small class="muted">{{to}}</small>
     <small class="muted pull-right">{{relativeTime}}</small>
     <p>{{text}}</p>
-  </a></li>
+  </li>
 </template>
 
 <template name="message_alert">

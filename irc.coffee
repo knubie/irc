@@ -121,11 +121,11 @@ if Meteor.isClient
     messages.map((msg) -> msg).reverse()
 
   Template.message.rendered = ->
-    console.log @
     urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
-    $(@find('p')).html(@data.text.replace(urlExp,"<a href='$1'>$1</a>"))
+    $(@find('p')).html(@data.text.replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
 
   Template.message.relativeTime = ->
+    #FIXME: doesn't work for message sent by user.
     moment(@time._d).fromNow()
 
   Template.message.alert_class = ->
@@ -183,6 +183,7 @@ if Meteor.isServer
             ).run()
         ).run()
 
+    #FIXME: Sometimes this connects multiple times.
     #users.forEach (user) -> connect user
 
     Meteor.methods
