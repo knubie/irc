@@ -1,8 +1,10 @@
 #TODO: Add ignore option.
-#TODO: Linkerize urls.
 #TODO: Differentiate your own messages.
 #TODO: Add quick reply to messages.
-Channels = new Meteor.Collection 'channels'
+#TODO: Add search.
+#TODO: Add PM support.
+#TODO: Add autocomplete.
+@Channels = new Meteor.Collection 'channels'
 Channels.allow
   insert: (userId, channel) ->
     duplicate = ->
@@ -14,7 +16,7 @@ Channels.allow
   remove: (userId, channel) ->
     channel.owner == userId
 
-Messages = new Meteor.Collection 'messages'
+@Messages = new Meteor.Collection 'messages'
 
 if Meteor.isClient
   Template.dashboard.connecting = ->
@@ -70,8 +72,6 @@ if Meteor.isClient
       Session.set 'channel', 'all'
 
   Template.channel.active = ->
-    console.log @name
-    console.log Session.get 'channel'
     if Session.get('channel') is @name then 'active' else 'inactive'
 
   Template.channel.alert_count = ->
@@ -120,6 +120,11 @@ if Meteor.isClient
       alert: true
     messages.map((msg) -> msg).reverse()
 
+  Template.message.rendered = ->
+    console.log @
+    urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
+    $(@find('p')).html(@data.text.replace(urlExp,"<a href='$1'>$1</a>"))
+
   Template.message.relativeTime = ->
     moment(@time._d).fromNow()
 
@@ -131,7 +136,6 @@ if Meteor.isClient
 
   Template.message_alert.events
     'click .close': ->
-      console.log 'close'
       Messages.update
         _id: @_id
       , {$set: {'alert': false}}
@@ -148,7 +152,7 @@ if Meteor.isServer
         _id: user._id
       , {$set: {'profile.connecting': true}}
 
-      clients[user.username] = new IRC.Client 'irc.freenode.net', user.username,
+      clients[user.username] = new IRC.Client 'irc.choopa.net', user.username,
         autoConnect: false
 
       clients[user.username].on 'error', (msg) ->
@@ -179,7 +183,7 @@ if Meteor.isServer
             ).run()
         ).run()
 
-    users.forEach (user) -> connect user
+    #users.forEach (user) -> connect user
 
     Meteor.methods
       newBot: (user) ->
