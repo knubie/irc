@@ -46,7 +46,7 @@ if Meteor.isClient
     'submit #new-channel': (e, t) ->
       e.preventDefault()
       name = t.find('#new-channel-name').value
-      name = t.find('#new-channel-name').value = ''
+      t.find('#new-channel-name').value = ''
       # Add channel to Collection.
       Channels.insert
         owner: Meteor.userId()
@@ -158,7 +158,7 @@ if Meteor.isServer
         _id: user._id
       , {$set: {'profile.connecting': true}}
 
-      clients[user.username] = new IRC.Client 'irc.freenode.net', user.username,
+      clients[user.username] = new IRC.Client 'irc.choopa.net', user.username,
         autoConnect: false
 
       clients[user.username].on 'error', (msg) ->
