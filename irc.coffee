@@ -46,6 +46,7 @@ if Meteor.isClient
     'submit #new-channel': (e, t) ->
       e.preventDefault()
       name = t.find('#new-channel-name').value
+      name = t.find('#new-channel-name').value = ''
       # Add channel to Collection.
       Channels.insert
         owner: Meteor.userId()
@@ -87,6 +88,10 @@ if Meteor.isClient
     count = messages.map((msg) -> msg).length
     if count > 0 then count else ''
 
+  Template.messages.rendered = ->
+    $(window).scrollTop(99999)
+    #FIXME: why aint this workin'
+
   Template.messages.events
     'submit #say': (e, t) ->
       e.preventDefault()
@@ -111,7 +116,6 @@ if Meteor.isClient
       messages = Messages.find
         owner: Meteor.userId()
         to: Session.get('channel')
-    messages.map((msg) -> msg).reverse()
 
   Template.messages.messages_alerts = ->
     messages = Messages.find
@@ -135,6 +139,9 @@ if Meteor.isClient
     moment(@time._d).fromNow()
 
   Template.message_alert.events
+    'click li': ->
+      $(window).scrollTop $("##{@_id}").offset().top
+
     'click .close': ->
       Messages.update
         _id: @_id
@@ -143,7 +150,6 @@ if Meteor.isClient
 if Meteor.isServer
   Meteor.startup ->
     Fiber = Npm.require("fibers")
-
     clients = {}
     users = Meteor.users.find {}
     connect = (user) ->
@@ -152,7 +158,7 @@ if Meteor.isServer
         _id: user._id
       , {$set: {'profile.connecting': true}}
 
-      clients[user.username] = new IRC.Client 'irc.choopa.net', user.username,
+      clients[user.username] = new IRC.Client 'irc.freenode.net', user.username,
         autoConnect: false
 
       clients[user.username].on 'error', (msg) ->
@@ -184,7 +190,7 @@ if Meteor.isServer
         ).run()
 
     #FIXME: Sometimes this connects multiple times.
-    #users.forEach (user) -> connect user
+    users.forEach (user) -> connect user
 
     Meteor.methods
       newBot: (user) ->

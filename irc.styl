@@ -1,0 +1,178 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700)
+
+turquoise = #1ABC9C
+turquoise-dark = #16A085
+
+emerald = #2ECC71
+nephritis = #27AE60
+
+peter-river = #3498DB
+belize-hole = #2980B9
+
+amethyst = #9B59B6
+wisteria = #8E44AD
+
+wet-asphalt = #34495E
+midnight-blue = #2C3E50
+
+sun-flower = #F1C40F
+orange = #F39C12
+
+carrot = #E67E22
+pumpkin = #D35400
+
+alizarin = #E74C3C
+pomegranate = #C0392B
+
+clouds = #ECF0F1
+silver = #BDC3C7
+
+concrete = #95A5A6
+asbestos = #7F8C8D
+
+body
+  background-color: silver
+  font-family: 'Lato', sans-serif
+  font-size: 16px
+
+.headline 
+  width: 300px
+  margin: 0 auto
+  color: #ECF0F1
+  font-size: 100px
+  text-align: center
+  font-weight: 700px
+  margin-top: 100px
+  height: 125px
+  text-shadow: 0 1px 0 #BDC3C7, 0 2px 0 #BDC3C7, 0 3px 0 #BDC3C7, 0 4px 0 #BDC3C7
+
+#auth-form > input[type="submit"] 
+  background-color: #3498DB
+  border-radius: 8px
+  box-shadow: 0 5px 0 #2980B9
+  margin-bottom: 20px
+  padding: 0 20px
+  border: none
+  color: #ECF0F1
+  font-size: 28px
+  font-weight: bold
+  width: 100%
+
+
+.channels.nav 
+  background-color: clouds
+  color: wet-asphalt
+  height: 100%
+  position: fixed
+  top: 0
+  left: 0
+  width: 300px
+
+.channels > li > a,
+.channels > li > form > input 
+  color: asbestos
+  padding: 15px 30px
+  font-size: 28px
+
+.channels > li > a > button 
+  display: none
+
+.channels > li:hover > a > button 
+  display: inline-block
+
+.channels > .active > a,
+.channels > .active:hover > a,
+.channels > li > a:hover 
+  color: #FFF
+  background-color: #3498DB
+
+.new-channel-li 
+  background-color: rgba(0, 0, 0, 0.075)
+  border-bottom: 2px solid rgba(0, 0, 0, 0.02)
+
+.new-channel-li input,
+.new-channel-li input:focus 
+  background-color: rgba(0,0,0,0)
+  border: none
+  box-shadow: none
+  line-height: normal
+  margin-top: 10px
+
+.new-channel-li input::-webkit-input-placeholder 
+  color: rgba(0, 0, 0, 0.15)
+
+#say
+  margin-top: 20px
+  margin-bottom: -20px
+
+.messages, .messages-alerts
+  margin: 0
+
+.messages > li,
+.messages-alerts > li
+  background-color: #ecf0f1
+  border-radius: 8px
+  box-shadow: 0 5px 0 rgba(236, 240, 241, 0.8)
+  margin-bottom: 20px
+  padding: 20px
+  color: asbestos
+
+.messages-alerts > li,
+.messages > li.alert-info
+  color: #ECF0F1
+  background-color: #3498DB
+  box-shadow: 0 5px 0 #2980B9
+
+.messages-alerts > li:hover
+  cursor: pointer
+  background-color: belize-hole
+
+.messages-alerts > li > .muted,
+.messages > li.alert-info > .muted
+  color: rgba(0,0,0,0.3)
+
+.messages > li:hover 
+  cursor: pointer
+
+.messages > li > a:link 
+  color: #3498DB
+
+.messages > li > p,
+.messages-alerts > li > p 
+  font-size: 28px
+  line-height: 28px
+
+.reply:hover 
+  text-decoration: underline
+
+form 
+  margin: 0
+
+#say, #say-input 
+  width: 100%
+
+.messages-container 
+  margin-left: 300px
+  padding: 20px
+
+.muted 
+  color: #BBB
+
+#auth-form 
+  width: 30vw
+  margin: 0 auto
+
+#auth-form > input,
+#auth-form > input:focus 
+  min-width: 260px
+  width: 100%
+  height: 60px
+  font-size: 21px
+  padding: 0 20px
+  margin-bottom: 20px
+  line-height: normal
+  border-radius: 8px
+  box-sizing: border-box
+
+.badge-info
+  background-color: peter-river

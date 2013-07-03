@@ -6,17 +6,13 @@
   <div style="position: absolute; top:5px; right:5px;">
     {{loginButtons align='right'}}
   </div>
-  <div class="container-fluid">
-    <div class="row-fluid">
-      {{> auth}}
-      {{> dashboard}}
-    </div>
-  </div>
+  {{> auth}}
+  {{> dashboard}}
 </body>
 
 <template name="auth">
   {{#unless currentUser}}
-    <h2>Log in / Sign up</h2>
+    <h1 class="headline">twirc</h1>
     <form id="auth-form">
       <input type="text" id="auth-nick" placeholder="Nick">
       <input type="password" id="auth-pw" placeholder="Password">
@@ -65,24 +61,24 @@
 
 <template name="messages">
   <div class="messages-container">
-    <form id="say">
-      <input type="text" class="span6" id="say-input" placeholder="{{channel}}">
-    </form>
-    <ul class="messages-alerts nav nav-tabs nav-stacked">
-      {{#each messages_alerts}}
-        {{> message_alert}}
-      {{/each}}
-    </ul>
     <ul class="messages nav nav-stacked">
       {{#each messages}}
         {{> message}}
       {{/each}}
     </ul>
+    <ul class="messages-alerts nav nav-tabs nav-stacked">
+      {{#each messages_alerts}}
+        {{> message_alert}}
+      {{/each}}
+    </ul>
+    <form id="say">
+      <input type="text" class="span6" id="say-input" placeholder="{{channel}}">
+    </form>
   </div>
 </template>
 
 <template name="message">
-  <li class="{{alert_class}}">
+<li id="{{_id}}" class="{{alert_class}}">
     <span class="reply">
       <strong>{{from}}</strong> <small class="muted">{{to}}</small>
     </span>
@@ -92,10 +88,10 @@
 </template>
 
 <template name="message_alert">
-  <li><a class="alert-info">
+  <li>
     <strong>{{from}}</strong> <small class="muted">{{to}}</small>
     <button type="button" class="close">&times;</button>
     <small class="muted pull-right">{{relativeTime}}</small>
     <p>{{text}}</p>
-  </a></li>
+  </li>
 </template>
