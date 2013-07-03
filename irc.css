@@ -2,7 +2,7 @@
 
 body {
   background-color: #2c3e50;
-  /*font-family: 'Lato', sans-serif;*/
+  font-family: 'Lato', sans-serif;
   font-size: 16px;
 }
 .channels.nav {
@@ -20,6 +20,12 @@ body {
   padding: 15px 30px;
   font-size: 28px;
 }
+.channels > li > a > button {
+  display: none;
+}
+.channels > li:hover > a > button {
+  display: inline-block;
+}
 .channels > .active > a,
 .channels > .active:hover > a,
 .channels > li > a:hover {
@@ -35,6 +41,8 @@ body {
   background-color: rgba(0,0,0,0);
   border: none;
   box-shadow: none;
+  line-height: normal;
+  margin-top: 10px;
 }
 .new-channel-li input::-webkit-input-placeholder {
   color: rgba(255, 255, 255, 0.25);
@@ -55,6 +63,13 @@ body {
 }
 .messages > li > a:link {
   color: #3498DB;
+}
+.messages > li > p {
+  font-size: 28px;
+  line-height: 28px;
+}
+.reply:hover {
+  text-decoration: underline;
 }
 form {
   margin: 0;

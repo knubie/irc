@@ -83,7 +83,9 @@
 
 <template name="message">
   <li class="{{alert_class}}">
-    <strong>{{from}}</strong> <small class="muted">{{to}}</small>
+    <span class="reply">
+      <strong>{{from}}</strong> <small class="muted">{{to}}</small>
+    </span>
     <small class="muted pull-right">{{relativeTime}}</small>
     <p>{{text}}</p>
   </li>
