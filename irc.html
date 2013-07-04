@@ -49,7 +49,7 @@
 </template>
 
 <template name="channel">
-<li class="{{name}} {{active}}">
+  <li class="{{name}} {{active}}">
     <a href="#">
       {{name}}
       <!--<i class="icon-chevron-right pull-right"></i>-->
@@ -85,7 +85,7 @@
         <small class="muted">{{to}}</small>
       {{/if}}
     </span>
-    <small class="muted pull-right">{{relativeTime}}</small>
+    <small class="muted pull-right">{{timeAgo}}</small>
     <p>{{text}}</p>
   </li>
 </template>

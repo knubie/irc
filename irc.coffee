@@ -130,8 +130,9 @@ if Meteor.isClient
     messages.map((msg) -> msg).reverse()
 
   Template.message.rendered = ->
+    #FIXME: this causes html to go unescaped.
     urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
-    $(@find('p')).html(@data.text.replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
+    #$(@find('p')).html(@data.text.replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
 
   Template.message.events
     'click .reply': ->
@@ -139,10 +140,10 @@ if Meteor.isClient
       $('#say-input').val("#{@from} ")
       $('#say-input').focus()
 
-  Template.message.all = ->
-    Session.get('channel') is 'all'
+  Template.message
+    all: Session.get('channel') is 'all'
 
-  Template.message.relativeTime = ->
+  Template.message.timeAgo = ->
     #FIXME: doesn't work for message sent by user.
     moment(@time._d).fromNow()
 
@@ -172,7 +173,7 @@ if Meteor.isServer
         _id: user._id
       , {$set: {'profile.connecting': true}}
 
-      clients[user.username] = new IRC.Client 'irc.choopa.net', user.username,
+      clients[user.username] = new IRC.Client 'irc.freenode.net', user.username,
         autoConnect: false
 
       clients[user.username].on 'error', (msg) ->
