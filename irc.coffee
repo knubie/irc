@@ -204,7 +204,7 @@ if Meteor.isServer
         ).run()
 
     #FIXME: Sometimes this connects multiple times.
-    users.forEach (user) -> connect user
+    #users.forEach (user) -> connect user
 
     Meteor.methods
       newBot: (user) ->

@@ -46,17 +46,18 @@ body
   height: 125px
   text-shadow: 0 1px 0 #BDC3C7, 0 2px 0 #BDC3C7, 0 3px 0 #BDC3C7, 0 4px 0 #BDC3C7
 
-#auth-form > input[type="submit"] 
-  background-color: #3498DB
-  border-radius: 8px
-  box-shadow: 0 5px 0 #2980B9
-  margin-bottom: 20px
-  padding: 0 20px
-  border: none
-  color: #ECF0F1
-  font-size: 28px
-  font-weight: bold
-  width: 100%
+#auth-form
+  input[type="submit"] 
+    background-color: #3498DB
+    border-radius: 8px
+    box-shadow: 0 5px 0 #2980B9
+    margin-bottom: 20px
+    padding: 0 20px
+    border: none
+    color: #ECF0F1
+    font-size: 28px
+    font-weight: bold
+    width: 100%
 
 
 .channels.nav 
@@ -67,24 +68,23 @@ body
   top: 0
   left: 0
   width: 300px
+  li
+    a > button 
+      display: none
+    a, form > input 
+      color: asbestos
+      padding: 15px 30px
+      font-size: 28px
+  li:hover > a > button 
+    display: inline-block
+  li.all:hover > a > button 
+    display:none
 
-.channels > li > a,
-.channels > li > form > input 
-  color: asbestos
-  padding: 15px 30px
-  font-size: 28px
-
-.channels > li > a > button 
-  display: none
-
-.channels > li:hover > a > button 
-  display: inline-block
-
-.channels > .active > a,
-.channels > .active:hover > a,
-.channels > li > a:hover 
-  color: #FFF
-  background-color: #3498DB
+  .active > a,
+  .active:hover > a,
+  li > a:hover 
+    color: #FFF
+    background-color: #3498DB
 
 .new-channel-li 
   background-color: rgba(0, 0, 0, 0.075)
