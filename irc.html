@@ -6,11 +6,11 @@
   <div style="position: absolute; top:5px; right:5px;">
     {{loginButtons align='right'}}
   </div>
-  {{> auth}}
+  {{> home}}
   {{> dashboard}}
 </body>
 
-<template name="auth">
+<template name="home">
   {{#unless currentUser}}
     <h1 class="headline">twirc</h1>
     <form id="auth-form">
@@ -78,9 +78,12 @@
 </template>
 
 <template name="message">
-<li id="{{_id}}" class="{{alert_class}}">
+  <li id="{{_id}}" class="{{alert_class}}">
     <span class="reply">
-      <strong>{{from}}</strong> <small class="muted">{{to}}</small>
+      <strong>{{from}}</strong>
+      {{#if all}}
+        <small class="muted">{{to}}</small>
+      {{/if}}
     </span>
     <small class="muted pull-right">{{relativeTime}}</small>
     <p>{{text}}</p>

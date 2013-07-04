@@ -3,6 +3,10 @@
 #TODO: Add search.
 #TODO: Add PM support.
 #TODO: Add autocomplete.
+#TODO: fixe all section.
+#TODO: combine messages from same nick
+#TODO: add nicklist to channels
+#TODO: fade nicks that are no longer in channel.
 @Channels = new Meteor.Collection 'channels'
 Channels.allow
   insert: (userId, channel) ->
@@ -18,10 +22,8 @@ Channels.allow
 @Messages = new Meteor.Collection 'messages'
 
 if Meteor.isClient
-  Template.dashboard.connecting = ->
-    return Meteor.user().profile.connecting
 
-  Template.auth.events
+  Template.home.events
     'submit #auth-form': (e,t) ->
       e.preventDefault()
       username = t.find('#auth-nick').value
@@ -40,6 +42,9 @@ if Meteor.isClient
             owner: Meteor.userId()
             name: 'all'
           Meteor.apply 'newBot', [Meteor.user()]
+
+  Template.dashboard.connecting = ->
+    return Meteor.user().profile.connecting
 
   Template.channels.events
     'submit #new-channel': (e, t) ->
@@ -134,6 +139,9 @@ if Meteor.isClient
       $('#say-input').val("#{@from} ")
       $('#say-input').focus()
 
+  Template.message.all = ->
+    Session.get('channel') is 'all'
+
   Template.message.relativeTime = ->
     #FIXME: doesn't work for message sent by user.
     moment(@time._d).fromNow()
@@ -196,7 +204,7 @@ if Meteor.isServer
         ).run()
 
     #FIXME: Sometimes this connects multiple times.
-    #users.forEach (user) -> connect user
+    users.forEach (user) -> connect user
 
     Meteor.methods
       newBot: (user) ->
