@@ -1,6 +1,5 @@
 #TODO: Add ignore option.
 #TODO: Differentiate your own messages.
-#TODO: Add quick reply to messages.
 #TODO: Add search.
 #TODO: Add PM support.
 #TODO: Add autocomplete.
@@ -63,6 +62,7 @@ if Meteor.isClient
 
   Template.channel.events
     'click li': (e,t) ->
+      #FIXME: make this work for touch.
       Session.set 'channel', @name
       $('.nav > li > a > i').removeClass 'icon-white'
       $(e.currentTarget).find('i').addClass 'icon-white'
@@ -128,6 +128,12 @@ if Meteor.isClient
     urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
     $(@find('p')).html(@data.text.replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
 
+  Template.message.events
+    'click .reply': ->
+      console.log 'clicked reply'
+      $('#say-input').val("#{@from} ")
+      $('#say-input').focus()
+
   Template.message.relativeTime = ->
     #FIXME: doesn't work for message sent by user.
     moment(@time._d).fromNow()
@@ -190,7 +196,7 @@ if Meteor.isServer
         ).run()
 
     #FIXME: Sometimes this connects multiple times.
-    users.forEach (user) -> connect user
+    #users.forEach (user) -> connect user
 
     Meteor.methods
       newBot: (user) ->
