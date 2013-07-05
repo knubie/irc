@@ -41,22 +41,25 @@ if Meteor.isClient
           Channels.insert
             owner: Meteor.userId()
             name: 'all'
-          Meteor.apply 'newBot', [Meteor.user()]
+          Meteor.apply 'newClient', [Meteor.user()]
 
   Template.dashboard.connecting = ->
     return Meteor.user().profile.connecting
+
+  Template.channel.rendered = ->
+    console.log @data.nicks
+    console.log @
 
   Template.channels.events
     'submit #new-channel': (e, t) ->
       e.preventDefault()
       name = t.find('#new-channel-name').value
       t.find('#new-channel-name').value = ''
-      # Add channel to Collection.
-      Channels.insert
+      newChannel = Channels.insert
         owner: Meteor.userId()
         name: name
-      # Join channel.
-      Meteor.apply 'join', [Meteor.user(), name]
+        nicks: []
+      Meteor.apply 'join', [Meteor.user(), Channels.findOne newChannel]
 
   Template.channels.channels = ->
     Channels.find
@@ -140,8 +143,8 @@ if Meteor.isClient
       $('#say-input').val("#{@from} ")
       $('#say-input').focus()
 
-  Template.message
-    all: Session.get('channel') is 'all'
+  Template.message.all = ->
+    Session.get('channel') is 'all'
 
   Template.message.timeAgo = ->
     #FIXME: doesn't work for message sent by user.
@@ -151,7 +154,7 @@ if Meteor.isClient
     'alert-info' if @alert
 
   Template.message_alert.relativeTime = ->
-    moment(@time._d).fromNow()
+    moment(@time).fromNow()
 
   Template.message_alert.events
     'click li': ->
@@ -163,59 +166,75 @@ if Meteor.isClient
       , {$set: {'alert': false}}
 
 if Meteor.isServer
+
+  Fiber = Npm.require("fibers")
+
   Meteor.startup ->
-    Fiber = Npm.require("fibers")
+
     clients = {}
-    users = Meteor.users.find {}
+    join = (user, channel) ->
+      if /^[#](.*)$/.test channel.name
+        clients[user._id].join channel.name
+
     connect = (user) ->
-      console.log "Connecting #{user.username}"
-      Meteor.users.update
-        _id: user._id
-      , {$set: {'profile.connecting': true}}
+      # Set user status to connecting.
+      Meteor.users.update user._id, $set: {'profile.connecting': true}
 
-      clients[user.username] = new IRC.Client 'irc.freenode.net', user.username,
+      # Create new IRC instance.
+      clients[user._id] = new IRC.Client 'irc.choopa.net', user.username,
         autoConnect: false
+      clients[user._id].on 'error', (msg) -> console.log msg
 
-      clients[user.username].on 'error', (msg) ->
-        console.log msg
-
-      clients[user.username].connect ->
-        console.log "#{user.username} connected to irc."
-        Fiber(->
-          Meteor.users.update
-            _id: user._id
-          , {$set: {'profile.connecting': false}}
-
-          channels = Channels.find {owner: user._id}
-          channels.forEach (channel) ->
-            console.log "Joining channel #{channel.name}"
-            if /^[#](.*)$/.test channel.name
-              clients[user.username].join channel.name
-
-          clients[user.username].on 'message', (from, to, text, message) ->
-            Fiber(->
-              Messages.insert
-                from: from
-                to: to
-                text: text
-                time: moment()
-                owner: user._id
-                alert: if text.match ".*#{user.username}.*" then true else false
-            ).run()
-        ).run()
+      clients[user._id].connect Meteor.bindEnvironment ->
+        # Set user status to connected.
+        Meteor.users.update user._id, $set: {'profile.connecting': false}
+        # Listen for messages and create new Messages doc for each one.
+        clients[user._id].on 'message'
+        , Meteor.bindEnvironment (from, to, text, message) ->
+          Messages.insert
+            from: from
+            to: to
+            text: text
+            time: new Date
+            owner: user._id
+            alert: if text.match ".*#{user.username}.*" then true else false
+        , (err) -> console.log err
+        # Listen for when the client requests names from a channel
+        # and log them to corresponding the channel document.
+        clients[user._id].on 'names', Meteor.bindEnvironment (channel,nicks) ->
+          nicksArray = for nick, status of nicks
+            nick
+          console.log nicksArray
+          Channels.update
+            name: channel
+            owner: user._id
+          , {$set: {'nicks': nicksArray}}
+        , (err) -> console.log err
+        # Listen for when users join or part a channel.
+        # Request names for that channel from the server.
+        # When names are request the names listener will be called
+        # which sets the name to the corresponding channel doc.
+        clients[user._id].on "join", Meteor.bindEnvironment (chan) ->
+          clients[user._id].send 'NAMES', chan
+        , (err) -> console.log err
+        clients[user._id].on "part", Meteor.bindEnvironment (chan) ->
+          clients[user._id].send 'NAMES', chan
+        , (err) -> console.log err
+        # Join all channels subscribed to by user.
+        channels = Channels.find owner: user._id
+        channels.forEach (channel) -> join user, channel
+      , (err) -> console.log err
 
     #FIXME: Sometimes this connects multiple times.
+    #users = Meteor.users.find {}
     #users.forEach (user) -> connect user
 
     Meteor.methods
-      newBot: (user) ->
+      newClient: (user) ->
         connect user
-
       join: (user, channel) ->
-        clients[user.username].join channel
-
+        join user, channel
       part: (user, channel) ->
-        clients[user.username].part channel
-
+        clients[user._id].part channel
       say: (user, channel, message) ->
-        clients[user.username].say channel, message
+        clients[user._id].say channel, message
