@@ -66,9 +66,9 @@
         {{> message}}
       {{/each}}
     </ul>
-    <ul class="messages-alerts nav nav-tabs nav-stacked">
-      {{#each messages_alerts}}
-        {{> message_alert}}
+    <ul class="notifications nav nav-tabs nav-stacked">
+      {{#each notifications}}
+        {{> notifications}}
       {{/each}}
     </ul>
     <form id="say">
@@ -78,18 +78,35 @@
 </template>
 
 <template name="message">
-  <li id="{{_id}}" class="{{message_class}}">
-    <span class="reply">
-      <strong>{{from}}</strong>
-      {{#if all}}
-        <small class="muted">{{to}}</small>
-      {{/if}}
-    </span>
-    <small class="muted pull-right">{{timeAgo}}</small>
+  {{#unless joinToPrev}}
+    <li id="{{_id}}" class="message {{message_class}}">
+      <span class="reply">
+        <strong>{{from}}</strong>
+        {{#if all}}
+          <small class="muted">{{to}}</small>
+        {{/if}}
+      </span>
+      <small class="muted pull-right">{{timeAgo}}</small>
+      <p>{{text}}</p>
+    </li>
+  {{/unless}}
+  {{#if joinToPrev}}
+    <li id="{{_id}}" class="message join {{message_class}}">
+      <div class="divider"></div>
+      <small class="muted pull-right">{{timeAgo}}</small>
+      <p>{{text}}</p>
+    </li>
+  {{/if}}
+</template>
+
+<template name="notifications">
+  <li class="message">
+    <strong>{{from}}</strong>
+    <button type="button" class="close">&times;</button>
+    <small class="muted pull-right">{{relativeTime}}</small>
     <p>{{text}}</p>
   </li>
 </template>
-
 <template name="message_alert">
   <li>
     <strong>{{from}}</strong> <small class="muted">{{to}}</small>

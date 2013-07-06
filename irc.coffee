@@ -3,10 +3,6 @@
 #TODO: Add search.
 #TODO: Add PM support.
 #TODO: Add autocomplete.
-#TODO: fixe all section.
-#TODO: combine messages from same nick
-#TODO: add nicklist to channels
-#TODO: fade nicks that are no longer in channel.
 @Channels = new Meteor.Collection 'channels'
 Channels.allow
   insert: (userId, channel) ->
@@ -108,6 +104,7 @@ if Meteor.isClient
         text: message
         time: moment()
         owner: Meteor.userId()
+        type: 'self'
 
   Template.messages.channel = ->
     Session.get('channel')
@@ -120,12 +117,16 @@ if Meteor.isClient
       messages = Messages.find
         owner: Meteor.userId()
         to: Session.get('channel')
+    prev = null
+    messages.map (msg) ->
+      msg.prev = prev
+      prev = msg
 
-  Template.messages.messages_alerts = ->
+  Template.messages.notifications = ->
     messages = Messages.find
       owner: Meteor.userId()
       to: Session.get('channel')
-      alert: true
+      type: 'mention'
     messages.map((msg) -> msg).reverse()
 
   Template.message.rendered = ->
@@ -138,6 +139,10 @@ if Meteor.isClient
       console.log 'clicked reply'
       $('#say-input').val("#{@from} ")
       $('#say-input').focus()
+
+  Template.message.joinToPrev = ->
+    unless @prev is null
+      @prev.from is @from
 
   Template.message.all = ->
     Session.get('channel') is 'all'
@@ -156,17 +161,17 @@ if Meteor.isClient
     return status + ' ' + @type
     @type
 
-  Template.message_alert.relativeTime = ->
+  Template.notifications.relativeTime = ->
     moment(@time).fromNow()
 
-  Template.message_alert.events
+  Template.notifications.events
     'click li': ->
       $(window).scrollTop $("##{@_id}").offset().top
 
     'click .close': ->
       Messages.update
         _id: @_id
-      , {$set: {'alert': false}}
+      , {$set: {'type': 'normal'}}
 
 if Meteor.isServer
 

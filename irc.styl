@@ -105,35 +105,38 @@ body
   margin-top: 20px
   margin-bottom: -20px
 
-.messages, .messages-alerts
+.messages, .notifications
   margin: 0
 
-.messages > li,
-.messages-alerts > li
+.messages
+  .offline
+    opacity: 0.5
+  .join
+    margin-top: -30px
+
+.message
   background-color: #ecf0f1
   border-radius: 8px
   box-shadow: 0 5px 0 rgba(236, 240, 241, 0.8)
   margin-bottom: 20px
   padding: 20px
   color: asbestos
+  .muted
+    color: rgba(0,0,0,0.3)
+  .divider
+    width: 100%
+    border-bottom: 1px solid silver
+    margin: -15px 0 15px 0
 
-.messages
-  li.offline
-    opacity: 0.5
-
-.messages-alerts > li,
-.messages > li.mention
+.notifications > .message,
+.messages > .mention
   color: #ECF0F1
   background-color: #3498DB
   box-shadow: 0 5px 0 #2980B9
 
-.messages-alerts > li:hover
+.notifications > .message:hover
   cursor: pointer
   background-color: belize-hole
-
-.messages-alerts > li > .muted,
-.messages > li.alert-info > .muted
-  color: rgba(0,0,0,0.3)
 
 .messages > li:hover 
   cursor: pointer
@@ -142,7 +145,7 @@ body
   color: #3498DB
 
 .messages > li > p,
-.messages-alerts > li > p 
+.notifications > li > p 
   font-size: 28px
   line-height: 28px
   font-weight: 300
@@ -167,9 +170,6 @@ form
 .messages-container 
   margin-left: 300px
   padding: 20px
-
-.muted 
-  color: #BBB
 
 #auth-form 
   width: 30vw
