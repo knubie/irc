@@ -1,4 +1,6 @@
+#TODO: use pub/sub and remove autopublish
 #TODO: Add ignore option.
+#TODO: Add 'view conversation' toggle.
 #TODO: Differentiate your own messages.
 #TODO: Add search.
 #TODO: Add PM support.
@@ -102,7 +104,7 @@ if Meteor.isClient
         from: Meteor.user().username
         to: Session.get('channel')
         text: message
-        time: moment()
+        time: new Date
         owner: Meteor.userId()
         type: 'self'
 
@@ -148,13 +150,10 @@ if Meteor.isClient
     Session.get('channel') is 'all'
 
   Template.message.timeAgo = ->
-    #FIXME: doesn't work for message sent by user.
-    moment(@time._d).fromNow()
+    moment(@time).fromNow()
 
   Template.message.message_class = ->
     ch = Channels.findOne {name: @to, owner: Meteor.userId()}
-    console.log @to
-    console.log ch
     status = 'offline'
     for nick in ch.nicks
       status = 'online' if @from is nick
@@ -189,7 +188,7 @@ if Meteor.isServer
       Meteor.users.update user._id, $set: {'profile.connecting': true}
 
       # Create new IRC instance.
-      clients[user._id] = new IRC.Client 'irc.freenode.net', user.username,
+      clients[user._id] = new IRC.Client 'irc.choopa.net', user.username,
         autoConnect: false
       clients[user._id].on 'error', (msg) -> console.log msg
 

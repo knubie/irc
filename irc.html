@@ -83,7 +83,7 @@
       <span class="reply">
         <strong>{{from}}</strong>
         {{#if all}}
-          <small class="muted">{{to}}</small>
+          <span class="muted">{{to}}</span>
         {{/if}}
       </span>
       <small class="muted pull-right">{{timeAgo}}</small>
@@ -103,7 +103,7 @@
   <li class="message">
     <strong>{{from}}</strong>
     <button type="button" class="close">&times;</button>
-    <small class="muted pull-right">{{relativeTime}}</small>
+    <span class="muted pull-right">{{relativeTime}}</span>
     <p>{{text}}</p>
   </li>
 </template>
