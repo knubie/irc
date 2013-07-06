@@ -46,10 +46,6 @@ if Meteor.isClient
   Template.dashboard.connecting = ->
     return Meteor.user().profile.connecting
 
-  Template.channel.rendered = ->
-    console.log @data.nicks
-    console.log @
-
   Template.channels.events
     'submit #new-channel': (e, t) ->
       e.preventDefault()
@@ -150,8 +146,15 @@ if Meteor.isClient
     #FIXME: doesn't work for message sent by user.
     moment(@time._d).fromNow()
 
-  Template.message.alert_class = ->
-    'alert-info' if @alert
+  Template.message.message_class = ->
+    ch = Channels.findOne {name: @to, owner: Meteor.userId()}
+    console.log @to
+    console.log ch
+    status = 'offline'
+    for nick in ch.nicks
+      status = 'online' if @from is nick
+    return status + ' ' + @type
+    @type
 
   Template.message_alert.relativeTime = ->
     moment(@time).fromNow()
@@ -186,18 +189,22 @@ if Meteor.isServer
       clients[user._id].on 'error', (msg) -> console.log msg
 
       clients[user._id].connect Meteor.bindEnvironment ->
+        console.log 'connected.'
         # Set user status to connected.
         Meteor.users.update user._id, $set: {'profile.connecting': false}
         # Listen for messages and create new Messages doc for each one.
-        clients[user._id].on 'message'
-        , Meteor.bindEnvironment (from, to, text, message) ->
+        clients[user._id].on 'message', Meteor.bindEnvironment (from, to, text, message) ->
+          if text.match ".*#{user.username}.*"
+            type = 'mention'
+          else
+            type = 'normal'
           Messages.insert
             from: from
             to: to
             text: text
             time: new Date
             owner: user._id
-            alert: if text.match ".*#{user.username}.*" then true else false
+            type: type
         , (err) -> console.log err
         # Listen for when the client requests names from a channel
         # and log them to corresponding the channel document.
