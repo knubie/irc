@@ -1,5 +1,5 @@
 channelsHandle = Meteor.subscribe 'channels'
-messagesHandle = Meteor.subscribeWithPagination 'messages', (-> Session.get('channel')), 2
+messagesHandle = Meteor.subscribeWithPagination 'messages', (-> Session.get('channel')), 50
 
 Template.home.events
   'submit #auth-form': (e,t) ->
@@ -36,8 +36,7 @@ Template.channels.events
     Meteor.apply 'join', [Meteor.user(), Channels.findOne newChannel]
 
 Template.channels.channels = ->
-  Channels.find
-    owner: Meteor.userId()
+  Channels.find {}
 
 Template.channels.channel_selected = ->
   Session.get 'channel'
