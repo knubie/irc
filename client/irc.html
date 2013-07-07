@@ -44,7 +44,9 @@
     {{/each}}
   </ul>
   {{#if channel_selected}}
-    {{> messages}}
+    <div class="messages-container">
+      {{> messages}}
+    </div>
   {{/if}}
 </template>
 
@@ -60,23 +62,21 @@
 </template>
 
 <template name="messages">
-  <div class="messages-container">
-    <span class="load-next">Load more.</span>
-    <ul class="messages nav nav-stacked">
-      {{#each messages}}
-        {{> message}}
-      {{/each}}
-    </ul>
-    <ul class="notifications nav nav-tabs nav-stacked">
-      {{#each notifications}}
-        {{> notifications}}
-      {{/each}}
-    </ul>
-    <div class="input-container">
-      <form id="say">
-        <input type="text" class="span6" id="say-input" placeholder="{{channel}}">
-      </form>
-    </div>
+  <span class="load-next">Load more.</span>
+  <ul class="messages nav nav-stacked">
+    {{#each messages}}
+      {{> message}}
+    {{/each}}
+  </ul>
+  <ul class="notifications nav nav-tabs nav-stacked">
+    {{#each notifications}}
+      {{> notifications}}
+    {{/each}}
+  </ul>
+  <div class="input-container">
+    <form id="say">
+      <input type="text" class="span6" id="say-input" placeholder="{{channel}}">
+    </form>
   </div>
 </template>
 

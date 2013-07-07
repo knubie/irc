@@ -85,7 +85,6 @@ Template.messages.rendered = ->
     #]
     #local: ch.nicks
   $(window).scrollTop(99999)
-  #FIXME: why aint this workin'
 
 Template.messages.events
   'submit #say': (e, t) ->
@@ -114,7 +113,6 @@ Template.messages.notifications = ->
   messages.map((msg) -> msg).reverse()
 
 Template.message.rendered = ->
-  #FIXME: this causes html to go unescaped.
   urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
   p = $(@find('p'))
   p.html(p.html().replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
@@ -134,7 +132,9 @@ Template.message.all = ->
 Template.message.timeAgo = ->
   moment(@time).fromNow()
 
-#Meteor.setInterval Template.message, 60000 # One minute
+Meteor.setInterval ->
+  $('.messages-container').html Meteor.render(Template.messages)
+, 60000 # One minute
 
 Template.message.message_class = ->
   ch = Channels.findOne {name: @to, owner: Meteor.userId()}

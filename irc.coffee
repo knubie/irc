@@ -1,4 +1,4 @@
-#TODO: Make relative time update in real time.
+#TODO: Make <tab> focus #say-input from anywhere.
 #TODO: Add ignore option.
 #TODO: Add 'view conversation' toggle.
 #TODO: Differentiate your own messages.

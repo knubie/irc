@@ -2,8 +2,8 @@ Fiber = Npm.require("fibers")
 
 Meteor.startup ->
   #FIXME: Sometimes this connects multiple times.
-  users = Meteor.users.find {}
-  users.forEach (user) -> connect user
+  #users = Meteor.users.find {}
+  #users.forEach (user) -> connect user
 
 clients = {}
 
