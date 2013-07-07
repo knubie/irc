@@ -3,5 +3,4 @@
 #TODO: Add 'view conversation' toggle.
 #TODO: Differentiate your own messages.
 #TODO: Add search.
-#TODO: Add PM support.
 #TODO: Add autocomplete.

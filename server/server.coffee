@@ -2,8 +2,8 @@ Fiber = Npm.require("fibers")
 
 Meteor.startup ->
   #FIXME: Sometimes this connects multiple times.
-  #users = Meteor.users.find {}
-  #users.forEach (user) -> connect user
+  users = Meteor.users.find {}
+  users.forEach (user) -> connect user
 
 clients = {}
 
@@ -27,17 +27,18 @@ connect = (user) ->
     Meteor.users.update user._id, $set: {'profile.connecting': false}
     # Listen for messages and create new Messages doc for each one.
     clients[user._id].on 'message', Meteor.bindEnvironment (from, to, text, message) ->
-      if text.match ".*#{user.username}.*"
-        type = 'mention'
-      else
-        type = 'normal'
+      type = 'normal'
+      # Rearrange some stuff to make messages
+      # show up where they're supposed to.
+      to = from if to is user.username
+      type = 'mention' if /.*#{user.username}.*/.test text or to is user.username
       Messages.insert
         from: from
         to: to
         text: text
+        type: type
         time: new Date
         owner: user._id
-        type: type
     , (err) -> console.log err
     # Listen for when the client requests names from a channel
     # and log them to corresponding the channel document.

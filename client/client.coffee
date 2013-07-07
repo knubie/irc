@@ -32,7 +32,7 @@ Template.channels.events
     newChannel = Channels.insert
       owner: Meteor.userId()
       name: name
-      nicks: []
+      nicks: if /^[#](.*)$/.test name then [] else [Meteor.user().username, name]
     Meteor.apply 'join', [Meteor.user(), Channels.findOne newChannel]
 
 Template.channels.channels = ->
