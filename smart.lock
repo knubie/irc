@@ -6,7 +6,8 @@
         "git": "https://github.com/knubie/meteor-node-irc.git",
         "branch": "master"
       },
-      "momentjs": {}
+      "momentjs": {},
+      "paginated-subscription": {}
     },
     "packages": {
       "irc": {
@@ -18,6 +19,11 @@
         "git": "https://github.com/crapthings/meteor-momentjs.git",
         "tag": "v2.0.0.1",
         "commit": "2200ae0f0472164b7cc33dfd9b3ba729a7deb805"
+      },
+      "paginated-subscription": {
+        "git": "https://github.com/tmeasday/meteor-paginated-subscription.git",
+        "tag": "v0.1.2",
+        "commit": "35e0c6112df2b4cfeb60b559276a93cac5ee2dd6"
       }
     }
   }

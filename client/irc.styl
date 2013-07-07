@@ -32,7 +32,7 @@ asbestos = #7F8C8D
 
 body
   background-color: clouds
-  font-family: sans-serif
+  font-family: Helvetica, sans-serif
   font-size: 14px
 
 .headline 
@@ -72,7 +72,7 @@ body
     a > button 
       display: none
     a, form > input 
-      color: asbestos
+      color: rgba(255,255,255,0.3)
       padding: 11px 22px
       font-size: 21px
   li:hover > a > button 
@@ -115,7 +115,7 @@ body
   border-radius: 6px
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1)
   margin-bottom: 15px
-  padding: 15px
+  padding: 11px 15px
   color: #777
   .muted
     color: rgba(0,0,0,0.4)
@@ -123,7 +123,7 @@ body
   .divider
     width: 100%
     border-bottom: 2px solid rgba(0,0,0,0.06)
-    margin: -15px 0 15px 0
+    margin: 0 0 10px 0
 
 .tt-dropdown-menu
   top: calc(100% \- 85px) !important
@@ -153,9 +153,6 @@ body
   cursor: pointer
   background-color: belize-hole
 
-.messages > li:hover 
-  cursor: pointer
-
 .messages > li > a:link 
   color: #3498DB
 
@@ -164,10 +161,13 @@ body
   font-size: 21px
   line-height: 28px
   font-weight: 300
-  margin-top: 5px
+  margin: 0
 
+.reply
+  font-size: 12px
 .reply:hover 
   border-bottom: 1px solid #ccc
+  cursor: pointer
 
 form 
   margin: 0
@@ -187,8 +187,7 @@ form
   margin-left: 225px
   padding: 15px
   .input-container
-    margin-left: -15px
-    margin-bottom: -15px
+    margin: 10px 0 -15px -15px
     width: calc(100% + 30px)
     background-color: rgba(0,0,0,0.075)
     border-top: 2px solid rgba(0,0,0,0.02)
