@@ -1,4 +1,5 @@
-#TODO: use pub/sub and remove autopublish
+#TODO: Make relative time update in real time.
+#TODO: Use pub/sub and remove autopublish.
 #TODO: Add ignore option.
 #TODO: Add 'view conversation' toggle.
 #TODO: Differentiate your own messages.
@@ -91,6 +92,19 @@ if Meteor.isClient
     if count > 0 then count else ''
 
   Template.messages.rendered = ->
+    ch = Channels.findOne
+      owner: Meteor.userId()
+      name: Session.get('channel')
+    $('#say-input').typeahead
+      name: 'names'
+      local: [
+        '@matty'
+        '@oddmunds'
+        '@entel'
+        '@weezy'
+        '@costanza'
+      ]
+      #local: ch.nicks
     $(window).scrollTop(99999)
     #FIXME: why aint this workin'
 
@@ -151,6 +165,8 @@ if Meteor.isClient
 
   Template.message.timeAgo = ->
     moment(@time).fromNow()
+
+  Meteor.setInterval Template.message, 60000 # One minute
 
   Template.message.message_class = ->
     ch = Channels.findOne {name: @to, owner: Meteor.userId()}

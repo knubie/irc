@@ -101,10 +101,6 @@ body
 .new-channel-li input::-webkit-input-placeholder 
   color: rgba(255, 255, 255, 0.15)
 
-#say
-  margin-top: 15px
-  margin-bottom: -10px
-
 .messages, .notifications
   margin: 0
 
@@ -117,7 +113,7 @@ body
 .message
   background-color: #fff
   border-radius: 6px
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1)
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1)
   margin-bottom: 15px
   padding: 15px
   color: #777
@@ -128,6 +124,24 @@ body
     width: 100%
     border-bottom: 2px solid rgba(0,0,0,0.06)
     margin: -15px 0 15px 0
+
+.tt-dropdown-menu
+  top: calc(100% \- 85px) !important
+  background-color: rgba(0,0,0,0)
+  width: 100%
+  .tt-suggestion
+    padding: 10px 18px
+    width: 100%
+    color: rgba(0,0,0,0.2)
+    font-size: 21px
+    p
+      margin: 0
+  .tt-is-under-cursor
+    background-color: peter-river
+    color: white
+
+.twitter-typeahead
+  width: 100%
 
 .notifications > .message,
 .messages > .mention
@@ -152,10 +166,8 @@ body
   font-weight: 300
   margin-top: 5px
 
-.reply
-  color: peter-river
 .reply:hover 
-  text-decoration: underline
+  border-bottom: 1px solid #ccc
 
 form 
   margin: 0
@@ -163,17 +175,31 @@ form
 #say, #say-input 
   width: 100%
 
-#say-input
+#say-input, input.tt-hint
   font-size: 21px
   height: 24px
   line-height: normal
 
-#say-input::-webkit-input-placeholder 
-  color: #BDC3C7
+#say-input::-webkit-input-placeholder, input.tt-hint
+  color: rgba(0, 0, 0, 0.2)
 
 .messages-container 
   margin-left: 225px
   padding: 15px
+  .input-container
+    margin-left: -15px
+    margin-bottom: -15px
+    width: calc(100% + 30px)
+    background-color: rgba(0,0,0,0.075)
+    border-top: 2px solid rgba(0,0,0,0.02)
+    input, input:focus
+      border: none
+      background-color: rgba(0,0,0,0)
+      margin-top: 15px
+      margin-bottom: 15px
+      margin-left: 15px
+      box-shadow: none
+      line-height: normal
 
 #auth-form 
   width: 30vw
