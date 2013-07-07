@@ -116,7 +116,8 @@ Template.messages.notifications = ->
 Template.message.rendered = ->
   #FIXME: this causes html to go unescaped.
   urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
-  #$(@find('p')).html(@data.text.replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
+  p = $(@find('p'))
+  p.html(p.html().replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
 
 Template.message.events
   'click .reply': ->
@@ -133,7 +134,7 @@ Template.message.all = ->
 Template.message.timeAgo = ->
   moment(@time).fromNow()
 
-Meteor.setInterval Template.message, 60000 # One minute
+#Meteor.setInterval Template.message, 60000 # One minute
 
 Template.message.message_class = ->
   ch = Channels.findOne {name: @to, owner: Meteor.userId()}
