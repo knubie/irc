@@ -16,7 +16,7 @@ connect = (user) ->
   Meteor.users.update user._id, $set: {'profile.connecting': true}
 
   # Create new IRC instance.
-  clients[user._id] = new IRC.Client 'irc.choopa.net', user.username,
+  clients[user._id] = new IRC.Client 'irc.freenode.net', user.username,
     autoConnect: false
 
   clients[user._id].on 'error', (msg) -> console.log msg

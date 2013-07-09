@@ -1,5 +1,7 @@
 # Currently selected channel for viewing messages.
 Session.setDefault 'channel', 'all'
+# Push messages to the bottom by default (ie don't save scroll position).
+Session.setDefault 'scroll', false
 
 # Collection subscriptions from the server.
 channelsHandle = Meteor.subscribe 'channels'
@@ -144,6 +146,11 @@ Template.messages.notifications = ->
     to: Session.get('channel')
     type: 'mention'
   messages.map((msg) -> msg).reverse()
+
+  Template.message.rendered = ->
+   urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
+    p = $(@find('p'))
+    p.html(p.html().replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
 
 Template.message.events
   'click .reply': ->
