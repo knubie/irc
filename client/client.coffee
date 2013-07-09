@@ -110,10 +110,16 @@ Template.messages.events
     message = t.find('#say-input').value
     $('#say-input').val('')
     Meteor.apply 'say', [Meteor.user(), Session.get('channel'), message]
-    Meteor.setTimeout (-> $(window).scrollTop(99999)), 0
 
   'click .load-next': ->
     messagesHandle.loadNextPage()
+
+$(window).scroll ->
+  if $(window).scrollTop() < $(document).height() - $(window).height()
+    Session.set 'scroll', true
+  else
+    Session.set 'scroll', false
+
 
 Template.messages.rendered = ->
   if Session.equals 'channel', 'all'
@@ -121,6 +127,9 @@ Template.messages.rendered = ->
       $('.message').not("[data-channel='#{$(this).attr('data-channel')}']").css 'opacity', '0.3'
     , ->
       $('.message').css 'opacity', '1'
+  if Session.equals 'scroll', false
+    $(window).scrollTop($(document).height() - $(window).height())
+
 
 Template.messages.messages = ->
   messages = Messages.find {}, sort: time: 1
@@ -171,8 +180,6 @@ Template.message.message_class = ->
     for nick in ch.nicks
       status = 'online' if @from is nick
     return status + ' ' + @type
-  else
-    return "online #{@type}"
 
 Template.notifications.relativeTime = ->
   moment(@time).fromNow()
