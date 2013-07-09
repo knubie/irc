@@ -34,6 +34,7 @@ body
   background-color: clouds
   font-family: Helvetica, sans-serif
   font-size: 14px
+  overflow-x: hidden
 
 .headline 
   width: 300px
@@ -80,8 +81,8 @@ body
   li.all:hover > a > button 
     display:none
 
-  .active > a,
-  .active:hover > a,
+  .selected > a,
+  .selected:hover > a,
   li > a:hover 
     color: #FFF
     background-color: #3498DB
@@ -117,6 +118,8 @@ body
   margin-bottom: 15px
   padding: 11px 15px
   color: #777
+  position: relative
+  transition: .15s left, .15s opacity
   .muted
     color: rgba(0,0,0,0.4)
     font-size: 12px
@@ -124,6 +127,26 @@ body
     width: 100%
     border-bottom: 2px solid rgba(0,0,0,0.06)
     margin: 0 0 10px 0
+  .actions
+    font-size: 12px
+    opacity: 0
+    display: inline
+    .action
+      display: inline
+
+.message:hover
+  cursor: pointer
+  .actions
+    opacity: 1
+    i
+      opacity: 0.4
+    .action
+      display: inline
+    .action:hover
+      color: #333
+      border-bottom: 1px solid #999
+      i
+        opacity: 0.8
 
 .tt-dropdown-menu
   top: calc(100% \- 85px) !important
@@ -173,7 +196,7 @@ form
   margin: 0
 
 #say, #say-input 
-  width: 100%
+  width: calc(100% \- 30px)
 
 #say-input, input.tt-hint
   font-size: 21px
@@ -188,7 +211,7 @@ form
   padding: 15px
   .input-container
     margin: 10px 0 -15px -15px
-    width: calc(100% + 30px)
+    width: calc(100% \+ 30px)
     background-color: rgba(0,0,0,0.075)
     border-top: 2px solid rgba(0,0,0,0.02)
     input, input:focus

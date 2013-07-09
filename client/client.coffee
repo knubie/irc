@@ -1,5 +1,29 @@
+# Currently selected channel for viewing messages.
+Session.setDefault 'channel', 'all'
+
+# Collection subscriptions from the server.
 channelsHandle = Meteor.subscribe 'channels'
 messagesHandle = Meteor.subscribeWithPagination 'messages', (-> Session.get('channel')), 50
+
+# Method stubs.
+Meteor.methods
+  join: (user, name) ->
+    owner = user._id
+    # If it's a channel, set an empty array and let the NAMES req populate it.
+    # If not, it's a PM so set the nicks array to the current user and sender.
+    nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
+    Channels.insert {owner, name, nicks}
+  part: (user, channel) ->
+    Channels.remove {owner: user._id, name: channel}
+    #Messages.remove {owner: user._id, to: channel}
+  say: (user, channel, message) ->
+    Messages.insert
+      from: user.username
+      to: channel #TODO: perhaps change this to owner: channel._id
+      text: message
+      time: new Date
+      owner: user._id
+      type: 'self'
 
 Template.home.events
   'submit #auth-form': (e,t) ->
@@ -24,39 +48,32 @@ Template.home.events
 Template.dashboard.connecting = ->
   return Meteor.user().profile.connecting
 
+########## Channels ##########
+
+Template.channels.channels = ->
+  Channels.find {}
+
 Template.channels.events
   'submit #new-channel': (e, t) ->
     e.preventDefault()
     name = t.find('#new-channel-name').value
     t.find('#new-channel-name').value = ''
-    newChannel = Channels.insert
-      owner: Meteor.userId()
-      name: name
-      nicks: if /^[#](.*)$/.test name then [] else [Meteor.user().username, name]
-    Meteor.apply 'join', [Meteor.user(), Channels.findOne newChannel]
+    Meteor.apply 'join', [Meteor.user(), name]
+    $('#say-input').focus()
 
-Template.channels.channels = ->
-  Channels.find {}
-
-Template.channels.channel_selected = ->
-  Session.get 'channel'
-
-Template.channel.events
-  'click li': (e,t) ->
+  'click .channel': (e,t) ->
     #FIXME: make this work for touch.
     Session.set 'channel', @name
-    $('.nav > li > a > i').removeClass 'icon-white'
-    $(e.currentTarget).find('i').addClass 'icon-white'
+    $('#say-input').focus()
 
   'click .close': ->
-    Channels.remove @_id
     Meteor.apply 'part', [Meteor.user(), @name]
     Session.set 'channel', 'all'
 
-Template.channel.active = ->
-  if Session.get('channel') is @name then 'active' else 'inactive'
+Template.channels.selected = ->
+  if Session.equals 'channel', @name then 'selected' else ''
 
-Template.channel.alert_count = ->
+Template.channels.alert_count = ->
   if @name is 'all'
     messages = Messages.find
       owner: Meteor.userId()
@@ -69,6 +86,8 @@ Template.channel.alert_count = ->
   count = messages.map((msg) -> msg).length
   if count > 0 then count else ''
 
+########## Messages ##########
+#
 Template.messages.rendered = ->
   ch = Channels.findOne
     owner: Meteor.userId()
@@ -84,7 +103,6 @@ Template.messages.rendered = ->
       #'@costanza'
     #]
     #local: ch.nicks
-  $(window).scrollTop(99999)
 
 Template.messages.events
   'submit #say': (e, t) ->
@@ -92,11 +110,17 @@ Template.messages.events
     message = t.find('#say-input').value
     $('#say-input').val('')
     Meteor.apply 'say', [Meteor.user(), Session.get('channel'), message]
+    Meteor.setTimeout (-> $(window).scrollTop(99999)), 0
+
   'click .load-next': ->
     messagesHandle.loadNextPage()
 
-Template.messages.channel = ->
-  Session.get('channel')
+Template.messages.rendered = ->
+  if Session.equals 'channel', 'all'
+    $('.message').hover ->
+      $('.message').not("[data-channel='#{$(this).attr('data-channel')}']").css 'opacity', '0.3'
+    , ->
+      $('.message').css 'opacity', '1'
 
 Template.messages.messages = ->
   messages = Messages.find {}, sort: time: 1
@@ -112,37 +136,43 @@ Template.messages.notifications = ->
     type: 'mention'
   messages.map((msg) -> msg).reverse()
 
-Template.message.rendered = ->
-  urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
-  p = $(@find('p'))
-  p.html(p.html().replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
-
 Template.message.events
   'click .reply': ->
     $('#say-input').val("#{@from} ")
     $('#say-input').focus()
 
+  'click': (e, t) ->
+    if Session.equals 'channel', 'all'
+      # Slide toggle all messages not belonging to clicked channel
+      # and set session to the new channel.
+      $('.message').not("[data-channel='#{@to}']").slideToggle 400, =>
+        #Session.set 'channel', @to
+        console.log 'hi'
+
 Template.message.joinToPrev = ->
   unless @prev is null
-    @prev.from is @from
+    @prev.from is @from and @prev.to is @to
 
 Template.message.all = ->
-  Session.get('channel') is 'all'
+  Session.equals 'channel', 'all'
 
 Template.message.timeAgo = ->
   moment(@time).fromNow()
 
-Meteor.setInterval ->
-  $('.messages-container').html Meteor.render(Template.messages)
-, 60000 # One minute
+#Meteor.setInterval ->
+  #$('.messages-container').html Meteor.render(Template.messages)
+#, 60000 # One minute
 
 Template.message.message_class = ->
   ch = Channels.findOne {name: @to, owner: Meteor.userId()}
   status = 'offline'
-  for nick in ch.nicks
-    status = 'online' if @from is nick
-  return status + ' ' + @type
-  @type
+  #FIXME: shouldn't need to check existence of ch
+  if ch
+    for nick in ch.nicks
+      status = 'online' if @from is nick
+    return status + ' ' + @type
+  else
+    return "online #{@type}"
 
 Template.notifications.relativeTime = ->
   moment(@time).fromNow()

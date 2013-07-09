@@ -8,15 +8,15 @@ Meteor.startup ->
 clients = {}
 
 join = (user, channel) ->
-  if /^[#](.*)$/.test channel.name
-    clients[user._id].join channel.name
+  if /^[#](.*)$/.test channel
+    clients[user._id].join channel
 
 connect = (user) ->
   # Set user status to connecting.
   Meteor.users.update user._id, $set: {'profile.connecting': true}
 
   # Create new IRC instance.
-  clients[user._id] = new IRC.Client 'irc.choopa.net', user.username,
+  clients[user._id] = new IRC.Client 'irc.freenode.net', user.username,
     autoConnect: false
 
   clients[user._id].on 'error', (msg) -> console.log msg
@@ -62,21 +62,30 @@ connect = (user) ->
     , (err) -> console.log err
     # Join all channels subscribed to by user.
     channels = Channels.find owner: user._id
-    channels.forEach (channel) -> join user, channel
+    channels.forEach (channel) -> join user, channel.name
   , (err) -> console.log err
 
 Meteor.methods
   newClient: (user) ->
     connect user
-  join: (user, channel) ->
-    join user, channel
+  join: (user, name) ->
+    owner = user._id
+    # If it's a channel, set an empty array and let the NAMES req populate it.
+    # If not, it's a PM so set the nicks array to the current user and sender.
+    nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
+    Channels.insert {owner, name, nicks}
+    join user, name
+
   part: (user, channel) ->
-    clients[user._id].part channel
+    clients[user._id].part channel if /^[#](.*)$/.test channel
+    Channels.remove {owner: user._id, name: channel}
+    #Messages.remove {owner: user._id, to: channel}
+
   say: (user, channel, message) ->
     clients[user._id].say channel, message
     Messages.insert
       from: user.username
-      to: channel
+      to: channel #TODO: perhaps change this to owner: channel._id
       text: message
       time: new Date
       owner: user._id

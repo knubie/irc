@@ -1,3 +1,7 @@
+# Channels
+#   owner: UserId
+#   name: String
+#   nicks: [String, ...]
 @Channels = new Meteor.Collection 'channels'
 Channels.allow
   insert: (userId, channel) ->
@@ -10,4 +14,11 @@ Channels.allow
   remove: (userId, channel) ->
     channel.owner == userId
 
+# Messages
+#   owner: UserId
+#   from: String
+#   to: String
+#   text: String
+#   type: 'normal' / 'mention' / 'self'
+#   time: Date
 @Messages = new Meteor.Collection 'messages'
