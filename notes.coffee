@@ -1,6 +1,6 @@
 #TODO: Reimplement notifications.
+#TODO: clicking on name should remove all messages but that user in that channel.
 #TODO: Hilight mentioned nicks.
-#TODO: Make <tab> focus #say-input from anywhere.
 #TODO: Support basic markdown eg *bold* _underline_ `code`
 #TODO: Add autocomplete for nicks.
 #TODO: Send messages to specific channels from 'all'.

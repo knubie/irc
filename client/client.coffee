@@ -3,21 +3,18 @@ Session.setDefault 'channel', 'all'
 # Push messages to the bottom by default (ie don't save scroll position).
 Session.setDefault 'scroll', false
 
-# Collection subscriptions from the server.
-channelsHandle = Meteor.subscribe 'channels'
-messagesHandle = Meteor.subscribeWithPagination 'messages', (-> Session.get('channel')), 50
-
-# Method stubs.
 Meteor.methods
   join: (user, name) ->
     owner = user._id
     # If it's a channel, set an empty array and let the NAMES req populate it.
-    # If not, it's a PM so set the nicks array to the current user and sender.
+    # If it's a PM, set the nicks array to the current user and sender.
     nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
-    Channels.insert {owner, name, nicks}
+    Channels.insert {owner, name, nicks, notifications: 0}
+
   part: (user, channel) ->
     Channels.remove {owner: user._id, name: channel}
     #Messages.remove {owner: user._id, to: channel}
+
   say: (user, channel, message) ->
     Messages.insert
       from: user.username
@@ -26,6 +23,10 @@ Meteor.methods
       time: new Date
       owner: user._id
       type: 'self'
+
+# Collection subscriptions from the server.
+channelsHandle = Meteor.subscribe 'channels'
+messagesHandle = Meteor.subscribeWithPagination 'messages', (-> Session.get('channel')), 50
 
 Template.home.events
   'submit #auth-form': (e,t) ->
@@ -45,10 +46,18 @@ Template.home.events
         Channels.insert
           owner: Meteor.userId()
           name: 'all'
+          notifications: 0
         Meteor.apply 'newClient', [Meteor.user()]
 
 Template.dashboard.connecting = ->
   return Meteor.user().profile.connecting
+
+Template.dashboard.rendered = ->
+  $(window).on 'keydown', (e) ->
+    keyCode = e.keyCode or e.which
+    if keyCode is 9 and not $('#say-input').is(':focus')
+      e.preventDefault()
+      $('#say-input').focus()
 
 ########## Channels ##########
 
@@ -76,13 +85,16 @@ Template.channels.selected = ->
   if Session.equals 'channel', @name then 'selected' else ''
 
 Template.channels.notification_count = ->
-  #FIXME: this breaks because published messages only correspond to the
-  # current channel session.
-  # TODO: remove this code and add a notification property to Channels.
-  # inc notification property on new message, decrement when closing.
+  #if @name is 'all'
+    #notifications = 0
+    #chs = Channels.find()
+    #chs.forEach (ch) -> notifications += ch.notifications
+    #return notifications
+  #else
+  if @notifications < 1 then '' else @notifications
 
 ########## Messages ##########
-#
+
 Template.messages.rendered = ->
   ch = Channels.findOne
     owner: Meteor.userId()
@@ -115,12 +127,6 @@ $(window).scroll ->
   else
     Session.set 'scroll', false
 
-$(window).on 'keydown', (e) ->
-  keyCode = e.keyCode or e.which
-  if keyCode is 9 and not $('#say-input').is(':focus')
-    e.preventDefault()
-    $('#say-input').focus()
-
 Template.messages.rendered = ->
   if Session.equals 'channel', 'all'
     $('.message').hover ->
@@ -142,8 +148,16 @@ Template.messages.notifications = ->
 
 Template.message.rendered = ->
   urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
+  codeExp = /`(.*)`/
+  boldExp = /\*(.*\S)\*/
+  underlineExp = /_(.*\S)_/
   p = $(@find('p'))
-  p.html(p.html().replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
+  ptext = p.html()
+  ptext = ptext.replace urlExp, "<a href='$1' target='_blank'>$1</a>"
+  ptext = ptext.replace codeExp, "<code>$1</code>"
+  ptext = ptext.replace boldExp, "<strong>$1</strong>"
+  ptext = ptext.replace underlineExp, '<span class="underline">$1</span>'
+  p.html(ptext)
 
 Template.message.events
   'click .reply': ->

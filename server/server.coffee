@@ -1,5 +1,8 @@
 Fiber = Npm.require("fibers")
 
+isChannel = (text) ->
+  /^[#](.*)$/.test text
+
 Meteor.startup ->
   #FIXME: Sometimes this connects multiple times.
   #users = Meteor.users.find {}
@@ -21,6 +24,7 @@ connect = (user) ->
 
   clients[user._id].on 'error', (msg) -> console.log msg
 
+  # Connect the client to the server.
   clients[user._id].connect Meteor.bindEnvironment ->
     console.log 'connected.'
     # Set user status to connected.
@@ -31,14 +35,25 @@ connect = (user) ->
       # Rearrange some stuff to make messages
       # show up where they're supposed to.
       mentionRegex = new RegExp ".*#{user.username}.*"
-      type = 'mention' if mentionRegex.test text or to is user.username
+      if mentionRegex.test text
+        type = 'mention'
+        Channels.update {owner: user._id, name: to}, {$inc: {notifications: 1}}
+        Channels.update {owner: user._id, name: 'all'}, {$inc: {notifications: 1}}
       # If receiving a PM
       if to is user.username
         # Check if "from" is in channel list, if not add it.
         onList = false
         channels = Channels.find owner: user._id
         channels.forEach (channel) -> onList = true if from is channel.name
-        Channels.insert {owner: user._id, name: from, nicks: [from, to]}
+        unless onList
+          Channels.insert
+            owner: user._id
+            name: from
+            nicks: [from, to]
+            notifications: 1
+        else
+          Channels.update {owner: user._id, name: from}, {$inc: {notifications: 1}}
+        Channels.update {owner: user._id, name: 'all'}, {$inc: {notifications: 1}}
         # Channel list displays "to" not "from"
         # (to is usually channel name)
         to = from
@@ -61,10 +76,10 @@ connect = (user) ->
       , {$set: {'nicks': nicksArray}}
     , (err) -> console.log err
     # Listen for when users join or part a channel.
-    # Request names for that channel from the server.
-    # When names are request the names listener will be called
-    # which sets the name to the corresponding channel doc.
     clients[user._id].on "join", Meteor.bindEnvironment (chan) ->
+      # Request names for that channel from the server.
+      # When names are requested the names listener will be called
+      # which sets the name to the corresponding channel's nicks array.
       clients[user._id].send 'NAMES', chan
     , (err) -> console.log err
     clients[user._id].on "part", Meteor.bindEnvironment (chan) ->
@@ -81,9 +96,9 @@ Meteor.methods
   join: (user, name) ->
     owner = user._id
     # If it's a channel, set an empty array and let the NAMES req populate it.
-    # If not, it's a PM so set the nicks array to the current user and sender.
+    # If it's a PM, set the nicks array to the current user and sender.
     nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
-    Channels.insert {owner, name, nicks}
+    Channels.insert {owner, name, nicks, notifications: 0}
     join user, name
 
   part: (user, channel) ->
