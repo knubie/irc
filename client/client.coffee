@@ -75,18 +75,11 @@ Template.channels.events
 Template.channels.selected = ->
   if Session.equals 'channel', @name then 'selected' else ''
 
-Template.channels.alert_count = ->
-  if @name is 'all'
-    messages = Messages.find
-      owner: Meteor.userId()
-      alert: true
-  else
-    messages = Messages.find
-      owner: Meteor.userId()
-      to: @name
-      alert: true
-  count = messages.map((msg) -> msg).length
-  if count > 0 then count else ''
+Template.channels.notification_count = ->
+  #FIXME: this breaks because published messages only correspond to the
+  # current channel session.
+  # TODO: remove this code and add a notification property to Channels.
+  # inc notification property on new message, decrement when closing.
 
 ########## Messages ##########
 #
@@ -122,6 +115,12 @@ $(window).scroll ->
   else
     Session.set 'scroll', false
 
+$(window).on 'keydown', (e) ->
+  keyCode = e.keyCode or e.which
+  if keyCode is 9 and not $('#say-input').is(':focus')
+    e.preventDefault()
+    $('#say-input').focus()
+
 Template.messages.rendered = ->
   if Session.equals 'channel', 'all'
     $('.message').hover ->
@@ -130,7 +129,6 @@ Template.messages.rendered = ->
       $('.message').css 'opacity', '1'
   if Session.equals 'scroll', false
     $(window).scrollTop($(document).height() - $(window).height())
-
 
 Template.messages.messages = ->
   messages = Messages.find {}, sort: time: 1

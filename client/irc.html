@@ -47,10 +47,13 @@
       <a href="#">
         {{name}}
         <button type="button" class="close">&times;</button>
-        <span class="badge badge-info pull-right">{{alert_count}}</span>
+        <span class="badge badge-info pull-right">{{notification_count}}</span>
       </a>
     </li>
   {{/each}}
+</template>
+
+<template name="channel">
 </template>
 
 <template name="messages">
@@ -123,15 +126,6 @@
       </div>
     </div>
     <small class="muted pull-right">{{timeAgo}}</small>
-    <p>{{text}}</p>
-  </li>
-</template>
-
-<template name="message_alert">
-  <li>
-    <strong>{{from}}</strong> <small class="muted">{{to}}</small>
-    <button type="button" class="close">&times;</button>
-    <small class="muted pull-right">{{relativeTime}}</small>
     <p>{{text}}</p>
   </li>
 </template>
