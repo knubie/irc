@@ -7,7 +7,9 @@
     {{loginButtons align='right'}}
   </div>
   {{> home}}
-  {{> dashboard}}
+  {{#if currentUser}}
+    {{> dashboard}}
+  {{/if}}
 </body>
 
 <template name="home">
@@ -22,17 +24,15 @@
 </template>
 
 <template name="dashboard">
-  {{#if currentUser}}
-    {{#if connecting}}
-      Connecting..
-    {{else}}
-      <ul class="channels nav nav-stacked">
-        {{> channels}}
-      </ul>
-      <div class="messages-container">
-        {{> messages}}
-      </div>
-    {{/if}}
+  {{#if connecting}}
+    Connecting..
+  {{else}}
+    <ul class="channels nav nav-stacked">
+      {{> channels}}
+    </ul>
+    <div class="messages-container">
+      {{> messages}}
+    </div>
   {{/if}}
 </template>
 

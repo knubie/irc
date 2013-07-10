@@ -147,12 +147,24 @@ Template.messages.notifications = ->
   messages = Messages.find {type: 'mention'}, {sort: {time: 1}}
 
 Template.message.rendered = ->
+  # Set up regular expressions.
   urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
   codeExp = /`(.*)`/
   boldExp = /\*(.*\S)\*/
   underlineExp = /_(.*\S)_/
+  # Get message text.
   p = $(@find('p'))
   ptext = p.html()
+  # Linkify nicks.
+  ch = Channels.findOne {name: @data.to}
+  #FIXME: shouldn't need to check existence of ch
+  if ch
+    console.log 'ch found'
+    for nick in ch.nicks
+      console.log nick
+      nickExp = new RegExp "(\\W+)(#{nick})(\\W+)|(\\W+)(#{nick})$|^(#{nick})(\\W+)|^(#{nick})$"
+      ptext = ptext.replace nickExp, "$1$4<a href='#'>$2$5$6$8</a>$3$7"
+  # Markdownify other stuff.
   ptext = ptext.replace urlExp, "<a href='$1' target='_blank'>$1</a>"
   ptext = ptext.replace codeExp, "<code>$1</code>"
   ptext = ptext.replace boldExp, "<strong>$1</strong>"
@@ -190,7 +202,7 @@ Template.notification.timeAgo = ->
 #, 60000 # One minute
 
 Template.message.message_class = ->
-  ch = Channels.findOne {name: @to, owner: Meteor.userId()}
+  ch = Channels.findOne {name: @to}
   status = 'offline'
   #FIXME: shouldn't need to check existence of ch
   if ch
