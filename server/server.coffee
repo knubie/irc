@@ -16,7 +16,7 @@ connect = (user) ->
   Meteor.users.update user._id, $set: {'profile.connecting': true}
 
   # Create new IRC instance.
-  clients[user._id] = new IRC.Client 'irc.freenode.net', user.username,
+  clients[user._id] = new IRC.Client 'irc.choopa.net', user.username,
     autoConnect: false
 
   clients[user._id].on 'error', (msg) -> console.log msg
@@ -30,8 +30,18 @@ connect = (user) ->
       type = 'normal'
       # Rearrange some stuff to make messages
       # show up where they're supposed to.
-      to = from if to is user.username
-      type = 'mention' if /.*#{user.username}.*/.test text or to is user.username
+      mentionRegex = new RegExp ".*#{user.username}.*"
+      type = 'mention' if mentionRegex.test text or to is user.username
+      # If receiving a PM
+      if to is user.username
+        # Check if "from" is in channel list, if not add it.
+        onList = false
+        channels = Channels.find owner: user._id
+        channels.forEach (channel) -> onList = true if from is channel.name
+        Channels.insert {owner: user._id, name: from, nicks: [from, to]}
+        # Channel list displays "to" not "from"
+        # (to is usually channel name)
+        to = from
       Messages.insert
         from: from
         to: to

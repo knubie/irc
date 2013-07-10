@@ -1,7 +1,7 @@
 #TODO: Reimplement notifications.
 #TODO: Hilight mentioned nicks.
 #TODO: Make <tab> focus #say-input from anywhere.
-#TODO: support inline code with backticks.
+#TODO: Support basic markdown eg *bold* _underline_ `code`
 #TODO: Add autocomplete for nicks.
 #TODO: Send messages to specific channels from 'all'.
 #TODO: Add 'view conversation' toggle.

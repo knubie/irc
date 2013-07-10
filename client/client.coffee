@@ -122,7 +122,6 @@ $(window).scroll ->
   else
     Session.set 'scroll', false
 
-
 Template.messages.rendered = ->
   if Session.equals 'channel', 'all'
     $('.message').hover ->
@@ -141,16 +140,12 @@ Template.messages.messages = ->
     prev = msg
 
 Template.messages.notifications = ->
-  messages = Messages.find
-    owner: Meteor.userId()
-    to: Session.get('channel')
-    type: 'mention'
-  messages.map((msg) -> msg).reverse()
+  messages = Messages.find {type: 'mention'}, {sort: {time: 1}}
 
-  Template.message.rendered = ->
-   urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
-    p = $(@find('p'))
-    p.html(p.html().replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
+Template.message.rendered = ->
+  urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
+  p = $(@find('p'))
+  p.html(p.html().replace(urlExp,"<a href='$1' target='_blank'>$1</a>"))
 
 Template.message.events
   'click .reply': ->
@@ -175,6 +170,9 @@ Template.message.all = ->
 Template.message.timeAgo = ->
   moment(@time).fromNow()
 
+Template.notification.timeAgo = ->
+  moment(@time).fromNow()
+
 #Meteor.setInterval ->
   #$('.messages-container').html Meteor.render(Template.messages)
 #, 60000 # One minute
@@ -188,10 +186,8 @@ Template.message.message_class = ->
       status = 'online' if @from is nick
     return status + ' ' + @type
 
-Template.notifications.relativeTime = ->
-  moment(@time).fromNow()
 
-Template.notifications.events
+Template.notification.events
   'click li': ->
     $(window).scrollTop $("##{@_id}").offset().top
 
