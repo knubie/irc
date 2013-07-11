@@ -9,6 +9,17 @@
         Messages.find
           owner: @owner
           to: @name
+      notifications: ->
+        if @name is 'all'
+          nots = Messages.find
+            owner: @owner
+            type: 'mention'
+        else
+          nots = Messages.find
+            owner: @owner
+            to: @name
+            type: 'mention'
+        return nots.count()
 
 Channels.allow
   insert: (userId, channel) ->
@@ -19,6 +30,9 @@ Channels.allow
     channel.owner == userId and channel.name and not duplicate()
 
   remove: (userId, channel) ->
+    channel.owner == userId
+
+  update: (userId, channel) ->
     channel.owner == userId
 
 # Messages

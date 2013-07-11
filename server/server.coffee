@@ -37,8 +37,6 @@ Meteor.methods
         mentionRegex = new RegExp ".*#{user.username}.*"
         if mentionRegex.test text
           type = 'mention'
-          Channels.update {owner: user._id, name: to}, {$inc: {notifications: 1}}
-          Channels.update {owner: user._id, name: 'all'}, {$inc: {notifications: 1}}
         # If receiving a PM
         if to is user.username
           # Check if "from" is in channel list, if not add it.
@@ -50,10 +48,7 @@ Meteor.methods
               owner: user._id
               name: from
               nicks: [from, to]
-              notifications: 1
           else
-            Channels.update {owner: user._id, name: from}, {$inc: {notifications: 1}}
-          Channels.update {owner: user._id, name: 'all'}, {$inc: {notifications: 1}}
           # Channel list displays "to" not "from"
           # (to is usually channel name)
           to = from
@@ -95,7 +90,7 @@ Meteor.methods
     # If it's a channel, set an empty array and let the NAMES req populate it.
     # If it's a PM, set the nicks array to the current user and sender.
     nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
-    Channels.insert {owner, name, nicks, notifications: 0}
+    Channels.insert {owner, name, nicks}
     join user, name
 
   part: (user, channel) ->

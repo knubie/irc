@@ -107,7 +107,8 @@ Template.channels.notification_count = ->
     #chs.forEach (ch) -> notifications += ch.notifications
     #return notifications
   #else
-  if @notifications < 1 then '' else @notifications
+  console.log @notifications()
+  if @notifications() < 1 then '' else @notifications()
 
 ########## Messages ##########
 
@@ -237,3 +238,7 @@ Template.notification.events
     Messages.update
       _id: @_id
     , {$set: {'type': 'normal'}}
+    ch = Channels.find name: @to
+    Channels.update ch._id, {$inc: {notifications: -1}}
+    ch = Channels.find name: 'all'
+    Channels.update ch._id, {$inc: {notifications: -1}}
