@@ -25,8 +25,24 @@ Meteor.methods
       type: 'self'
 
 # Collection subscriptions from the server.
-channelsHandle = Meteor.subscribe 'channels'
-messagesHandle = Meteor.subscribeWithPagination 'messages', (-> Session.get('channel')), 50
+handlers = {messages:{},channel:{}}
+handlers.channel = Meteor.subscribe 'channels', ->
+  channels = Channels.find()
+  channels.forEach (channel) ->
+    handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
+    , channel.name
+    , 10
+  channels.rewind()
+  channels.observe
+    added: (channel) ->
+      handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
+      , channel.name
+      , 10
+
+
+#messagesHandle = Meteor.subscribeWithPagination 'messages', ->
+  #Meteor.user().channels
+#, 50
 
 Template.home.events
   'submit #auth-form': (e,t) ->
@@ -47,7 +63,7 @@ Template.home.events
           owner: Meteor.userId()
           name: 'all'
           notifications: 0
-        Meteor.apply 'newClient', [Meteor.user()]
+        Meteor.apply 'connect', [Meteor.user()]
 
 Template.dashboard.connecting = ->
   return Meteor.user().profile.connecting
@@ -62,7 +78,7 @@ Template.dashboard.rendered = ->
 ########## Channels ##########
 
 Template.channels.channels = ->
-  Channels.find {}
+  Channels.find()
 
 Template.channels.events
   'submit #new-channel': (e, t) ->
@@ -119,7 +135,7 @@ Template.messages.events
     Meteor.apply 'say', [Meteor.user(), Session.get('channel'), message]
 
   'click .load-next': ->
-    messagesHandle.loadNextPage()
+    handlers.messages[Session.get 'channel'].loadNextPage()
 
 $(window).scroll ->
   if $(window).scrollTop() < $(document).height() - $(window).height()
@@ -137,7 +153,10 @@ Template.messages.rendered = ->
     $(window).scrollTop($(document).height() - $(window).height())
 
 Template.messages.messages = ->
-  messages = Messages.find {}, sort: time: 1
+  if Session.equals 'channel', 'all'
+    messages = Messages.find {}, sort: time: 1
+  else
+    messages = Messages.find {to: Session.get('channel')}, sort: time: 1
   prev = null
   messages.map (msg) ->
     msg.prev = prev
@@ -147,7 +166,7 @@ Template.messages.notifications = ->
   messages = Messages.find {type: 'mention'}, {sort: {time: 1}}
 
 Template.message.rendered = ->
-  # Set up regular expressions.
+  # Define regular expressions.
   urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
   codeExp = /`(.*)`/
   boldExp = /\*(.*\S)\*/
@@ -159,9 +178,8 @@ Template.message.rendered = ->
   ch = Channels.findOne {name: @data.to}
   #FIXME: shouldn't need to check existence of ch
   if ch
-    console.log 'ch found'
     for nick in ch.nicks
-      console.log nick
+      # This looks retarded.
       nickExp = new RegExp "(\\W+)(#{nick})(\\W+)|(\\W+)(#{nick})$|^(#{nick})(\\W+)|^(#{nick})$"
       ptext = ptext.replace nickExp, "$1$4<a href='#'>$2$5$6$8</a>$3$7"
   # Markdownify other stuff.
@@ -213,7 +231,7 @@ Template.message.message_class = ->
 
 Template.notification.events
   'click li': ->
-    $(window).scrollTop $("##{@_id}").offset().top
+    $(window).scrollTop $("##{@_id}").offset().top - 10
 
   'click .close': ->
     Messages.update

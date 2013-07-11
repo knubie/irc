@@ -34,19 +34,19 @@ body
   background-color: clouds
   font-family: Helvetica, sans-serif
   font-size: 14px
-  overflow-x: hidden
+  padding: 0
 
 .underline
   text-decoration: underline
 
 code
   color: #777
-  font-size: 16px
+  font-size: 14px
 
 .headline 
   width: 300px
   margin: 0 auto
-  color: #ECF0F1
+  color: #FFF
   font-size: 100px
   text-align: center
   font-weight: 700px
@@ -75,14 +75,14 @@ code
   position: fixed
   top: 0
   left: 0
-  width: 225px
+  width: 200px
   li
     a > button 
       display: none
     a, form > input 
       color: rgba(255,255,255,0.3)
-      padding: 11px 22px
-      font-size: 21px
+      padding: 6px 12px
+      font-size: 16px
   li:hover > a > button 
     display: inline-block
   li.all:hover > a > button 
@@ -120,9 +120,9 @@ code
 
 .message
   background-color: #fff
-  border-radius: 6px
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1)
-  margin-bottom: 15px
+  border-radius: 4px
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1)
+  margin-bottom: 10px
   padding: 11px 15px
   color: #777
   position: relative
@@ -173,11 +173,12 @@ code
 .twitter-typeahead
   width: 100%
 
-.notifications > .message,
 .messages > .mention
+  border: 1px solid peter-river
+.notifications > .message
   color: #ECF0F1
   background-color: #3498DB
-  box-shadow: 0 4px 0 #2980B9
+  box-shadow: 0 2px 0 #2980B9
 
 .notifications > .message:hover
   cursor: pointer
@@ -188,8 +189,8 @@ code
 
 .messages > li > p,
 .notifications > li > p 
-  font-size: 21px
-  line-height: 28px
+  font-size: 16px
+  line-height: 21px
   font-weight: 300
   margin: 0
 
@@ -214,7 +215,7 @@ form
   color: rgba(0, 0, 0, 0.2)
 
 .messages-container 
-  margin-left: 225px
+  margin-left: 200px
   padding: 15px
   .input-container
     margin: 10px 0 -15px -15px
@@ -231,7 +232,7 @@ form
       line-height: normal
 
 #auth-form 
-  width: 30vw
+  width: 35vw
   margin: 0 auto
 
 #auth-form > input,

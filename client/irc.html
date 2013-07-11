@@ -39,7 +39,7 @@
 <template name="channels">
   <li class="new-channel-li">
     <form id="new-channel">
-      <input type="text" id="new-channel-name" placeholder="Add Channel">
+      <input type="text" id="new-channel-name" autocomplete="off" placeholder="Add Channel">
     </form>
   </li>
   {{#each channels}}
@@ -47,7 +47,7 @@
       <a href="#">
         {{name}}
         <button type="button" class="close">&times;</button>
-        <span class="badge badge-info pull-right">{{notification_count}}</span>
+        <span class="badge badge-info">{{notification_count}}</span>
       </a>
     </li>
   {{/each}}
@@ -70,7 +70,7 @@
   </ul>
   <div class="input-container">
     <form id="say">
-      <input type="text" class="span6" id="say-input" placeholder="Type a message or command">
+      <input type="text" class="span6" id="say-input" autocomplete="off" placeholder="Type a message or command">
     </form>
   </div>
 </template>
