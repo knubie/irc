@@ -26,6 +26,7 @@ Meteor.methods
 
 # Collection subscriptions from the server.
 handlers = {messages:{},channel:{}}
+handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels', ->
   channels = Channels.find()
   channels.forEach (channel) ->

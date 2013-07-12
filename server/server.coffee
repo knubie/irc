@@ -28,6 +28,7 @@ Meteor.methods
     # Connect the client to the server.
     clients[user._id].connect Meteor.bindEnvironment ->
       # Set user status to connected.
+      #clients[user._id].send 'WEBIRC', 'password', 'knubie', 
       Meteor.users.update user._id, $set: {'profile.connecting': false}
       # Listen for messages and create new Messages doc for each one.
       clients[user._id].on 'message', Meteor.bindEnvironment (from, to, text, message) ->
@@ -108,7 +109,9 @@ Meteor.methods
       owner: user._id
       type: 'self'
 
-#FIXME: apparently userId is not allowed here.
+Meteor.publish 'users', ->
+  Meteor.users.find()
+
 Meteor.publish 'channels', ->
   Channels.find {owner: @userId}
 
