@@ -9,7 +9,7 @@ Meteor.methods
     # If it's a channel, set an empty array and let the NAMES req populate it.
     # If it's a PM, set the nicks array to the current user and sender.
     nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
-    Channels.insert {owner, name, nicks, notifications: 0}
+    Channels.insert {owner, name, nicks}
 
   part: (user, channel) ->
     Channels.remove {owner: user._id, name: channel}
@@ -62,7 +62,6 @@ Template.home.events
         Channels.insert
           owner: Meteor.userId()
           name: 'all'
-          notifications: 0
         Meteor.apply 'connect', [Meteor.user()]
 
 Template.dashboard.connecting = ->
@@ -101,13 +100,6 @@ Template.channels.selected = ->
   if Session.equals 'channel', @name then 'selected' else ''
 
 Template.channels.notification_count = ->
-  #if @name is 'all'
-    #notifications = 0
-    #chs = Channels.find()
-    #chs.forEach (ch) -> notifications += ch.notifications
-    #return notifications
-  #else
-  console.log @notifications()
   if @notifications() < 1 then '' else @notifications()
 
 ########## Messages ##########
@@ -168,26 +160,27 @@ Template.messages.notifications = ->
 
 Template.message.rendered = ->
   # Define regular expressions.
-  urlExp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
-  codeExp = /`(.*)`/
-  boldExp = /\*(.*\S)\*/
-  underlineExp = /_(.*\S)_/
+  urlExp = /([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)/ig
+  codeExp = new RegExp "(^|</[^>]*>)([^<>]*)`([^<>]*)`([^<>]*)(?=$|<)"
+  boldExp = new RegExp "(^|</[^>]*>)([^<>]*)\*([^<>]*)\*([^<>]*)(?=$|<)"
+  underlineExp = new RegExp "(^|</[^>]*>)([^<>]*)_([^<>]*)_([^<>]*)(?=$|<)"
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
+  # Linkify URLs.
+  ptext = ptext.replace urlExp, "<a href='$1' target='_blank'>$1</a>"
   # Linkify nicks.
   ch = Channels.findOne {name: @data.to}
   #FIXME: shouldn't need to check existence of ch
+  convo = ""
   if ch
     for nick in ch.nicks
-      # This looks retarded.
-      nickExp = new RegExp "(\\W+)(#{nick})(\\W+)|(\\W+)(#{nick})$|^(#{nick})(\\W+)|^(#{nick})$"
-      ptext = ptext.replace nickExp, "$1$4<a href='#'>$2$5$6$8</a>$3$7"
+      nickExp = new RegExp "(^|[^\S])(#{nick})($|[^\S])"
+      ptext = ptext.replace nickExp, "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
-  ptext = ptext.replace urlExp, "<a href='$1' target='_blank'>$1</a>"
-  ptext = ptext.replace codeExp, "<code>$1</code>"
-  ptext = ptext.replace boldExp, "<strong>$1</strong>"
-  ptext = ptext.replace underlineExp, '<span class="underline">$1</span>'
+  ptext = ptext.replace codeExp, '$2<code>$3</code>$4'
+  ptext = ptext.replace boldExp, '$2<strong>$3</strong>$4'
+  ptext = ptext.replace underlineExp, '$2<span class="underline">$3</span>$4'
   p.html(ptext)
 
 Template.message.events
@@ -200,25 +193,47 @@ Template.message.events
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $('.message').not("[data-channel='#{@to}']").slideToggle 400, =>
-        #Session.set 'channel', @to
-        console.log 'hi'
+        Session.set 'channel', @to
+
+  'click .convo': (e, t) ->
+    convo = t.find('.message').getAttribute 'data-convo'
+    # Slide toggle all messages not belonging to clicked channel
+    # and set session to the new channel.
+    #.not("[data-channel='#{@to}']") do this if in 'all'
+    $('.message')
+    .not("[data-nick='#{@from}']")
+    .not("[data-nick='#{convo}']")
+    .slideToggle 400
 
 Template.message.joinToPrev = ->
   unless @prev is null
-    @prev.from is @from and @prev.to is @to
+    @prev.from is @from and @prev.to is @to and @type isnt 'mention' and @prev.type isnt 'mention'
 
 Template.message.all = ->
   Session.equals 'channel', 'all'
 
+Template.message.convo = ->
+  ch = Channels.findOne {name: @to}
+  #FIXME: shouldn't need to check existence of ch
+  convo = ""
+  if ch
+    for nick in ch.nicks
+      nickExp = new RegExp "(^|[^\S])(#{nick})($|[^\S])"
+      convo = "data-convo=#{nick}" if nickExp.test(@text)
+  return convo
+
+Template.message.isConvo = ->
+  ch = Channels.findOne {name: @to}
+  #FIXME: shouldn't need to check existence of ch
+  convo = false
+  if ch
+    for nick in ch.nicks
+      nickExp = new RegExp "(^|[^\S])(#{nick})($|[^\S])"
+      convo = true if nickExp.test(@text)
+  return convo
+
 Template.message.timeAgo = ->
   moment(@time).fromNow()
-
-Template.notification.timeAgo = ->
-  moment(@time).fromNow()
-
-#Meteor.setInterval ->
-  #$('.messages-container').html Meteor.render(Template.messages)
-#, 60000 # One minute
 
 Template.message.message_class = ->
   ch = Channels.findOne {name: @to}
@@ -229,6 +244,13 @@ Template.message.message_class = ->
       status = 'online' if @from is nick
     return status + ' ' + @type
 
+Template.notification.timeAgo = ->
+  moment(@time).fromNow()
+
+#Meteor.setInterval ->
+  #$('.messages-container').html Meteor.render(Template.messages)
+#, 60000 # One minute
+
 
 Template.notification.events
   'click li': ->
@@ -238,7 +260,3 @@ Template.notification.events
     Messages.update
       _id: @_id
     , {$set: {'type': 'normal'}}
-    ch = Channels.find name: @to
-    Channels.update ch._id, {$inc: {notifications: -1}}
-    ch = Channels.find name: 'all'
-    Channels.update ch._id, {$inc: {notifications: -1}}

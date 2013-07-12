@@ -1,4 +1,5 @@
 #FIXME: remove markdownifying from links.
+#TODO: Add a watch list.
 #TODO: clicking on name should isolate that user's messages.
 #TODO: Add autocomplete for nicks and channels
 #TODO: Send messages to specific channels from 'all'.

@@ -1,5 +1,5 @@
 <head>
-  <title>irc</title>
+  <title>Twirc</title>
 </head>
 
 <body>
@@ -83,7 +83,7 @@
       <p>{{text}}</p>
     </li>
   {{else}}
-    <li id="{{_id}}" data-channel="{{to}}" class="message {{message_class}}">
+  <li id="{{_id}}" data-nick="{{from}}" data-channel="{{to}}" {{convo}} class="message {{message_class}}">
       <span class="reply">
         <strong>{{from}}</strong>
         {{#if all}}
@@ -96,9 +96,11 @@
           <i class="icon-share-alt"></i> reply
         </div>
         &nbsp;
-        <div class="action">
-          <i class="icon-comment"></i> view conversation
-        </div>
+        {{#if isConvo}}
+          <div class="action convo">
+            <i class="icon-comment"></i> view conversation
+          </div>
+        {{/if}}
       </div>
       <small class="muted pull-right">{{timeAgo}}</small>
       <p>{{text}}</p>
@@ -115,16 +117,6 @@
         <span class="muted">{{to}}</span>
       {{/if}}
     </span>
-    &nbsp;
-    <div class="actions">
-      <div class="action">
-        <i class="icon-share-alt"></i> reply
-      </div>
-      &nbsp;
-      <div class="action">
-        <i class="icon-comment"></i> view conversation
-      </div>
-    </div>
     <small class="muted pull-right">{{timeAgo}}</small>
     <p>{{text}}</p>
   </li>
