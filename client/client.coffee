@@ -162,7 +162,7 @@ Template.message.rendered = ->
   # Define regular expressions.
   urlExp = /([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)/ig
   codeExp = new RegExp "(^|</[^>]*>)([^<>]*)`([^<>]*)`([^<>]*)(?=$|<)"
-  boldExp = new RegExp "(^|</[^>]*>)([^<>]*)\*([^<>]*)\*([^<>]*)(?=$|<)"
+  boldExp = new RegExp "(^|</[^>]*>)([^<>]*)\\*([^<>]*)\\*([^<>]*)(?=$|<)"
   underlineExp = new RegExp "(^|</[^>]*>)([^<>]*)_([^<>]*)_([^<>]*)(?=$|<)"
   # Get message text.
   p = $(@find('p'))
@@ -175,7 +175,7 @@ Template.message.rendered = ->
   convo = ""
   if ch
     for nick in ch.nicks
-      nickExp = new RegExp "(^|[^\S])(#{nick})($|[^\S])"
+      nickExp = new RegExp "(^|[^\\S])(#{nick})($|[^\\S])"
       ptext = ptext.replace nickExp, "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
   ptext = ptext.replace codeExp, '$2<code>$3</code>$4'
