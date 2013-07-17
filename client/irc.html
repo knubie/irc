@@ -3,9 +3,6 @@
 </head>
 
 <body>
-  <div style="position: absolute; top:5px; right:5px;">
-    {{loginButtons align='right'}}
-  </div>
   {{> home}}
   {{#if currentUser}}
     {{> dashboard}}
@@ -31,7 +28,7 @@
       <li class="logo">Twirc</li>
       <li class="nav-item"><a href="#">Explore</a></li>
       <li class="nav-item"><a href="#">Account</a></li>
-      <li class="nav-item"><a href="#">Sign Out</a></li>
+      <li class="nav-item sign-out"><a href="#">Sign Out</a></li>
       {{> channels}}
     </ul>
     <div class="messages-container">
@@ -93,32 +90,34 @@
           <span class="muted">{{channel}}</span>
         {{/if}}
       </span>
-      &nbsp;
-      <div class="actions">
-        <div class="action">
-          <i class="icon-share-alt"></i> Reply
-        </div>
+      {{#unless self}}
         &nbsp;
-        <div class="action">
-          <i class="icon-volume-off"></i> Ignore
+        <div class="actions">
+          <div class="action">
+            <i class="icon-share-alt"></i> Reply
+          </div>
+          &nbsp;
+          <div class="action">
+            <i class="icon-volume-off"></i> Ignore
+          </div>
+          {{#if op_status}}
+            &nbsp;
+            <div class="action">
+              <i class="icon-share"></i> Kick
+            </div>
+            &nbsp;
+            <div class="action">
+              <i class="icon-ban-circle"></i> Ban
+            </div>
+          {{/if}}
+          {{#if isConvo}}
+            &nbsp;
+            <div class="action convo">
+              <i class="icon-comment"></i> View conversation
+            </div>
+          {{/if}}
         </div>
-        {{#if op_status}}
-          &nbsp;
-          <div class="action">
-            <i class="icon-share"></i> Kick
-          </div>
-          &nbsp;
-          <div class="action">
-            <i class="icon-ban-circle"></i> Ban
-          </div>
-        {{/if}}
-        {{#if isConvo}}
-          &nbsp;
-          <div class="action convo">
-            <i class="icon-comment"></i> View conversation
-          </div>
-        {{/if}}
-      </div>
+      {{/unless}}
       <small class="muted pull-right">{{timeAgo}}</small>
       <p>{{text}}</p>
     </li>

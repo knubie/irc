@@ -77,7 +77,7 @@
         return done();
       });
     });
-    return test('uniqueness', function(done, server, client) {
+    test('insert', function(done, server, client) {
       client["eval"](function() {
         return Accounts.createUser({
           username: 'matt',
@@ -85,7 +85,31 @@
           profile: {
             connecting: true
           }
-        }, function(err) {
+        }, function() {
+          Channels.insert({
+            owner: Meteor.userId(),
+            name: '#channel'
+          });
+          return Channels.find().observe({
+            added: function() {
+              return emit('added');
+            }
+          });
+        });
+      });
+      return client.once('added', function() {
+        return done();
+      });
+    });
+    test('uniqueness', function(done, server, client) {
+      client["eval"](function() {
+        return Accounts.createUser({
+          username: 'matt',
+          password: 'password',
+          profile: {
+            connecting: true
+          }
+        }, function() {
           Channels.insert({
             owner: Meteor.userId(),
             name: '#channel'
@@ -93,6 +117,30 @@
           Channels.insert({
             owner: Meteor.userId(),
             name: '#channel'
+          });
+          return Channels.find().observe({
+            removed: function() {
+              return emit('removed');
+            }
+          });
+        });
+      });
+      return client.once('removed', function() {
+        return done();
+      });
+    });
+    return test('no whitespace', function(done, server, client) {
+      client["eval"](function() {
+        return Accounts.createUser({
+          username: 'matt',
+          password: 'password',
+          profile: {
+            connecting: true
+          }
+        }, function() {
+          Channels.insert({
+            owner: Meteor.userId(),
+            name: '#channel name'
           });
           return Channels.find().observe({
             removed: function() {

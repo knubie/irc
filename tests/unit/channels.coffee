@@ -15,7 +15,6 @@ suite 'Channels', ->
       assert.equal length, 1
       done()
         
-        
   test 'Channel#status', (done, server, client) ->
     client.eval ->
       Accounts.createUser
@@ -59,6 +58,23 @@ suite 'Channels', ->
       assert.equal length, 1
       done()
 
+  test 'insert', (done, server, client) ->
+    client.eval ->
+      Accounts.createUser
+        username: 'matt'
+        password: 'password'
+        profile:
+          connecting: true
+      , ->
+        Channels.insert
+          owner: Meteor.userId()
+          name: '#channel'
+
+        Channels.find().observe
+          added: -> emit 'added'
+
+    client.once 'added', ->
+      done()
 
   test 'uniqueness', (done, server, client) ->
     client.eval ->
@@ -67,16 +83,35 @@ suite 'Channels', ->
         password: 'password'
         profile:
           connecting: true
-      , (err) ->
+      , ->
         Channels.insert
           owner: Meteor.userId()
           name: '#channel'
         Channels.insert
           owner: Meteor.userId()
           name: '#channel'
+
         Channels.find().observe
           removed: -> emit 'removed'
-        #emit 'check', Channels.find().fetch().length
 
     client.once 'removed', ->
       done()
+
+  test 'no whitespace', (done, server, client) ->
+    client.eval ->
+      Accounts.createUser
+        username: 'matt'
+        password: 'password'
+        profile:
+          connecting: true
+      , ->
+        Channels.insert
+          owner: Meteor.userId()
+          name: '#channel name'
+
+        Channels.find().observe
+          removed: -> emit 'removed'
+
+    client.once 'removed', ->
+      done()
+

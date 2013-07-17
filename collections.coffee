@@ -26,13 +26,16 @@ if Meteor.isServer
         Channels.findOne
           owner: userId
           name: channel.name
-      channel.owner is userId and channel.name and not duplicate()
-
+      spaces = ->
+        channel.name.indexOf(' ') >= 0
+      channel.owner is userId and
+      channel.name and
+      not duplicate() and
+      not spaces()
     remove: (userId, channel) ->
-      channel.owner == userId
-
+      channel.owner is userId
     update: (userId, channel) ->
-      channel.owner == userId
+      channel.owner is userId
 
 # Messages
 #   owner   : UserId
@@ -55,14 +58,13 @@ if Meteor.isServer
           else
             return 'normal'
       convo: ->
-        ch = Channels.findOne {name: @channel}
         convo = ''
         for nick, status of Channels.findOne(name: @channel).nicks
-          nickExp = new RegExp "(^|[^\\S])(#{nick})($|([:,]|[^\\S]))"
+          nickExp = new RegExp "(^|[^\\S])(#{nick})($|([:,.!?]|[^\\S]))"
           convo = nick if nickExp.test(@text)
         return convo
       online: ->
         online = no
         for nick, status of Channels.findOne(name: @channel).nicks
-          online = yes if @from is nick; break
+          online = yes if @from is nick
         return online

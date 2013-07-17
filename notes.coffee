@@ -21,3 +21,13 @@
 # Persistent connection.
 # Full text search.*
 # Keyword subscriptions.*
+#
+#
+# Roadmap:
+# Add heroku like bot add-ons
+# Create a new public IRC server.
+# Allow creation of new private networks.
+#
+# Free: Persistent connection.
+# Personal: Free + Private channels and other networks.
+# Business: Personal + Private networks.

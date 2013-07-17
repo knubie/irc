@@ -13,7 +13,7 @@ client = {}
 class Client
   constructor: ({@_id, @username}) ->
     # Create a new IRC Client instance.
-    @client = new IRC.Client 'irc.freenode.net', @username,
+    @client = new IRC.Client 'irc.choopa.net', @username,
       autoConnect: false
 
     # Log errors sent from the network.
@@ -37,20 +37,23 @@ class Client
       #@join from if to is @username
 
     # Listen for 'names' requests.
-    @client.on 'names', async (channel, nicks) ->
+    @client.on 'names', async (channel, nicks) =>
       # Update Channel.nicks with the nicks object sent from the network.
       Channels.update
         name: channel
         owner: @_id
       , {$set: {nicks}}
 
-    # Send a NAMES request to the network when users join or part.
+    # Send a NAMES request when users joins, parts, or changes nick.
     @client.on "join", async (channel) => @client.send 'NAMES', channel
-    @client.on "part", async (channel) => @clients.send 'NAMES', channel
+    @client.on "part", async (channel) => @client.send 'NAMES', channel
+    @client.on "nick", async (channel) => @client.send 'NAMES', channel
 
   connect: ->
     # Connect to the IRC network.
+    console.log 'connecting..'
     @client.connect async =>
+      console.log 'connected'
       # Set connecting status to false.
       Meteor.users.update @_id, $set: {'profile.connecting': false}
       # Join subscribed channels.
@@ -66,10 +69,11 @@ class Client
       @client.join channel
     else # channel is actually a nick
       nicks[channel] = '' # Add nick to nicks object.
-
-    # Insert a new Channel doc unless one already exists.
-    unless Channels.findOne {owner: @_id, name: channel}
-      Channels.insert {owner: @_id, name: channel, nicks}
+      # Update channel with new nicks.
+      Channels.update
+        name: channel
+        owner: @_id
+      , {$set: {nicks}}
 
   say: (channel, text) ->
     check channel, String
@@ -94,8 +98,6 @@ class Client
 Meteor.methods
   connect: (user) ->
     check user, Match.ObjectIncluding({_id: String, username: String})
-    console.log 'connect'
-    console.log user
     Meteor.users.update user._id, $set: {'profile.connecting': true}
     client[user._id] = new Client user
     client[user._id].connect()

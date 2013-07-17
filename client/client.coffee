@@ -35,16 +35,13 @@ regex =
 handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels', ->
-  for channel in Channels.find().fetch()
+  subscribeToMessagesOf = (channel) ->
     handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
     , channel.name
     , 30
-    channels.rewind()
-    channels.observe
-      added: (channel) ->
-        handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
-        , channel.name
-        , 30
+  subscribeToMessagesOf channel for channel in Channels.find().fetch()
+  Channels.find().observe
+    added: subscribeToMessagesOf
 
 Meteor.startup ->
   $(window).scroll ->
@@ -86,6 +83,10 @@ Template.home.events
 
 ########## Dashboard ##########
 
+Template.dashboard.events
+  'click .sign-out': ->
+    Meteor.logout()
+
 Template.dashboard.rendered = ->
   $(window).on 'keydown', (e) ->
     keyCode = e.keyCode or e.which
@@ -105,6 +106,7 @@ Template.channels.events
     e.preventDefault()
     name = t.find('#new-channel-name').value
     t.find('#new-channel-name').value = ''
+    Channels.insert {owner: Meteor.userId(), name}
     Meteor.call 'join', Meteor.user(), name
     #TODO: combine with identicle lines below?
     Session.set 'channel', name
@@ -171,23 +173,13 @@ Template.messages.helpers
   messages: ->
     prev = null
     Channels.findOne(name: Session.get 'channel')
-    .messages({sort: time: 1})
-    .map (msg) ->
+    ?.messages({sort: time: 1}) #FIXME: why do i need to check for existence.
+    ?.map (msg) ->
       msg.prev = prev
       prev = msg
-    #if Session.equals 'channel', 'all'
-      #messages = Messages.find {}, sort: time: 1
-    #else
-      #messages = Messages.find {channel: Session.get('channel')}, sort: time: 1
-    #prev = null
-    #messages.map (msg) ->
-      #msg.prev = prev
-      #prev = msg
   notifications: ->
     Channels.findOne(name: Session.get 'channel')
-    .notifications({sort: time: 1})
-    #messages = Messages.find({}, {sort: {time: 1}}).fetch()
-    #messages.filter (msg) -> msg.type() is 'mention'
+    ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
 
 ########## Message ##########
 
@@ -199,7 +191,7 @@ Template.message.rendered = ->
   # Linkify URLs.
   ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>$1</a>"
   # Linkify nicks.
-  for nick, status of Channels.findOne(name: @channel).nicks
+  for nick, status of Channels.findOne(name: @data.channel).nicks
     ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
   ptext = ptext.replace regex.code, '$2<code>$3</code>$4'
@@ -242,9 +234,11 @@ Template.message.helpers
   timeAgo: ->
     moment(@time).fromNow()
   message_class: ->
-    if @online() then @type else "offline #{@type()}"
+    if @online() then @type() else "offline #{@type()}"
   op_status: ->
     Channels.findOne(name: Session.get 'channel' ).status() is '@'
+  self: ->
+    @type() is 'self'
 
 Template.notification.timeAgo = ->
   moment(@time).fromNow()
