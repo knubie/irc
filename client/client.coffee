@@ -1,49 +1,63 @@
+########## Defaults ##########
+
 # Currently selected channel for viewing messages.
 Session.setDefault 'channel', 'all'
 # Push messages to the bottom by default (ie don't save scroll position).
 Session.setDefault 'scroll', false
 
+########## Methods ##########
+
 Meteor.methods
-  join: (user, name) ->
-    owner = user._id
-    # If it's a channel, set an empty array and let the NAMES req populate it.
-    # If it's a PM, set the nicks array to the current user and sender.
-    nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
-    Channels.insert {owner, name, nicks}
+  join: (user, channel) ->
+    Channels.insert {owner: user._id, name: channel, nicks: {}}
 
   part: (user, channel) ->
     Channels.remove {owner: user._id, name: channel}
-    #Messages.remove {owner: user._id, to: channel}
 
   say: (user, channel, message) ->
     Messages.insert
       from: user.username
-      to: channel #TODO: perhaps change this to owner: channel._id
+      channel: channel
       text: message
       time: new Date
       owner: user._id
-      type: 'self'
 
-# Collection subscriptions from the server.
+########## Helpers ##########
+
+regex =
+  url: /([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)/ig
+  code: new RegExp "(^|</[^>]*>)([^<>]*)`([^<>]*)`([^<>]*)(?=$|<)"
+  bold: new RegExp "(^|</[^>]*>)([^<>]*)\\*([^<>]*)\\*([^<>]*)(?=$|<)"
+  underline: new RegExp "(^|</[^>]*>)([^<>]*)_([^<>]*)_([^<>]*)(?=$|<)"
+  nick: (nick) -> new RegExp "(^|[^\\S])(#{nick})($|([:,]|[^\\S]))"
+
+########## Subscriptions ##########
 handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels', ->
-  channels = Channels.find()
-  channels.forEach (channel) ->
+  for channel in Channels.find().fetch()
     handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
     , channel.name
-    , 10
-  channels.rewind()
-  channels.observe
-    added: (channel) ->
-      handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
-      , channel.name
-      , 10
+    , 30
+    channels.rewind()
+    channels.observe
+      added: (channel) ->
+        handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
+        , channel.name
+        , 30
 
+Meteor.startup ->
+  $(window).scroll ->
+    # If not scrolled to the bottom
+    if $(window).scrollTop() < $(document).height() - $(window).height()
+      Session.set 'scroll', true
+    else
+      Session.set 'scroll', false
 
-#messagesHandle = Meteor.subscribeWithPagination 'messages', ->
-  #Meteor.user().channels
-#, 50
+    # If close to top and messages handler is ready.
+    if $(window).scrollTop() <= 50 and handlers.messages[Session.get 'channel'].ready()
+      # Load next page.
+      handlers.messages[Session.get 'channel'].loadNextPage()
 
 Template.home.events
   'submit #auth-form': (e,t) ->
@@ -51,68 +65,90 @@ Template.home.events
     username = t.find('#auth-nick').value
     password = t.find('#auth-pw').value
 
+    # If user exists.
     if Meteor.users.findOne {username}
+      # Log in.
       Meteor.loginWithPassword username, password
-    else
+    else # User doesn't exist.
+      # Create user.
       Accounts.createUser
         username: username
         password: password
         profile:
           connecting: true
       , (err) ->
+        # Create default 'all' channel.
         Channels.insert
           owner: Meteor.userId()
           name: 'all'
-        Meteor.apply 'connect', [Meteor.user()]
+        # Connect user to IRC network.
+        Meteor.call 'connect', Meteor.user()
 
-Template.dashboard.connecting = ->
-  return Meteor.user().profile.connecting
+########## Dashboard ##########
 
 Template.dashboard.rendered = ->
   $(window).on 'keydown', (e) ->
     keyCode = e.keyCode or e.which
+    # Focus #say-input on <TAB>
     if keyCode is 9 and not $('#say-input').is(':focus')
       e.preventDefault()
       $('#say-input').focus()
 
-########## Channels ##########
+Template.dashboard.helpers
+  connecting: ->
+    Meteor.user().profile.connecting
 
-Template.channels.channels = ->
-  Channels.find()
+########## Channels ##########
 
 Template.channels.events
   'submit #new-channel': (e, t) ->
     e.preventDefault()
     name = t.find('#new-channel-name').value
     t.find('#new-channel-name').value = ''
-    Meteor.apply 'join', [Meteor.user(), name]
+    Meteor.call 'join', Meteor.user(), name
+    #TODO: combine with identicle lines below?
+    Session.set 'channel', name
     $('#say-input').focus()
 
-  'click .channel': (e,t) ->
-    #FIXME: make this work for touch.
+  'click, tap .channel': (e,t) ->
     Session.set 'channel', @name
     $('#say-input').focus()
 
   'click .close': ->
-    Meteor.apply 'part', [Meteor.user(), @name]
+    Meteor.call 'part', Meteor.user(), @name
     Session.set 'channel', 'all'
 
-Template.channels.selected = ->
-  if Session.equals 'channel', @name then 'selected' else ''
-
-Template.channels.notification_count = ->
-  if @notifications() < 1 then '' else @notifications()
+Template.channels.helpers
+  channels: ->
+    Channels.find()
+  selected: ->
+    if Session.equals 'channel', @name then 'selected' else ''
+  notification_count: ->
+    if @notifications().length < 1 then '' else @notifications().length
 
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  ch = Channels.findOne
-    owner: Meteor.userId()
-    name: Session.get('channel')
+  if Session.equals 'channel', 'all'
+    $('.message').hover ->
+      $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
+    , ->
+      $('.message').removeClass 'faded'
+  if Session.equals 'scroll', false
+    $(window).scrollTop($(document).height() - $(window).height())
+
+  #ch = Channels.findOne
+    #owner: Meteor.userId()
+    #name: Session.get('channel')
   #FIXME: this breaks the messages.events
   #$('#say-input').typeahead
     #name: 'names'
     #local: [
+      #'? Type @ to mention nicks.'
+      #'? Click on \'View conversation\' to isolate a conversation between two users.'
+      #'? Hover over message in \'all\' view to messages from the same channel.'
+      #'? Click any message in \'all\' view to jump to that channel.'
+      #'? Basic formatting: *bold*, _underline_, and `inline code`.'
       #'@matty'
       #'@oddmunds'
       #'@entel'
@@ -126,62 +162,49 @@ Template.messages.events
     e.preventDefault()
     message = t.find('#say-input').value
     $('#say-input').val('')
-    Meteor.apply 'say', [Meteor.user(), Session.get('channel'), message]
+    Meteor.call 'say', Meteor.user(), Session.get('channel'), message
 
-  'click .load-next': ->
+  'click, tap .load-next': ->
     handlers.messages[Session.get 'channel'].loadNextPage()
 
-$(window).scroll ->
-  if $(window).scrollTop() < $(document).height() - $(window).height()
-    Session.set 'scroll', true
-  else
-    Session.set 'scroll', false
+Template.messages.helpers
+  messages: ->
+    prev = null
+    Channels.findOne(name: Session.get 'channel')
+    .messages({sort: time: 1})
+    .map (msg) ->
+      msg.prev = prev
+      prev = msg
+    #if Session.equals 'channel', 'all'
+      #messages = Messages.find {}, sort: time: 1
+    #else
+      #messages = Messages.find {channel: Session.get('channel')}, sort: time: 1
+    #prev = null
+    #messages.map (msg) ->
+      #msg.prev = prev
+      #prev = msg
+  notifications: ->
+    Channels.findOne(name: Session.get 'channel')
+    .notifications({sort: time: 1})
+    #messages = Messages.find({}, {sort: {time: 1}}).fetch()
+    #messages.filter (msg) -> msg.type() is 'mention'
 
-Template.messages.rendered = ->
-  if Session.equals 'channel', 'all'
-    $('.message').hover ->
-      $('.message').not("[data-channel='#{$(this).attr('data-channel')}']").css 'opacity', '0.3'
-    , ->
-      $('.message').css 'opacity', '1'
-  if Session.equals 'scroll', false
-    $(window).scrollTop($(document).height() - $(window).height())
-
-Template.messages.messages = ->
-  if Session.equals 'channel', 'all'
-    messages = Messages.find {}, sort: time: 1
-  else
-    messages = Messages.find {to: Session.get('channel')}, sort: time: 1
-  prev = null
-  messages.map (msg) ->
-    msg.prev = prev
-    prev = msg
-
-Template.messages.notifications = ->
-  messages = Messages.find {type: 'mention'}, {sort: {time: 1}}
+########## Message ##########
 
 Template.message.rendered = ->
-  # Define regular expressions.
-  urlExp = /([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)/ig
-  codeExp = new RegExp "(^|</[^>]*>)([^<>]*)`([^<>]*)`([^<>]*)(?=$|<)"
-  boldExp = new RegExp "(^|</[^>]*>)([^<>]*)\\*([^<>]*)\\*([^<>]*)(?=$|<)"
-  underlineExp = new RegExp "(^|</[^>]*>)([^<>]*)_([^<>]*)_([^<>]*)(?=$|<)"
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
+  #TODO: combine all markdownification into a helper method.
   # Linkify URLs.
-  ptext = ptext.replace urlExp, "<a href='$1' target='_blank'>$1</a>"
+  ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>$1</a>"
   # Linkify nicks.
-  ch = Channels.findOne {name: @data.to}
-  #FIXME: shouldn't need to check existence of ch
-  convo = ""
-  if ch
-    for nick in ch.nicks
-      nickExp = new RegExp "(^|[^\\S])(#{nick})($|[^\\S])"
-      ptext = ptext.replace nickExp, "$1<a href=\"#\">$2</a>$3"
+  for nick, status of Channels.findOne(name: @channel).nicks
+    ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
-  ptext = ptext.replace codeExp, '$2<code>$3</code>$4'
-  ptext = ptext.replace boldExp, '$2<strong>$3</strong>$4'
-  ptext = ptext.replace underlineExp, '$2<span class="underline">$3</span>$4'
+  ptext = ptext.replace regex.code, '$2<code>$3</code>$4'
+  ptext = ptext.replace regex.bold, '$2<strong>$3</strong>$4'
+  ptext = ptext.replace regex.underline, '$2<span class="underline">$3</span>$4'
   p.html(ptext)
 
 Template.message.events
@@ -189,7 +212,7 @@ Template.message.events
     $('#say-input').val("#{@from} ")
     $('#say-input').focus()
 
-  'click': (e, t) ->
+  'click, tap': (e, t) ->
     if Session.equals 'channel', 'all'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
@@ -206,58 +229,35 @@ Template.message.events
     .not("[data-nick='#{convo}']")
     .slideToggle 400
 
-Template.message.joinToPrev = ->
-  unless @prev is null
-    @prev.from is @from and @prev.to is @to and @type isnt 'mention' and @prev.type isnt 'mention'
-
-Template.message.all = ->
-  Session.equals 'channel', 'all'
-
-Template.message.convo = ->
-  ch = Channels.findOne {name: @to}
-  #FIXME: shouldn't need to check existence of ch
-  convo = ""
-  if ch
-    for nick in ch.nicks
-      nickExp = new RegExp "(^|[^\S])(#{nick})($|[^\S])"
-      convo = "data-convo=#{nick}" if nickExp.test(@text)
-  return convo
-
-Template.message.isConvo = ->
-  ch = Channels.findOne {name: @to}
-  #FIXME: shouldn't need to check existence of ch
-  convo = false
-  if ch
-    for nick in ch.nicks
-      nickExp = new RegExp "(^|[^\S])(#{nick})($|[^\S])"
-      convo = true if nickExp.test(@text)
-  return convo
-
-Template.message.timeAgo = ->
-  moment(@time).fromNow()
-
-Template.message.message_class = ->
-  ch = Channels.findOne {name: @to}
-  status = 'offline'
-  #FIXME: shouldn't need to check existence of ch
-  if ch
-    for nick in ch.nicks
-      status = 'online' if @from is nick
-    return status + ' ' + @type
+Template.message.helpers
+  joinToPrev: ->
+    unless @prev is null
+      @prev.from is @from and @prev.channel is @channel and @type() isnt 'mention' and @prev.type() isnt 'mention'
+  all: ->
+    Session.equals 'channel', 'all'
+  convo: ->
+    @convo()
+  isConvo: ->
+    if @convo() then yes else no
+  timeAgo: ->
+    moment(@time).fromNow()
+  message_class: ->
+    if @online() then @type else "offline #{@type()}"
+  op_status: ->
+    Channels.findOne(name: Session.get 'channel' ).status() is '@'
 
 Template.notification.timeAgo = ->
   moment(@time).fromNow()
 
-#Meteor.setInterval ->
-  #$('.messages-container').html Meteor.render(Template.messages)
-#, 60000 # One minute
-
-
 Template.notification.events
-  'click li': ->
+  'click, tap li': ->
     $(window).scrollTop $("##{@_id}").offset().top - 10
 
   'click .close': ->
     Messages.update
       _id: @_id
     , {$set: {'type': 'normal'}}
+
+#Meteor.setInterval ->
+  #$('.messages-container').html Meteor.render(Template.messages)
+#, 60000 # One minute

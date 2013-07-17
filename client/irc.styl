@@ -36,6 +36,9 @@ body
   font-size: 14px
   padding: 0
 
+.fixed-width
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace
+
 .underline
   text-decoration: underline
 
@@ -76,6 +79,11 @@ code
   top: 0
   left: 0
   width: 200px
+  li.logo
+    font-size: 21px
+    color: white
+    font-weight: bold
+    padding: 12px 12px
   li
     a > button 
       display: none
@@ -89,10 +97,11 @@ code
     display:none
 
   .selected > a,
-  .selected:hover > a,
-  li > a:hover 
+  .selected:hover > a
+    background-color: peter-river
     color: #FFF
-    background-color: #3498DB
+  li > a:hover 
+    background-color: midnight-blue
 
 .new-channel-li 
   background-color: rgba(0, 0, 0, 0.075)
@@ -114,9 +123,22 @@ code
 
 .messages
   .offline
-    opacity: 0.5
+    .reply, small, p
+      opacity: 0.4
+    .actions
+      display: none
+    .divider
+      border-bottom: 2px solid rgba(0,0,0,0.02)
   .join
     margin-top: -23px
+
+.message.faded
+  background-color: #f4f8f9
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05)
+  .reply, small, p
+    opacity: 0.4
+  .divider
+    border-bottom: 2px solid rgba(0,0,0,0.02)
 
 .message
   background-color: #fff
@@ -126,7 +148,9 @@ code
   padding: 11px 15px
   color: #777
   position: relative
-  transition: .15s left, .15s opacity
+  transition: .15s left, .15s opacity, .15s background-color, .15s color
+  .reply, small, p
+    transition: .15s left, .15s opacity, .15s background-color, .15s color
   .muted
     color: rgba(0,0,0,0.4)
     font-size: 12px
@@ -151,7 +175,6 @@ code
       display: inline
     .action:hover
       color: #333
-      border-bottom: 1px solid #999
       i
         opacity: 0.8
 
@@ -160,10 +183,10 @@ code
   background-color: rgba(0,0,0,0)
   width: 100%
   .tt-suggestion
-    padding: 10px 18px
+    padding: 3px 18px
     width: 100%
     color: rgba(0,0,0,0.2)
-    font-size: 21px
+    font-size: 16px
     p
       margin: 0
   .tt-is-under-cursor
@@ -216,11 +239,14 @@ form
 
 .messages-container 
   margin-left: 200px
+  margin-bottom: 51px
   padding: 15px
   .input-container
-    margin: 10px 0 -15px -15px
+    position: fixed
+    bottom: 0
+    left: 200px
     width: calc(100% \+ 30px)
-    background-color: rgba(0,0,0,0.075)
+    background-color: #d9ddde
     border-top: 2px solid rgba(0,0,0,0.02)
     input, input:focus
       border: none

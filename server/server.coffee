@@ -1,113 +1,119 @@
-Fiber = Npm.require("fibers")
+#Fiber = Npm.require("fibers")
 
-isChannel = (text) ->
-  /^[#](.*)$/.test text
+String::isChannel = ->
+  if /^[#](.*)$/.test @ then true else false
 
 Meteor.startup ->
-  #FIXME: Sometimes this connects multiple times.
-  users = Meteor.users.find {}
-  users.forEach (user) -> Meteor.apply 'connect', [user]
+  Meteor.call 'connect', user for user in Meteor.users.find().fetch()
 
-clients = {}
+async = (cb) -> Meteor.bindEnvironment cb, (err) -> console.log err
 
-join = (user, channel) ->
-  if /^[#](.*)$/.test channel
-    clients[user._id].join channel
+client = {}
+
+class Client
+  constructor: ({@_id, @username}) ->
+    # Create a new IRC Client instance.
+    @client = new IRC.Client 'irc.freenode.net', @username,
+      autoConnect: false
+
+    # Log errors sent from the network.
+    @client.on 'error', (msg) -> console.log msg
+
+    # Listen for incoming messages.
+    @client.on 'message', async (from, to, text, message) =>
+      #FIXME: this is inelegant.
+      if to is @username
+        @join from
+        to = from
+      # Insert a new message
+      Messages.insert
+        from: from
+        channel: to #TODO: add support for PMs
+        text: text
+        time: new Date
+        owner: @_id
+
+      # Create new Channel if message is a PM.
+      #@join from if to is @username
+
+    # Listen for 'names' requests.
+    @client.on 'names', async (channel, nicks) ->
+      # Update Channel.nicks with the nicks object sent from the network.
+      Channels.update
+        name: channel
+        owner: @_id
+      , {$set: {nicks}}
+
+    # Send a NAMES request to the network when users join or part.
+    @client.on "join", async (channel) => @client.send 'NAMES', channel
+    @client.on "part", async (channel) => @clients.send 'NAMES', channel
+
+  connect: ->
+    # Connect to the IRC network.
+    @client.connect async =>
+      # Set connecting status to false.
+      Meteor.users.update @_id, $set: {'profile.connecting': false}
+      # Join subscribed channels.
+      @join channel.name for channel in Channels.find(owner: @_id).fetch()
+
+  join: (channel) ->
+    check channel, String
+    # Create a base nicks object.
+    nicks = {}
+    nicks[@username] = ''
+
+    if channel.isChannel() # channel begins with '#'
+      @client.join channel
+    else # channel is actually a nick
+      nicks[channel] = '' # Add nick to nicks object.
+
+    # Insert a new Channel doc unless one already exists.
+    unless Channels.findOne {owner: @_id, name: channel}
+      Channels.insert {owner: @_id, name: channel, nicks}
+
+  say: (channel, text) ->
+    check channel, String
+    check text, String
+    # Sends text to the specified channel and inserts a new Message doc.
+    @client.say channel, text
+    Messages.insert
+      from: @username
+      channel: channel
+      text: text
+      time: new Date
+      owner: @_id
+
+  part: (channel) ->
+    check channel, String
+    # Leave the channel if it is in fact a channel (ie. not a nick)
+    @client.part channel if /^[#](.*)$/.test channel
+    # Remove the corresponding Channel doc.
+    Channels.remove {owner: @_id, name: channel}
+    #Messages.remove {owner: user._id, to: channel}
 
 Meteor.methods
   connect: (user) ->
-    # Set user status to connecting.
+    check user, Match.ObjectIncluding({_id: String, username: String})
+    console.log 'connect'
+    console.log user
     Meteor.users.update user._id, $set: {'profile.connecting': true}
+    client[user._id] = new Client user
+    client[user._id].connect()
 
-    # Create new IRC instance.
-    clients[user._id] = new IRC.Client 'irc.freenode.net', user.username,
-      autoConnect: false
-
-    clients[user._id].on 'error', (msg) -> console.log msg
-
-    # Connect the client to the server.
-    clients[user._id].connect Meteor.bindEnvironment ->
-      # Set user status to connected.
-      #clients[user._id].send 'WEBIRC', 'password', 'knubie', 
-      Meteor.users.update user._id, $set: {'profile.connecting': false}
-      # Listen for messages and create new Messages doc for each one.
-      clients[user._id].on 'message', Meteor.bindEnvironment (from, to, text, message) ->
-        type = 'normal'
-        # Rearrange some stuff to make messages
-        # show up where they're supposed to.
-        mentionRegex = new RegExp ".*#{user.username}.*"
-        if mentionRegex.test text
-          type = 'mention'
-        # If receiving a PM
-        if to is user.username
-          # Check if "from" is in channel list, if not add it.
-          onList = false
-          channels = Channels.find owner: user._id
-          channels.forEach (channel) -> onList = true if from is channel.name
-          unless onList
-            Channels.insert
-              owner: user._id
-              name: from
-              nicks: [from, to]
-          else
-          # Channel list displays "to" not "from"
-          # (to is usually channel name)
-          to = from
-        Messages.insert
-          from: from
-          to: to
-          text: text
-          type: type
-          time: new Date
-          owner: user._id
-      , (err) -> console.log err
-      # Listen for when the client requests names from a channel
-      # and log them to corresponding the channel document.
-      clients[user._id].on 'names', Meteor.bindEnvironment (channel,nicks) ->
-        nicksArray = for nick, status of nicks
-          nick
-        Channels.update
-          name: channel
-          owner: user._id
-        , {$set: {'nicks': nicksArray}}
-      , (err) -> console.log err
-      # Listen for when users join or part a channel.
-      clients[user._id].on "join", Meteor.bindEnvironment (chan) ->
-        # Request names for that channel from the server.
-        # When names are requested the names listener will be called
-        # which sets the name to the corresponding channel's nicks array.
-        clients[user._id].send 'NAMES', chan
-      , (err) -> console.log err
-      clients[user._id].on "part", Meteor.bindEnvironment (chan) ->
-        clients[user._id].send 'NAMES', chan
-      , (err) -> console.log err
-      # Join all channels subscribed to by user.
-      channels = Channels.find owner: user._id
-      channels.forEach (channel) -> join user, channel.name
-    , (err) -> console.log err
-
-  join: (user, name) ->
-    owner = user._id
-    # If it's a channel, set an empty array and let the NAMES req populate it.
-    # If it's a PM, set the nicks array to the current user and sender.
-    nicks = if /^[#](.*)$/.test name then [] else [user.username, name]
-    Channels.insert {owner, name, nicks}
-    join user, name
+  join: (user, channel) ->
+    check user, Match.ObjectIncluding(_id: String)
+    client[user._id].join channel
 
   part: (user, channel) ->
-    clients[user._id].part channel if /^[#](.*)$/.test channel
-    Channels.remove {owner: user._id, name: channel}
-    #Messages.remove {owner: user._id, to: channel}
+    check user, Match.ObjectIncluding(_id: String)
+    check channel, String
+    client[user._id].part channel
 
   say: (user, channel, message) ->
-    clients[user._id].say channel, message
-    Messages.insert
-      from: user.username
-      to: channel #TODO: perhaps change this to owner: channel._id
-      text: message
-      time: new Date
-      owner: user._id
-      type: 'self'
+    check user, Match.ObjectIncluding(_id: String)
+    check channel, String
+    check message, String
+    client[user._id].say channel, message
 
 Meteor.publish 'users', ->
   Meteor.users.find()

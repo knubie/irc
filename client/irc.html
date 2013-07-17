@@ -28,6 +28,10 @@
     Connecting..
   {{else}}
     <ul class="channels nav nav-stacked">
+      <li class="logo">Twirc</li>
+      <li class="nav-item"><a href="#">Explore</a></li>
+      <li class="nav-item"><a href="#">Account</a></li>
+      <li class="nav-item"><a href="#">Sign Out</a></li>
       {{> channels}}
     </ul>
     <div class="messages-container">
@@ -57,7 +61,6 @@
 </template>
 
 <template name="messages">
-  <span class="load-next">Load more.</span>
   <ul class="messages nav nav-stacked">
     {{#each messages}}
       {{> message}}
@@ -70,35 +73,49 @@
   </ul>
   <div class="input-container">
     <form id="say">
-      <input type="text" class="span6" id="say-input" autocomplete="off" placeholder="Type a message or command">
+      <input type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
     </form>
   </div>
 </template>
 
 <template name="message">
   {{#if joinToPrev}}
-    <li id="{{_id}}" data-channel="{{to}}" class="message join {{message_class}}">
+    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{to}}" class="message join {{message_class}}">
       <div class="divider"></div>
       <small class="muted pull-right">{{timeAgo}}</small>
       <p>{{text}}</p>
     </li>
   {{else}}
-  <li id="{{_id}}" data-nick="{{from}}" data-channel="{{to}}" {{convo}} class="message {{message_class}}">
+    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{to}}" {{convo}} class="message {{message_class}}">
       <span class="reply">
         <strong>{{from}}</strong>
         {{#if all}}
-          <span class="muted">{{to}}</span>
+          <span class="muted">{{channel}}</span>
         {{/if}}
       </span>
       &nbsp;
       <div class="actions">
         <div class="action">
-          <i class="icon-share-alt"></i> reply
+          <i class="icon-share-alt"></i> Reply
         </div>
         &nbsp;
+        <div class="action">
+          <i class="icon-volume-off"></i> Ignore
+        </div>
+        {{#if op_status}}
+          &nbsp;
+          <div class="action">
+            <i class="icon-share"></i> Kick
+          </div>
+          &nbsp;
+          <div class="action">
+            <i class="icon-ban-circle"></i> Ban
+          </div>
+        {{/if}}
         {{#if isConvo}}
+          &nbsp;
           <div class="action convo">
-            <i class="icon-comment"></i> view conversation
+            <i class="icon-comment"></i> View conversation
           </div>
         {{/if}}
       </div>
@@ -120,4 +137,14 @@
     <small class="muted pull-right">{{timeAgo}}</small>
     <p>{{text}}</p>
   </li>
+</template>
+
+<template  name="explore">
+  <ul class="nav nav-pills">
+  <li class="active">
+    <a href="#">##meteor_test</a>
+  </li>
+  <li><a href="#">#other_channel</a></li>
+  <li><a href="#">#sausage</a></li>
+</ul>
 </template>
