@@ -5,23 +5,6 @@ Session.setDefault 'channel', 'all'
 # Push messages to the bottom by default (ie don't save scroll position).
 Session.setDefault 'scroll', false
 
-########## Methods ##########
-
-Meteor.methods
-  join: (user, channel) ->
-    Channels.insert {owner: user._id, name: channel, nicks: {}}
-
-  part: (user, channel) ->
-    Channels.remove {owner: user._id, name: channel}
-
-  say: (user, channel, message) ->
-    Messages.insert
-      from: user.username
-      channel: channel
-      text: message
-      time: new Date
-      owner: user._id
-
 ########## Subscriptions ##########
 handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'

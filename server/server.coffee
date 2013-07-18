@@ -1,8 +1,5 @@
 #Fiber = Npm.require("fibers")
 
-String::isChannel = ->
-  if /^[#](.*)$/.test @ then true else false
-
 Meteor.startup ->
   Meteor.call 'connect', user for user in Meteor.users.find().fetch()
 
@@ -13,7 +10,9 @@ client = {}
 class Client
   constructor: ({@_id, @username}) ->
     # Create a new IRC Client instance.
-    @client = new IRC.Client 'irc.choopa.net', @username,
+    @client = new IRC.Client 'irc.freenode.net', @username,
+      userName: @username
+      realName: 'N/A'
       autoConnect: false
 
     # Log errors sent from the network.
@@ -86,7 +85,7 @@ class Client
   part: (channel) ->
     check channel, String
     # Leave the channel if it is in fact a channel (ie. not a nick)
-    @client.part channel if /^[#](.*)$/.test channel
+    @client.part channel if channel.isChannel
     # Remove the corresponding Channel doc.
     Channels.remove {owner: @_id, name: channel}
     #Messages.remove {owner: user._id, to: channel}
