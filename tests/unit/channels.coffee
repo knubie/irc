@@ -44,6 +44,7 @@ suite 'Channels', ->
         Channels.insert
           owner: Meteor.userId()
           name: '#channel'
+          notificationsRead: 1
         Messages.insert
           owner: Meteor.userId()
           channel: '#channel'
@@ -52,6 +53,10 @@ suite 'Channels', ->
           owner: Meteor.userId()
           channel: '#channel'
           text: 'hey matt.'
+        Messages.insert
+          owner: Meteor.userId()
+          channel: '#channel'
+          text: 'hi again, matt.'
         emit 'check', Channels.findOne().notifications().length
 
     client.once 'check', (length) ->

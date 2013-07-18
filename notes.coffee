@@ -27,7 +27,8 @@
 # Add heroku like bot add-ons
 # Create a new public IRC server.
 # Allow creation of new private networks.
+# Image hosting.
 #
 # Free: Persistent connection.
-# Personal: Free + Private channels and other networks.
+# Personal: Free + Private channels.
 # Business: Personal + Private networks.

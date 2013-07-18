@@ -7,13 +7,14 @@
     doc extends
       messages: (opts) ->
         opts ?= {}
-        Messages.find
-          owner: @owner
-          channel: if @name is 'all' then '' else @name
-        , opts
+        if @name is 'all'
+          selector = {owner: @owner}
+        else
+          selector = {owner: @owner, channel: @name}
+        Messages.find selector, opts
       notifications: (opts) ->
         opts ?= {}
-        @messages().fetch().filter (msg) -> msg.type() is 'mention'
+        @messages(opts).fetch().filter (msg) -> msg.type() is 'mention'
       status: ->
         {username} = Meteor.users.findOne(@owner)
         return @nicks[username]
@@ -52,19 +53,14 @@ if Meteor.isServer
         if @from is username
           return 'self'
         else
-          nickExp = new RegExp "(^|[^\\S])(#{username})($|([:,.!]|[^\\S]))"
-          if nickExp.test @text
-            return 'mention'
-          else
-            return 'normal'
+          if regex.nick(username).test @text then 'mention' else 'normal'
       convo: ->
         convo = ''
         for nick, status of Channels.findOne(name: @channel).nicks
-          nickExp = new RegExp "(^|[^\\S])(#{nick})($|([:,.!?]|[^\\S]))"
-          convo = nick if nickExp.test(@text)
+          convo = nick if regex.nick(nick).test(@text)
         return convo
       online: ->
         online = no
         for nick, status of Channels.findOne(name: @channel).nicks
-          online = yes if @from is nick
+          if @from is nick then online = yes; break
         return online

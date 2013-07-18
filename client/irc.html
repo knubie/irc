@@ -63,11 +63,6 @@
       {{> message}}
     {{/each}}
   </ul>
-  <ul class="notifications nav nav-stacked">
-    {{#each notifications}}
-      {{> notification}}
-    {{/each}}
-  </ul>
   <div class="input-container">
     <form id="say">
       <input type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
@@ -77,13 +72,13 @@
 
 <template name="message">
   {{#if joinToPrev}}
-    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{to}}" class="message join {{message_class}}">
+    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message join {{message_class}}">
       <div class="divider"></div>
       <small class="muted pull-right">{{timeAgo}}</small>
       <p>{{text}}</p>
     </li>
   {{else}}
-    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{to}}" {{convo}} class="message {{message_class}}">
+    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" data-convo="{{convo}}" class="message {{message_class}}">
       <span class="reply">
         <strong>{{from}}</strong>
         {{#if all}}

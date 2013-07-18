@@ -21,20 +21,16 @@ class Client
 
     # Listen for incoming messages.
     @client.on 'message', async (from, to, text, message) =>
-      #FIXME: this is inelegant.
-      if to is @username
-        @join from
-        to = from
       # Insert a new message
       Messages.insert
         from: from
-        channel: to #TODO: add support for PMs
+        channel: if to is @username then from else to
         text: text
         time: new Date
         owner: @_id
 
       # Create new Channel if message is a PM.
-      #@join from if to is @username
+      @join from if to is @username
 
     # Listen for 'names' requests.
     @client.on 'names', async (channel, nicks) =>
@@ -99,7 +95,7 @@ Meteor.methods
   connect: (user) ->
     check user, Match.ObjectIncluding({_id: String, username: String})
     Meteor.users.update user._id, $set: {'profile.connecting': true}
-    client[user._id] = new Client user
+    client[user._id] ?= new Client user
     client[user._id].connect()
 
   join: (user, channel) ->

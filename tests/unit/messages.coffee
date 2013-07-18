@@ -1,6 +1,7 @@
 assert = require 'assert'
 
 suite 'Messages', ->
+
   test 'Messages#type', (done, server, client) ->
     client.eval ->
       Accounts.createUser

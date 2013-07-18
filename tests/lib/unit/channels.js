@@ -57,7 +57,8 @@
         }, function(err) {
           Channels.insert({
             owner: Meteor.userId(),
-            name: '#channel'
+            name: '#channel',
+            notificationsRead: 1
           });
           Messages.insert({
             owner: Meteor.userId(),
@@ -68,6 +69,11 @@
             owner: Meteor.userId(),
             channel: '#channel',
             text: 'hey matt.'
+          });
+          Messages.insert({
+            owner: Meteor.userId(),
+            channel: '#channel',
+            text: 'hi again, matt.'
           });
           return emit('check', Channels.findOne().notifications().length);
         });

@@ -22,15 +22,6 @@ Meteor.methods
       time: new Date
       owner: user._id
 
-########## Helpers ##########
-
-regex =
-  url: /([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)/ig
-  code: new RegExp "(^|</[^>]*>)([^<>]*)`([^<>]*)`([^<>]*)(?=$|<)"
-  bold: new RegExp "(^|</[^>]*>)([^<>]*)\\*([^<>]*)\\*([^<>]*)(?=$|<)"
-  underline: new RegExp "(^|</[^>]*>)([^<>]*)_([^<>]*)_([^<>]*)(?=$|<)"
-  nick: (nick) -> new RegExp "(^|[^\\S])(#{nick})($|([:,]|[^\\S]))"
-
 ########## Subscriptions ##########
 handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'
@@ -208,8 +199,8 @@ Template.message.events
     if Session.equals 'channel', 'all'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
-      $('.message').not("[data-channel='#{@to}']").slideToggle 400, =>
-        Session.set 'channel', @to
+      $('.message').not("[data-channel='#{@channel}']").slideToggle 400, =>
+        Session.set 'channel', @channel
 
   'click .convo': (e, t) ->
     convo = t.find('.message').getAttribute 'data-convo'
@@ -239,6 +230,13 @@ Template.message.helpers
     Channels.findOne(name: Session.get 'channel' ).status() is '@'
   self: ->
     @type() is 'self'
+  status: ->
+    statuses =
+      '@': 'operator'
+      '%': 'half-operator'
+      '+': 'voiced'
+      '': 'normal'
+    statuses[Channels.findOne(name: Session.get 'channel').nicks[@from]]
 
 Template.notification.timeAgo = ->
   moment(@time).fromNow()
