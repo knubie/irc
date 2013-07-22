@@ -2,15 +2,16 @@
 #   owner : UserId
 #   name  : String
 #   nicks : {name: status, ...}
+#   topic : String
 @Channels = new Meteor.Collection 'channels',
   transform: (doc) ->
     doc extends
       messages: (opts) ->
         opts ?= {}
         if @name is 'all'
-          selector = {owner: @owner}
+          selector = {@owner}
         else
-          selector = {owner: @owner, channel: @name}
+          selector = {@owner, channel: @name}
         Messages.find selector, opts
       notifications: (opts) ->
         opts ?= {}
@@ -52,6 +53,8 @@ if Meteor.isServer
         {username} = Meteor.users.findOne(@owner)
         if @from is username
           return 'self'
+        else if @from is 'system'
+          return 'info'
         else
           if regex.nick(username).test @text then 'mention' else 'normal'
       convo: ->

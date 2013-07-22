@@ -30,38 +30,27 @@ Meteor.startup ->
       # Load next page.
       handlers.messages[Session.get 'channel'].loadNextPage()
 
-Template.home.events
-  'submit #auth-form': (e,t) ->
+Template.home_logged_out.events
+  'submit #form-signup': (e,t) ->
     e.preventDefault()
     username = t.find('#auth-nick').value
+    email = t.find('#auth-email').value
     password = t.find('#auth-pw').value
+    Meteor.call 'remember', username, password, email
 
-    # If user exists.
-    if Meteor.users.findOne {username}
-      # Log in.
-      Meteor.loginWithPassword username, password
-    else # User doesn't exist.
-      # Create user.
-      Accounts.createUser
-        username: username
-        password: password
-        profile:
-          connecting: true
-      , (err) ->
-        # Create default 'all' channel.
-        Channels.insert
-          owner: Meteor.userId()
-          name: 'all'
-        # Connect user to IRC network.
-        Meteor.call 'connect', Meteor.user()
+  'submit #form-signin': (e,t) ->
+    e.preventDefault()
+    username = t.find('#signin-username').value
+    password = t.find('#signin-password').value
+    Meteor.loginWithPassword username, password
 
 ########## Dashboard ##########
 
-Template.dashboard.events
+Template.home_logged_in.events
   'click .sign-out': ->
     Meteor.logout()
 
-Template.dashboard.rendered = ->
+Template.home_logged_in.rendered = ->
   $(window).on 'keydown', (e) ->
     keyCode = e.keyCode or e.which
     # Focus #say-input on <TAB>
@@ -69,7 +58,7 @@ Template.dashboard.rendered = ->
       e.preventDefault()
       $('#say-input').focus()
 
-Template.dashboard.helpers
+Template.home_logged_in.helpers
   connecting: ->
     Meteor.user().profile.connecting
 
@@ -144,6 +133,8 @@ Template.messages.events
     handlers.messages[Session.get 'channel'].loadNextPage()
 
 Template.messages.helpers
+  all: ->
+    Session.equals 'channel', 'all'
   messages: ->
     prev = null
     Channels.findOne(name: Session.get 'channel')
@@ -233,6 +224,8 @@ Template.notification.events
       _id: @_id
     , {$set: {'type': 'normal'}}
 
-#Meteor.setInterval ->
-  #$('.messages-container').html Meteor.render(Template.messages)
-#, 60000 # One minute
+Meteor.Router.add
+  '/': 'messages'
+  '/explore': 'explore'
+
+  '*': 'not_found'

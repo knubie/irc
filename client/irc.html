@@ -3,24 +3,45 @@
 </head>
 
 <body>
-  {{> home}}
-  {{#if currentUser}}
-    {{> dashboard}}
-  {{/if}}
+  {{#unless currentUser}}
+    {{> home_logged_out}}
+  {{else}}
+    {{> home_logged_in}}
+    <div class="page-container">
+      {{renderPage}}
+    </div>
+  {{/unless}}
 </body>
 
-<template name="home">
+<template name="home_logged_out">
   {{#unless currentUser}}
-    <h1 class="headline">twirc</h1>
-    <form id="auth-form">
-      <input type="text" id="auth-nick" placeholder="Nick">
-      <input type="password" id="auth-pw" placeholder="Password">
-      <input type="submit" value="Go">
-    </form>
+    <div class="marketing-section-signup">
+      <div class="container">
+        <form id="form-signup">
+          <input type="text" id="auth-nick" placeholder="Pick a username">
+          <input type="email" id="auth-email" placeholder="Your email">
+          <input type="password" id="auth-pw" placeholder="Create a passphrase">
+          <input type="submit" value="Sign up">
+          By clicking "Sign up", you agree to our terms of service and privacy policy.
+        </form>
+        <h1 class="heading">Join the conversation.</h1>
+        <p class="subhead">
+          Connect to our public netork in seconds. Create and joins channels, add bots or make your own. Need a private network?<br/>
+          <a href="/plans">Upgraded plans start at $5/mo.</a>
+        </p>
+      </div>
+    </div>
+    <div class="signin">
+      <form id="form-signin">
+        <input type="text" id="signin-username" placeholder="Username or email">
+        <input type="password" id="signin-password" placeholder="Passphrase">
+        <input type="submit" value="Sign in">
+      </form>
+    </div>
   {{/unless}}
 </template>
 
-<template name="dashboard">
+<template name="home_logged_in">
   {{#if connecting}}
     Connecting..
   {{else}}
@@ -31,9 +52,6 @@
       <li class="nav-item sign-out"><a href="#">Sign Out</a></li>
       {{> channels}}
     </ul>
-    <div class="messages-container">
-      {{> messages}}
-    </div>
   {{/if}}
 </template>
 
@@ -63,11 +81,13 @@
       {{> message}}
     {{/each}}
   </ul>
-  <div class="input-container">
-    <form id="say">
-      <input type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
-    </form>
-  </div>
+  {{#unless all}}
+    <div class="input-container">
+      <form id="say">
+        <input type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
+      </form>
+    </div>
+  {{/unless}}
 </template>
 
 <template name="message">
@@ -135,10 +155,10 @@
 
 <template  name="explore">
   <ul class="nav nav-pills">
-  <li class="active">
-    <a href="#">##meteor_test</a>
-  </li>
-  <li><a href="#">#other_channel</a></li>
-  <li><a href="#">#sausage</a></li>
-</ul>
+    <li class="active">
+      <a href="#">##meteor_test</a>
+    </li>
+    <li><a href="#">#other_channel</a></li>
+    <li><a href="#">#sausage</a></li>
+  </ul>
 </template>
