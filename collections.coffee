@@ -17,8 +17,9 @@
         opts ?= {}
         @messages(opts).fetch().filter (msg) -> msg.type() is 'mention'
       status: ->
-        {username} = Meteor.users.findOne(@owner)
-        return @nicks[username]
+        unless @owner is 'network'
+          {username} = Meteor.users.findOne(@owner)
+          return @nicks[username]
 
 
 if Meteor.isServer
@@ -67,3 +68,11 @@ if Meteor.isServer
         for nick, status of Channels.findOne(name: @channel).nicks
           if @from is nick then online = yes; break
         return online
+
+# Users
+# profile:
+#   connecting: Boolean
+#   channels: 
+#     '#channelname':
+#       ignore: [String, ...]
+#       mode: String

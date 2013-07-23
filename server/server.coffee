@@ -49,16 +49,24 @@ class Client
 
     # Handle various actions by the network.
     @client.on 'raw', async (msg) =>
-      if msg.command is 'KICK'
-        Messages.insert
-          owner: @_id
-          channel: msg.args[0]
-          text: "#{msg.args[1]} was kicked by #{msg.nick}! \"#{msg.args[2]}\""
-          time: new Date
-          from: 'system'
+      if msg.command is 'rpl_list'
+        Channels.insert
+          owner: 'network'
+          name: msg.args[1]
+          count: msg.args[2]
+          topic: msg.args[3]
 
     # Listen for 'names' requests.
-    @client.on 'names', async (channel, nicks) =>
+    @client.on 'names', async (channel, nicks_in) =>
+      #TODO: Either add rpl_isupport to hector, or remove from node-irc
+      nicks = {}
+      for nick, status of nicks_in
+        match = nick.match(/^(.)(.*)$/)
+        if match
+          if match[1] is '@'
+            nicks[match[2]] = match[1]
+          else
+            nicks[nick] = ''
       # Update Channel.nicks with the nicks object sent from the network.
       Channels.update
         name: channel
@@ -66,13 +74,19 @@ class Client
       , {$set: {nicks}}
 
     @client.on 'kick', async (channel, nick, kicker, reason, message) =>
+      Messages.insert
+        owner: @_id
+        channel: channel
+        text: "#{nick} was kicked by #{kicker}! \"#{reason}\""
+        time: new Date
+        from: 'system'
       if nick is @username
         Channels.remove {owner: @_id, name: channel}
         console.log "You have been kicked from #{channel}."
         console.log "Reason: #{reason}"
 
     # Send a NAMES request when users joins, parts, or changes nick.
-    for event in ['join', 'part', 'nick']
+    for event in ['join', 'part', 'nick', 'kick']
       @client.on event, async (channel) => @client.send 'NAMES', channel
 
   connect: (password) ->
@@ -123,6 +137,10 @@ class Client
     Channels.remove {owner: @_id, name: channel}
     #Messages.remove {owner: user._id, to: channel}
 
+  kick: (channel, username, reason) ->
+    reason = reason or ''
+    @client.send 'KICK', channel, username, reason
+
 Meteor.methods
   connect: (user, password) ->
     check user, Match.ObjectIncluding({_id: String, username: String})
@@ -161,19 +179,15 @@ Meteor.methods
         Meteor.call 'connect', {_id: newUser, username}, password
         console.log 'remembered'
       ).run()
-    #remember = spawn "hector", ['identity', 'remember', user.username, password],
-      #cwd: '~/Development/hector/twirc.hect'
-      #env: null
-    #Meteor.call 'connect', Meteor.user(), password
-    #console.log 'remembered'
-    #remember.on 'close', async (code) ->
-        #console.log('child process exited with code ' + code)
+
+  kick: (user, channel, username, reason) ->
+    client[user._id].kick channel, username, reason
 
 Meteor.publish 'users', ->
   Meteor.users.find()
 
 Meteor.publish 'channels', ->
-  Channels.find {owner: @userId}
+  Channels.find {$or: [{owner: @userId}, {owner: 'network'}]}
 
 Meteor.publish 'messages', (channel, limit) ->
   if channel is 'all'

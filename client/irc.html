@@ -47,7 +47,7 @@
   {{else}}
     <ul class="channels nav nav-stacked">
       <li class="logo">Twirc</li>
-      <li class="nav-item"><a href="#">Explore</a></li>
+      <li class="nav-item"><a href="/explore">Explore</a></li>
       <li class="nav-item"><a href="#">Account</a></li>
       <li class="nav-item sign-out"><a href="#">Sign Out</a></li>
       {{> channels}}
@@ -63,7 +63,7 @@
   </li>
   {{#each channels}}
     <li class="channel {{selected}}">
-      <a href="#">
+      <a href="/">
         {{name}}
         <button type="button" class="close">&times;</button>
         <span class="badge badge-info">{{notification_count}}</span>
@@ -76,6 +76,11 @@
 </template>
 
 <template name="messages">
+  <div class="page-head">
+    <span class="topic">{{topic}}</span>
+    <i class="icon-search"></i>
+    <i class="icon-wrench"></i>
+  </div>
   <ul class="messages nav nav-stacked">
     {{#each messages}}
       {{> message}}
@@ -117,7 +122,7 @@
           </div>
           {{#if op_status}}
             &nbsp;
-            <div class="action">
+            <div class="action kick">
               <i class="icon-share"></i> Kick
             </div>
             &nbsp;
@@ -153,12 +158,17 @@
   </li>
 </template>
 
-<template  name="explore">
-  <ul class="nav nav-pills">
-    <li class="active">
-      <a href="#">##meteor_test</a>
-    </li>
-    <li><a href="#">#other_channel</a></li>
-    <li><a href="#">#sausage</a></li>
+<template name="explore">
+  <ul class="channel-list">
+    {{#each channels}}
+      <li>
+        <h3>
+          <a href="/">{{name}}</a>
+        </h3>
+        <div class="body">
+          {{topic}}
+        </div>
+      </li>
+    {{/each}}
   </ul>
 </template>

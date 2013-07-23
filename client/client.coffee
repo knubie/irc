@@ -85,7 +85,7 @@ Template.channels.events
 
 Template.channels.helpers
   channels: ->
-    Channels.find()
+    Channels.find owner: Meteor.userId()
   selected: ->
     if Session.equals 'channel', @name then 'selected' else ''
   notification_count: ->
@@ -137,13 +137,13 @@ Template.messages.helpers
     Session.equals 'channel', 'all'
   messages: ->
     prev = null
-    Channels.findOne(name: Session.get 'channel')
+    Channels.findOne(owner: Meteor.userId(), name: Session.get 'channel')
     ?.messages({sort: time: 1}) #FIXME: why do i need to check for existence.
     ?.map (msg) ->
       msg.prev = prev
       prev = msg
   notifications: ->
-    Channels.findOne(name: Session.get 'channel')
+    Channels.findOne(owner: Meteor.userId(), name: Session.get 'channel')
     ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
 
 ########## Message ##########
@@ -186,6 +186,9 @@ Template.message.events
     .not("[data-nick='#{convo}']")
     .slideToggle 400
 
+  'click .kick': (e, t) ->
+    Meteor.call 'kick', Meteor.user(), @channel, @from
+
 Template.message.helpers
   joinToPrev: ->
     unless @prev is null
@@ -223,6 +226,23 @@ Template.notification.events
     Messages.update
       _id: @_id
     , {$set: {'type': 'normal'}}
+
+########## Message ##########
+
+Template.explore.events
+  'click ul>li>h3>a': (e,t) ->
+    console.log t
+    console.log e
+    name = e.toElement.outerText
+    Channels.insert {owner: Meteor.userId(), name}
+    Meteor.call 'join', Meteor.user(), name
+    ##TODO: combine with identicle lines below?
+    Session.set 'channel', name
+    $('#say-input').focus()
+
+Template.explore.helpers
+  channels: ->
+    Channels.find {owner: 'network'}, {sort : {count : -1}}
 
 Meteor.Router.add
   '/': 'messages'
