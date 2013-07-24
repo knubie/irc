@@ -108,6 +108,7 @@ code
   margin: 0
 
 .messages
+  margin-top: 55px
   .offline
     .reply, small, p
       opacity: 0.4
@@ -135,6 +136,7 @@ code
   color: #777
   position: relative
   transition: .15s left, .15s opacity, .15s background-color, .15s color
+  width: calc(100% \- 40px)
   .reply, small, p
     transition: .15s left, .15s opacity, .15s background-color, .15s color
   .muted
@@ -150,6 +152,10 @@ code
     display: inline
     .action
       display: inline
+
+.message.self
+  position: relative
+  left: 10px
 
 .message:hover
   cursor: pointer
@@ -168,6 +174,8 @@ code
   top: calc(100% \- 85px) !important
   background-color: rgba(0,0,0,0)
   width: 100%
+  .tt-suggestions
+    padding-top: 5px
   .tt-suggestion
     padding: 3px 18px
     width: 100%
@@ -220,6 +228,11 @@ code
 
 .reply
   font-size: 12px
+  i
+    color: peter-river
+    display: none
+  .operator
+    display: inline-block
 .reply:hover 
   border-bottom: 1px solid #ccc
   cursor: pointer

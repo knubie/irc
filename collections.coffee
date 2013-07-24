@@ -1,9 +1,18 @@
 # Channels
-#   owner : UserId
 #   name  : String
 #   nicks : {name: status, ...}
 #   topic : String
-@Channels = new Meteor.Collection 'channels',
+class ChannelsCollection extends Meteor.Collection
+  find_or_create: (name, count, topic) ->
+    count ?= 0
+    topic ?= 'No topic set.'
+    nicks = {}
+    if name.isChannel and not @findOne({name})
+      @findOne(@insert {name, count, topic, nicks})
+    else
+      @findOne({name})
+
+@Channels = new ChannelsCollection 'channels',
   transform: (doc) ->
     doc extends
       messages: (opts) ->
@@ -16,10 +25,17 @@
       notifications: (opts) ->
         opts ?= {}
         @messages(opts).fetch().filter (msg) -> msg.type() is 'mention'
-      status: ->
-        unless @owner is 'network'
-          {username} = Meteor.users.findOne(@owner)
-          return @nicks[username]
+      join: (nick) ->
+        return if @nicks[nick]
+        if _.isEmpty @nicks
+          @nicks[nick] = '@'
+        else
+          @nicks[nick] = ''
+      part: (nick) ->
+        delete nicks[nick]
+        if _.isEmpty @nicks
+          Channels.remove @_id
+
 
 
 if Meteor.isServer

@@ -8,6 +8,7 @@ Session.setDefault 'scroll', false
 ########## Subscriptions ##########
 handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'
+#handlers.messages = Meteor.subscribe 'messages'
 handlers.channel = Meteor.subscribe 'channels', ->
   subscribeToMessagesOf = (channel) ->
     handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
@@ -69,7 +70,6 @@ Template.channels.events
     e.preventDefault()
     name = t.find('#new-channel-name').value
     t.find('#new-channel-name').value = ''
-    Channels.insert {owner: Meteor.userId(), name}
     Meteor.call 'join', Meteor.user(), name
     #TODO: combine with identicle lines below?
     Session.set 'channel', name
@@ -85,11 +85,15 @@ Template.channels.events
 
 Template.channels.helpers
   channels: ->
-    Channels.find owner: Meteor.userId()
+    #Channels.find owner: Meteor.userId()
+    Channels.find().map (doc) ->
+      if Meteor.user().username of doc.nicks
+        return doc
   selected: ->
     if Session.equals 'channel', @name then 'selected' else ''
   notification_count: ->
-    if @notifications().length < 1 then '' else @notifications().length
+    #if @notifications().length < 1 then '' else @notifications().length
+    0
 
 ########## Messages ##########
 
@@ -106,28 +110,32 @@ Template.messages.rendered = ->
     #owner: Meteor.userId()
     #name: Session.get('channel')
   #FIXME: this breaks the messages.events
-  #$('#say-input').typeahead
-    #name: 'names'
-    #local: [
+  $('#say-input').typeahead
+    name: 'names'
+    local: [
       #'? Type @ to mention nicks.'
       #'? Click on \'View conversation\' to isolate a conversation between two users.'
       #'? Hover over message in \'all\' view to messages from the same channel.'
       #'? Click any message in \'all\' view to jump to that channel.'
       #'? Basic formatting: *bold*, _underline_, and `inline code`.'
-      #'@matty'
-      #'@oddmunds'
-      #'@entel'
-      #'@weezy'
-      #'@costanza'
-    #]
+      'matty'
+      'oddmunds'
+      'entel'
+      'weezy'
+      'costanza'
+    ]
     #local: ch.nicks
 
 Template.messages.events
+  #'keydown #say': (e, t) ->
   'submit #say': (e, t) ->
-    e.preventDefault()
-    message = t.find('#say-input').value
-    $('#say-input').val('')
-    Meteor.call 'say', Meteor.user(), Session.get('channel'), message
+    keyCode = e.keyCode or e.which
+    if keyCode is 13
+      e.preventDefault()
+      message = t.find('#say-input').value
+      $('#say-input').val('')
+      Meteor.call 'say', Meteor.user(), Session.get('channel'), message
+      console.log 'say'
 
   'click, tap .load-next': ->
     handlers.messages[Session.get 'channel'].loadNextPage()
@@ -137,14 +145,19 @@ Template.messages.helpers
     Session.equals 'channel', 'all'
   messages: ->
     prev = null
-    Channels.findOne(owner: Meteor.userId(), name: Session.get 'channel')
-    ?.messages({sort: time: 1}) #FIXME: why do i need to check for existence.
-    ?.map (msg) ->
+    Messages.find({channel: Session.get 'channel'}, {sort: {time: 1}})
+    .map (msg) ->
+    #Channels.findOne(name: Session.get 'channel')
+    #?.messages({sort: time: 1}) #FIXME: why do i need to check for existence.
+    #?.map (msg) ->
       msg.prev = prev
       prev = msg
   notifications: ->
-    Channels.findOne(owner: Meteor.userId(), name: Session.get 'channel')
+    Channels.findOne(name: Session.get 'channel')
     ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
+  topic: ->
+    unless Session.equals 'channel', 'all'
+      Channels.findOne(name: Session.get 'channel').topic
 
 ########## Message ##########
 
@@ -204,7 +217,8 @@ Template.message.helpers
   message_class: ->
     if @online() then @type() else "offline #{@type()}"
   op_status: ->
-    Channels.findOne(name: Session.get 'channel' ).status() is '@'
+    Channels.findOne(name: Session.get 'channel').nicks[Meteor.user().username] is '@'
+    #Channels.findOne(name: Session.get 'channel' ).status() is '@'
   self: ->
     @type() is 'self'
   status: ->
@@ -234,7 +248,6 @@ Template.explore.events
     console.log t
     console.log e
     name = e.toElement.outerText
-    Channels.insert {owner: Meteor.userId(), name}
     Meteor.call 'join', Meteor.user(), name
     ##TODO: combine with identicle lines below?
     Session.set 'channel', name
@@ -242,7 +255,7 @@ Template.explore.events
 
 Template.explore.helpers
   channels: ->
-    Channels.find {owner: 'network'}, {sort : {count : -1}}
+    Channels.find {}, {sort : {count : -1}}
 
 Meteor.Router.add
   '/': 'messages'

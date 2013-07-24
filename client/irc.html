@@ -1,5 +1,6 @@
 <head>
   <title>Twirc</title>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 </head>
 
 <body>
@@ -66,7 +67,7 @@
       <a href="/">
         {{name}}
         <button type="button" class="close">&times;</button>
-        <span class="badge badge-info">{{notification_count}}</span>
+        <!--<span class="badge badge-info">{{notification_count}}</span>-->
       </a>
     </li>
   {{/each}}
@@ -105,6 +106,7 @@
   {{else}}
     <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" data-convo="{{convo}}" class="message {{message_class}}">
       <span class="reply">
+        <i class="icon-certificate {{status}}"></i>
         <strong>{{from}}</strong>
         {{#if all}}
           <span class="muted">{{channel}}</span>

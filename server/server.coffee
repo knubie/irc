@@ -50,11 +50,11 @@ class Client
     # Handle various actions by the network.
     @client.on 'raw', async (msg) =>
       if msg.command is 'rpl_list'
-        Channels.insert
-          owner: 'network'
-          name: msg.args[1]
-          count: msg.args[2]
-          topic: msg.args[3]
+        name = msg.args[1]
+        count = msg.args[2]
+        topic = msg.args[3]
+        ch = Channels.find_or_create name
+        Channels.update ch, $set: {count, topic}
 
     # Listen for 'names' requests.
     @client.on 'names', async (channel, nicks_in) =>
@@ -70,7 +70,6 @@ class Client
       # Update Channel.nicks with the nicks object sent from the network.
       Channels.update
         name: channel
-        owner: @_id
       , {$set: {nicks}}
 
     @client.on 'kick', async (channel, nick, kicker, reason, message) =>
@@ -81,7 +80,7 @@ class Client
         time: new Date
         from: 'system'
       if nick is @username
-        Channels.remove {owner: @_id, name: channel}
+        Channels.find({name}).part @username
         console.log "You have been kicked from #{channel}."
         console.log "Reason: #{reason}"
 
@@ -101,21 +100,20 @@ class Client
       @client.list()
     @client.send 'PASS', password
 
-  join: (channel) ->
-    check channel, String
-    # Create a base nicks object.
+  join: (name) ->
+    check name, String
+    #TODO: validation
     nicks = {}
-    nicks[@username] = ''
-
-    if channel.isChannel() # channel begins with '#'
-      @client.join channel
-    else # channel is actually a nick
-      nicks[channel] = '' # Add nick to nicks object.
-      # Update channel with new nicks.
-      Channels.update
-        name: channel
-        owner: @_id
-      , {$set: {nicks}}
+    Channels.find_or_create(name)?.join @username
+    if name.isChannel() # channel begins with '#'
+      @client.join name
+    #else # channel is actually a nick
+      #nicks[name] = '' # Add nick to nicks object.
+      ## Update channel with new nicks.
+      #Channels.update
+        #name: name
+        #owner: @_id
+      #, {$set: {nicks}}
 
   say: (channel, text) ->
     check channel, String
@@ -129,13 +127,11 @@ class Client
       time: new Date
       owner: @_id
 
-  part: (channel) ->
-    check channel, String
+  part: (name) ->
+    check name, String
     # Leave the channel if it is in fact a channel (ie. not a nick)
-    @client.part channel if channel.isChannel
-    # Remove the corresponding Channel doc.
-    Channels.remove {owner: @_id, name: channel}
-    #Messages.remove {owner: user._id, to: channel}
+    @client.part name if name.isChannel
+    Channels.findOne({name}).part @username
 
   kick: (channel, username, reason) ->
     reason = reason or ''
@@ -173,9 +169,6 @@ Meteor.methods
           password: password
           profile:
             connecting: true
-        Channels.insert
-          owner: newUser
-          name: 'all'
         Meteor.call 'connect', {_id: newUser, username}, password
         console.log 'remembered'
       ).run()
@@ -187,10 +180,12 @@ Meteor.publish 'users', ->
   Meteor.users.find()
 
 Meteor.publish 'channels', ->
-  Channels.find {$or: [{owner: @userId}, {owner: 'network'}]}
+  Channels.find()
 
+#Meteor.publish 'messages', (channel, limit) ->
+  #Messages.find()
 Meteor.publish 'messages', (channel, limit) ->
   if channel is 'all'
     Messages.find {owner: @userId}, {limit, sort:{time: -1}}
   else
-    Messages.find {owner: @userId, to: channel}, {limit, sort:{time: -1}}
+    Messages.find {owner: @userId, channel: channel}, {limit, sort:{time: -1}}
