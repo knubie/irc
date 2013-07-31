@@ -15,8 +15,13 @@ handlers.channel = Meteor.subscribe 'channels', ->
     , channel.name
     , 30
   subscribeToMessagesOf channel for channel in Channels.find().fetch()
+  subscribeToMessagesOf {name: 'all'}
   Channels.find().observe
     added: subscribeToMessagesOf
+
+#UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
+  #user = Meteor.users.findOne userId
+  #if user.profile.connection is off
 
 Meteor.startup ->
   $(window).scroll ->
@@ -37,13 +42,19 @@ Template.home_logged_out.events
     username = t.find('#auth-nick').value
     email = t.find('#auth-email').value
     password = t.find('#auth-pw').value
-    Meteor.call 'remember', username, password, email
+    _id = Accounts.createUser {username, email, password, profile:
+      connection: off
+      account: 'free'
+    }, (error) ->
+      if Meteor.userId()? and not error
+        Meteor.call 'remember', username, password, Meteor.userId()
 
   'submit #form-signin': (e,t) ->
     e.preventDefault()
     username = t.find('#signin-username').value
     password = t.find('#signin-password').value
-    Meteor.loginWithPassword username, password
+    Meteor.loginWithPassword username, password, (error) ->
+      Meteor.call 'remember', username, password, Meteor.userId()
 
 ########## Dashboard ##########
 
@@ -60,24 +71,35 @@ Template.home_logged_in.rendered = ->
       $('#say-input').focus()
 
 Template.home_logged_in.helpers
-  connecting: ->
-    Meteor.user().profile.connecting
+  connection: ->
+    Meteor.user().profile.connection
 
 ########## Channels ##########
 
 Template.channels.events
+  'click .new-channel-link': (e, t) ->
+    $('.new-channel-link').hide()
+    $('#new-channel').show()
+    $('#new-channel-name').focus()
+    console.log 'new channel'
+
+  'blur #new-channel-name': (e, t) ->
+    $('.new-channel-link').show()
+    $('#new-channel').hide()
+
   'submit #new-channel': (e, t) ->
     e.preventDefault()
     name = t.find('#new-channel-name').value
     t.find('#new-channel-name').value = ''
-    Meteor.call 'join', Meteor.user(), name
+    Meteor.call 'join', Meteor.user().username, name
     #TODO: combine with identicle lines below?
     Session.set 'channel', name
     $('#say-input').focus()
 
-  'click, tap .channel': (e,t) ->
+  'click .channel > a': (e,t) ->
     Session.set 'channel', @name
     $('#say-input').focus()
+    console.log 'switch channel'
 
   'click .close': ->
     Meteor.call 'part', Meteor.user(), @name
@@ -85,15 +107,34 @@ Template.channels.events
 
 Template.channels.helpers
   channels: ->
-    #Channels.find owner: Meteor.userId()
-    Channels.find().map (doc) ->
-      if Meteor.user().username of doc.nicks
-        return doc
+    channels = (channel for channel in Channels.find().fetch() \
+      when Meteor.user().username of channel.nicks)
+
+    add_url = (channel) ->
+      return channel extends
+        url_name: ->
+          @name.match(/^(.)(.*)$/)[2]
+
+    channels = (add_url channel for channel in channels)
+
+    return channels
+      
+    #chs = Channels.find().map (doc) ->
+      #console.log doc
+      #if Meteor.user().username of doc.nicks
+        #console.log doc
+        #return doc extends
+          #url_name: ->
+            #@name.match(/^(.)(.*)$/)[2]
+    #console.log chs
+    #return chs
   selected: ->
     if Session.equals 'channel', @name then 'selected' else ''
   notification_count: ->
     #if @notifications().length < 1 then '' else @notifications().length
     0
+  all: ->
+    if Session.equals 'channel', 'all' then 'selected' else ''
 
 ########## Messages ##########
 
@@ -103,32 +144,20 @@ Template.messages.rendered = ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
     , ->
       $('.message').removeClass 'faded'
+  else
+    ch = Channels.findOne
+      name: Session.get('channel')
+    nicks = (nick for nick of ch.nicks)
+    $('#say-input').typeahead
+      name: 'names'
+      local: nicks
+
   if Session.equals 'scroll', false
     $(window).scrollTop($(document).height() - $(window).height())
 
-  #ch = Channels.findOne
-    #owner: Meteor.userId()
-    #name: Session.get('channel')
-  #FIXME: this breaks the messages.events
-  $('#say-input').typeahead
-    name: 'names'
-    local: [
-      #'? Type @ to mention nicks.'
-      #'? Click on \'View conversation\' to isolate a conversation between two users.'
-      #'? Hover over message in \'all\' view to messages from the same channel.'
-      #'? Click any message in \'all\' view to jump to that channel.'
-      #'? Basic formatting: *bold*, _underline_, and `inline code`.'
-      'matty'
-      'oddmunds'
-      'entel'
-      'weezy'
-      'costanza'
-    ]
-    #local: ch.nicks
-
 Template.messages.events
-  #'keydown #say': (e, t) ->
-  'submit #say': (e, t) ->
+  'keydown #say': (e, t) ->
+  #'submit #say': (e, t) ->
     keyCode = e.keyCode or e.which
     if keyCode is 13
       e.preventDefault()
@@ -145,19 +174,45 @@ Template.messages.helpers
     Session.equals 'channel', 'all'
   messages: ->
     prev = null
-    Messages.find({channel: Session.get 'channel'}, {sort: {time: 1}})
-    .map (msg) ->
-    #Channels.findOne(name: Session.get 'channel')
-    #?.messages({sort: time: 1}) #FIXME: why do i need to check for existence.
-    #?.map (msg) ->
-      msg.prev = prev
-      prev = msg
+    if Session.equals 'channel', 'all'
+      Messages.find({}, {sort: {time: 1}})
+      .map (msg) ->
+        msg.prev = prev
+        prev = msg
+    else
+      Messages.find({channel: Session.get 'channel'}, {sort: {time: 1}})
+      .map (msg) ->
+        msg.prev = prev
+        prev = msg
   notifications: ->
     Channels.findOne(name: Session.get 'channel')
     ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
   topic: ->
     unless Session.equals 'channel', 'all'
-      Channels.findOne(name: Session.get 'channel').topic
+      Channels.findOne(name: Session.get 'channel')?.topic
+  op_status: ->
+    if Session.equals 'channel', 'all'
+      return no
+    else
+      Channels.findOne(name: Session.get 'channel')?.nicks[Meteor.user().username] is '@'
+  channel: ->
+    Session.get 'channel'
+  url_channel: ->
+    Session.get('channel').match(/^(.)(.*)$/)[2]
+  users: ->
+    unless Session.equals 'channel', 'all'
+      Channels.findOne(name: Session.get 'channel')?.users
+
+Template.channel_header.helpers
+  all: ->
+    Session.equals 'channel', 'all'
+  channel: ->
+    Session.get 'channel'
+  url_channel: ->
+    Session.get('channel').match(/^(.)(.*)$/)[2]
+  users: ->
+    unless Session.equals 'channel', 'all'
+      Channels.findOne(name: Session.get 'channel')?.users
 
 ########## Message ##########
 
@@ -178,15 +233,18 @@ Template.message.rendered = ->
   p.html(ptext)
 
 Template.message.events
-  'click .reply': ->
-    $('#say-input').val("#{@from} ")
+  'click .reply-action': ->
+    $('#say-input').val("@#{@from} ")
     $('#say-input').focus()
 
   'click, tap': (e, t) ->
     if Session.equals 'channel', 'all'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
-      $('.message').not("[data-channel='#{@channel}']").slideToggle 400, =>
+      if $('.message').not("[data-channel='#{@channel}']").length > 0
+        $('.message').not("[data-channel='#{@channel}']").slideToggle 400, =>
+          Session.set 'channel', @channel
+      else
         Session.set 'channel', @channel
 
   'click .convo': (e, t) ->
@@ -217,8 +275,7 @@ Template.message.helpers
   message_class: ->
     if @online() then @type() else "offline #{@type()}"
   op_status: ->
-    Channels.findOne(name: Session.get 'channel').nicks[Meteor.user().username] is '@'
-    #Channels.findOne(name: Session.get 'channel' ).status() is '@'
+    Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'
   status: ->
@@ -227,7 +284,7 @@ Template.message.helpers
       '%': 'half-operator'
       '+': 'voiced'
       '': 'normal'
-    statuses[Channels.findOne(name: Session.get 'channel').nicks[@from]]
+    statuses[Channels.findOne(name: @channel).nicks[@from]]
 
 Template.notification.timeAgo = ->
   moment(@time).fromNow()
@@ -237,11 +294,9 @@ Template.notification.events
     $(window).scrollTop $("##{@_id}").offset().top - 10
 
   'click .close': ->
-    Messages.update
-      _id: @_id
-    , {$set: {'type': 'normal'}}
+    # Do something
 
-########## Message ##########
+########## Explore ##########
 
 Template.explore.events
   'click ul>li>h3>a': (e,t) ->
@@ -255,10 +310,36 @@ Template.explore.events
 
 Template.explore.helpers
   channels: ->
-    Channels.find {}, {sort : {count : -1}}
+    Channels.find {}, {sort : {users : -1}}
+
+########## Settings ##########
+
+Template.settings.helpers
+  op_status: ->
+    if Session.equals 'channel', 'all'
+      return no
+    else
+      Channels.findOne(name: Session.get 'channel')?.nicks[Meteor.user().username] is '@'
+
 
 Meteor.Router.add
-  '/': 'messages'
+  '/': ->
+    Session.set 'channel', 'all'
+    return 'channel_main'
+
   '/explore': 'explore'
+
+  '/logout': ->
+    console.log 'log out'
+    Meteor.logout -> Meteor.Router.to('/')
+
+  '/channels/:channel/settings': (channel) ->
+    console.log 'settings'
+    Session.set 'channel', "##{channel}"
+    return 'channel_settings'
+
+  '/channels/:channel': (channel) ->
+    Session.set 'channel', "##{channel}"
+    return 'channel_main'
 
   '*': 'not_found'

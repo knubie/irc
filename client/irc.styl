@@ -35,6 +35,7 @@ body
   font-family: Helvetica, sans-serif
   font-size: 14px
   padding: 0
+  padding-top: 63px
 
 .fixed-width
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace
@@ -57,26 +58,53 @@ code
   height: 125px
   text-shadow: 0 1px 0 #BDC3C7, 0 2px 0 #BDC3C7, 0 3px 0 #BDC3C7, 0 4px 0 #BDC3C7
 
-.channels.nav 
+.header
+  padding: 20px
   background-color: wet-asphalt
-  color: wet-asphalt
-  height: 100%
   position: fixed
   top: 0
   left: 0
+  right: 0
+  z-index: 99
+  .logo
+    font-size: 24px
+    font-weight: bold
+    color: white
+  .top-nav
+    float: right
+    list-style: none
+    color: white
+    margin: 0
+    li
+      display: inline-block
+      margin-left: 35px
+      a
+        color: white
+.channels
+  color: #777
+  height: 100%
   width: 200px
+  list-style: none
+  font-size: 18px
+  padding: 0
+  margin: 0
+  margin-top: 25px
+  position: fixed
   li.logo
     font-size: 21px
     color: white
     font-weight: bold
     padding: 12px 12px
   li
+    margin-bottom: 13px
+    width: 180px
+
     a > button 
       display: none
     a, form > input 
-      color: rgba(255,255,255,0.3)
-      padding: 6px 12px
-      font-size: 16px
+      color: #777
+      font-size: 18px
+      transition: .15s background-color, .15s color
   li:hover > a > button 
     display: inline-block
   li.all:hover > a > button 
@@ -84,31 +112,64 @@ code
 
   .selected > a,
   .selected:hover > a
-    background-color: peter-river
-    color: #FFF
-  li > a:hover 
-    background-color: midnight-blue
+    color: peter-river
+    transition: .15s background-color, .15s color
 
-.new-channel-li 
-  background-color: rgba(0, 0, 0, 0.075)
-  border-bottom: 2px solid rgba(0, 0, 0, 0.02)
-
-.new-channel-li input,
-.new-channel-li input:focus 
-  background-color: rgba(0,0,0,0)
-  border: none
-  box-shadow: none
-  line-height: normal
-  margin-top: 7px
-
-.new-channel-li input::-webkit-input-placeholder 
-  color: rgba(255, 255, 255, 0.15)
-
+.new-channel-li
+  .new-channel-link
+    color: silver
+  .new-channel-link:hover
+    cursor: pointer
+    color: #777
+  #new-channel
+    display: none
 .messages, .notifications
   margin: 0
 
+.channel-container
+  position: absolute
+  top: 0
+  left: 200px
+  width: 760px
+  .channel-breadcrumb
+    color: #777
+    margin-top: 25px
+    .channel-name
+      font-size: 16px
+      font-weight: bold
+    .slash
+      font-size: 16px
+      color: silver
+  .buttons
+    position: absolute
+    top: 25px
+    right: 0
+    a
+      border: none
+      color: white
+      font-weight: bold
+      text-transform: uppercase
+      border-radius: 3px
+      display: inline-block
+      font-size: 10px
+      padding: 3px 12px
+    .add-bot
+      background-color: peter-river
+      box-shadow: 0 2px 0 belize-hole
+    .settings
+      background-color: silver
+      box-shadow: 0 2px 0 concrete
+  .user-count
+      display: inline-block
+      font-size: 12px
+      i
+        position: relative
+        top: -2px
+        margin-right: 4px
+        opacity: 0.35
 .messages
-  margin-top: 55px
+  margin-top: 20px
+  margin-bottom: 62px
   .offline
     .reply, small, p
       opacity: 0.4
@@ -118,10 +179,26 @@ code
       border-bottom: 2px solid rgba(0,0,0,0.02)
   .join
     margin-top: -23px
+  .info
+    background-color: rgba(0,0,0,0)
+    box-shadow: none
+    padding-top: 0px
+    .reply, .actions
+      display: none
+    p
+      color: black
+      text-shadow: 0 1px 0 white
+      opacity: 0.3
+      font-weight: bold
+      font-size: 14px
+  .mention
+    border: 1px solid peter-river
+  .bot
+    background-color: silver
 
 .message.faded
-  background-color: #f4f8f9
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05)
+  background-color: clouds
+  box-shadow: 0 2px 0 clouds
   .reply, small, p
     opacity: 0.4
   .divider
@@ -136,9 +213,23 @@ code
   color: #777
   position: relative
   transition: .15s left, .15s opacity, .15s background-color, .15s color
-  width: calc(100% \- 40px)
+  p
+    font-size: 16px
+    line-height: 21px
+    font-weight: 300
+    margin: 0
   .reply, small, p
     transition: .15s left, .15s opacity, .15s background-color, .15s color
+  .reply
+    font-size: 12px
+    i
+      color: peter-river
+      display: none
+    .operator
+      display: inline-block
+  .reply:hover 
+    border-bottom: 1px solid #ccc
+    cursor: pointer
   .muted
     color: rgba(0,0,0,0.4)
     font-size: 12px
@@ -152,10 +243,6 @@ code
     display: inline
     .action
       display: inline
-
-.message.self
-  position: relative
-  left: 10px
 
 .message:hover
   cursor: pointer
@@ -173,12 +260,13 @@ code
 .tt-dropdown-menu
   top: calc(100% \- 85px) !important
   background-color: rgba(0,0,0,0)
-  width: 100%
+  width: 760px
   .tt-suggestions
     padding-top: 5px
   .tt-suggestion
     padding: 3px 18px
-    width: 100%
+    width: 760px
+    box-sizing: border-box
     color: rgba(0,0,0,0.2)
     font-size: 16px
     p
@@ -190,8 +278,6 @@ code
 .twitter-typeahead
   width: 100%
 
-.messages > .mention
-  border: 1px solid peter-river
 .notifications > .message
   color: #ECF0F1
   background-color: #3498DB
@@ -203,50 +289,16 @@ code
 
 .messages > li > a:link 
   color: #3498DB
-
-.messages > li > p,
-.notifications > li > p 
-  font-size: 16px
-  line-height: 21px
-  font-weight: 300
-  margin: 0
-
-.messages
-  .info
-    background-color: rgba(0,0,0,0)
-    box-shadow: none
-    padding-top: 0px
-    .reply, .actions
-      display: none
-    p
-      color: black
-      text-shadow: 0 1px 0 white
-      opacity: 0.3
-      font-weight: bold
-      font-size: 14px
-
-
-.reply
-  font-size: 12px
-  i
-    color: peter-river
-    display: none
-  .operator
-    display: inline-block
-.reply:hover 
-  border-bottom: 1px solid #ccc
-  cursor: pointer
-
 form 
   margin: 0
 
-#say, #say-input 
-  width: calc(100% \- 30px)
-
 #say-input, input.tt-hint
   font-size: 16px
-  height: 24px
+  height: 32px
   line-height: normal
+  background-color: white
+  width: 760px
+  box-sizing: border-box
 
 #say-input::-webkit-input-placeholder, input.tt-hint
   color: rgba(0, 0, 0, 0.2)
@@ -255,8 +307,9 @@ form
   background-color: wet-asphalt
   padding: 80px 0
 .container
-  width: 980px
+  width: 960px
   color: white
+  position: relative
   .heading
     font-size: 70px
     font-weight: normal
@@ -278,6 +331,8 @@ form
       border-radius: 5px
       margin-bottom: 10px
       border: none
+      height: 40px
+      box-sizing: border-box
     input[type="submit"] 
       background-color: #3498DB
       box-shadow: 0 5px 0 #2980B9
@@ -285,23 +340,14 @@ form
       color: #ECF0F1
       font-weight: bold
 
-.page-container 
-  margin-left: 200px
-  margin-bottom: 51px
-  padding: 15px
-  .input-container
-    position: fixed
-    bottom: 0
-    left: 200px
-    width: calc(100% \+ 30px)
-    background-color: #d9ddde
-    border-top: 2px solid rgba(0,0,0,0.02)
-    input, input:focus
-      border: none
-      background-color: rgba(0,0,0,0)
-      box-shadow: none
-      line-height: normal
-      margin: 10px
+.privacy-print
+  color: rgba(255,255,255,0.3)
+
+.input-container
+  position: fixed
+  bottom: 0
+  background-color: clouds
+  padding: 10px 0
 
 .badge-info
   background-color: midnight-blue
@@ -321,6 +367,7 @@ form
     border-bottom: 1px solid #ccc
     padding-bottom: 15px
     margin-bottom: 15px
+    color: #777
     h3
       font-size: 20px
       margin: 0
@@ -335,8 +382,32 @@ form
   width: calc(100% \- 200px)
   box-shadow: 0px 2px 4px rgba(0,0,0,0.1)
   box-sizing: border-box
-  .topic
-    font-size: 16px
-    color: #666
+  a
+    margin-right: 97px
+    color: #777
+    transition: .15s left, .15s opacity, .15s background-color, .15s color
+  a:hover
+    color: peter-river
+    text-decoration: none
   i
-    float: right
+    margin: 0 10px
+    font-size: 16px
+    color: #777
+.topic
+  font-size: 16px
+  font-weight: 300
+  color: #666
+  margin-top: 9px
+
+.settings-section
+  border-radius: 5px
+  border: 1px solid silver
+  background-color: white
+  padding: 10px
+  width: 760px
+  box-sizing: border-box
+  color: #777
+  margin-top: 25px
+  .section-heading
+    font-size: 16px
+    font-weight: bold

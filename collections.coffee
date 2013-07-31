@@ -3,58 +3,34 @@
 #   nicks : {name: status, ...}
 #   topic : String
 class ChannelsCollection extends Meteor.Collection
-  find_or_create: (name, count, topic) ->
-    count ?= 0
+  find_or_create: (name, users, topic) ->
+    console.log 'find or create'
+    users ?= 0
     topic ?= 'No topic set.'
     nicks = {}
     if name.isChannel and not @findOne({name})
-      @findOne(@insert {name, count, topic, nicks})
+      @findOne(@insert {name, users, topic, nicks})
     else
       @findOne({name})
 
 @Channels = new ChannelsCollection 'channels',
   transform: (doc) ->
     doc extends
-      messages: (opts) ->
-        opts ?= {}
-        if @name is 'all'
-          selector = {@owner}
-        else
-          selector = {@owner, channel: @name}
-        Messages.find selector, opts
-      notifications: (opts) ->
-        opts ?= {}
-        @messages(opts).fetch().filter (msg) -> msg.type() is 'mention'
       join: (nick) ->
+        console.log 'channels.join'
         return if @nicks[nick]
+        console.log 'nick is not in channel\'s nick list'
         if _.isEmpty @nicks
           @nicks[nick] = '@'
         else
           @nicks[nick] = ''
       part: (nick) ->
+        nicks = _.clone @nicks
         delete nicks[nick]
         if _.isEmpty @nicks
           Channels.remove @_id
-
-
-
-if Meteor.isServer
-  Channels.allow
-    insert: (userId, channel) ->
-      duplicate = ->
-        Channels.findOne
-          owner: userId
-          name: channel.name
-      spaces = ->
-        channel.name.indexOf(' ') >= 0
-      channel.owner is userId and
-      channel.name and
-      not duplicate() and
-      not spaces()
-    remove: (userId, channel) ->
-      channel.owner is userId
-    update: (userId, channel) ->
-      channel.owner is userId
+        else
+          Channels.update @_id, $set: {nicks}
 
 # Messages
 #   owner   : UserId
@@ -87,8 +63,12 @@ if Meteor.isServer
 
 # Users
 # profile:
-#   connecting: Boolean
+#   connection: Boolean
+#   account: free/personal/business
 #   channels: 
 #     '#channelname':
 #       ignore: [String, ...]
 #       mode: String
+
+#if Meteor.isServer
+  #@Channels._ensureIndex('name', {unique: 1, sparse: 1})

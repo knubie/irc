@@ -5,6 +5,7 @@
     },
     "momentjs": {},
     "paginated-subscription": {},
-    "router": {}
+    "router": {},
+    "user-status": {}
   }
 }

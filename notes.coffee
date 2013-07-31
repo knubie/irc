@@ -1,28 +1,31 @@
 #TODO: Add a watch list.
 #TODO: clicking on name should isolate that user's messages.
-#TODO: Add autocomplete for nicks and channels
-#TODO: Send messages to specific channels from 'all'.
 #TODO: Add ignore option.
-#TODO: Differentiate your own messages.
 #TODO: Add search.
 #TODO: Add irssi style trackbar.
 #TODO: Add drag and drop file uploads.
+#TODO: Add expand button to expand text field for pastebin style stuff.
+#TODO: translate urls to their title.
+#TODO: add meteor_irc.meteor.com style stats
+#TODO: add channel autocomplete
+#TODO: make a 'create channel' button
+#TODO: add categories to channels
+#TODO: add tags to channels
 
-#043  RPL_SAVENICK  IRCnet  :<info> Sent to the client when their nickname was forced to change due to a collision
-#482  ERR_CHANOPRIVSNEEDED  RFC1459 <channel> :<reason> Returned by any command requiring special channel privileges (eg. channel operator) to indicate the operation was unsuccessful
-#473  ERR_INVITEONLYCHAN  RFC1459 <channel> :<reason> Returned when attempting to join a channel which is invite only without an invitation
-#471  ERR_CHANNELISFULL RFC1459 <channel> :<reason> Returned when attempting to join a channel which is set +l and is already full
 
+# Server reset:
+#   all connected clients reconnect.
+#   if client.status is 'connected' then client.connect
+#   client.on 'connect' -> client.status is 'connected'
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`
 # Aggregated messages.
-# View conversation.*
+# View conversation.
 # Notifications.
 # Persistent connection.
 # Full text search.*
 # Keyword subscriptions.*
-#
 #
 # Roadmap:
 # Add heroku like bot add-ons
@@ -37,3 +40,17 @@
 # 
 # Public server requires username/password available upon sign up from the site.
 # Private channels are hidden, and invite-only by default.
+
+
+# Site
+#   Account settings
+#     Plan (free/personal/business)
+#     Billing info
+#     Account details (username/password)
+#     Bots
+#   Mentions
+#   Explore
+#     Channels
+#   Channels
+#     Channel
+#       

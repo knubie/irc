@@ -1,181 +1,106 @@
-spawn = Npm.require('child_process').spawn
 exec = Npm.require('child_process').exec
-Fiber = Npm.require("fibers")
+
+Meteor.users.update {}, $set: 'profile.connection': off
+console.log 'turn everyone\'s connection off'
+
 Meteor.startup ->
-  #Meteor.call 'connect', user for user in Meteor.users.find().fetch()
+  # Make sure all users' connection status is 'off'
 
-async = (cb) -> Meteor.bindEnvironment cb, (err) -> console.log err
+UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
+  # Scenario 1:
+  #   A user logs in and their profile.connection is off. This user is either
+  #   1a) A free user who has logged out and is now logging back in.
+  #     Action: reconnect.
+  #   2a) A new user who has not yet connect to the irc server.
+  #     Action: reconnect. If no client instance exists, log the user out
+  #     so they can reauthenticate to create one.
+  #   3a) Any user and the server has restart, all users' connection
+  #   status has been set to off
+  #     Action: log out all users so they can re-authenticate and connect to
+  #     the irc server.
+  #
+  # Scenario 2:
+  #   A user logs in and their profile.connection is on. This user is either
+  #   1a)
+  #     a paid user with persistent connection
+  #     Action: none.
+  user = Meteor.users.findOne userId
+  if user.profile.connection is off
+    if client[user.username]?
+      client[user.username].connect()
+    else
+      # Log out all users.
+      #Meteor.users.update userId, $set: 'services.resume.loginTokens' : []
 
-client = {}
+UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
+  user = Meteor.users.findOne userId
+  if user.profile.connection is on and user.profile.account is 'free'
+    client[user.username]?.disconnect()
 
-class Client
-  constructor: ({@_id, @username}) ->
-    # Create a new IRC Client instance.
-    @client = new IRC.Client 'localhost', @username,
-      port: 6767
-      userName: @username
-      realName: 'N/A'
-      autoConnect: no
-      autoRejoin: no
+#client['_bot'] = new IRC.Client 'localhost', "network_bot",
+  #userName: "network_bot"
+  #port: 6767
+  #password: 'bot'
+  #realName: 'N/A'
+  #autoConnect: no
+  #autoRejoin: no
 
-    # Remove all previous listeners just in case.
-    @client.removeAllListeners [
-      'error'
-      'message'
-      'names'
-      'join'
-      'part'
-      'nick'
-    ]
+#client['_bot'].on 'raw', async (msg) =>
+  #if msg.command is 'rpl_list'
+    #name = msg.args[1]
+    #users = msg.args[2]
+    #topic = msg.args[3]
+    #ch = Channels.find_or_create name
+    #Channels.update ch, $set: {users, topic}
 
-    # Log errors sent from the network.
-    @client.on 'error', (msg) -> console.log msg
+#client['_bot'].on 'error', (msg) -> console.log msg
 
-    # Log raw messages sent from the network.
-    @client.on 'raw', (msg) -> console.log msg
+#client['_bot'].connect async ->
+  #client['_bot'].join '#test'
+  #Meteor.setInterval ->
+    #client['_bot'].conn.write("LIST\r\n")
+    ##client['_bot'].send 'LIST'
+  #, 30000
 
-    # Listen for incoming messages.
-    @client.on 'message', async (from, to, text, message) =>
-      # Insert a new message
-      Messages.insert
-        from: from
-        channel: if to is @username then from else to
-        text: text
-        time: new Date
-        owner: @_id
-
-      # Create new Channel if message is a PM.
-      @join from if to is @username
-
-    # Handle various actions by the network.
-    @client.on 'raw', async (msg) =>
-      if msg.command is 'rpl_list'
-        name = msg.args[1]
-        count = msg.args[2]
-        topic = msg.args[3]
-        ch = Channels.find_or_create name
-        Channels.update ch, $set: {count, topic}
-
-    # Listen for 'names' requests.
-    @client.on 'names', async (channel, nicks_in) =>
-      #TODO: Either add rpl_isupport to hector, or remove from node-irc
-      nicks = {}
-      for nick, status of nicks_in
-        match = nick.match(/^(.)(.*)$/)
-        if match
-          if match[1] is '@'
-            nicks[match[2]] = match[1]
-          else
-            nicks[nick] = ''
-      # Update Channel.nicks with the nicks object sent from the network.
-      Channels.update
-        name: channel
-      , {$set: {nicks}}
-
-    @client.on 'kick', async (channel, nick, kicker, reason, message) =>
-      Messages.insert
-        owner: @_id
-        channel: channel
-        text: "#{nick} was kicked by #{kicker}! \"#{reason}\""
-        time: new Date
-        from: 'system'
-      if nick is @username
-        Channels.find({name}).part @username
-        console.log "You have been kicked from #{channel}."
-        console.log "Reason: #{reason}"
-
-    # Send a NAMES request when users joins, parts, or changes nick.
-    for event in ['join', 'part', 'nick', 'kick']
-      @client.on event, async (channel) => @client.send 'NAMES', channel
-
-  connect: (password) ->
-    # Connect to the IRC network.
-    console.log "connecting.."
-    @client.connect async =>
-      console.log 'connected'
-      # Set connecting status to false.
-      Meteor.users.update @_id, $set: {'profile.connecting': false}
-      # Join subscribed channels.
-      @join channel.name for channel in Channels.find(owner: @_id).fetch()
-      @client.list()
-    @client.send 'PASS', password
-
-  join: (name) ->
-    check name, String
-    #TODO: validation
-    nicks = {}
-    Channels.find_or_create(name)?.join @username
-    if name.isChannel() # channel begins with '#'
-      @client.join name
-    #else # channel is actually a nick
-      #nicks[name] = '' # Add nick to nicks object.
-      ## Update channel with new nicks.
-      #Channels.update
-        #name: name
-        #owner: @_id
-      #, {$set: {nicks}}
-
-  say: (channel, text) ->
-    check channel, String
-    check text, String
-    # Sends text to the specified channel and inserts a new Message doc.
-    @client.say channel, text
-    Messages.insert
-      from: @username
-      channel: channel
-      text: text
-      time: new Date
-      owner: @_id
-
-  part: (name) ->
-    check name, String
-    # Leave the channel if it is in fact a channel (ie. not a nick)
-    @client.part name if name.isChannel
-    Channels.findOne({name}).part @username
-
-  kick: (channel, username, reason) ->
-    reason = reason or ''
-    @client.send 'KICK', channel, username, reason
-
+########## Methods ##########
+#
 Meteor.methods
-  connect: (user, password) ->
-    check user, Match.ObjectIncluding({_id: String, username: String})
-    Meteor.users.update user._id, $set: {'profile.connecting': true}
-    unless client[user._id]?
-      client[user._id] = new Client user
-      client[user._id].connect(password)
+  remember: (username, password, _id) ->
+    console.log 'remember..'
+    console.log "username: #{username}"
+    console.log "password: #{password}"
+    console.log "_id: #{_id}"
+    exec "cd ~/Development/hector/myserver.hect; hector identity remember #{username} #{password}", async ->
+      console.log 'remember succeeded'
+      client[username] ?= new Client {_id, username, password}
+      client[username].connect()
+    return null
 
-  join: (user, channel) ->
-    check user, Match.ObjectIncluding(_id: String)
-    client[user._id].join channel
+  join: (username, channel) ->
+    #check user, Match.ObjectIncluding(_id: String)
+    console.log 'meteor.methods.join'
+    client[username].join channel
+    return null
 
   part: (user, channel) ->
     check user, Match.ObjectIncluding(_id: String)
     check channel, String
-    client[user._id].part channel
+    client[user.username].part channel
+    return null
 
   say: (user, channel, message) ->
     check user, Match.ObjectIncluding(_id: String)
     check channel, String
     check message, String
-    client[user._id].say channel, message
-
-  remember: (username, password, email) ->
-    exec "cd ~/Development/hector/myserver.hect; hector identity remember #{username} #{password}", ->
-      Fiber(->
-        newUser = Accounts.createUser
-          username: username
-          email: email
-          password: password
-          profile:
-            connecting: true
-        Meteor.call 'connect', {_id: newUser, username}, password
-        console.log 'remembered'
-      ).run()
+    client[user.username].say channel, message
+    return null
 
   kick: (user, channel, username, reason) ->
-    client[user._id].kick channel, username, reason
+    client[user.username].kick channel, username, reason
+    return null
 
+########## Publications ##########
+#
 Meteor.publish 'users', ->
   Meteor.users.find()
 

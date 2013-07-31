@@ -1,19 +1,35 @@
 <head>
   <title>Twirc</title>
-  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <!--<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
 </head>
 
 <body>
-  {{#unless currentUser}}
-    {{> home_logged_out}}
-  {{else}}
+  {{#if currentUser}}
     {{> home_logged_in}}
-    <div class="page-container">
-      {{renderPage}}
-    </div>
-  {{/unless}}
+  {{else}}
+    {{> home_logged_out}}
+  {{/if}}
 </body>
 
+<template name="home_logged_in">
+  <div class="header header-logged-in">
+    <div class="container">
+      <a href="/" class="logo">idletron</a>
+      <ul class="top-nav">
+        <li><a href="/explore">Explore</a></li>
+        <li><a href="/account">Account</a></li>
+        <li><a href="/logout">Sign out</a></li>
+      </ul>
+    </div>
+  </div>
+  {{#if connection}}
+    <div class="container">
+      {{renderPage}}
+    </div>
+  {{else}}
+    Connecting..
+  {{/if}}
+</template>
 <template name="home_logged_out">
   {{#unless currentUser}}
     <div class="marketing-section-signup">
@@ -23,7 +39,7 @@
           <input type="email" id="auth-email" placeholder="Your email">
           <input type="password" id="auth-pw" placeholder="Create a passphrase">
           <input type="submit" value="Sign up">
-          By clicking "Sign up", you agree to our terms of service and privacy policy.
+          <span class="privacy-print">By clicking "Sign up", you agree to our terms of service and privacy policy.</span>
         </form>
         <h1 class="heading">Join the conversation.</h1>
         <p class="subhead">
@@ -42,46 +58,66 @@
   {{/unless}}
 </template>
 
-<template name="home_logged_in">
-  {{#if connecting}}
-    Connecting..
-  {{else}}
-    <ul class="channels nav nav-stacked">
-      <li class="logo">Twirc</li>
-      <li class="nav-item"><a href="/explore">Explore</a></li>
-      <li class="nav-item"><a href="#">Account</a></li>
-      <li class="nav-item sign-out"><a href="#">Sign Out</a></li>
-      {{> channels}}
-    </ul>
-  {{/if}}
+<template name="channel_main">
+  {{> channels}}
+  <div class="channel-container">
+    {{> channel_header}}
+    {{> messages}}
+  </div>
+</template>
+
+<template name="channel_settings">
+  {{> channels}}
+  <div class="channel-container">
+    {{> channel_header}}
+    {{> settings}}
+  </div>
+</template>
+
+<template name="channel_header">
+  {{#unless all}}
+    <div class="channel-breadcrumb">
+      <span class="channel-name">{{channel}}</span>
+      <span class="slash">&nbsp;/&nbsp;</span>
+      <div class="user-count">
+        <i class="icon-user"></i><strong>{{users}}</strong> users
+      </div>
+    </div>
+    <div class="buttons">
+      <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
+      <a class="add-bot">add a bot</a>
+    </div>
+  {{/unless}}
 </template>
 
 <template name="channels">
-  <li class="new-channel-li">
-    <form id="new-channel">
-      <input type="text" id="new-channel-name" autocomplete="off" placeholder="Add Channel">
-    </form>
-  </li>
-  {{#each channels}}
-    <li class="channel {{selected}}">
+  <ul class="channels">
+    <li class="all-channels {{all}}">
       <a href="/">
-        {{name}}
-        <button type="button" class="close">&times;</button>
+        All channels
         <!--<span class="badge badge-info">{{notification_count}}</span>-->
       </a>
     </li>
-  {{/each}}
-</template>
-
-<template name="channel">
+    {{#each channels}}
+      <li class="channel {{selected}}">
+        <a href="/channels/{{url_name}}">
+          {{name}}
+          <!--<span class="badge badge-info">{{notification_count}}</span>-->
+        </a>
+        <button type="button" class="close">&times;</button>
+      </li>
+    {{/each}}
+    <li class="new-channel-li">
+      <span class="new-channel-link">+ Add channel</span>
+      <form id="new-channel">
+        <input type="text" id="new-channel-name" autocomplete="off" placeholder="Add Channel">
+      </form>
+    </li>
+  </ul>
 </template>
 
 <template name="messages">
-  <div class="page-head">
-    <span class="topic">{{topic}}</span>
-    <i class="icon-search"></i>
-    <i class="icon-wrench"></i>
-  </div>
+  <div class="topic">{{topic}}</div>
   <ul class="messages nav nav-stacked">
     {{#each messages}}
       {{> message}}
@@ -106,7 +142,7 @@
   {{else}}
     <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" data-convo="{{convo}}" class="message {{message_class}}">
       <span class="reply">
-        <i class="icon-certificate {{status}}"></i>
+        <!--<i class="icon-certificate {{status}}"></i>-->
         <strong>{{from}}</strong>
         {{#if all}}
           <span class="muted">{{channel}}</span>
@@ -115,7 +151,7 @@
       {{#unless self}}
         &nbsp;
         <div class="actions">
-          <div class="action">
+          <div class="action reply-action">
             <i class="icon-share-alt"></i> Reply
           </div>
           &nbsp;
@@ -161,6 +197,11 @@
 </template>
 
 <template name="explore">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#">Top</a></li>
+    <li class=""><a href="#">Trending</a></li>
+    <li class=""><a href="#">Categories</a></li>
+  </ul>
   <ul class="channel-list">
     {{#each channels}}
       <li>
@@ -173,4 +214,52 @@
       </li>
     {{/each}}
   </ul>
+</template>
+
+<template name="settings">
+  <div class="settings-section">
+    <div class="section-heading">Options</div>
+    <form>
+      <fieldset>
+        <input type="text" class="form-control" id="inputTopic" placeholder="Enter topic">
+        <label>
+          <input type="checkbox"> Private
+        </label>
+        <label>
+          <input type="checkbox"> Show join/part messages
+        </label>
+      </fieldset>
+    </form>
+  </div>
+  <div class="settings-section">
+    <div class="section-heading">Invite users</div>
+    ignore user:
+    ignored users list
+  </div>
+  <div class="settings-section">
+    <div class="section-heading">Ignore list</div>
+    <ul>
+      <li>user</li>
+    </ul>
+    <form>
+      <fieldset>
+        <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user">
+      <fieldset>
+    <form>
+  </div>
+  <div class="settings-section">
+    <div class="section-heading">Operators</div>
+    op user
+    op list
+  </div>
+  <div class="settings-section">
+    <div class="section-heading">Bans</div>
+    ban user
+    ban list
+  </div>
+  <div class="settings-section">
+    <div class="section-heading">Bots</div>
+    add bot
+    bot list
+  </div>
 </template>
