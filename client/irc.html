@@ -30,6 +30,7 @@
     Connecting..
   {{/if}}
 </template>
+
 <template name="home_logged_out">
   {{#unless currentUser}}
     <div class="marketing-section-signup">
@@ -155,7 +156,7 @@
             <i class="icon-share-alt"></i> Reply
           </div>
           &nbsp;
-          <div class="action">
+          <div class="action ignore-action">
             <i class="icon-volume-off"></i> Ignore
           </div>
           {{#if op_status}}
@@ -239,11 +240,16 @@
   <div class="settings-section">
     <div class="section-heading">Ignore list</div>
     <ul>
-      <li>user</li>
+      {{#each ignore_list}}
+      <li>
+        {{.}}
+        <button type="button" class="close">&times;</button>
+      </li>
+      {{/each}}
     </ul>
-    <form>
+    <form id="ignore-form">
       <fieldset>
-        <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user">
+        <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user" autocomplete="off">
       <fieldset>
     <form>
   </div>

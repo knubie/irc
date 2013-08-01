@@ -45,6 +45,7 @@ Template.home_logged_out.events
     _id = Accounts.createUser {username, email, password, profile:
       connection: off
       account: 'free'
+      channels: {}
     }, (error) ->
       if Meteor.userId()? and not error
         Meteor.call 'remember', username, password, Meteor.userId()
@@ -81,7 +82,6 @@ Template.channels.events
     $('.new-channel-link').hide()
     $('#new-channel').show()
     $('#new-channel-name').focus()
-    console.log 'new channel'
 
   'blur #new-channel-name': (e, t) ->
     $('.new-channel-link').show()
@@ -99,7 +99,6 @@ Template.channels.events
   'click .channel > a': (e,t) ->
     Session.set 'channel', @name
     $('#say-input').focus()
-    console.log 'switch channel'
 
   'click .close': ->
     Meteor.call 'part', Meteor.user(), @name
@@ -116,6 +115,10 @@ Template.channels.helpers
           @name.match(/^(.)(.*)$/)[2]
 
     channels = (add_url channel for channel in channels)
+    #.map (channel) ->
+      #channel extends
+        #url_name: ->
+          #@name.match(/^(.)(.*)$/)[2]
 
     return channels
       
@@ -164,7 +167,6 @@ Template.messages.events
       message = t.find('#say-input').value
       $('#say-input').val('')
       Meteor.call 'say', Meteor.user(), Session.get('channel'), message
-      console.log 'say'
 
   'click, tap .load-next': ->
     handlers.messages[Session.get 'channel'].loadNextPage()
@@ -175,15 +177,18 @@ Template.messages.helpers
   messages: ->
     prev = null
     if Session.equals 'channel', 'all'
-      Messages.find({}, {sort: {time: 1}})
-      .map (msg) ->
-        msg.prev = prev
-        prev = msg
+      messages = Messages.find({}, {sort: {time: 1}}).fetch()
     else
-      Messages.find({channel: Session.get 'channel'}, {sort: {time: 1}})
-      .map (msg) ->
-        msg.prev = prev
-        prev = msg
+      messages = Messages.find(
+        channel: Session.get 'channel'
+      , sort: {time: 1}).fetch()
+
+    setPrev = (msg) ->
+      msg.prev = prev
+      prev = msg
+    return (setPrev message for message in messages when message.from \
+    not in Meteor.user().profile.channels[message.channel].ignore)
+
   notifications: ->
     Channels.findOne(name: Session.get 'channel')
     ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
@@ -236,6 +241,12 @@ Template.message.events
   'click .reply-action': ->
     $('#say-input').val("@#{@from} ")
     $('#say-input').focus()
+
+  'click .ignore-action': ->
+    {channels} = Meteor.user().profile
+    channels[@channel]?.ignore.push @from
+    Meteor.users.update \
+      Meteor.userId(), $set: {'profile.channels': channels}
 
   'click, tap': (e, t) ->
     if Session.equals 'channel', 'all'
@@ -300,8 +311,6 @@ Template.notification.events
 
 Template.explore.events
   'click ul>li>h3>a': (e,t) ->
-    console.log t
-    console.log e
     name = e.toElement.outerText
     Meteor.call 'join', Meteor.user(), name
     ##TODO: combine with identicle lines below?
@@ -314,12 +323,33 @@ Template.explore.helpers
 
 ########## Settings ##########
 
+Template.settings.events
+  'submit #ignore-form': (e,t) ->
+    e.preventDefault()
+    ignoree = t.find('#inputIgnore').value
+    t.find('#inputIgnore').value = ''
+    console.log ignoree
+    {channels} = Meteor.user().profile
+    channels[Session.get('channel')]?.ignore.push ignoree
+    Meteor.users.update \
+      Meteor.userId(), $set: {'profile.channels': channels}
+
+  'click .close': (e,t) ->
+    {channels} = Meteor.user().profile
+    #channels[Session.get('channel')]?.ignore.push ignoree
+    index = channels[Session.get('channel')]?.ignore.indexOf(@)
+    channels[Session.get('channel')]?.ignore.splice(index, 1)
+    Meteor.users.update \
+      Meteor.userId(), $set: {'profile.channels': channels}
+
 Template.settings.helpers
   op_status: ->
     if Session.equals 'channel', 'all'
       return no
     else
       Channels.findOne(name: Session.get 'channel')?.nicks[Meteor.user().username] is '@'
+  ignore_list: ->
+    Meteor.user().profile.channels[Session.get('channel')]?.ignore
 
 
 Meteor.Router.add
@@ -330,11 +360,9 @@ Meteor.Router.add
   '/explore': 'explore'
 
   '/logout': ->
-    console.log 'log out'
     Meteor.logout -> Meteor.Router.to('/')
 
   '/channels/:channel/settings': (channel) ->
-    console.log 'settings'
     Session.set 'channel', "##{channel}"
     return 'channel_settings'
 

@@ -70,10 +70,11 @@ Meteor.methods
     console.log "username: #{username}"
     console.log "password: #{password}"
     console.log "_id: #{_id}"
-    exec "cd ~/Development/hector/myserver.hect; hector identity remember #{username} #{password}", async ->
-      console.log 'remember succeeded'
-      client[username] ?= new Client {_id, username, password}
-      client[username].connect()
+    if _id?
+      exec "cd ~/Development/hector/myserver.hect; hector identity remember #{username} #{password}", async ->
+        console.log 'remember succeeded'
+        client[username] ?= new Client {_id, username, password}
+        client[username].connect()
     return null
 
   join: (username, channel) ->

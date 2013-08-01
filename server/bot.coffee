@@ -49,7 +49,6 @@ class @Client extends IRC.Client
     # Listen for 'names' requests.
     @on 'names', async (channel, nicks_in) =>
       #TODO: Either add rpl_isupport to hector, or remove from node-irc
-      console.log 'names'
       nicks = {}
       for nick, status of nicks_in
         match = nick.match(/^(.)(.*)$/)
@@ -60,7 +59,6 @@ class @Client extends IRC.Client
             nicks[nick] = ''
       # Count the number of nicks in the nicks_in object
       users = (user for user of nicks).length
-      console.log users
       # Update Channel.nicks with the nicks object sent from the network.
       Channels.update
         name: channel
@@ -91,8 +89,8 @@ class @Client extends IRC.Client
       # Set connecting status to false.
       Meteor.users.update @_id, $set: {'profile.connection': on}
       # Join subscribed channels.
-      if channels = Meteor.users.findOne(@_id)?.channels
-        for channel in channels
+      if channels = Meteor.users.findOne(@_id)?.profile.channels
+        for channel of channels
           console.log "joining #{channel}"
           #@join channel.name
           @join channel
@@ -106,13 +104,19 @@ class @Client extends IRC.Client
 
   join: (name) ->
     check name, String
-    console.log 'client.join'
     #TODO: validation
-    nicks = {}
+    {channels} = Meteor.users.findOne(@_id).profile
+    unless name of channels
+      channels[name] =
+        ignore: []
+        verbose: false
+        unread: 0
+        mentions: 0
+    console.log channels
+    Meteor.users.update @_id, $set: {'profile.channels': channels}
+    console.log Meteor.users.findOne(@_id)
     Channels.find_or_create(name)?.join @username
     super name if name.isChannel()
-    # TODO: make channels an array of objects, not strings.
-    Meteor.users.update @_id, $addToSet: {channels: name}
     #else # channel is actually a nick
       #nicks[name] = '' # Add nick to nicks object.
       ## Update channel with new nicks.
