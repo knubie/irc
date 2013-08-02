@@ -24,7 +24,7 @@ class @Client extends IRC.Client
     # Log raw messages sent from the network.
     @on 'raw', (msg) -> console.log msg
 
-    #TODO: make this work.
+    # Sets the channel topic.
     @on 'topic', async (channel, topic, nick, message) ->
       Channels.update {name: channel}, $set: {topic}
 
@@ -41,10 +41,12 @@ class @Client extends IRC.Client
       # Create new Channel if message is a PM.
       @join from if to is @username
 
+    # Listen for channel list response and populate
+    # channel collection with the results.
     @on 'channellist_item', (data) ->
       {name, users, topic} = data
-      ch = Channels.find_or_create name
-      Channels.update ch, $set: {users, topic}
+      channel = Channels.find_or_create name
+      Channels.update channel, $set: {users, topic}
 
     # Listen for 'names' requests.
     @on 'names', async (channel, nicks_in) =>
@@ -82,21 +84,14 @@ class @Client extends IRC.Client
       
   connect: ->
     # Connect to the IRC network.
-    console.log "connecting.."
     super async =>
-      console.log 'connected!'
-      console.log @_id
-      # Set connecting status to false.
+      # Set connecting status to on.
       Meteor.users.update @_id, $set: {'profile.connection': on}
       # Join subscribed channels.
       if channels = Meteor.users.findOne(@_id)?.profile.channels
         for channel of channels
           console.log "joining #{channel}"
-          #@join channel.name
           @join channel
-      #Channels.find().forEach (channel) =>
-        #if Meteor.users.findOne(@_id).username of channel.nicks
-          #@join channel.name
 
   disconnect: ->
     super async =>

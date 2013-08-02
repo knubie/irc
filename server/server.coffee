@@ -73,9 +73,12 @@ Meteor.methods
     if _id?
       exec "cd ~/Development/hector/myserver.hect; hector identity remember #{username} #{password}", async ->
         console.log 'remember succeeded'
-        client[username] ?= new Client {_id, username, password}
-        client[username].connect()
+        Meteor.call 'connect', username, password, _id
     return null
+
+  connect: (username, password, _id) ->
+    client[username] ?= new Client {_id, username, password}
+    client[username].connect()
 
   join: (username, channel) ->
     #check user, Match.ObjectIncluding(_id: String)
