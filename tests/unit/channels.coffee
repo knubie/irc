@@ -1,42 +1,14 @@
 assert = require 'assert'
 
 suite 'Channels', ->
-  test 'uniqueness', (done, server, client) ->
-    client.eval ->
-      Accounts.createUser
-        username: 'matt'
-        password: 'password'
-        profile:
-          connecting: true
-      , ->
-        Channels.insert
-          owner: Meteor.userId()
-          name: '#channel'
-        Channels.insert
-          owner: Meteor.userId()
-          name: '#channel'
+  test 'find_or_create', (done, server) ->
+    server.eval ->
+      Channels.find_or_create '#test'
+      doc = Channels.find_or_create '#test'
+      docs = Channels.find().fetch()
+      emit 'docs'#, doc, docs
 
-        Channels.find().observe
-          removed: -> emit 'removed'
-
-    client.once 'removed', ->
+    server.once 'docs', (doc, docs) ->
+      #assert.equal doc.name, '#test'
+      #assert.equal docs.length, 1
       done()
-
-  test 'no whitespace', (done, server, client) ->
-    client.eval ->
-      Accounts.createUser
-        username: 'matt'
-        password: 'password'
-        profile:
-          connecting: true
-      , ->
-        Channels.insert
-          owner: Meteor.userId()
-          name: '#channel name'
-
-        Channels.find().observe
-          removed: -> emit 'removed'
-
-    client.once 'removed', ->
-      done()
-

@@ -2,11 +2,13 @@
 #   name  : String
 #   nicks : {name: status, ...}
 #   topic : String
+#   modes : Array
 class ChannelsCollection extends Meteor.Collection
-  find_or_create: (name, users, topic) ->
+  find_or_create: (name, users, topic, modes) ->
     console.log 'find or create'
     users ?= 0
     topic ?= 'No topic set.'
+    modes ?= []
     nicks = {}
     if name.isChannel and not @findOne({name})
       @findOne(@insert {name, users, topic, nicks})
@@ -17,17 +19,15 @@ class ChannelsCollection extends Meteor.Collection
   transform: (doc) ->
     doc extends
       join: (nick) ->
-        console.log 'channels.join'
         return if @nicks[nick]
-        console.log 'nick is not in channel\'s nick list'
         if _.isEmpty @nicks
           @nicks[nick] = '@'
         else
           @nicks[nick] = ''
       part: (nick) ->
-        nicks = _.clone @nicks
+        {nicks} = @
         delete nicks[nick]
-        if _.isEmpty @nicks
+        if _.isEmpty nicks
           Channels.remove @_id
         else
           Channels.update @_id, $set: {nicks}
@@ -69,6 +69,24 @@ class ChannelsCollection extends Meteor.Collection
 #     '#channelname':
 #       ignore: [String, ...]
 #       mode: String
+
+#if Meteor.isServer
+  #Accounts.onCreateUser (options, user) ->
+    #user.join = (name) ->
+      ## Get user's existing channel object
+      #{channels} = user.profile
+      ## Add the new channel if it's not there already.
+      #unless name of channels
+        #channels[name] =
+          #ignore: []
+          #verbose: false
+          #unread: 0
+          #mentions: 0
+      ## Update the User with the new channels object.
+      #Meteor.users.update user._id, $set: {'profile.channels': channels}
+
+    #user.profile = options.profile if options.profile
+    #return user
 
 #if Meteor.isServer
   #@Channels._ensureIndex('name', {unique: 1, sparse: 1})

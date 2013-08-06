@@ -224,10 +224,8 @@
       <fieldset>
         <input type="text" class="form-control" id="inputTopic" placeholder="Enter topic">
         <label>
-          <input type="checkbox"> Private
-        </label>
-        <label>
-          <input type="checkbox"> Show join/part messages
+          <input id="privateCheckbox" type="checkbox" {{private_checked}}>
+          Private
         </label>
       </fieldset>
     </form>
@@ -238,7 +236,7 @@
     ignored users list
   </div>
   <div class="settings-section">
-    <div class="section-heading">Ignore list</div>
+    <div class="section-heading">Ignore</div>
     <ul>
       {{#each ignore_list}}
       <li>
@@ -252,6 +250,7 @@
         <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user" autocomplete="off">
       <fieldset>
     <form>
+    <input type="checkbox" id="inputIgnoreJoinPart"> Show join/part messages
   </div>
   <div class="settings-section">
     <div class="section-heading">Operators</div>

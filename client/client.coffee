@@ -1,3 +1,4 @@
+#TODO: change Session.set 'channel' to channel.name and channel._id
 ########## Defaults ##########
 
 # Currently selected channel for viewing messages.
@@ -55,7 +56,7 @@ Template.home_logged_out.events
     username = t.find('#signin-username').value
     password = t.find('#signin-password').value
     Meteor.loginWithPassword username, password, (error) ->
-      Meteor.call 'remember', username, password, Meteor.userId()
+      Meteor.call 'connect', username, password, Meteor.userId()
 
 ########## Dashboard ##########
 
@@ -106,6 +107,7 @@ Template.channels.events
 
 Template.channels.helpers
   channels: ->
+    #TODO: reduce code
     channels = (channel for channel in Channels.find().fetch() \
       when Meteor.user().username of channel.nicks)
 
@@ -183,6 +185,7 @@ Template.messages.helpers
         channel: Session.get 'channel'
       , sort: {time: 1}).fetch()
 
+    #TODO: reduce code
     setPrev = (msg) ->
       msg.prev = prev
       prev = msg
@@ -244,6 +247,7 @@ Template.message.events
 
   'click .ignore-action': ->
     {channels} = Meteor.user().profile
+    #TODO: avoid duplicates
     channels[@channel]?.ignore.push @from
     Meteor.users.update \
       Meteor.userId(), $set: {'profile.channels': channels}
@@ -330,6 +334,7 @@ Template.settings.events
     t.find('#inputIgnore').value = ''
     console.log ignoree
     {channels} = Meteor.user().profile
+    #TODO: avoid duplicates
     channels[Session.get('channel')]?.ignore.push ignoree
     Meteor.users.update \
       Meteor.userId(), $set: {'profile.channels': channels}
@@ -342,6 +347,11 @@ Template.settings.events
     Meteor.users.update \
       Meteor.userId(), $set: {'profile.channels': channels}
 
+  'click #privateCheckbox': (e,t) ->
+    channel = Channels.findOne {name: Session.get('channel')}
+    if 's' in channel.modes or 'i' in channel.modes
+      Meteor.call 'modes', Meteor.user(), '-si'
+
 Template.settings.helpers
   op_status: ->
     if Session.equals 'channel', 'all'
@@ -350,6 +360,13 @@ Template.settings.helpers
       Channels.findOne(name: Session.get 'channel')?.nicks[Meteor.user().username] is '@'
   ignore_list: ->
     Meteor.user().profile.channels[Session.get('channel')]?.ignore
+
+  private_checked: ->
+    channel = Channels.findOne {name: Session.get('channel')}
+    if 's' in channel.modes or 'i' in channel.modes
+      return 'checked'
+    else
+      return ''
 
 
 Meteor.Router.add

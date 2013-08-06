@@ -71,7 +71,7 @@ Meteor.methods
     console.log "password: #{password}"
     console.log "_id: #{_id}"
     if _id?
-      exec "cd ~/Development/hector/myserver.hect; hector identity remember #{username} #{password}", async ->
+      exec "cd ~/Development/hector/idletron.hect; hector identity remember #{username} #{password}", async ->
         console.log 'remember succeeded'
         Meteor.call 'connect', username, password, _id
     return null
@@ -102,6 +102,11 @@ Meteor.methods
   kick: (user, channel, username, reason) ->
     client[user.username].kick channel, username, reason
     return null
+
+  mode: (user, channel, mode) ->
+    check user, Match.ObjectIncluding(_id: String)
+    check channel, String
+    client[user.username].mode channel, mode
 
 ########## Publications ##########
 #
