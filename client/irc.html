@@ -101,6 +101,7 @@
     </li>
     {{#each channels}}
       <li class="channel {{selected}}">
+        {{#if private}}<i class="icon-lock"></i> {{/if}}
         <a href="/channels/{{url_name}}">
           {{name}}
           <!--<span class="badge badge-info">{{notification_count}}</span>-->
@@ -118,7 +119,16 @@
 </template>
 
 <template name="messages">
-  <div class="topic">{{topic}}</div>
+  <div class="topic">
+    {{topic}}
+    {{#if op_status}}
+      <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
+    {{/if}}
+  </div>
+  <form id="topic-form">
+    <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{topic}}">
+    <a href="#" class="cancel">cancel</a>
+  </form>
   <ul class="messages nav nav-stacked">
     {{#each messages}}
       {{> message}}
@@ -218,18 +228,35 @@
 </template>
 
 <template name="settings">
-  <div class="settings-section">
-    <div class="section-heading">Options</div>
-    <form>
-      <fieldset>
-        <input type="text" class="form-control" id="inputTopic" placeholder="Enter topic">
-        <label>
-          <input id="privateCheckbox" type="checkbox" {{private_checked}}>
-          Private
-        </label>
-      </fieldset>
-    </form>
-  </div>
+  {{#if op_status}}
+    <div class="settings-section">
+      <div class="section-heading">Options</div>
+      <form>
+        <fieldset>
+          <input type="text" class="form-control" id="inputTopic" placeholder="Enter topic">
+          <label>
+            <input id="privateCheckbox" type="checkbox" {{private_checked}}>
+            Private
+          </label>
+        </fieldset>
+      </form>
+    </div>
+    <div class="settings-section">
+      <div class="section-heading">Operators</div>
+      op user
+      op list
+    </div>
+    <div class="settings-section">
+      <div class="section-heading">Bans</div>
+      ban user
+      ban list
+    </div>
+    <div class="settings-section">
+      <div class="section-heading">Bots</div>
+      add bot
+      bot list
+    </div>
+  {{/if}}
   <div class="settings-section">
     <div class="section-heading">Invite users</div>
     ignore user:
@@ -239,10 +266,10 @@
     <div class="section-heading">Ignore</div>
     <ul>
       {{#each ignore_list}}
-      <li>
-        {{.}}
-        <button type="button" class="close">&times;</button>
-      </li>
+        <li>
+          {{.}}
+          <button type="button" class="close">&times;</button>
+        </li>
       {{/each}}
     </ul>
     <form id="ignore-form">
@@ -251,20 +278,5 @@
       <fieldset>
     <form>
     <input type="checkbox" id="inputIgnoreJoinPart"> Show join/part messages
-  </div>
-  <div class="settings-section">
-    <div class="section-heading">Operators</div>
-    op user
-    op list
-  </div>
-  <div class="settings-section">
-    <div class="section-heading">Bans</div>
-    ban user
-    ban list
-  </div>
-  <div class="settings-section">
-    <div class="section-heading">Bots</div>
-    add bot
-    bot list
   </div>
 </template>

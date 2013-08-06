@@ -106,7 +106,11 @@ Meteor.methods
   mode: (user, channel, mode) ->
     check user, Match.ObjectIncluding(_id: String)
     check channel, String
-    client[user.username].mode channel, mode
+    client[user.username].send 'MODE', channel, mode
+
+  topic: (user, channel, topic) ->
+    client[user.username].send 'TOPIC', channel, topic
+
 
 ########## Publications ##########
 #

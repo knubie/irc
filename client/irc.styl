@@ -90,17 +90,15 @@ code
   margin: 0
   margin-top: 25px
   position: fixed
-  li.logo
-    font-size: 21px
-    color: white
-    font-weight: bold
-    padding: 12px 12px
   li
     margin-bottom: 13px
     width: 180px
 
-    a > button 
+    button 
       display: none
+    i
+      opacity: 0.5
+      vertical-align: baseline
     a, form > input 
       color: #777
       font-size: 18px
@@ -398,6 +396,11 @@ form
   font-weight: 300
   color: #666
   margin-top: 9px
+  .topic-edit, .topic-edit > a
+    color: silver
+
+#topic-form
+  display: none
 
 .settings-section
   border-radius: 5px

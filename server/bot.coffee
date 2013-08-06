@@ -183,6 +183,8 @@ class @Client extends IRC.Client
     @send 'KICK', channel, username, reason
 
   mode: (channel, mode) -> @send 'MODE', channel, mode
+
+  topic: (channel, topic) -> @send 'topic', channel, topic
       
   # Helper funciton
 

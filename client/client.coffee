@@ -88,6 +88,12 @@ Template.channels.events
     $('.new-channel-link').show()
     $('#new-channel').hide()
 
+  'keydown #new-channel-name': (e, t) ->
+    keyCode = e.keyCode or e.which
+    if keyCode is 27
+      $('.new-channel-link').show()
+      $('#new-channel').hide()
+
   'submit #new-channel': (e, t) ->
     e.preventDefault()
     name = t.find('#new-channel-name').value
@@ -107,32 +113,8 @@ Template.channels.events
 
 Template.channels.helpers
   channels: ->
-    #TODO: reduce code
-    channels = (channel for channel in Channels.find().fetch() \
+    (channel for channel in Channels.find().fetch() \
       when Meteor.user().username of channel.nicks)
-
-    add_url = (channel) ->
-      return channel extends
-        url_name: ->
-          @name.match(/^(.)(.*)$/)[2]
-
-    channels = (add_url channel for channel in channels)
-    #.map (channel) ->
-      #channel extends
-        #url_name: ->
-          #@name.match(/^(.)(.*)$/)[2]
-
-    return channels
-      
-    #chs = Channels.find().map (doc) ->
-      #console.log doc
-      #if Meteor.user().username of doc.nicks
-        #console.log doc
-        #return doc extends
-          #url_name: ->
-            #@name.match(/^(.)(.*)$/)[2]
-    #console.log chs
-    #return chs
   selected: ->
     if Session.equals 'channel', @name then 'selected' else ''
   notification_count: ->
@@ -140,6 +122,10 @@ Template.channels.helpers
     0
   all: ->
     if Session.equals 'channel', 'all' then 'selected' else ''
+  url_name: ->
+    @name.match(/^(.)(.*)$/)[2]
+  private: ->
+    's' in @modes or 'i' in @modes
 
 ########## Messages ##########
 
@@ -162,7 +148,6 @@ Template.messages.rendered = ->
 
 Template.messages.events
   'keydown #say': (e, t) ->
-  #'submit #say': (e, t) ->
     keyCode = e.keyCode or e.which
     if keyCode is 13
       e.preventDefault()
@@ -172,6 +157,24 @@ Template.messages.events
 
   'click, tap .load-next': ->
     handlers.messages[Session.get 'channel'].loadNextPage()
+
+  'click .topic-edit > a': (e, t) ->
+    $('.topic').hide()
+    $('#topic-form').show()
+    $('#topic-name').focus()
+
+  'click #topic-form > .cancel': (e, t) ->
+    e.preventDefault()
+    $('.topic').show()
+    $('#topic-form').hide()
+
+  'submit #topic-form': (e,t) ->
+    e.preventDefault()
+    topic = t.find('#topic-name').value
+    Meteor.call 'topic', Meteor.user(), Session.get('channel'), topic
+    $('.topic').show()
+    $('#topic-form').hide()
+
 
 Template.messages.helpers
   all: ->
@@ -191,7 +194,6 @@ Template.messages.helpers
       prev = msg
     return (setPrev message for message in messages when message.from \
     not in Meteor.user().profile.channels[message.channel].ignore)
-
   notifications: ->
     Channels.findOne(name: Session.get 'channel')
     ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
@@ -360,7 +362,6 @@ Template.settings.helpers
       Channels.findOne(name: Session.get 'channel')?.nicks[Meteor.user().username] is '@'
   ignore_list: ->
     Meteor.user().profile.channels[Session.get('channel')]?.ignore
-
   private_checked: ->
     channel = Channels.findOne {name: Session.get('channel')}
     if 's' in channel.modes or 'i' in channel.modes
