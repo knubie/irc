@@ -93,7 +93,6 @@ Template.channels.events
     name = t.find('#new-channel-name').value
     t.find('#new-channel-name').value = ''
     Meteor.call 'join', Meteor.user().username, name
-    #TODO: combine with identicle lines below?
     Session.set 'channel', name
     $('#say-input').focus()
 
@@ -104,6 +103,7 @@ Template.channels.events
   'click .close': ->
     Meteor.call 'part', Meteor.user(), @name
     Session.set 'channel', 'all'
+    Meteor.Router.to('/')
 
 Template.channels.helpers
   channels: ->
@@ -228,7 +228,6 @@ Template.message.rendered = ->
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
-  #TODO: combine all markdownification into a helper method.
   # Linkify URLs.
   ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>$1</a>"
   # Linkify nicks.
@@ -247,10 +246,9 @@ Template.message.events
 
   'click .ignore-action': ->
     {channels} = Meteor.user().profile
-    #TODO: avoid duplicates
     channels[@channel]?.ignore.push @from
-    Meteor.users.update \
-      Meteor.userId(), $set: {'profile.channels': channels}
+    Meteor.users.update Meteor.userId()
+    , $set: {'profile.channels': _.uniq channels[@channel]?.ignore}
 
   'click, tap': (e, t) ->
     if Session.equals 'channel', 'all'
@@ -334,10 +332,9 @@ Template.settings.events
     t.find('#inputIgnore').value = ''
     console.log ignoree
     {channels} = Meteor.user().profile
-    #TODO: avoid duplicates
     channels[Session.get('channel')]?.ignore.push ignoree
-    Meteor.users.update \
-      Meteor.userId(), $set: {'profile.channels': channels}
+    Meteor.users.update Meteor.userId()
+    , $set: 'profile.channels': _.uniq channels[Session.get 'channel']?.ignore
 
   'click .close': (e,t) ->
     {channels} = Meteor.user().profile
@@ -348,9 +345,12 @@ Template.settings.events
       Meteor.userId(), $set: {'profile.channels': channels}
 
   'click #privateCheckbox': (e,t) ->
+    console.log 'private checkbox clicked'
     channel = Channels.findOne {name: Session.get('channel')}
     if 's' in channel.modes or 'i' in channel.modes
-      Meteor.call 'modes', Meteor.user(), '-si'
+      Meteor.call 'mode', Meteor.user(), Session.get('channel'), '-si'
+    else
+      Meteor.call 'mode', Meteor.user(), Session.get('channel'), '+si'
 
 Template.settings.helpers
   op_status: ->
@@ -380,7 +380,10 @@ Meteor.Router.add
     Meteor.logout -> Meteor.Router.to('/')
 
   '/channels/:channel/settings': (channel) ->
-    Session.set 'channel', "##{channel}"
+    channel = "##{channel}"
+    unless channel of Meteor.user().profile.channels
+      Meteor.call 'join', Meteor.user().username, channel
+    Session.set 'channel', channel
     return 'channel_settings'
 
   '/channels/:channel': (channel) ->

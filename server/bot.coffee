@@ -1,6 +1,8 @@
 
 # TODO: store user's profile as instance variables and create 
 # getter / setter methods in order to reduce db queries.
+#
+# TODO: move database operations to the client.
 
 class @Client extends IRC.Client
   constructor: ({@_id, @username, @password}) ->
@@ -132,19 +134,20 @@ class @Client extends IRC.Client
     Channels.find_or_create channel
     # Join the channel.
     if channel.isChannel()
-      super channel, async =>
-        {channels} = @user().profile
-        # Add the new channel if it's not there already.
-        unless channel of channels
-          channels[channel] =
-            ignore: []
-            verbose: false
-            unread: 0
-            mentions: 0
-        # Update the User with the new channels object.
-        Meteor.users.update @_id, $set: {'profile.channels': channels}
-        # Request channel modes
-        @send 'MODE', channel
+      super channel #TODO: double check that join was successful
+
+    {channels} = @user().profile
+    # Add the new channel if it's not there already.
+    unless channel of channels
+      channels[channel] =
+        ignore: []
+        verbose: false
+        unread: 0
+        mentions: 0
+    # Update the User with the new channels object.
+    Meteor.users.update @_id, $set: {'profile.channels': channels}
+    # Request channel modes
+    @send 'MODE', channel
 
     #else # channel is actually a nick
       #nicks[name] = '' # Add nick to nicks object.
@@ -168,8 +171,8 @@ class @Client extends IRC.Client
 
   part: (name) ->
     check name, String
-    # Leave the channel if it is in fact a channel (ie. not a nick)
     Channels.findOne({name}).part @username
+    # Leave the channel if it is in fact a channel (ie. not a nick)
     super name if name.isChannel()
     {channels} = @user().profile
     delete channels[name]
