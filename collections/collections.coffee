@@ -33,9 +33,10 @@ class ChannelsCollection extends Meteor.Collection
           Channels.update @_id, $set: {nicks}
 
 #Channels.allow
-  #insert: false
+  #insert: -> true
   #update: false
-  #remove: false
+  #remove: (userId, channel) ->
+    #_.isEmpty channel.nicks
 
 # Messages
 #   owner   : UserId

@@ -17,6 +17,8 @@ Meteor.methods
 
   join: (username, channel) ->
     #check user, Match.ObjectIncluding(_id: String)
+    newChanId = Channels.find_or_create(channel)._id
+
     if Meteor.isServer
       client[username]?.join channel
 
@@ -31,11 +33,17 @@ Meteor.methods
     # Update the User with the new channels object.
     Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
 
-    return Channels.find_or_create(channel)._id
+    return newChanId
+
 
   part: (user, channel) ->
     if Meteor.isServer
       client[user.username].part channel
+
+    Channels.findOne({name: channel}).part user.username
+    {channels} = Meteor.user().profile
+    delete channels[channel]
+    Meteor.users.update Meteor.userId, $set: {'profile.channels': channels}
     return null
 
   say: (user, channel, message) ->

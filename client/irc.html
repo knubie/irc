@@ -103,7 +103,7 @@
       <li class="channel {{selected}}">
         {{#if private}}<i class="icon-lock"></i> {{/if}}
         <a href="/channels/{{url_name}}">
-          {{name}}
+          {{.}}
           <!--<span class="badge badge-info">{{notification_count}}</span>-->
         </a>
         <button type="button" class="close">&times;</button>
@@ -111,8 +111,8 @@
     {{/each}}
     <li class="new-channel-li">
       <span class="new-channel-link">+ Add channel</span>
-      <form id="new-channel">
-        <input type="text" id="new-channel-name" autocomplete="off" placeholder="Add Channel">
+      <form class="new-channel-form">
+        <input type="text" class="new-channel-input" autocomplete="off" placeholder="Add Channel">
       </form>
     </li>
   </ul>

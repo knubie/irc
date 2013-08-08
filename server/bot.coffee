@@ -75,6 +75,8 @@ class @Client extends IRC.Client
       # Count the number of nicks in the nicks_in object
       users = (user for user of nicks).length
       # Update Channel.nicks with the nicks object sent from the network.
+      console.log 'got names req, updating channel'
+      console.log Channels.findOne(name: channel)
       Channels.update
         name: channel
       , {$set: {nicks, users}}
@@ -176,12 +178,8 @@ class @Client extends IRC.Client
 
   part: (name) ->
     check name, String
-    Channels.findOne({name}).part @username
     # Leave the channel if it is in fact a channel (ie. not a nick)
     super name if name.isChannel()
-    {channels} = @user().profile
-    delete channels[name]
-    Meteor.users.update @_id, $set: {'profile.channels': channels}
 
   kick: (channel, username, reason) ->
     reason = reason or ''

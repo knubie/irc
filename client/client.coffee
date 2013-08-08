@@ -68,8 +68,7 @@ Template.home_logged_in.events
 Template.home_logged_in.rendered = ->
   $(window).on 'keydown', (e) ->
     keyCode = e.keyCode or e.which
-    # Focus #say-input on <TAB>
-    if keyCode is 9 and not $('#say-input').is(':focus')
+    if keyCode is 9 and $('#say-input').length > 1
       e.preventDefault()
       $('#say-input').focus()
 
@@ -82,60 +81,61 @@ Template.home_logged_in.helpers
 Template.channels.events
   'click .new-channel-link': (e, t) ->
     $('.new-channel-link').hide()
-    $('#new-channel').show()
-    $('#new-channel-name').focus()
+    $('.new-channel-form').show()
+    $('.new-channel-input').focus()
 
-  'blur #new-channel-name': (e, t) ->
+  'blur .new-channel-input': (e, t) ->
     $('.new-channel-link').show()
-    $('#new-channel').hide()
+    $('.new-channel-form').hide()
 
-  'keydown #new-channel-name': (e, t) ->
+  'keydown .new-channel-input': (e, t) ->
     keyCode = e.keyCode or e.which
     if keyCode is 27
       $('.new-channel-link').show()
-      $('#new-channel').hide()
+      $('.new-channel-form').hide()
 
-  'submit #new-channel': (e, t) ->
+  'submit .new-channel-form': (e, t) ->
     e.preventDefault()
-    name = t.find('#new-channel-name').value
-    t.find('#new-channel-name').value = ''
+    name = t.find('.new-channel-input').value
+    t.find('.new-channel-input').value = ''
     Meteor.call 'join', Meteor.user().username, name, (err, channel) ->
       Session.set 'channel.id', channel
     Session.set 'channel.name', name
     $('#say-input').focus()
 
   'click .channel > a': (e,t) ->
-    ch = Channels.findOne {name: @name}
-    Session.set 'channel.name', @name
+    ch = Channels.findOne {name: "#{@}"}
+    Session.set 'channel.name', "#{@}"
     Session.set 'channel.id', ch._id
     $('#say-input').focus()
 
   'click .close': ->
-    Meteor.call 'part', Meteor.user(), @name
+    Meteor.call 'part', Meteor.user(), "#{@}"
     Session.set 'channel.name', 'all'
     Session.set 'channel.id', null
     Meteor.Router.to('/')
 
 Template.channels.helpers
   channels: ->
-    chs = Channels.find
-      name: $in: (channel for channel of Meteor.user().profile.channels)
-    .fetch()
-    console.log chs
-    return chs
+    (channel for channel of Meteor.user().profile.channels)
+    #Channels.find
+      #name: $in: (channel for channel of Meteor.user().profile.channels)
+    #.fetch()
   selected: ->
-    console.log @
-    if Session.equals 'channel.name', @name then 'selected' else ''
+    if Session.equals 'channel.name', "#{@}" then 'selected' else ''
   notification_count: ->
     #if @notifications().length < 1 then '' else @notifications().length
     0
   all: ->
     if Session.equals 'channel.name', 'all' then 'selected' else ''
   url_name: ->
-    @name.match(/^(.)(.*)$/)[2]
+    "#{@}".match(/^(.)(.*)$/)[2]
   private: ->
-    console.log @
-    's' in @modes or 'i' in @modes
+    ch = Channels.findOne(name: "#{@}")
+    if ch?
+      's' in ch.modes or 'i' in ch.modes
+    else
+      no
 
 ########## Messages ##########
 
@@ -147,7 +147,7 @@ Template.messages.rendered = ->
       $('.message').removeClass 'faded'
   else
     ch = Channels.findOne Session.get('channel.id')
-    nicks = (nick for nick of ch.nicks)
+    nicks = (nick for nick of ch?.nicks) ? []
     $('#say-input').typeahead
       name: 'names'
       local: nicks
@@ -255,9 +255,10 @@ Template.message.events
 
   'click .ignore-action': ->
     {channels} = Meteor.user().profile
-    channels[@channel]?.ignore.push @from
+    channels[@channel].ignore.push @from
+    channels[@channel].ignore = _.uniq channels[@channel].ignore
     Meteor.users.update Meteor.userId()
-    , $set: {'profile.channels': _.uniq channels[@channel]?.ignore}
+    , $set: {'profile.channels': channels}
 
   'click, tap': (e, t) ->
     if Session.equals 'channel.name', 'all'
