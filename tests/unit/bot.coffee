@@ -12,6 +12,11 @@ serverHelpers = ->
 
 clientHelpers = ->
   @signup = ->
+    Meteor.users.find().observe
+      changed: (doc) ->
+        if doc.profile.connection is on
+          emit 'return'
+
     Accounts.createUser
       username: 'matty'
       email: 'matty@gmail.com'
@@ -24,11 +29,12 @@ clientHelpers = ->
       if Meteor.userId()? and not error
         Meteor.call 'remember', 'matty', 'password', Meteor.userId()
 
-  @waitForConnection = ->
+  @join = (channel) ->
     Meteor.users.find().observe
       changed: (doc) ->
-        if doc.profile.connection is on
+        if channel of doc.profile.channels
           emit 'return'
+    Meteor.call 'join', Meteor.user().username, channel
 
   emit 'return'
 
@@ -49,20 +55,12 @@ suite 'Bot', ->
 
   test 'connect', (done, server, client) ->
     client.evalSync clientHelpers
-    client.evalSync ->
-      Meteor.users.find().observe
-        changed: (doc) ->
-          if doc.profile.connection is on
-            emit 'return'
-      signup()
-
+    client.evalSync -> signup()
     done()
 
   test 'disconnect', (done, server, client) ->
     client.evalSync clientHelpers
-    client.evalSync ->
-      waitForConnection()
-      signup()
+    client.evalSync -> signup()
 
     server.evalSync ->
       Meteor.users.find().observe
@@ -76,25 +74,16 @@ suite 'Bot', ->
   test 'join', (done, server, client) ->
     server.evalSync serverHelpers
     client.evalSync clientHelpers
-    client.evalSync ->
-      waitForConnection()
-      signup()
-
-    server.evalSync ->
-      join('#test')
-
+    client.evalSync -> signup()
+    client.evalSync -> join('#test')
     done()
 
   test 'say', (done, server, client) ->
     server.evalSync serverHelpers
     client.evalSync clientHelpers
 
-    client.evalSync ->
-      waitForConnection()
-      signup()
-
-    server.evalSync ->
-      join('#test')
+    client.evalSync -> signup()
+    client.evalSync -> join('#test')
 
     text = server.evalSync ->
       Messages.find().observe
@@ -109,12 +98,8 @@ suite 'Bot', ->
     server.evalSync serverHelpers
     client.evalSync clientHelpers
 
-    client.evalSync ->
-      waitForConnection()
-      signup()
-
-    server.evalSync ->
-      join('#test')
+    client.evalSync -> signup()
+    client.evalSync -> join('#test')
 
     server.evalSync ->
       Channels.find().observe

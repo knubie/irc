@@ -36,6 +36,12 @@ class @Client extends IRC.Client
 
     # Listen for incoming messages.
     @on 'message', async (from, to, text, message) =>
+
+      convo = ''
+      for nick of Channels.findOne(name: to).nicks
+        if regex.nick(nick).test(text)
+          convo = nick
+          break
       # Insert a new message
       Messages.insert
         from: from
@@ -43,6 +49,7 @@ class @Client extends IRC.Client
         text: text
         time: new Date
         owner: @_id
+        convo: convo
 
       # Create new Channel if message is a PM.
       @join from if to is @username
@@ -79,6 +86,7 @@ class @Client extends IRC.Client
         text: "#{nick} was kicked by #{kicker}! \"#{reason}\""
         time: new Date
         from: 'system'
+        convo: ''
       if nick is @username
         Channels.find({name}).part @username
         console.log "You have been kicked from #{channel}."
@@ -131,21 +139,10 @@ class @Client extends IRC.Client
       Meteor.users.update @_id, $set: {'profile.connection': off}
 
   join: (channel) ->
-    Channels.find_or_create channel
     # Join the channel.
     if channel.isChannel()
       super channel #TODO: double check that join was successful
 
-    {channels} = @user().profile
-    # Add the new channel if it's not there already.
-    unless channel of channels
-      channels[channel] =
-        ignore: []
-        verbose: false
-        unread: 0
-        mentions: 0
-    # Update the User with the new channels object.
-    Meteor.users.update @_id, $set: {'profile.channels': channels}
     # Request channel modes
     @send 'MODE', channel
 
@@ -162,12 +159,20 @@ class @Client extends IRC.Client
     check text, String
     # Sends text to the specified channel and inserts a new Message doc.
     super channel, text
+
+    convo = ''
+    for nick of Channels.findOne(name: channel).nicks
+      if regex.nick(nick).test(text)
+        convo = nick
+        break
+
     Messages.insert
       from: @username
       channel: channel
       text: text
       time: new Date
       owner: @_id
+      convo: convo
 
   part: (name) ->
     check name, String
@@ -176,7 +181,7 @@ class @Client extends IRC.Client
     super name if name.isChannel()
     {channels} = @user().profile
     delete channels[name]
-    Meteor.users.update @_id, $set: {channels}
+    Meteor.users.update @_id, $set: {'profile.channels': channels}
 
   kick: (channel, username, reason) ->
     reason = reason or ''

@@ -86,7 +86,7 @@
     </div>
     <div class="buttons">
       <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
-      <a class="add-bot">add a bot</a>
+      <a class="add-bot">invite</a>
     </div>
   {{/unless}}
 </template>
@@ -153,7 +153,7 @@
   {{else}}
     <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" data-convo="{{convo}}" class="message {{message_class}}">
       <span class="reply">
-        <!--<i class="icon-certificate {{status}}"></i>-->
+        <span class="{{status}}">&bull;</span>
         <strong>{{from}}</strong>
         {{#if all}}
           <span class="muted">{{channel}}</span>

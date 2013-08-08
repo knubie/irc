@@ -1,5 +1,3 @@
-exec = Npm.require('child_process').exec
-
 Meteor.users.update {}, $set: 'profile.connection': off
 console.log 'turn everyone\'s connection off'
 
@@ -34,8 +32,8 @@ UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
 
 UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
   user = Meteor.users.findOne userId
-  if user.profile.connection is on and user.profile.account is 'free'
-    client[user.username]?.disconnect()
+  #if user.profile.connection is on and user.profile.account is 'free'
+    #client[user.username]?.disconnect()
 
 #client['_bot'] = new IRC.Client 'localhost', "network_bot",
   #userName: "network_bot"
@@ -62,58 +60,8 @@ UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
     ##client['_bot'].send 'LIST'
   #, 30000
 
-########## Methods ##########
-#
-Meteor.methods
-  remember: (username, password, _id) ->
-    console.log 'remember..'
-    console.log "username: #{username}"
-    console.log "password: #{password}"
-    console.log "_id: #{_id}"
-    if _id?
-      exec "cd ~/Development/hector/idletron.hect; hector identity remember #{username} #{password}", async ->
-        console.log 'remember succeeded'
-        Meteor.call 'connect', username, password, _id
-    return null
-
-  connect: (username, password, _id) ->
-    client[username] ?= new Client {_id, username, password}
-    client[username].connect()
-
-  join: (username, channel) ->
-    #check user, Match.ObjectIncluding(_id: String)
-    console.log 'meteor.methods.join'
-    client[username].join channel
-    return null
-
-  part: (user, channel) ->
-    check user, Match.ObjectIncluding(_id: String)
-    check channel, String
-    client[user.username].part channel
-    return null
-
-  say: (user, channel, message) ->
-    check user, Match.ObjectIncluding(_id: String)
-    check channel, String
-    check message, String
-    client[user.username].say channel, message
-    return null
-
-  kick: (user, channel, username, reason) ->
-    client[user.username].kick channel, username, reason
-    return null
-
-  mode: (user, channel, mode) ->
-    check user, Match.ObjectIncluding(_id: String)
-    check channel, String
-    client[user.username].send 'MODE', channel, mode
-
-  topic: (user, channel, topic) ->
-    client[user.username].send 'TOPIC', channel, topic
-
-
 ########## Publications ##########
-#
+
 Meteor.publish 'users', ->
   Meteor.users.find()
 

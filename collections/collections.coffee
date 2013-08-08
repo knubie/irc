@@ -11,7 +11,7 @@ class ChannelsCollection extends Meteor.Collection
     modes ?= []
     nicks = {}
     if name.isChannel and not @findOne({name})
-      @findOne(@insert {name, users, topic, nicks})
+      @findOne(@insert {name, users, topic, nicks, modes})
     else
       @findOne({name})
 
@@ -32,6 +32,11 @@ class ChannelsCollection extends Meteor.Collection
         else
           Channels.update @_id, $set: {nicks}
 
+#Channels.allow
+  #insert: false
+  #update: false
+  #remove: false
+
 # Messages
 #   owner   : UserId
 #   from    : String
@@ -50,15 +55,11 @@ class ChannelsCollection extends Meteor.Collection
           return 'info'
         else
           if regex.nick(username).test @text then 'mention' else 'normal'
-      convo: ->
-        convo = ''
-        for nick, status of Channels.findOne(name: @channel).nicks
-          convo = nick if regex.nick(nick).test(@text)
-        return convo
       online: ->
         online = no
-        for nick, status of Channels.findOne(name: @channel).nicks
-          if @from is nick then online = yes; break
+        if channel = Channels.findOne {name: @channel}
+          for nick of channel.nicks
+            if @from is nick then online = yes; break
         return online
 
 # Users
