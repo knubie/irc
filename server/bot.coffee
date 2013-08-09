@@ -38,21 +38,34 @@ class @Client extends IRC.Client
     @on 'message', async (from, to, text, message) =>
 
       convo = ''
-      for nick of Channels.findOne(name: to).nicks
-        if regex.nick(nick).test(text)
-          convo = nick
-          break
+
+      if to is @username
+        if not Channels.findOne(name: from)
+          channelId = Meteor.call 'join', @username, from
+          channel = Channels.findOne channelId
+        else
+          channel = Channels.find_or_create from
+      else
+        channel = Channels.find_or_create to
+
+      if to.isChannel()
+        for nick of channel.nicks
+          if regex.nick(nick).test(text)
+            convo = nick; break
+      else
+        nicks = {}
+        nicks[to] = ''
+        nicks[from] = ''
+        Channels.update channel._id, $set: {nicks}
+
       # Insert a new message
       Messages.insert
         from: from
-        channel: if to is @username then from else to
+        channel: channel.name
         text: text
         time: new Date
         owner: @_id
         convo: convo
-
-      # Create new Channel if message is a PM.
-      @join from if to is @username
 
     # Listen for channel list response and populate
     # channel collection with the results.
@@ -145,8 +158,8 @@ class @Client extends IRC.Client
     if channel.isChannel()
       super channel #TODO: double check that join was successful
 
-    # Request channel modes
-    @send 'MODE', channel
+      # Request channel modes
+      @send 'MODE', channel
 
     #else # channel is actually a nick
       #nicks[name] = '' # Add nick to nicks object.
@@ -177,17 +190,11 @@ class @Client extends IRC.Client
       convo: convo
 
   part: (name) ->
-    check name, String
     # Leave the channel if it is in fact a channel (ie. not a nick)
     super name if name.isChannel()
 
-  kick: (channel, username, reason) ->
-    reason = reason or ''
+  kick: (channel, username, reason = '') ->
     @send 'KICK', channel, username, reason
-
-  mode: (channel, mode) -> @send 'MODE', channel, mode
-
-  topic: (channel, topic) -> @send 'topic', channel, topic
       
   # Helper funciton
 

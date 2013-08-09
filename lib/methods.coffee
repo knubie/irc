@@ -32,7 +32,7 @@ Meteor.methods
     # Update the User with the new channels object.
     Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
 
-    return newChanId._id
+    return newChannel._id
 
   part: (user, channel) ->
     if Meteor.isServer

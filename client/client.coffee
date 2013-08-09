@@ -394,18 +394,16 @@ Meteor.Router.add
     Meteor.logout -> Meteor.Router.to('/')
 
   '/channels/:channel/settings': (channel) ->
-    channel = "##{channel}"
-    unless channel of Meteor.user().profile.channels
-      Meteor.call 'join', Meteor.user().username, channel
-    ch = Channels.findOne {name: channel}
-    Session.set 'channel.name', channel
+    #unless channel of Meteor.user().profile.channels
+      #Meteor.call 'join', Meteor.user().username, channel
+    ch = Channels.findOne(name:"##{channel}") ? Channels.findOne(name:channel)
+    Session.set 'channel.name', ch.name
     Session.set 'channel.id', ch._id
     return 'channel_settings'
 
   '/channels/:channel': (channel) ->
-    channel = "##{channel}"
-    ch = Channels.findOne {name: channel}
-    Session.set 'channel.name', channel
+    ch = Channels.findOne(name:"##{channel}") ? Channels.findOne(name:channel)
+    Session.set 'channel.name', ch.name
     Session.set 'channel.id', ch._id
     return 'channel_main'
 

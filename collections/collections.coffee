@@ -5,12 +5,11 @@
 #   modes : Array
 class ChannelsCollection extends Meteor.Collection
   find_or_create: (name, users, topic, modes) ->
-    console.log 'find or create'
     users ?= 0
     topic ?= 'No topic set.'
     modes ?= []
     nicks = {}
-    if name.isChannel and not @findOne({name})
+    if not @findOne {name}
       @findOne(@insert {name, users, topic, nicks, modes})
     else
       @findOne({name})

@@ -78,11 +78,11 @@
 <template name="channel_header">
   {{#unless all}}
     <div class="channel-breadcrumb">
-      <span class="channel-name">{{channel}}</span>
+      <a href="/channels/{{url_channel}}" class="channel-name">{{channel}}</a>
       <span class="slash">&nbsp;/&nbsp;</span>
-      <div class="user-count">
+      <a href="/channels/{{url_channel}}/users" class="user-count">
         <i class="icon-user"></i><strong>{{users}}</strong> users
-      </div>
+      </a>
     </div>
     <div class="buttons">
       <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
