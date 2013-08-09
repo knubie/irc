@@ -98,10 +98,11 @@ Template.channels.events
     e.preventDefault()
     name = t.find('.new-channel-input').value
     t.find('.new-channel-input').value = ''
-    Meteor.call 'join', Meteor.user().username, name, (err, channel) ->
-      Session.set 'channel.id', channel
-    Session.set 'channel.name', name
-    $('#say-input').focus()
+    if name
+      Meteor.call 'join', Meteor.user().username, name, (err, channel) ->
+        Session.set 'channel.id', channel
+      Session.set 'channel.name', name
+      $('#say-input').focus()
 
   'click .channel > a': (e,t) ->
     ch = Channels.findOne {name: "#{@}"}
@@ -335,6 +336,7 @@ Template.explore.events
 
 Template.explore.helpers
   channels: ->
+    #TODO: exclude if not isChannel
     Channels.find {}, {sort : {users : -1}}
 
 ########## Settings ##########
