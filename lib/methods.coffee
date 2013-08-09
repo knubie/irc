@@ -16,12 +16,11 @@ Meteor.methods
       client[username].connect()
 
   join: (username, channel) ->
-    #check user, Match.ObjectIncluding(_id: String)
-    newChanId = Channels.find_or_create(channel)._id
-
+    newChannel = Channels.find_or_create(channel)
+    # Join the channel in IRC.
     if Meteor.isServer
       client[username]?.join channel
-
+    # Update user's channels object
     {channels} = Meteor.user().profile
     # Add the new channel if it's not there already.
     unless channel of channels
@@ -33,8 +32,7 @@ Meteor.methods
     # Update the User with the new channels object.
     Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
 
-    return newChanId
-
+    return newChanId._id
 
   part: (user, channel) ->
     if Meteor.isServer
@@ -60,6 +58,9 @@ Meteor.methods
     if Meteor.isServer
       client[user.username].send 'MODE', channel, mode
 
-  topic: (user, channel, topic) ->
+  topic: (user, channelId, topic) ->
+    channel = Channels.findOne(channelId)
     if Meteor.isServer
-      client[user.username].send 'TOPIC', channel, topic
+      client[user.username].send 'TOPIC', channel.name, topic
+    if channel.nicks[user.username] is '@'
+      Channels.update channelId, $set: {topic}

@@ -181,7 +181,7 @@ Template.messages.events
   'submit #topic-form': (e,t) ->
     e.preventDefault()
     topic = t.find('#topic-name').value
-    Meteor.call 'topic', Meteor.user(), Session.get('channel.name'), topic
+    Meteor.call 'topic', Meteor.user(), Session.get('channel.id'), topic
     $('.topic').show()
     $('#topic-form').hide()
 
@@ -254,6 +254,7 @@ Template.message.events
     $('#say-input').focus()
 
   'click .ignore-action': ->
+    #TODO: extract this pattern into an update method
     {channels} = Meteor.user().profile
     channels[@channel].ignore.push @from
     channels[@channel].ignore = _.uniq channels[@channel].ignore
@@ -261,14 +262,14 @@ Template.message.events
     , $set: {'profile.channels': channels}
 
   'click, tap': (e, t) ->
+    console.log e
     if Session.equals 'channel.name', 'all'
+
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
-
       $messagesFromOtherChannels = \
         $('.message').not("[data-channel='#{@channel}']")
       ch = Channels.findOne {name: @channel}
-
       # If there are any message to slideToggle...
       if $messagesFromOtherChannels.length > 0
         $messagesFromOtherChannels.slideToggle 400, =>
@@ -279,13 +280,9 @@ Template.message.events
         Session.set 'channel.id', ch._id
 
   'click .convo': (e, t) ->
-    convo = t.find('.message').getAttribute 'data-convo'
-    # Slide toggle all messages not belonging to clicked channel
-    # and set session to the new channel.
-    #.not("[data-channel='#{@to}']") do this if in 'all'
     $('.message')
     .not("[data-nick='#{@from}']")
-    .not("[data-nick='#{convo}']")
+    .not("[data-nick='#{@convo}']")
     .slideToggle 400
 
   'click .kick': (e, t) ->

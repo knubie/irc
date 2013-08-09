@@ -32,11 +32,13 @@ class ChannelsCollection extends Meteor.Collection
         else
           Channels.update @_id, $set: {nicks}
 
-#Channels.allow
-  #insert: -> true
-  #update: false
-  #remove: (userId, channel) ->
-    #_.isEmpty channel.nicks
+Channels.allow
+  insert: -> true
+  update: (userId, channel) ->
+    console.log 'check allow.'
+    channel.nicks[Meteor.users.findOne(userId).username] is '@'
+  remove: (userId, channel) ->
+    _.isEmpty channel.nicks
 
 # Messages
 #   owner   : UserId
