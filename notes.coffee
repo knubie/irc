@@ -11,6 +11,7 @@
 #TODO: make a 'create channel' button
 #TODO: add categories to channels
 #TODO: add tags to channels
+#TODO: remove sanitize untrusted user input from href attributes
 
 
 # Server reset:
