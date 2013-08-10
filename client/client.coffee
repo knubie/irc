@@ -99,10 +99,11 @@ Template.channels.events
     name = t.find('.new-channel-input').value
     t.find('.new-channel-input').value = ''
     if name
-      Meteor.call 'join', Meteor.user().username, name, (err, channel) ->
-        Session.set 'channel.id', channel
-      Session.set 'channel.name', name
-      $('#say-input').focus()
+      Meteor.call 'join', Meteor.user().username, name, (err, channelId) ->
+        if channelId
+          Session.set 'channel.id', channelId
+          Session.set 'channel.name', name
+          $('#say-input').focus()
 
   'click .channel > a': (e,t) ->
     ch = Channels.findOne {name: "#{@}"}
@@ -146,7 +147,7 @@ Template.messages.rendered = ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
     , ->
       $('.message').removeClass 'faded'
-  else
+  else if Session.get('channel.name').isChannel()
     ch = Channels.findOne Session.get('channel.id')
     nicks = (nick for nick of ch?.nicks) ? []
     $('#say-input').typeahead
@@ -197,19 +198,19 @@ Template.messages.helpers
     Channels.findOne Session.get('channel.id')
     ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
   topic: ->
-    unless Session.equals 'channel.name', 'all'
+    if Session.get('channel.name').isChannel()
       Channels.findOne(Session.get 'channel.id')?.topic
   op_status: ->
-    if Session.equals 'channel.name', 'all'
-      return no
-    else
+    if Session.get('channel.name').isChannel()
       Channels.findOne(Session.get 'channel.id')?.nicks[Meteor.user().username] is '@'
+    else
+      return no
   channel: ->
     Session.get 'channel.name'
   url_channel: ->
-    Session.get('channel.name').match(/^(.)(.*)$/)[2]
+    Session.get('channel.name').match(/^(#)?(.*)$/)[2]
   users: ->
-    unless Session.equals 'channel.name', 'all'
+    if Session.get('channel.name').isChannel()
       Channels.findOne(Session.get 'channel.id')?.users
 
 Template.channel_header.helpers
@@ -218,9 +219,9 @@ Template.channel_header.helpers
   channel: ->
     Session.get 'channel.name'
   url_channel: ->
-    Session.get('channel.name').match(/^(.)(.*)$/)[2]
+    Session.get('channel.name').match(/^(#)?(.*)$/)[2]
   users: ->
-    unless Session.equals 'channel.name', 'all'
+    if Session.get('channel.name').isChannel()
       Channels.findOne(Session.get 'channel.id')?.users
 
 ########## Message ##########
@@ -232,8 +233,9 @@ Template.message.rendered = ->
   # Linkify URLs.
   ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>$1</a>"
   # Linkify nicks.
-  for nick, status of Channels.findOne(name: @data.channel).nicks
-    ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
+  if @data.channel.isChannel()
+    for nick, status of Channels.findOne(name: @data.channel).nicks
+      ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
   ptext = ptext.replace regex.code, '$2<code>$3</code>$4'
   ptext = ptext.replace regex.bold, '$2<strong>$3</strong>$4'
@@ -254,9 +256,7 @@ Template.message.events
     , $set: {'profile.channels': channels}
 
   'click, tap': (e, t) ->
-    console.log e
     if Session.equals 'channel.name', 'all'
-
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $messagesFromOtherChannels = \
@@ -293,16 +293,20 @@ Template.message.helpers
   message_class: ->
     if @online() then @type() else "offline #{@type()}"
   op_status: ->
-    Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
+    if @channel.isChannel()
+      Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'
   status: ->
-    statuses =
-      '@': 'operator'
-      '%': 'half-operator'
-      '+': 'voiced'
-      '': 'normal'
-    statuses[Channels.findOne(name: @channel).nicks[@from]]
+    if @channel.isChannel()
+      statuses =
+        '@': 'operator'
+        '%': 'half-operator'
+        '+': 'voiced'
+        '': 'normal'
+      statuses[Channels.findOne(name: @channel).nicks[@from]]
+    else
+      'normal'
 
 Template.notification.timeAgo = ->
   moment(@time).fromNow()

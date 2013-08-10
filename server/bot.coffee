@@ -36,27 +36,27 @@ class @Client extends IRC.Client
 
     # Listen for incoming messages.
     @on 'message', async (from, to, text, message) =>
-
       convo = ''
 
+      # If message is a PM
       if to is @username
-        if not Channels.findOne(name: from)
-          channelId = Meteor.call 'join', @username, from
-          channel = Channels.findOne channelId
-        else
-          channel = Channels.find_or_create from
+        channel = {name: from}
+        # Update user's channels object
+        {channels} = Meteor.users.findOne(@_id).profile
+        # Add the new channel if it's not there already.
+        unless channel of channels
+          channels[channel] =
+            ignore: []
+            verbose: false
+            unread: 0
+            mentions: 0
+          # Update the User with the new channels object.
+          Meteor.users.update @_id, $set: {'profile.channels': channels}
       else
         channel = Channels.find_or_create to
-
-      if to.isChannel()
         for nick of channel.nicks
           if regex.nick(nick).test(text)
             convo = nick; break
-      else
-        nicks = {}
-        nicks[to] = ''
-        nicks[from] = ''
-        Channels.update channel._id, $set: {nicks}
 
       # Insert a new message
       Messages.insert
@@ -154,12 +154,12 @@ class @Client extends IRC.Client
       Meteor.users.update @_id, $set: {'profile.connection': off}
 
   join: (channel) ->
+    check channel, validChannelName
     # Join the channel.
-    if channel.isChannel()
-      super channel #TODO: double check that join was successful
+    super channel #TODO: double check that join was successful
 
-      # Request channel modes
-      @send 'MODE', channel
+    # Request channel modes
+    @send 'MODE', channel
 
     #else # channel is actually a nick
       #nicks[name] = '' # Add nick to nicks object.
@@ -170,8 +170,8 @@ class @Client extends IRC.Client
       #, {$set: {nicks}}
 
   say: (channel, text) ->
-    check channel, String
-    check text, String
+    check channel, validChannelName
+    check text, validMessageText
     # Sends text to the specified channel and inserts a new Message doc.
     super channel, text
 
@@ -190,8 +190,8 @@ class @Client extends IRC.Client
       convo: convo
 
   part: (name) ->
-    # Leave the channel if it is in fact a channel (ie. not a nick)
-    super name if name.isChannel()
+    check name, validChannelName
+    super name
 
   kick: (channel, username, reason = '') ->
     @send 'KICK', channel, username, reason

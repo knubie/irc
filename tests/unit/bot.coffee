@@ -88,9 +88,7 @@ suite 'Bot', ->
       , (error) ->
         emit 'return', error
 
-    console.log thatthing
     done()
-
 
   test 'disconnect', (done, server, client) ->
     client.evalSync clientHelpers

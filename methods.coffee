@@ -16,26 +16,29 @@ Meteor.methods
       client[username].connect()
 
   join: (username, channel) ->
-    if channel
-      newChannel = Channels.find_or_create(channel)
-      # Join the channel in IRC.
-      if Meteor.isServer and channel.isChannel()
-        client[username]?.join channel
-      # Update user's channels object
-      {channels} = Meteor.user().profile
-      # Add the new channel if it's not there already.
-      unless channel of channels
-        channels[channel] =
-          ignore: []
-          verbose: false
-          unread: 0
-          mentions: 0
-      # Update the User with the new channels object.
-      Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
+    check username, validUsername
+    check channel, validChannelName
+    newChannel = Channels.find_or_create(channel)
+    # Join the channel in IRC.
+    if Meteor.isServer
+      client[username]?.join channel
+    # Update user's channels object
+    {channels} = Meteor.user().profile
+    # Add the new channel if it's not there already.
+    unless channel of channels
+      channels[channel] =
+        ignore: []
+        verbose: false
+        unread: 0
+        mentions: 0
+    # Update the User with the new channels object.
+    Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
 
-      return newChannel._id
+    return newChannel._id or null
 
   part: (username, channel) ->
+    check username, validUsername
+    check channel, validChannelName
     if Meteor.isServer
       client[username].part channel
 
@@ -46,6 +49,9 @@ Meteor.methods
     return null
 
   say: (username, channel, message) ->
+    check username, validUsername
+    check channel, validChannelName
+    check message, validMessageText
     if Meteor.isServer
       client[username].say channel, message
     return null

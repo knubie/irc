@@ -1,5 +1,5 @@
-Meteor.users.update {}, $set: 'profile.connection': off
-console.log 'turn everyone\'s connection off'
+#Meteor.users.update {}, $set: 'profile.connection': off
+Meteor.users.update {}, $set: 'services.resume.loginTokens' : []
 
 Meteor.startup ->
   # Make sure all users' connection status is 'off'
