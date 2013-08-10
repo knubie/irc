@@ -5,8 +5,8 @@ Meteor.methods
   remember: (username, password, _id) ->
     if Meteor.isServer
       if _id?
+        #FIXME: What if username = "; rm -rf /"
         exec "cd ~/Development/hector/idletron.hect; hector identity remember #{username} #{password}", async ->
-          console.log 'remember succeeded'
           Meteor.call 'connect', username, password, _id
       return null
 
@@ -35,19 +35,19 @@ Meteor.methods
 
       return newChannel._id
 
-  part: (user, channel) ->
+  part: (username, channel) ->
     if Meteor.isServer
-      client[user.username].part channel
+      client[username].part channel
 
-    Channels.findOne({name: channel}).part user.username
+    Channels.findOne({name: channel}).part username
     {channels} = Meteor.user().profile
     delete channels[channel]
     Meteor.users.update Meteor.userId, $set: {'profile.channels': channels}
     return null
 
-  say: (user, channel, message) ->
+  say: (username, channel, message) ->
     if Meteor.isServer
-      client[user.username].say channel, message
+      client[username].say channel, message
     return null
 
   kick: (user, channel, username, reason) ->

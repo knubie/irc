@@ -1,4 +1,3 @@
-#TODO: change Session.set 'channel' to channel.name and channel._id
 #TODO: write a helper function for setting cannel session
 ########## Defaults ##########
 
@@ -63,6 +62,7 @@ Template.home_logged_out.events
 
 Template.home_logged_in.events
   'click .sign-out': ->
+    #TODO: disconnect
     Meteor.logout()
 
 Template.home_logged_in.rendered = ->
@@ -111,7 +111,7 @@ Template.channels.events
     $('#say-input').focus()
 
   'click .close': ->
-    Meteor.call 'part', Meteor.user(), "#{@}"
+    Meteor.call 'part', Meteor.user().username, "#{@}"
     Session.set 'channel.name', 'all'
     Session.set 'channel.id', null
     Meteor.Router.to('/')
@@ -157,15 +157,6 @@ Template.messages.rendered = ->
     $(window).scrollTop($(document).height() - $(window).height())
 
 Template.messages.events
-  'keydown #say': (e, t) ->
-    keyCode = e.keyCode or e.which
-    if keyCode is 13
-      e.preventDefault()
-      message = t.find('#say-input').value
-      $('#say-input').val('')
-      #TODO: use channel.id insted
-      Meteor.call 'say', Meteor.user(), Session.get('channel.name'), message
-
   'click, tap .load-next': ->
     handlers.messages[Session.get 'channel.name'].loadNextPage()
 
@@ -323,6 +314,18 @@ Template.notification.events
   'click .close': ->
     # Do something
 
+########## Say ##########
+
+Template.say.events
+  'keydown #say': (e, t) ->
+    keyCode = e.keyCode or e.which
+    if keyCode is 13
+      e.preventDefault()
+      message = t.find('#say-input').value
+      $('#say-input').val('')
+      #TODO: use channel.id insted
+      Meteor.call 'say', Meteor.user().username, Session.get('channel.name'), message
+
 ########## Explore ##########
 
 Template.explore.events
@@ -393,6 +396,7 @@ Meteor.Router.add
   '/explore': 'explore'
 
   '/logout': ->
+    #TODO: disconnect
     Meteor.logout -> Meteor.Router.to('/')
 
   '/channels/:channel/settings': (channel) ->

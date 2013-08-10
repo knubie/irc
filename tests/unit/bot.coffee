@@ -30,11 +30,27 @@ clientHelpers = ->
         Meteor.call 'remember', 'matty', 'password', Meteor.userId()
 
   @join = (channel) ->
+    Channels.find().observe
+      added: (doc) ->
+        if doc.name is channel
+          Meteor.users.update Meteor.userId, $set: {'profile.return': true}
     Meteor.users.find().observe
       changed: (doc) ->
-        if channel of doc.profile.channels
+        if channel of doc.profile.channels and doc.profile.return
           emit 'return'
     Meteor.call 'join', Meteor.user().username, channel
+
+  @part = (channel) ->
+    Channels.find().observe
+      removed: (doc) ->
+        if doc.name is channel
+          Meteor.users.update Meteor.userId
+          , $set: {'profile.return': true}
+    Meteor.users.find().observe
+      changed: (doc) ->
+        if channel not of doc.profile.channels and doc.profile.return
+          emit 'return'
+    Meteor.call 'part', Meteor.user(), channel
 
   emit 'return'
 
@@ -57,6 +73,24 @@ suite 'Bot', ->
     client.evalSync clientHelpers
     client.evalSync -> signup()
     done()
+
+  test 'validate user creation', (done, server, client) ->
+    client.evalSync clientHelpers
+    thatthing = client.evalSync ->
+      Accounts.createUser
+        username: ';<script>matty</script>'
+        email: ';matty@gmail.com'
+        password: 'password'
+        profile:
+          connection: off
+          account: 'free'
+          channels: {}
+      , (error) ->
+        emit 'return', error
+
+    console.log thatthing
+    done()
+
 
   test 'disconnect', (done, server, client) ->
     client.evalSync clientHelpers
@@ -81,36 +115,22 @@ suite 'Bot', ->
   test 'say', (done, server, client) ->
     server.evalSync serverHelpers
     client.evalSync clientHelpers
-
     client.evalSync -> signup()
     client.evalSync -> join('#test')
 
-    text = server.evalSync ->
+    client.evalSync ->
       Messages.find().observe
         added: (doc) ->
-          emit 'return', doc.text
-      client['matty'].say('#test', 'hello')
+          emit 'return'
+      Meteor.call 'say', Meteor.user().username, '#test', 'hello'
 
-    assert.equal text, 'hello'
     done()
 
   test 'part', (done, server, client) ->
     server.evalSync serverHelpers
     client.evalSync clientHelpers
-
     client.evalSync -> signup()
     client.evalSync -> join('#test')
-
-    server.evalSync ->
-      Channels.find().observe
-        removed: (doc) ->
-          if doc.name is '#test'
-            Meteor.users.update {name: 'matty'}
-            , $set: {'profile.test': 'return'}
-      Meteor.users.find().observe
-        changed: (doc) ->
-          if '#test' not of doc.profile.channels and doc.profile.test?
-            emit 'return'
-      client['matty'].part('#test')
+    client.evalSync -> part('#test')
 
     done()

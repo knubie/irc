@@ -64,6 +64,7 @@
   <div class="channel-container">
     {{> channel_header}}
     {{> messages}}
+    {{> say}}
   </div>
 </template>
 
@@ -134,6 +135,9 @@
       {{> message}}
     {{/each}}
   </ul>
+</template>
+
+<template name="say">
   {{#unless all}}
     <div class="input-container">
       <form id="say">

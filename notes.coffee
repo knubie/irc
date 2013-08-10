@@ -1,17 +1,17 @@
-#TODO: Add a watch list.
-#TODO: clicking on name should isolate that user's messages.
-#TODO: Add ignore option.
-#TODO: Add search.
-#TODO: Add irssi style trackbar.
-#TODO: Add drag and drop file uploads.
-#TODO: Add expand button to expand text field for pastebin style stuff.
-#TODO: translate urls to their title.
-#TODO: add meteor_irc.meteor.com style stats
-#TODO: add channel autocomplete
-#TODO: make a 'create channel' button
-#TODO: add categories to channels
-#TODO: add tags to channels
-#TODO: remove sanitize untrusted user input from href attributes
+#: Add a watch list.
+#: clicking on name should isolate that user's messages.
+#: Add ignore option.
+#: Add search.
+#: Add irssi style trackbar.
+#: Add drag and drop file uploads.
+#: Add expand button to expand text field for pastebin style stuff.
+#: translate urls to their title.
+#: add meteor_irc.meteor.com style stats
+#: add channel autocomplete
+#: make a 'create channel' button
+#: add categories to channels
+#: add tags to channels
+#: remove sanitize untrusted user input from href attributes
 
 
 # Server reset:

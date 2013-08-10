@@ -34,7 +34,6 @@ class ChannelsCollection extends Meteor.Collection
 Channels.allow
   insert: -> true
   update: (userId, channel) ->
-    console.log 'check allow.'
     channel.nicks[Meteor.users.findOne(userId).username] is '@'
   remove: (userId, channel) ->
     _.isEmpty channel.nicks
@@ -93,3 +92,27 @@ Channels.allow
 
 #if Meteor.isServer
   #@Channels._ensureIndex('name', {unique: 1, sparse: 1})
+  #
+
+if Meteor.isServer
+  Accounts.validateNewUser (user) ->
+    check user.username, String
+    return true
+
+  Accounts.validateNewUser (user) ->
+    if /^[^\W]*$/.test user.username
+      return true
+    else
+      throw new Meteor.Error 403, "Invalid characters in username."
+
+  Accounts.validateNewUser (user) ->
+    if user.username.length > 0
+      return true
+    else
+      throw new Meteor.Error 403, "Username must have at least one character."
+
+  Accounts.validateNewUser (user) ->
+    if user.username.length < 10
+      return true
+    else
+      throw new Meteor.Error 403, "Username must be less than 10 characters."
