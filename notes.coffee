@@ -1,27 +1,20 @@
 #: Add a watch list.
-#: clicking on name should isolate that user's messages.
-#: Add ignore option.
+#: User page
 #: Add search.
 #: Add irssi style trackbar.
 #: Add drag and drop file uploads.
 #: Add expand button to expand text field for pastebin style stuff.
 #: translate urls to their title.
-#: add meteor_irc.meteor.com style stats
+#: add channel/user stats a la meteor_irc.meteor.com
 #: add channel autocomplete
 #: make a 'create channel' button
 #: add categories to channels
 #: add tags to channels
-#: remove sanitize untrusted user input from href attributes
-
-
-# Server reset:
-#   all connected clients reconnect.
-#   if client.status is 'connected' then client.connect
-#   client.on 'connect' -> client.status is 'connected'
+#: remove/sanitize untrusted user input from href attributes
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`
-# Aggregated messages.
+# Aggregated messages from all channels
 # View conversation.
 # Notifications.
 # Persistent connection.
@@ -40,7 +33,7 @@
 # 30 networks on one linode (cheapest)
 # 
 # Public server requires username/password available upon sign up from the site.
-# Private channels are hidden, and invite-only by default.
+# Private channels are secret, and invite-only by default.
 
 
 # Site
@@ -55,3 +48,6 @@
 #   Channels
 #     Channel
 #       
+#
+# Copy
+# Zero-config chat client with a powerful IRC backend.

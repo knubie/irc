@@ -64,7 +64,9 @@
   <div class="channel-container">
     {{> channel_header}}
     {{> messages}}
-    {{> say}}
+    {{#isolate}}
+      {{> say}}
+    {{/isolate}}
   </div>
 </template>
 
