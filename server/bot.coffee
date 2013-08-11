@@ -88,8 +88,6 @@ class @Client extends IRC.Client
       # Count the number of nicks in the nicks_in object
       users = (user for user of nicks).length
       # Update Channel.nicks with the nicks object sent from the network.
-      console.log 'got names req, updating channel'
-      console.log Channels.findOne(name: channel)
       Channels.update
         name: channel
       , {$set: {nicks, users}}
@@ -104,8 +102,6 @@ class @Client extends IRC.Client
         convo: ''
       if nick is @username
         Channels.find({name}).part @username
-        console.log "You have been kicked from #{channel}."
-        console.log "Reason: #{reason}"
 
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick']
@@ -113,32 +109,26 @@ class @Client extends IRC.Client
 
     @on 'raw', async (msg) =>
       if msg.command is 'MODE'
-        console.log 'got MODE'
         @send 'MODE', msg.args[0]
 
       if msg.command is 'rpl_channelmodeis'
-        console.log 'got rpl_channelmodeis'
         modes = msg.args[2].split('')
         modes.shift()
         Channels.update {name: msg.args[1]}, $set: {modes}
 
     #@on 'MODE', (msg) =>
-      #console.log 'got MODE'
       #@send 'MODE', msg.args[0]
     ## args: [ '#test', '+s' ]
 
     #@on 'rpl_channelmodeis', (msg) ->
-      #console.log 'got rpl_channelmodeis'
       #Channels.update {name: args[1]}
       #, $set: {modes: msg.args[2].split('').shift()}
 
-      #console.log msg.args[2].split('').shift()
       # args: [ 'bill', '#test', '+s' ]
 
     #@on 'raw', (msg) ->
       #if msg.rawCommand is 'RPL_CHANNELMODEIS'
 
-      #console.log msg
 
   connect: ->
     # Connect to the IRC network.

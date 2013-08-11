@@ -56,7 +56,8 @@ Template.home_logged_out.events
     username = t.find('#signin-username').value
     password = t.find('#signin-password').value
     Meteor.loginWithPassword username, password, (error) ->
-      Meteor.call 'connect', username, password, Meteor.userId()
+      unless error
+        Meteor.call 'connect', username, password, Meteor.userId()
 
 ########## Dashboard ##########
 
@@ -78,6 +79,14 @@ Template.home_logged_in.helpers
 
 ########## Channels ##########
 
+Template.channels.rendered = ->
+  console.log 'channels rendered'
+Template.channel_main.rendered = ->
+  console.log 'channels_main rendered'
+Template.channel_header.rendered = ->
+  console.log 'channels_header rendered'
+Template.say.rendered = ->
+  $('#say-input').focus()
 Template.channels.events
   'click .new-channel-link': (e, t) ->
     $('.new-channel-link').hide()
@@ -142,6 +151,7 @@ Template.channels.helpers
 ########## Messages ##########
 
 Template.messages.rendered = ->
+  console.log 'messages rendered'
   if Session.equals 'channel.name', 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
@@ -150,9 +160,9 @@ Template.messages.rendered = ->
   else if Session.get('channel.name').isChannel()
     ch = Channels.findOne Session.get('channel.id')
     nicks = (nick for nick of ch?.nicks) ? []
-    $('#say-input').typeahead
-      name: 'names'
-      local: nicks
+    #$('#say-input').typeahead
+      #name: 'names'
+      #local: nicks
 
   if Session.equals 'scroll', false
     $(window).scrollTop($(document).height() - $(window).height())
@@ -227,6 +237,7 @@ Template.channel_header.helpers
 ########## Message ##########
 
 Template.message.rendered = ->
+  console.log 'message rendered'
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
@@ -345,6 +356,8 @@ Template.explore.helpers
   channels: ->
     #TODO: exclude if not isChannel
     Channels.find {}, {sort : {users : -1}}
+  url_name: ->
+    @name.match(/^(.)(.*)$/)[2]
 
 ########## Settings ##########
 

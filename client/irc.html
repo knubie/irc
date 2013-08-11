@@ -1,5 +1,5 @@
 <head>
-  <title>Twirc</title>
+  <title>idletron</title>
   <!--<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
 </head>
 
@@ -64,9 +64,7 @@
   <div class="channel-container">
     {{> channel_header}}
     {{> messages}}
-    {{#isolate}}
-      {{> say}}
-    {{/isolate}}
+    {{> say}}
   </div>
 </template>
 
@@ -223,7 +221,7 @@
     {{#each channels}}
       <li>
         <h3>
-          <a href="/">{{name}}</a>
+          <a href="/channels/{{url_name}}">{{name}}</a>
         </h3>
         <div class="body">
           {{topic}}
