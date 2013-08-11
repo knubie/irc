@@ -25,7 +25,7 @@ class @Client extends IRC.Client
     ]
 
     # Log errors sent from the network.
-    @on 'error', (msg) -> console.log msg
+    @on 'error', async (msg) -> console.log msg
 
     # Log raw messages sent from the network.
     #@on 'raw', (msg) -> console.log msg
@@ -69,7 +69,7 @@ class @Client extends IRC.Client
 
     # Listen for channel list response and populate
     # channel collection with the results.
-    @on 'channellist_item', (data) ->
+    @on 'channellist_item', async (data) ->
       {name, users, topic} = data
       channel = Channels.find_or_create name
       Channels.update channel, $set: {users, topic}
