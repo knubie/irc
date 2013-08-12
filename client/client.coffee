@@ -79,12 +79,6 @@ Template.home_logged_in.helpers
 
 ########## Channels ##########
 
-Template.channels.rendered = ->
-  console.log 'channels rendered'
-Template.channel_main.rendered = ->
-  console.log 'channels_main rendered'
-Template.channel_header.rendered = ->
-  console.log 'channels_header rendered'
 Template.say.rendered = ->
   $('#say-input').focus()
 Template.channels.events
@@ -151,7 +145,6 @@ Template.channels.helpers
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  console.log 'messages rendered'
   if Session.equals 'channel.name', 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
@@ -237,7 +230,6 @@ Template.channel_header.helpers
 ########## Message ##########
 
 Template.message.rendered = ->
-  console.log 'message rendered'
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
@@ -308,16 +300,6 @@ Template.message.helpers
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'
-  status: ->
-    if @channel.isChannel()
-      statuses =
-        '@': 'operator'
-        '%': 'half-operator'
-        '+': 'voiced'
-        '': 'normal'
-      statuses[Channels.findOne(name: @channel).nicks[@from]]
-    else
-      'normal'
 
 Template.notification.timeAgo = ->
   moment(@time).fromNow()
@@ -366,7 +348,6 @@ Template.settings.events
     e.preventDefault()
     ignoree = t.find('#inputIgnore').value
     t.find('#inputIgnore').value = ''
-    console.log ignoree
     {channels} = Meteor.user().profile
     channels[Session.get('channel.name')]?.ignore.push ignoree
     Meteor.users.update Meteor.userId()
@@ -380,7 +361,6 @@ Template.settings.events
       Meteor.userId(), $set: {'profile.channels': channels}
 
   'click #privateCheckbox': (e,t) ->
-    console.log 'private checkbox clicked'
     channel = Channels.findOne Session.get('channel.id')
     if 's' in channel.modes or 'i' in channel.modes
       Meteor.call 'mode', Meteor.user(), Session.get('channel.name'), '-si'

@@ -58,6 +58,9 @@ class @Client extends IRC.Client
           if regex.nick(nick).test(text)
             convo = nick; break
 
+      status =
+        '@': 'operator'
+        '': 'normal'
       # Insert a new message
       Messages.insert
         from: from
@@ -66,6 +69,7 @@ class @Client extends IRC.Client
         time: new Date
         owner: @_id
         convo: convo
+        status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
 
     # Listen for channel list response and populate
     # channel collection with the results.
@@ -166,10 +170,15 @@ class @Client extends IRC.Client
     super channel, text
 
     convo = ''
-    for nick of Channels.findOne(name: channel).nicks
+    channelDoc = Channels.findOne(name: channel)
+    for nick of channelDoc.nicks
       if regex.nick(nick).test(text)
         convo = nick
         break
+
+      status =
+        '@': 'operator'
+        '': 'normal'
 
     Messages.insert
       from: @username
@@ -178,10 +187,13 @@ class @Client extends IRC.Client
       time: new Date
       owner: @_id
       convo: convo
+      status: channelDoc.nicks[@username]
+      status: if channelDoc.nicks? then status[channelDoc.nicks[@username]] else 'normal'
 
-  part: (name) ->
-    check name, validChannelName
-    super name
+  part: (channel) ->
+    check channel, validChannelName
+    super channel, async =>
+      @send 'NAMES', channel
 
   kick: (channel, username, reason = '') ->
     @send 'KICK', channel, username, reason
