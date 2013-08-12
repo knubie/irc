@@ -1,4 +1,14 @@
 #TODO: write a helper function for setting cannel session
+########## Notifications ##########
+$('.allow-notifications').on 'click', ->
+  unless window.webkitNotifications.checkPermission() is 0
+    window.webkitNotifications.requestPermission()
+
+class Notification
+  constructor: (title, message) ->
+    if window.webkitNotifications.checkPermission() is 0
+      window.webkitNotifications.createNotification 'icon.png', title, message
+
 ########## Defaults ##########
 
 # Currently selected channel for viewing messages.
@@ -48,6 +58,7 @@ Template.home_logged_out.events
       account: 'free'
       channels: {}
     }, (error) ->
+      alert error.reason if error
       if Meteor.userId()? and not error
         Meteor.call 'remember', username, password, Meteor.userId()
 
@@ -56,6 +67,7 @@ Template.home_logged_out.events
     username = t.find('#signin-username').value
     password = t.find('#signin-password').value
     Meteor.loginWithPassword username, password, (error) ->
+      alert error.reason if error
       unless error
         Meteor.call 'connect', username, password, Meteor.userId()
 
