@@ -4,51 +4,45 @@
 </head>
 
 <body>
-  {{#if currentUser}}
-    {{> home_logged_in}}
-  {{else}}
-    {{> home_logged_out}}
-  {{/if}}
-</body>
-
-<template name="home_logged_in">
   <div class="header header-logged-in">
     <div class="container">
       <a href="/" class="logo">idletron</a>
       <ul class="top-nav">
         <li><a href="/explore">Explore</a></li>
-        <li><a href="/account">Account</a></li>
-        <li><a href="/logout">Sign out</a></li>
+        {{#if currentUser}}
+          <li><a href="/account">Account</a></li>
+          <li><a href="/logout">Sign out</a></li>
+        {{else}}
+          <li><a href="/features">Features</a></li>
+          <li><a href="/login">Sign in</a></li>
+        {{/if}}
       </ul>
     </div>
   </div>
-  {{#if connection}}
-    <div class="container">
-      {{renderPage}}
-    </div>
-  {{else}}
-    Connecting..
-  {{/if}}
-</template>
+  {{renderPage}}
+</body>
 
 <template name="home_logged_out">
-  {{#unless currentUser}}
-    <div class="marketing-section-signup">
-      <div class="container">
-        <form id="form-signup">
-          <input type="text" id="auth-nick" placeholder="Pick a username">
-          <input type="email" id="auth-email" placeholder="Your email">
-          <input type="password" id="auth-pw" placeholder="Create a passphrase">
-          <input type="submit" value="Sign up">
-          <span class="privacy-print">By clicking "Sign up", you agree to our terms of service and privacy policy.</span>
-        </form>
-        <h1 class="heading">Join the conversation.</h1>
-        <p class="subhead">
-          Connect to our public netork in seconds. Create and joins channels, add bots or make your own. Need a private network?<br/>
-          <a href="/plans">Upgraded plans start at $5/mo.</a>
-        </p>
-      </div>
+  <div class="marketing-section-signup">
+    <div class="container">
+      <form id="form-signup">
+        <input type="text" id="auth-nick" placeholder="Pick a username">
+        <input type="email" id="auth-email" placeholder="Your email">
+        <input type="password" id="auth-pw" placeholder="Create a passphrase">
+        <input type="submit" value="Sign up">
+        <span class="privacy-print">By clicking "Sign up", you agree to our terms of service and privacy policy.</span>
+      </form>
+      <h1 class="heading">Join the conversation.</h1>
+      <p class="subhead">
+        Connect to our public network in seconds. Create and join channels, add bots or make your own. Need private channels?<br/>
+        <a href="/plans">Upgraded plans start at $5/mo.</a>
+      </p>
     </div>
+  </div>
+</template>
+
+<template name="sign_in">
+  <div class="container">
     <div class="signin">
       <form id="form-signin">
         <input type="text" id="signin-username" placeholder="Username or email">
@@ -56,20 +50,25 @@
         <input type="submit" value="Sign in">
       </form>
     </div>
-  {{/unless}}
+  </div>
 </template>
 
 <template name="notification_request">
-  Would you like to receive notifications? (You can toggle this option in your account settings later)
-  Yes No
+  <div class="container">
+    Would you like to receive notifications? (You can toggle this option in your account settings later)
+    <input type="button" class="allow-notifications" value="yes">
+    <a href="/">No</a>
+  </div>
 </template>
 
 <template name="channel_main">
-  {{> channels}}
-  <div class="channel-container">
-    {{> channel_header}}
-    {{> messages}}
-    {{> say}}
+  <div class="container">
+    {{> channels}}
+    <div class="channel-container">
+      {{> channel_header}}
+      {{> messages}}
+      {{> say}}
+    </div>
   </div>
 </template>
 
@@ -217,26 +216,28 @@
 </template>
 
 <template name="explore">
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#">Top</a></li>
-    <li class=""><a href="#">Trending</a></li>
-    <li class=""><a href="#">Categories</a></li>
-  </ul>
-  <ul class="channel-list">
-    {{#each channels}}
-      <li>
-        <h3>
-          <a href="/channels/{{url_name}}">{{name}}</a>
-        </h3>
-        <a href="/channels/{{url_channel}}/users" class="user-count">
-          <i class="icon-user"></i><strong>{{users}}</strong> users
-        </a>
-        <div class="body">
-          {{topic}}
-        </div>
-      </li>
-    {{/each}}
-  </ul>
+  <div class="container">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#">Top</a></li>
+      <li class=""><a href="#">Trending</a></li>
+      <li class=""><a href="#">Categories</a></li>
+    </ul>
+    <ul class="channel-list">
+      {{#each channels}}
+        <li>
+          <h3>
+            <a href="/channels/{{url_name}}">{{name}}</a>
+          </h3>
+          <a href="/channels/{{url_channel}}/users" class="user-count">
+            <i class="icon-user"></i><strong>{{users}}</strong> users
+          </a>
+          <div class="body">
+            {{topic}}
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
 </template>
 
 <template name="settings">

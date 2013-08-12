@@ -1,13 +1,19 @@
 #TODO: write a helper function for setting cannel session
-########## Notifications ##########
-$('.allow-notifications').on 'click', ->
-  unless window.webkitNotifications.checkPermission() is 0
-    window.webkitNotifications.requestPermission()
 
+########## Notifications ##########
+notifications = {}
 class Notification
   constructor: (title, message) ->
     if window.webkitNotifications.checkPermission() is 0
-      window.webkitNotifications.createNotification 'icon.png', title, message
+      @self = window.webkitNotifications.createNotification 'icon.png', title, message
+      @count = 0
+  show: ->
+    @self.show()
+    @count++
+  showOnce: ->
+    if @count < 1
+      @self.show()
+
 
 ########## Defaults ##########
 
@@ -58,41 +64,42 @@ Template.home_logged_out.events
       account: 'free'
       channels: {}
     }, (error) ->
-      alert error.reason if error
-      if Meteor.userId()? and not error
+      if error
+        alert error.reason
+      else
         Meteor.call 'remember', username, password, Meteor.userId()
+        Meteor.Router.to('/notifications-request') #FIXME: should work without this.
 
+Template.sign_in.events
   'submit #form-signin': (e,t) ->
     e.preventDefault()
     username = t.find('#signin-username').value
     password = t.find('#signin-password').value
     Meteor.loginWithPassword username, password, (error) ->
-      alert error.reason if error
-      unless error
+      if error
+        alert error.reason
+      else
         Meteor.call 'connect', username, password, Meteor.userId()
+        Meteor.Router.to('/') #FIXME: should work without this.
 
 ########## Dashboard ##########
 
-Template.home_logged_in.events
-  'click .sign-out': ->
-    #TODO: disconnect
-    Meteor.logout()
+#Template.home_logged_in.rendered = ->
+  #$(window).on 'keydown', (e) ->
+    #keyCode = e.keyCode or e.which
+    #if keyCode is 9 and $('#say-input').length > 1
+      #e.preventDefault()
+      #$('#say-input').focus()
 
-Template.home_logged_in.rendered = ->
-  $(window).on 'keydown', (e) ->
-    keyCode = e.keyCode or e.which
-    if keyCode is 9 and $('#say-input').length > 1
-      e.preventDefault()
-      $('#say-input').focus()
-
-Template.home_logged_in.helpers
-  connection: ->
-    Meteor.user().profile.connection
+#Template.home_logged_in.helpers
+  #connection: ->
+    #Meteor.user().profile.connection
 
 ########## Channels ##########
 
 Template.say.rendered = ->
   $('#say-input').focus()
+
 Template.channels.events
   'click .new-channel-link': (e, t) ->
     $('.new-channel-link').hide()
@@ -153,6 +160,13 @@ Template.channels.helpers
       's' in ch.modes or 'i' in ch.modes
     else
       no
+
+
+########## Notification Request ##########
+Template.notification_request.rendered = ->
+  document.querySelector('.allow-notifications').addEventListener 'click', ->
+    webkitNotifications.requestPermission()
+
 
 ########## Messages ##########
 
@@ -256,6 +270,10 @@ Template.message.rendered = ->
   ptext = ptext.replace regex.bold, '$2<strong>$3</strong>$4'
   ptext = ptext.replace regex.underline, '$2<span class="underline">$3</span>$4'
   p.html(ptext)
+
+  if @data.type() is 'mention'
+    notifications[@data._id] ?= new Notification @data.channel, @data.text
+    notifications[@data._id].showOnce()
 
 Template.message.events
   'click .reply-action': ->
@@ -398,11 +416,22 @@ Template.settings.helpers
 ########## Router ##########
 Meteor.Router.add
   '/': ->
-    Session.set 'channel.name', 'all'
-    Session.set 'channel.id', null
-    return 'channel_main'
+    if Meteor.userId()?
+      Session.set 'channel.name', 'all'
+      Session.set 'channel.id', null
+      return 'channel_main'
+    else
+      return 'home_logged_out'
 
   '/explore': 'explore'
+
+  '/notifications-request': 'notification_request'
+
+  '/login': ->
+    if Meteor.userId()?
+      Meteor.Router.to('/')
+    else
+      return 'sign_in'
 
   '/logout': ->
     #TODO: disconnect
@@ -417,13 +446,18 @@ Meteor.Router.add
     # no such channel
 
   '/channels/:channel': (channel) ->
-    if ch = Channels.findOne(name:"##{channel}")
-      Session.set 'channel.name', ch.name
-      Session.set 'channel.id', ch._id
-      return 'channel_main'
+    if Meteor.userId()?
+      if ch = Channels.findOne(name:"##{channel}")
+        Session.set 'channel.name', ch.name
+        Session.set 'channel.id', ch._id
+        return 'channel_main'
+      else
+        Session.set 'channel.name', channel
+        return 'channel_main'
     else
-      Session.set 'channel.name', channel
-      return 'channel_main'
+      console.log 'nada'
+      Meteor.Router.to('/')
+      return 'home_logged_out'
     #TODO: no such channel
 
   '*': 'not_found'
