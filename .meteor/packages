@@ -7,7 +7,6 @@ preserve-inputs
 coffeescript
 accounts-password
 accounts-ui
-irc
 jquery
 insecure
 bootstrap

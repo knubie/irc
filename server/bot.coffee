@@ -4,7 +4,7 @@
 #
 # TODO: move database operations to the client.
 
-class @Client extends IRC.Client
+class @Bot extends Client
   constructor: ({@_id, @username, @password}) ->
     super 'localhost', @username,
       port: 6667
@@ -120,18 +120,9 @@ class @Client extends IRC.Client
         modes.shift()
         Channels.update {name: msg.args[1]}, $set: {modes}
 
-    #@on 'MODE', (msg) =>
-      #@send 'MODE', msg.args[0]
-    ## args: [ '#test', '+s' ]
-
-    #@on 'rpl_channelmodeis', (msg) ->
-      #Channels.update {name: args[1]}
-      #, $set: {modes: msg.args[2].split('').shift()}
-
-      # args: [ 'bill', '#test', '+s' ]
-
-    #@on 'raw', (msg) ->
-      #if msg.rawCommand is 'RPL_CHANNELMODEIS'
+      if msg.command is 'err_passwdmismatch'
+        #TODO: Notify user of error, redirect to login.
+        Meteor.users.update @_id, $set: 'services.resume.loginTokens' : []
 
 
   connect: ->

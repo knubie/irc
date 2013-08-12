@@ -12,7 +12,7 @@ Meteor.methods
 
   connect: (username, password, _id) ->
     if Meteor.isServer
-      client[username] ?= new Client {_id, username, password}
+      client[username] ?= new Bot {_id, username, password}
       client[username].connect()
 
   join: (username, channel) ->
