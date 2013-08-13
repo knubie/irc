@@ -113,7 +113,7 @@
         {{#if private}}<i class="icon-lock"></i> {{/if}}
         <a href="/channels/{{url_name}}">
           {{.}}
-          <!--<span class="badge badge-info">{{notification_count}}</span>-->
+          <span class="badge badge-info">{{unread}}</span>
         </a>
         <button type="button" class="close">&times;</button>
       </li>
@@ -281,7 +281,7 @@
   </div>
   <div class="settings-section">
     <div class="section-heading">Ignore</div>
-    <ul>
+    <ul class="ignore-list">
       {{#each ignore_list}}
         <li>
           {{.}}

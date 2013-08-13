@@ -150,6 +150,9 @@ Template.channels.helpers
     #Channels.find
       #name: $in: (channel for channel of Meteor.user().profile.channels)
     #.fetch()
+  unread: ->
+    Messages.find({channel: "#{@}", read: false}).fetch().length or ''
+
   selected: ->
     if Session.equals 'channel.name', "#{@}" then 'selected' else ''
   notification_count: ->
