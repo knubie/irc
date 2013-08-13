@@ -15,7 +15,7 @@
         else if @from is 'system'
           return 'info'
         else
-          if regex.nick(username).test @text then 'mention' else 'normal'
+          if @convo is username then 'mention' else 'normal'
       online: ->
         online = no
         if @channel.isChannel()

@@ -31,8 +31,15 @@ handlers.channel = Meteor.subscribe 'channels', ->
     handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
     , channel.name
     , 30
+    Messages.find().observeChanges
+      added: (id, doc) ->
+        console.log 'got new msg'
+        unless doc.read
+          console.log 'doc isnt read'
+          if doc.convo is Meteor.user().username
+            notifications[id] ?= new Notification doc.channel, doc.text
+            notifications[id].showOnce()
   subscribeToMessagesOf channel for channel in Channels.find().fetch()
-  subscribeToMessagesOf {name: 'all'}
   Channels.find().observe
     added: subscribeToMessagesOf
 
@@ -152,12 +159,10 @@ Template.channels.helpers
     #.fetch()
   unread: ->
     Messages.find({channel: "#{@}", read: false}).fetch().length or ''
-
+  unread_mentions: ->
+    Messages.find({channel: "#{@}", read: false, convo: Meteor.user().username}).fetch().length or ''
   selected: ->
     if Session.equals 'channel.name', "#{@}" then 'selected' else ''
-  notification_count: ->
-    #if @notifications().length < 1 then '' else @notifications().length
-    0
   all: ->
     if Session.equals 'channel.name', 'all' then 'selected' else ''
   url_name: ->
@@ -229,9 +234,6 @@ Template.messages.helpers
       prev = msg
     return (setPrev message for message in messages when message.from not in \
     (Meteor.user().profile.channels[message.channel]?.ignore or []))
-  notifications: ->
-    Channels.findOne Session.get('channel.id')
-    ?.notifications({sort: time: 1}) #FIXME: why do i need to check for existence.
   topic: ->
     if Session.get('channel.name').isChannel()
       Channels.findOne(Session.get 'channel.id')?.topic
@@ -277,9 +279,6 @@ Template.message.rendered = ->
 
   unless @data.read
     Messages.update @data._id, $set: {'read': true}
-    if @data.type() is 'mention'
-      notifications[@data._id] ?= new Notification @data.channel, @data.text
-      notifications[@data._id].showOnce()
 
 Template.message.events
   'click .reply-action': ->
