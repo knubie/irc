@@ -33,10 +33,9 @@ handlers.channel = Meteor.subscribe 'channels', ->
     , 30
     Messages.find().observeChanges
       added: (id, doc) ->
-        console.log 'got new msg'
         unless doc.read
-          console.log 'doc isnt read'
-          if doc.convo is Meteor.user().username
+          if doc.convo is Meteor.user().username and \
+          doc.from not in Meteor.user().profile.channels[doc.channel].ignore
             notifications[id] ?= new Notification doc.channel, doc.text
             notifications[id].showOnce()
   subscribeToMessagesOf channel for channel in Channels.find().fetch()
@@ -158,9 +157,20 @@ Template.channels.helpers
       #name: $in: (channel for channel of Meteor.user().profile.channels)
     #.fetch()
   unread: ->
-    Messages.find({channel: "#{@}", read: false}).fetch().length or ''
+    ignore_list = Meteor.user().profile.channels["#{@}"].ignore
+    Messages.find
+      channel: "#{@}"
+      read: false
+      from: $nin: ignore_list
+    .fetch().length or ''
   unread_mentions: ->
-    Messages.find({channel: "#{@}", read: false, convo: Meteor.user().username}).fetch().length or ''
+    ignore_list = Meteor.user().profile.channels["#{@}"].ignore
+    Messages.find
+      channel: "#{@}"
+      read: false
+      convo: Meteor.user().username
+      from: $nin: ignore_list
+    .fetch().length or ''
   selected: ->
     if Session.equals 'channel.name', "#{@}" then 'selected' else ''
   all: ->
@@ -277,7 +287,7 @@ Template.message.rendered = ->
   ptext = ptext.replace regex.underline, '$2<span class="underline">$3</span>$4'
   p.html(ptext)
 
-  unless @data.read
+  if not @data.read and @data.from
     Messages.update @data._id, $set: {'read': true}
 
 Template.message.events
