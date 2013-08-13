@@ -189,6 +189,7 @@ Template.channels.helpers
 Template.notification_request.rendered = ->
   document.querySelector('.allow-notifications').addEventListener 'click', ->
     webkitNotifications.requestPermission()
+    Meteor.Router.to('/')
 
 
 ########## Messages ##########
