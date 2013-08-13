@@ -179,7 +179,6 @@ class @Bot extends Client
       time: new Date
       owner: @_id
       convo: convo
-      status: channelDoc.nicks[@username]
       status: if channelDoc.nicks? then status[channelDoc.nicks[@username]] else 'normal'
       read: false
 

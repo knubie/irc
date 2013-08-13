@@ -26,10 +26,10 @@
   <div class="marketing-section-signup">
     <div class="container">
       <form id="form-signup">
-        <input type="text" id="auth-nick" placeholder="Pick a username">
-        <input type="email" id="auth-email" placeholder="Your email">
-        <input type="password" id="auth-pw" placeholder="Create a passphrase">
-        <input type="submit" value="Sign up">
+        <input type="text" id="auth-nick" placeholder="Pick a username" tabindex="1">
+        <input type="email" id="auth-email" placeholder="Your email" tabindex="2">
+        <input type="password" id="auth-pw" placeholder="Create a passphrase" tabindex="3">
+        <input type="submit" value="Sign up" tabindex="4">
         <span class="privacy-print">By clicking "Sign up", you agree to our terms of service and privacy policy.</span>
       </form>
       <h1 class="heading">Join the conversation.</h1>
@@ -45,9 +45,9 @@
   <div class="container">
     <div class="signin">
       <form id="form-signin">
-        <input type="text" id="signin-username" placeholder="Username or email">
-        <input type="password" id="signin-password" placeholder="Passphrase">
-        <input type="submit" value="Sign in">
+        <input type="text" id="signin-username" placeholder="Username or email" tabindex="1">
+        <input type="password" id="signin-password" placeholder="Passphrase" tabindex="2">
+        <input type="submit" value="Sign in" tabindex="3">
       </form>
     </div>
   </div>
@@ -149,7 +149,7 @@
   {{#unless all}}
     <div class="input-container">
       <form id="say">
-        <input type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
+        <input tabindex="1" type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
       </form>
     </div>
   {{/unless}}
