@@ -271,9 +271,11 @@ Template.message.rendered = ->
   ptext = ptext.replace regex.underline, '$2<span class="underline">$3</span>$4'
   p.html(ptext)
 
-  if @data.type() is 'mention'
-    notifications[@data._id] ?= new Notification @data.channel, @data.text
-    notifications[@data._id].showOnce()
+  unless @data.read
+    Messages.update @data._id, $set: {'read': true}
+    if @data.type() is 'mention'
+      notifications[@data._id] ?= new Notification @data.channel, @data.text
+      notifications[@data._id].showOnce()
 
 Template.message.events
   'click .reply-action': ->

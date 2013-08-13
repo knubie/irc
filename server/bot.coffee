@@ -70,6 +70,7 @@ class @Bot extends Client
         owner: @_id
         convo: convo
         status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
+        read: false
 
     # Listen for channel list response and populate
     # channel collection with the results.
@@ -104,6 +105,7 @@ class @Bot extends Client
         time: new Date
         from: 'system'
         convo: ''
+        read: false
       if nick is @username
         Channels.find({name}).part @username
 
@@ -123,7 +125,6 @@ class @Bot extends Client
       if msg.command is 'err_passwdmismatch'
         #TODO: Notify user of error, redirect to login.
         Meteor.users.update @_id, $set: 'services.resume.loginTokens' : []
-
 
   connect: ->
     # Connect to the IRC network.
@@ -180,6 +181,7 @@ class @Bot extends Client
       convo: convo
       status: channelDoc.nicks[@username]
       status: if channelDoc.nicks? then status[channelDoc.nicks[@username]] else 'normal'
+      read: false
 
   part: (channel) ->
     check channel, validChannelName
