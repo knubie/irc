@@ -425,6 +425,12 @@ Template.settings.helpers
     else
       return ''
 
+########## Users ##########
+#
+Template.users.helpers
+  users: ->
+    (nick for nick of Channels.findOne(Session.get('channel.id')).nicks).sort()
+
 
 ########## Router ##########
 Meteor.Router.add
@@ -457,6 +463,12 @@ Meteor.Router.add
       return 'channel_settings'
     #else
     # no such channel
+
+  '/channels/:channel/users': (channel) ->
+    if ch = Channels.findOne(name:"##{channel}")
+      Session.set 'channel.name', ch.name
+      Session.set 'channel.id', ch._id
+      return 'channel_users'
 
   '/channels/:channel': (channel) ->
     if Meteor.userId()?

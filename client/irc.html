@@ -84,6 +84,26 @@
   </div>
 </template>
 
+<template name="channel_users">
+  <div class="container">
+    {{> channels}}
+    <div class="channel-container">
+      {{> channel_header}}
+      {{> users}}
+    </div>
+  </div>
+</template>
+
+<template name="users">
+  <ul class="user-list">
+    {{#each users}}
+      <li>
+        <h3><a href="#">{{.}}</a></h3>
+      </li>
+    {{/each}}
+  </ul>
+</template>
+
 <template name="channel_header">
   {{#unless all}}
     <div class="channel-breadcrumb">
@@ -105,7 +125,6 @@
     <li class="all-channels {{all}}">
       <a href="/">
         All channels
-        <!--<span class="badge badge-info">{{notification_count}}</span>-->
       </a>
     </li>
     {{#each channels}}
