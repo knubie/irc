@@ -53,6 +53,11 @@ Meteor.startup ->
       # Load next page.
       handlers.messages[Session.get 'channel.name'].loadNextPage()
 
+########## Global helpers ##########
+
+Handlebars.registerHelper 'all', ->
+  Session.equals 'channel.name', 'all'
+
 Template.home_logged_out.events
   'submit #form-signup': (e,t) ->
     e.preventDefault()
@@ -208,8 +213,6 @@ Template.messages.events
     $('#topic-form').hide()
 
 Template.messages.helpers
-  all: ->
-    Session.equals 'channel.name', 'all'
   messages: ->
     prev = null
     if Session.equals 'channel.name', 'all'
@@ -243,8 +246,6 @@ Template.messages.helpers
       Channels.findOne(Session.get 'channel.id')?.users
 
 Template.channel_header.helpers
-  all: ->
-    Session.equals 'channel.name', 'all'
   channel: ->
     Session.get 'channel.name'
   url_channel: ->
@@ -319,8 +320,6 @@ Template.message.helpers
   joinToPrev: ->
     unless @prev is null
       @prev.from is @from and @prev.channel is @channel and @type() isnt 'mention' and @prev.type() isnt 'mention'
-  all: ->
-    Session.equals 'channel.name', 'all'
   isConvo: ->
     if @convo then yes else no
   timeAgo: ->

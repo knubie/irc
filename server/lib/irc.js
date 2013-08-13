@@ -24,8 +24,6 @@ var util = Npm.require('util');
 //var colors = require('./colors');
 //exports.colors = colors;
 
-//var replyFor = require('./codes');
-
 Client = function (server, nick, opt) {
     var self = this;
     self.opt = {
