@@ -5,35 +5,10 @@ Meteor.startup ->
   # Make sure all users' connection status is 'off'
 
 UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
-  # Scenario 1:
-  #   A user logs in and their profile.connection is off. This user is either
-  #   1a) A free user who has logged out and is now logging back in.
-  #     Action: reconnect.
-  #   2a) A new user who has not yet connect to the irc server.
-  #     Action: reconnect. If no client instance exists, log the user out
-  #     so they can reauthenticate to create one.
-  #   3a) Any user and the server has restart, all users' connection
-  #   status has been set to off
-  #     Action: log out all users so they can re-authenticate and connect to
-  #     the irc server.
-  #
-  # Scenario 2:
-  #   A user logs in and their profile.connection is on. This user is either
-  #   1a)
-  #     a paid user with persistent connection
-  #     Action: none.
-  user = Meteor.users.findOne userId
-  if user.profile.connection is off
-    if client[user.username]?
-      client[user.username].connect()
-    else
-      # Log out all users.
-      #Meteor.users.update userId, $set: 'services.resume.loginTokens' : []
+  # Do anything here?
 
 UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
-  user = Meteor.users.findOne userId
-  #if user.profile.connection is on and user.profile.account is 'free'
-    #client[user.username]?.disconnect()
+  # Do anything here?
 
 #client['_bot'] = new IRC.Client 'localhost', "network_bot",
   #userName: "network_bot"

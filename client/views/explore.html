@@ -1,0 +1,24 @@
+<template name="explore">
+  <div class="container">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#">Top</a></li>
+      <li class=""><a href="#">Trending</a></li>
+      <li class=""><a href="#">Categories</a></li>
+    </ul>
+    <ul class="channel-list">
+      {{#each channels}}
+        <li>
+          <h3>
+            <a href="/channels/{{url_name}}">{{name}}</a>
+          </h3>
+          <a href="/channels/{{url_channel}}/users" class="user-count">
+            <i class="icon-user"></i><strong>{{users}}</strong> users
+          </a>
+          <div class="body">
+            {{topic}}
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</template>

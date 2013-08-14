@@ -23,7 +23,6 @@
 #
 # Roadmap:
 # Add heroku like bot add-ons
-# Create a new public IRC server.
 # Allow creation of new private networks.
 # Image hosting.
 #

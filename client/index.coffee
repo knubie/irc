@@ -14,52 +14,6 @@ class Notification
     if @count < 1
       @self.show()
 
-
-########## Defaults ##########
-
-# Currently selected channel for viewing messages.
-Session.setDefault 'channel', 'all'
-# Push messages to the bottom by default (ie don't save scroll position).
-Session.setDefault 'scroll', false
-
-########## Subscriptions ##########
-handlers = {messages:{},channel:{}}
-handlers.user = Meteor.subscribe 'users'
-#handlers.messages = Meteor.subscribe 'messages'
-handlers.channel = Meteor.subscribe 'channels', ->
-  subscribeToMessagesOf = (channel) ->
-    handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
-    , channel.name
-    , 30
-    Messages.find().observeChanges
-      added: (id, doc) ->
-        unless doc.read
-          if doc.convo is Meteor.user().username and \
-          doc.from not in Meteor.user().profile.channels[doc.channel].ignore
-            notifications[id] ?= new Notification doc.channel, doc.text
-            notifications[id].showOnce()
-
-  subscribeToMessagesOf channel for channel in Channels.find().fetch()
-  Channels.find().observe
-    added: subscribeToMessagesOf
-
-#UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
-  #user = Meteor.users.findOne userId
-  #if user.profile.connection is off
-
-Meteor.startup ->
-  $(window).scroll ->
-    # If not scrolled to the bottom
-    if $(window).scrollTop() < $(document).height() - $(window).height()
-      Session.set 'scroll', true
-    else
-      Session.set 'scroll', false
-
-    # If close to top and messages handler is ready.
-    if $(window).scrollTop() <= 50 and handlers.messages[Session.get 'channel.name'].ready()
-      # Load next page.
-      handlers.messages[Session.get 'channel.name'].loadNextPage()
-
 ########## Global helpers ##########
 
 Handlebars.registerHelper 'all', ->
@@ -93,19 +47,6 @@ Template.sign_in.events
       else
         Meteor.call 'connect', username, password, Meteor.userId()
         Meteor.Router.to('/') #FIXME: should work without this.
-
-########## Dashboard ##########
-
-#Template.home_logged_in.rendered = ->
-  #$(window).on 'keydown', (e) ->
-    #keyCode = e.keyCode or e.which
-    #if keyCode is 9 and $('#say-input').length > 1
-      #e.preventDefault()
-      #$('#say-input').focus()
-
-#Template.home_logged_in.helpers
-  #connection: ->
-    #Meteor.user().profile.connection
 
 ########## Channels ##########
 
@@ -141,6 +82,7 @@ Template.channels.events
 
   'click .channel > a': (e,t) ->
     ch = Channels.findOne {name: "#{@}"}
+    Session.set 'scroll', false
     Session.set 'channel.name', "#{@}"
     Session.set 'channel.id', ch._id
     $('#say-input').focus()
@@ -368,24 +310,6 @@ Template.say.events
       #TODO: use channel.id insted
       Meteor.call 'say', Meteor.user().username, Session.get('channel.name'), message
 
-########## Explore ##########
-
-Template.explore.events
-  'click ul>li>h3>a': (e,t) ->
-    name = e.toElement.outerText
-    Meteor.call 'join', Meteor.user(), name
-    ch = Channels.findOne {name}
-    Session.set 'channel.name', name
-    Session.set 'channel.id', ch._id
-    $('#say-input').focus()
-
-Template.explore.helpers
-  channels: ->
-    #TODO: exclude if not isChannel
-    Channels.find {}, {sort : {users : -1}}
-  url_name: ->
-    @name.match(/^(.)(.*)$/)[2]
-
 ########## Settings ##########
 
 Template.settings.events
@@ -432,66 +356,3 @@ Template.settings.helpers
 Template.users.helpers
   users: ->
     (nick for nick of Channels.findOne(Session.get('channel.id')).nicks).sort()
-
-
-########## Router ##########
-Meteor.Router.filters
-  'checkLoggedIn': (page) ->
-    if Meteor.loggingIn()
-      return 'loading'
-    else if Meteor.user()
-      return page
-    else
-      return 'home_logged_out'
-
-Meteor.Router.add
-  '/': ->
-    Session.set 'channel.name', 'all'
-    Session.set 'channel.id', null
-    return 'channel_main'
-
-  '/explore': 'explore'
-
-  '/notifications-request': 'notification_request'
-
-  '/login': ->
-      if Meteor.user()?
-        Meteor.Router.to('/')
-      else
-        return 'sign_in'
-
-  '/logout': ->
-    #TODO: disconnect
-    Meteor.logout -> Meteor.Router.to('/')
-
-  '/channels/:channel/settings': (channel) ->
-    if ch = Channels.findOne(name:"##{channel}")
-      Session.set 'channel.name', ch.name
-      Session.set 'channel.id', ch._id
-      return 'channel_settings'
-    else
-      return 'not_found'
-    #else
-    # no such channel
-
-  '/channels/:channel/users': (channel) ->
-    if ch = Channels.findOne(name:"##{channel}")
-      Session.set 'channel.name', ch.name
-      Session.set 'channel.id', ch._id
-      return 'channel_users'
-    else
-      return 'not_found'
-
-  '/channels/:channel': (channel) ->
-    if ch = Channels.findOne(name:"##{channel}")
-      Session.set 'channel.name', ch.name
-      Session.set 'channel.id', ch._id
-      return 'channel_main'
-    else
-      Session.set 'channel.name', channel
-      return 'channel_main'
-    #TODO: no such channel
-
-  '*': 'not_found'
-
-Meteor.Router.filter('checkLoggedIn', except: 'sign_in')
