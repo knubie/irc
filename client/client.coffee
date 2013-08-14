@@ -38,6 +38,7 @@ handlers.channel = Meteor.subscribe 'channels', ->
           doc.from not in Meteor.user().profile.channels[doc.channel].ignore
             notifications[id] ?= new Notification doc.channel, doc.text
             notifications[id].showOnce()
+
   subscribeToMessagesOf channel for channel in Channels.find().fetch()
   Channels.find().observe
     added: subscribeToMessagesOf
@@ -434,21 +435,29 @@ Template.users.helpers
 
 
 ########## Router ##########
-Meteor.Router.add
-  '/': ->
-    if Meteor.userId()?
-      Session.set 'channel.name', 'all'
-      Session.set 'channel.id', null
-      return 'channel_main'
+Meteor.Router.filters
+  'checkLoggedIn': (page) ->
+    if Meteor.loggingIn()
+      return 'loading'
+    else if Meteor.user()
+      return page
     else
       return 'home_logged_out'
+
+Meteor.Router.filter('checkLoggedIn')
+
+Meteor.Router.add
+  '/': ->
+    Session.set 'channel.name', 'all'
+    Session.set 'channel.id', null
+    return 'channel_main'
 
   '/explore': 'explore'
 
   '/notifications-request': 'notification_request'
 
   '/login': ->
-    if Meteor.userId()?
+    if Meteor.user()?
       Meteor.Router.to('/')
     else
       return 'sign_in'
@@ -462,6 +471,8 @@ Meteor.Router.add
       Session.set 'channel.name', ch.name
       Session.set 'channel.id', ch._id
       return 'channel_settings'
+    else
+      return 'not_found'
     #else
     # no such channel
 
@@ -470,20 +481,17 @@ Meteor.Router.add
       Session.set 'channel.name', ch.name
       Session.set 'channel.id', ch._id
       return 'channel_users'
+    else
+      return 'not_found'
 
   '/channels/:channel': (channel) ->
-    if Meteor.userId()?
-      if ch = Channels.findOne(name:"##{channel}")
-        Session.set 'channel.name', ch.name
-        Session.set 'channel.id', ch._id
-        return 'channel_main'
-      else
-        Session.set 'channel.name', channel
-        return 'channel_main'
+    if ch = Channels.findOne(name:"##{channel}")
+      Session.set 'channel.name', ch.name
+      Session.set 'channel.id', ch._id
+      return 'channel_main'
     else
-      console.log 'nada'
-      Meteor.Router.to('/')
-      return 'home_logged_out'
+      Session.set 'channel.name', channel
+      return 'channel_main'
     #TODO: no such channel
 
   '*': 'not_found'
