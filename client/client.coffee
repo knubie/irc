@@ -444,8 +444,6 @@ Meteor.Router.filters
     else
       return 'home_logged_out'
 
-Meteor.Router.filter('checkLoggedIn')
-
 Meteor.Router.add
   '/': ->
     Session.set 'channel.name', 'all'
@@ -457,10 +455,10 @@ Meteor.Router.add
   '/notifications-request': 'notification_request'
 
   '/login': ->
-    if Meteor.user()?
-      Meteor.Router.to('/')
-    else
-      return 'sign_in'
+      if Meteor.user()?
+        Meteor.Router.to('/')
+      else
+        return 'sign_in'
 
   '/logout': ->
     #TODO: disconnect
@@ -495,3 +493,5 @@ Meteor.Router.add
     #TODO: no such channel
 
   '*': 'not_found'
+
+Meteor.Router.filter('checkLoggedIn', except: 'sign_in')
