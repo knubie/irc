@@ -14,22 +14,22 @@ class ChannelsCollection extends Meteor.Collection
     else
       @findOne({name})
 
-@Channels = new ChannelsCollection 'channels',
-  transform: (doc) ->
-    doc extends
-      join: (nick) ->
-        return if @nicks[nick]
-        if _.isEmpty @nicks
-          @nicks[nick] = '@'
-        else
-          @nicks[nick] = ''
-      part: (nick) ->
-        {nicks} = @
-        delete nicks[nick]
-        if _.isEmpty nicks
-          Channels.remove @_id
-        else
-          Channels.update @_id, $set: {nicks}
+@Channels = new ChannelsCollection 'channels'#,
+  #transform: (doc) ->
+    #doc extends
+      #join: (nick) ->
+        #return if @nicks[nick]
+        #if _.isEmpty @nicks
+          #@nicks[nick] = '@'
+        #else
+          #@nicks[nick] = ''
+      #part: (nick) ->
+        #{nicks} = @
+        #delete nicks[nick]
+        #if _.isEmpty nicks
+          #Channels.remove @_id
+        #else
+          #Channels.update @_id, $set: {nicks}
 
 Channels.allow
   insert: (userId, channel) ->

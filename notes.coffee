@@ -12,7 +12,10 @@
 #: add tags to channels
 #: remove/sanitize untrusted user input from href attributes
 #: add an away flag, perhaps when say -> 'brb'
-#: take a look at pagination
+#: fix url regexp eg '..thing' creates a url
+#: nick autocomplete
+#: make timestamp update
+#: add regex for channels to link
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`

@@ -46,7 +46,21 @@ Meteor.methods
     if Meteor.isServer
       client[username].part channel
 
-    Channels.findOne({name: channel}).part username
+    ch = Channels.findOne({name: channel})
+    {nicks} = ch
+    delete nicks[username]
+    if _.isEmpty nicks
+      Channels.remove ch._id
+    else
+      Channels.update ch._id, $set: {nicks}
+    #Channels.findOne({name: channel}).part username
+      #part: (nick) ->
+        #{nicks} = @
+        #delete nicks[nick]
+        #if _.isEmpty nicks
+          #Channels.remove @_id
+        #else
+          #Channels.update @_id, $set: {nicks}
     {channels} = Meteor.user().profile
     delete channels[channel]
     Meteor.users.update Meteor.userId, $set: {'profile.channels': channels}

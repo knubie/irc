@@ -1,7 +1,22 @@
+########## Notifications ##########
+notifications = {}
+class Notification
+  constructor: (title, message) ->
+    if window.webkitNotifications.checkPermission() is 0
+      @self = window.webkitNotifications.createNotification 'icon.png', title, message
+      @count = 0
+  show: ->
+    @self.show()
+    @count++
+  showOnce: ->
+    if @count < 1
+      @self.show()
+
 ########## Defaults ##########
 
 # Currently selected channel for viewing messages.
-Session.setDefault 'channel', 'all'
+Session.setDefault 'channel.name', 'all'
+Session.setDefault 'channel.id', null
 # Push messages to the bottom by default (ie don't save scroll position).
 Session.setDefault 'scroll', false
 
@@ -9,23 +24,19 @@ Session.setDefault 'scroll', false
 
 @handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'
-#handlers.messages = Meteor.subscribe 'messages'
-handlers.channel = Meteor.subscribe 'channels', ->
-  subscribeToMessagesOf = (channel) ->
-    handlers.messages[channel.name] = Meteor.subscribeWithPagination 'messages'
-    , channel.name
-    , 30
-    Messages.find().observeChanges
-      added: (id, doc) ->
-        unless doc.read
-          if doc.convo is Meteor.user().username and \
-          doc.from not in Meteor.user().profile.channels[doc.channel].ignore
-            notifications[id] ?= new Notification doc.channel, doc.text
-            notifications[id].showOnce()
+handlers.channel = Meteor.subscribe 'channels'
+handlers.messages = Meteor.subscribeWithPagination 'messages', ->
+  Session.get('channel.name')
+, 30
 
-  subscribeToMessagesOf channel for channel in Channels.find().fetch()
-  Channels.find().observe
-    added: subscribeToMessagesOf
+Messages.find().observeChanges
+  added: (id, doc) ->
+    unless doc.read
+      if doc.convo is Meteor.user().username and \
+      doc.from not in Meteor.user().profile.channels[doc.channel].ignore
+        notifications[id] ?= new Notification doc.channel, doc.text
+        notifications[id].showOnce()
+
 
 ########## Startup ##########
 #
@@ -40,8 +51,12 @@ Meteor.startup ->
       Session.set 'scroll', true
     else
       Session.set 'scroll', false
+      handlers.messages.reset()
 
     # If close to top and messages handler is ready.
-    if $(window).scrollTop() <= 50 and handlers.messages[Session.get 'channel.name'].ready()
+    if $(window).scrollTop() <= 50 and handlers.messages.ready()
       # Load messages subscription next page.
-      handlers.messages[Session.get 'channel.name'].loadNextPage()
+      handlers.messages.loadNextPage()
+      #TODO: change scroll position or something to prevent continuous loading of pages.
+      # newHeight - oldHeight = difference
+      # scrollTop += difference

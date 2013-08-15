@@ -1,19 +1,5 @@
 #TODO: write a helper function for setting cannel session
 
-########## Notifications ##########
-notifications = {}
-class Notification
-  constructor: (title, message) ->
-    if window.webkitNotifications.checkPermission() is 0
-      @self = window.webkitNotifications.createNotification 'icon.png', title, message
-      @count = 0
-  show: ->
-    @self.show()
-    @count++
-  showOnce: ->
-    if @count < 1
-      @self.show()
-
 ########## Global helpers ##########
 
 Handlebars.registerHelper 'all', ->
@@ -83,6 +69,7 @@ Template.channels.events
   'click .channel > a': (e,t) ->
     ch = Channels.findOne {name: "#{@}"}
     Session.set 'scroll', false
+    handlers.messages.reset()
     Session.set 'channel.name', "#{@}"
     Session.set 'channel.id', ch._id
     $('#say-input').focus()
@@ -226,9 +213,12 @@ Template.message.rendered = ->
     for nick, status of Channels.findOne(name: @data.channel).nicks
       ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
-  ptext = ptext.replace regex.code, '$1$2<code>$3</code>$4'
-  ptext = ptext.replace regex.bold, '$1$2<strong>$3</strong>$4'
-  ptext = ptext.replace regex.underline, '$1$2<span class="underline">$3</span>$4'
+  while regex.code.test ptext
+    ptext = ptext.replace regex.code, '$1$2<code>$3</code>$4'
+  while regex.bold.test ptext
+    ptext = ptext.replace regex.bold, '$1$2<strong>$3</strong>$4'
+  while regex.underline.test ptext
+    ptext = ptext.replace regex.underline, '$1$2<span class="underline">$3</span>$4'
   p.html(ptext)
 
   if not @data.read and @data.from
