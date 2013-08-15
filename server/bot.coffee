@@ -6,7 +6,6 @@
 
 class @Bot extends Client
   constructor: ({@_id, @username, @password}) ->
-    console.log 'creating new client'
     super 'localhost', @username,
       port: 6667
       userName: @username
@@ -26,7 +25,7 @@ class @Bot extends Client
     ]
 
     # Log errors sent from the network.
-    @on 'error', async (msg) -> console.log msg
+    @on 'error', async (msg) -> Log.error msg
 
     # Log raw messages sent from the network.
     #@on 'raw', (msg) -> console.log msg
@@ -128,7 +127,6 @@ class @Bot extends Client
         Meteor.users.update @_id, $set: 'services.resume.loginTokens' : []
 
   connect: ->
-    console.log 'bot.connect'
     # Connect to the IRC network.
     super async =>
       # Set connecting status to on.

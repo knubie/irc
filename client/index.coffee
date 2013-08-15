@@ -226,9 +226,9 @@ Template.message.rendered = ->
     for nick, status of Channels.findOne(name: @data.channel).nicks
       ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
-  ptext = ptext.replace regex.code, '$2<code>$3</code>$4'
-  ptext = ptext.replace regex.bold, '$2<strong>$3</strong>$4'
-  ptext = ptext.replace regex.underline, '$2<span class="underline">$3</span>$4'
+  ptext = ptext.replace regex.code, '$1$2<code>$3</code>$4'
+  ptext = ptext.replace regex.bold, '$1$2<strong>$3</strong>$4'
+  ptext = ptext.replace regex.underline, '$1$2<span class="underline">$3</span>$4'
   p.html(ptext)
 
   if not @data.read and @data.from

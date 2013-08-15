@@ -12,7 +12,6 @@ Meteor.methods
 
   connect: (username, password, _id) ->
     if Meteor.isServer
-      console.log 'methods.connect'
       client[username] ?= new Bot {_id, username, password}
       client[username].connect()
 
