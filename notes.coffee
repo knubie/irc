@@ -11,6 +11,8 @@
 #: add categories to channels
 #: add tags to channels
 #: remove/sanitize untrusted user input from href attributes
+#: add an away flag, perhaps when say -> 'brb'
+#: take a look at pagination
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`

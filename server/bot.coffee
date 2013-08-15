@@ -163,27 +163,6 @@ class @Bot extends Client
     # Sends text to the specified channel and inserts a new Message doc.
     super channel, text
 
-    convo = ''
-    channelDoc = Channels.findOne(name: channel)
-    for nick of channelDoc.nicks
-      if regex.nick(nick).test(text)
-        convo = nick
-        break
-
-      status =
-        '@': 'operator'
-        '': 'normal'
-
-    Messages.insert
-      from: @username
-      channel: channel
-      text: text
-      time: new Date
-      owner: @_id
-      convo: convo
-      status: if channelDoc.nicks? then status[channelDoc.nicks[@username]] else 'normal'
-      read: false
-
   part: (channel) ->
     check channel, validChannelName
     super channel, async =>

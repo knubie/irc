@@ -11,3 +11,9 @@ jquery
 insecure
 bootstrap
 stylus
+standard-app-packages
+momentjs
+page-js-ie-support
+paginated-subscription
+router
+user-status

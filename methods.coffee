@@ -59,6 +59,29 @@ Meteor.methods
     check message, validMessageText
     if Meteor.isServer
       client[username].say channel, message
+    #TODO: inser the message client-side
+    user = Meteor.users.findOne({username})
+    convo = ''
+    channelDoc = Channels.findOne(name: channel)
+    for nick of channelDoc.nicks
+      if regex.nick(nick).test(message)
+        convo = nick
+        break
+
+      status =
+        '@': 'operator'
+        '': 'normal'
+
+    Messages.insert
+      from: username
+      channel: channel
+      text: message
+      time: new Date
+      owner: user._id
+      convo: convo
+      status: if channelDoc.nicks? then status[channelDoc.nicks[username]] else 'normal'
+      read: true
+
     return null
 
   kick: (user, channel, username, reason) ->
