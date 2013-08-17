@@ -88,6 +88,22 @@
   </div>
 </template>
 
+<template name="channel_header">
+  {{#unless all}}
+    <div class="channel-breadcrumb">
+      <a href="/channels/{{url_channel}}" class="channel-name">{{channel}}</a>
+      <span class="slash">&nbsp;/&nbsp;</span>
+      <a href="/channels/{{url_channel}}/users" class="user-count">
+        <i class="icon-user"></i><strong>{{users}}</strong> users
+      </a>
+    </div>
+    <div class="buttons">
+      <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
+      <a class="add-bot">invite</a>
+    </div>
+  {{/unless}}
+</template>
+
 <template name="channel_settings">
   <div class="container">
     {{> channels}}
@@ -118,29 +134,15 @@
   </ul>
 </template>
 
-<template name="channel_header">
-  {{#unless all}}
-    <div class="channel-breadcrumb">
-      <a href="/channels/{{url_channel}}" class="channel-name">{{channel}}</a>
-      <span class="slash">&nbsp;/&nbsp;</span>
-      <a href="/channels/{{url_channel}}/users" class="user-count">
-        <i class="icon-user"></i><strong>{{users}}</strong> users
-      </a>
-    </div>
-    <div class="buttons">
-      <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
-      <a class="add-bot">invite</a>
-    </div>
-  {{/unless}}
-</template>
-
 <template name="channels">
   <ul class="channels">
-    <li class="all-channels {{all}}">
-      <a href="/">
-        All channels
-      </a>
-    </li>
+    {{#if currentUser}}
+      <li class="all-channels {{all}}">
+        <a href="/">
+          All channels
+        </a>
+      </li>
+    {{/if}}
     {{#each channels}}
       <li class="channel {{selected}}">
         {{#if private}}<i class="icon-lock"></i> {{/if}}
@@ -152,12 +154,14 @@
         <button type="button" class="close">&times;</button>
       </li>
     {{/each}}
-    <li class="new-channel-li">
-      <span class="new-channel-link">+ Add channel</span>
-      <form class="new-channel-form">
-        <input type="text" class="new-channel-input" autocomplete="off" placeholder="Add Channel">
-      </form>
-    </li>
+    {{#if currentUser}}
+      <li class="new-channel-li">
+        <span class="new-channel-link">+ Add channel</span>
+        <form class="new-channel-form">
+          <input type="text" class="new-channel-input" autocomplete="off" placeholder="Add Channel">
+        </form>
+      </li>
+    {{/if}}
   </ul>
 </template>
 
@@ -181,11 +185,28 @@
 
 <template name="say">
   {{#unless all}}
-    <div class="input-container">
-      <form id="say">
-        <input tabindex="1" type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
-      </form>
-    </div>
+    {{#if currentUser}}
+      <div class="input-container">
+        <form id="say">
+          <input tabindex="1" type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
+        </form>
+      </div>
+    {{else}}
+      <div class="input-container">
+        <div class="alert alert-info">
+          <strong>
+            <a href="/" class="btn">
+              Sign up for free
+            </a>
+            to join this discussion.
+          </strong>
+          Already have an account?
+          <a href="/login">
+            Sign in to chat
+          </a>
+        </div>
+      </div>
+    {{/if}}
   {{/unless}}
 </template>
 
@@ -304,5 +325,18 @@
       <fieldset>
     <form>
     <input type="checkbox" id="inputIgnoreJoinPart"> Show join/part messages
+  </div>
+</template>
+
+<template name="user_profile">
+  <div class="container">
+    <div class="vcard">
+      <div class="name">
+        {{username}}
+      </div>
+      <div class="stats">
+        Joined on Oct 07, 2010
+      </div>
+    </div>
   </div>
 </template>

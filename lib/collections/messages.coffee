@@ -9,13 +9,16 @@
   transform: (doc) ->
     doc extends
       type: ->
-        {username} = Meteor.users.findOne(@owner)
-        if @from is username
-          return 'self'
-        else if @from is 'system'
-          return 'info'
+        if @owner = 'idletron'
+          return 'normal'
         else
-          if @convo is username then 'mention' else 'normal'
+          {username} = Meteor.users.findOne(@owner)
+          if @from is username
+            return 'self'
+          else if @from is 'system'
+            return 'info'
+          else
+            if @convo is username then 'mention' else 'normal'
       online: ->
         online = no
         if @channel.isChannel()

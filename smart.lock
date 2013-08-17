@@ -9,7 +9,8 @@
       "momentjs": {},
       "paginated-subscription": {},
       "router": {},
-      "user-status": {}
+      "user-status": {},
+      "iron-router": {}
     },
     "packages": {
       "irc": {
@@ -36,6 +37,11 @@
         "git": "https://github.com/mizzao/meteor-user-status.git",
         "tag": "v0.1.5",
         "commit": "0169a468e57155f1d61fc2b1cd76bc9ca51c7313"
+      },
+      "iron-router": {
+        "git": "https://github.com/EventedMind/meteor-iron-router.git",
+        "tag": "v0.5.3",
+        "commit": "f737b04106a226c0f8772b9112673a9be49406d7"
       },
       "page-js-ie-support": {
         "git": "https://github.com/tmeasday/meteor-page-js-ie-support.git",

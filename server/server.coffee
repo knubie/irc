@@ -2,6 +2,11 @@
 Meteor.users.update {}, $set: 'services.resume.loginTokens' : []
 
 Meteor.startup ->
+  client.idletron = new Idletron
+  client.idletron.connect async ->
+    for channel in Channels.find().fetch()
+      console.log channel.name
+      client.idletron.join channel.name
   # Make sure all users' connection status is 'off'
 
 UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
@@ -47,6 +52,12 @@ Meteor.publish 'channels', ->
   #Messages.find()
 Meteor.publish 'messages', (channel, limit) ->
   if channel is 'all'
-    Messages.find {owner: @userId}, {limit, sort:{time: -1}}
+    if @userId
+      Messages.find {owner: @userId}, {limit, sort:{time: -1}}
+    else
+      Messages.find {owner: 'idletron'}, {limit, sort:{time: -1}}
   else
-    Messages.find {owner: @userId, channel: channel}, {limit, sort:{time: -1}}
+    if @userId
+      Messages.find {owner: @userId, channel: channel}, {limit, sort:{time: -1}}
+    else
+      Messages.find {owner: 'idletron', channel: channel}, {limit, sort:{time: -1}}

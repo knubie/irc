@@ -4,6 +4,110 @@
 #
 # TODO: move database operations to the client.
 
+class @Idletron extends Client
+  constructor: ->
+    @channels = {}
+    super 'localhost', 'Idletron',
+      port: 6667
+      userName: 'Idletron'
+      password: 'password'
+      realName: 'N/A'
+      autoConnect: no
+      autoRejoin: no
+
+    # Remove all previous listeners just in case.
+    @removeAllListeners [
+      'error'
+      'message'
+      'names'
+      'join'
+      'part'
+      'nick'
+    ]
+
+    # Log errors sent from the network.
+    @on 'error', async (msg) -> Log.error msg
+
+    # Log raw messages sent from the network.
+    #@on 'raw', (msg) -> console.log msg
+
+    # Sets the channel topic.
+    @on 'topic', async (channel, topic, nick, message) ->
+      Channels.update {name: channel}, $set: {topic}
+      #TODO: do this only once... instead of once for every client
+
+    # Listen for incoming messages.
+    @on 'message', async (from, to, text, message) =>
+      convo = ''
+
+      # If message is a PM
+      channel = Channels.find_or_create to
+      for nick of channel.nicks
+        if regex.nick(nick).test(text)
+          convo = nick; break
+
+      status =
+        '@': 'operator'
+        '': 'normal'
+      # Insert a new message
+      Messages.insert
+        from: from
+        channel: channel.name
+        text: text
+        time: new Date
+        owner: 'idletron'
+        convo: convo
+        status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
+        read: true
+
+    # Listen for channel list response and populate
+    # channel collection with the results.
+    @on 'channellist_item', async (data) ->
+      {name, users, topic} = data
+      channel = Channels.find_or_create name
+      Channels.update channel, $set: {users, topic}
+
+    # Listen for 'names' requests.
+    @on 'names', async (channel, nicks_in) =>
+      #TODO: Either add rpl_isupport to hector, or remove from node-irc
+      nicks = {}
+      for nick, status of nicks_in
+        match = nick.match(/^(.)(.*)$/)
+        if match
+          if match[1] is '@'
+            nicks[match[2]] = match[1]
+          else
+            nicks[nick] = ''
+      # Count the number of nicks in the nicks_in object
+      users = (user for user of nicks).length
+      # Update Channel.nicks with the nicks object sent from the network.
+      Channels.update
+        name: channel
+      , {$set: {nicks, users}}
+
+    @on 'kick', async (channel, nick, kicker, reason, message) =>
+      Messages.insert
+        owner: 'idletron'
+        channel: channel
+        text: "#{nick} was kicked by #{kicker}! \"#{reason}\""
+        time: new Date
+        from: 'system'
+        convo: ''
+        read: false
+
+    # Send a NAMES request when users joins, parts, or changes nick.
+    for event in ['join', 'part', 'nick', 'kick']
+      @on event, async (channel) => @send 'NAMES', channel
+
+    @on 'raw', async (msg) =>
+      if msg.command is 'MODE'
+        @send 'MODE', msg.args[0]
+
+      if msg.command is 'rpl_channelmodeis'
+        modes = msg.args[2].split('')
+        modes.shift()
+        Channels.update {name: msg.args[1]}, $set: {modes}
+
 class @Bot extends Client
   constructor: ({@_id, @username, @password}) ->
     super 'localhost', @username,
@@ -33,6 +137,7 @@ class @Bot extends Client
     # Sets the channel topic.
     @on 'topic', async (channel, topic, nick, message) ->
       Channels.update {name: channel}, $set: {topic}
+      #TODO: do this only once... instead of once for every client
 
     # Listen for incoming messages.
     @on 'message', async (from, to, text, message) =>

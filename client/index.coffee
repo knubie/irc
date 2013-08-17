@@ -36,9 +36,6 @@ Template.sign_in.events
 
 ########## Channels ##########
 
-Template.say.rendered = ->
-  $('#say-input').focus()
-
 Template.channels.events
   'click .new-channel-link': (e, t) ->
     $('.new-channel-link').hide()
@@ -82,25 +79,34 @@ Template.channels.events
 
 Template.channels.helpers
   channels: ->
-    (channel for channel of Meteor.user().profile.channels)
+    if Meteor.user()
+      (channel for channel of Meteor.user().profile.channels)
+    else
+      [Session.get('channel.name')]
     #Channels.find
       #name: $in: (channel for channel of Meteor.user().profile.channels)
     #.fetch()
   unread: ->
-    ignore_list = Meteor.user().profile.channels["#{@}"].ignore
-    Messages.find
-      channel: "#{@}"
-      read: false
-      from: $nin: ignore_list
-    .fetch().length or ''
+    if Meteor.user()
+      ignore_list = Meteor.user().profile.channels["#{@}"].ignore
+      Messages.find
+        channel: "#{@}"
+        read: false
+        from: $nin: ignore_list
+      .fetch().length or ''
+    else
+      return ''
   unread_mentions: ->
-    ignore_list = Meteor.user().profile.channels["#{@}"].ignore
-    Messages.find
-      channel: "#{@}"
-      read: false
-      convo: Meteor.user().username
-      from: $nin: ignore_list
-    .fetch().length or ''
+    if Meteor.user()
+      ignore_list = Meteor.user().profile.channels["#{@}"].ignore
+      Messages.find
+        channel: "#{@}"
+        read: false
+        convo: Meteor.user().username
+        from: $nin: ignore_list
+      .fetch().length or ''
+    else
+      return ''
   selected: ->
     if Session.equals 'channel.name', "#{@}" then 'selected' else ''
   all: ->
@@ -114,13 +120,21 @@ Template.channels.helpers
     else
       no
 
+Template.channel_header.helpers
+  channel: ->
+    Session.get 'channel.name'
+  url_channel: ->
+    Session.get('channel.name').match(/^(#)?(.*)$/)[2]
+  users: ->
+    if Session.get('channel.name').isChannel()
+      Channels.findOne(Session.get 'channel.id')?.users
 
 ########## Notification Request ##########
+#
 Template.notification_request.rendered = ->
   document.querySelector('.allow-notifications').addEventListener 'click', ->
     webkitNotifications.requestPermission()
     Meteor.Router.to('/')
-
 
 ########## Messages ##########
 
@@ -173,25 +187,19 @@ Template.messages.helpers
     setPrev = (msg) ->
       msg.prev = prev
       prev = msg
-    return (setPrev message for message in messages when message.from not in \
-    (Meteor.user().profile.channels[message.channel]?.ignore or []))
+    if Meteor.user()
+      return (setPrev message for message in messages when message.from \
+      not in (Meteor.user().profile.channels[message.channel]?.ignore or []))
+    else
+      return (setPrev message for message in messages)
   topic: ->
     if Session.get('channel.name').isChannel()
       Channels.findOne(Session.get 'channel.id')?.topic
   op_status: ->
-    if Session.get('channel.name').isChannel()
+    if Session.get('channel.name').isChannel() and Meteor.user()
       Channels.findOne(Session.get 'channel.id')?.nicks[Meteor.user().username] is '@'
     else
       return no
-  channel: ->
-    Session.get 'channel.name'
-  url_channel: ->
-    Session.get('channel.name').match(/^(#)?(.*)$/)[2]
-  users: ->
-    if Session.get('channel.name').isChannel()
-      Channels.findOne(Session.get 'channel.id')?.users
-
-Template.channel_header.helpers
   channel: ->
     Session.get 'channel.name'
   url_channel: ->
@@ -273,7 +281,7 @@ Template.message.helpers
   message_class: ->
     if @online() then @type() else "offline #{@type()}"
   op_status: ->
-    if @channel.isChannel()
+    if @channel.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'
@@ -299,6 +307,30 @@ Template.say.events
       $('#say-input').val('')
       #TODO: use channel.id insted
       Meteor.call 'say', Meteor.user().username, Session.get('channel.name'), message
+      user = Meteor.user()
+      convo = ''
+      channelDoc = Channels.findOne(Session.get('channel.id'))
+      for nick of channelDoc.nicks
+        if regex.nick(nick).test(message)
+          convo = nick
+          break
+
+        status =
+          '@': 'operator'
+          '': 'normal'
+
+      Messages.insert
+        from: user.username
+        channel: Session.get('channel.name')
+        text: message
+        time: new Date
+        owner: Meteor.userId()
+        convo: convo
+        status: if channelDoc.nicks? then status[channelDoc.nicks[user.username]] else 'normal'
+        read: true
+
+Template.say.rendered = ->
+  $('#say-input').focus()
 
 ########## Settings ##########
 
@@ -342,7 +374,11 @@ Template.settings.helpers
       return ''
 
 ########## Users ##########
-#
+
 Template.users.helpers
   users: ->
     (nick for nick of Channels.findOne(Session.get('channel.id')).nicks).sort()
+
+########## User Profile ##########
+
+Template.user_profile.data = Meteor.users.findOne(Session.get('user_profile'))
