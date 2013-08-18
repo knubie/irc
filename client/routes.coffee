@@ -89,4 +89,9 @@ Meteor.Router.add
 
   '*': 'not_found'
 
-Meteor.Router.filter('checkLoggedIn', except: ['sign_in', 'channel_main', 'not_found'])
+Meteor.Router.filter 'checkLoggedIn', except: [
+  'sign_in'
+  'channel_main'
+  'channel_users'
+  'not_found'
+]

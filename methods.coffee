@@ -63,7 +63,7 @@ Meteor.methods
           #Channels.update @_id, $set: {nicks}
     {channels} = Meteor.user().profile
     delete channels[channel]
-    Meteor.users.update Meteor.userId, $set: {'profile.channels': channels}
+    Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
     return null
 
   say: (username, channel, message) ->

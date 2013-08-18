@@ -97,21 +97,13 @@
         <i class="icon-user"></i><strong>{{users}}</strong> users
       </a>
     </div>
-    <div class="buttons">
-      <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
-      <a class="add-bot">invite</a>
-    </div>
+    {{#if currentUser}}
+      <div class="buttons">
+        <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
+        <a class="add-bot">invite</a>
+      </div>
+    {{/if}}
   {{/unless}}
-</template>
-
-<template name="channel_settings">
-  <div class="container">
-    {{> channels}}
-    <div class="channel-container">
-      {{> channel_header}}
-      {{> settings}}
-    </div>
-  </div>
 </template>
 
 <template name="channel_users">
@@ -181,6 +173,20 @@
       {{> message}}
     {{/each}}
   </ul>
+  {{#unless currentUser}}
+    <div class="alert alert-info">
+      <strong>
+        <a href="/" class="btn">
+          Sign up for free
+        </a>
+        to join this discussion.
+      </strong>
+      Already have an account?
+      <a href="/login">
+        Sign in to chat
+      </a>
+    </div>
+  {{/unless}}
 </template>
 
 <template name="message">
@@ -242,21 +248,6 @@
         <form id="say">
           <input tabindex="1" type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
         </form>
-      </div>
-    {{else}}
-      <div class="input-container">
-        <div class="alert alert-info">
-          <strong>
-            <a href="/" class="btn">
-              Sign up for free
-            </a>
-            to join this discussion.
-          </strong>
-          Already have an account?
-          <a href="/login">
-            Sign in to chat
-          </a>
-        </div>
       </div>
     {{/if}}
   {{/unless}}

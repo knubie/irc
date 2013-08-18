@@ -20,7 +20,10 @@ Template.home_logged_out.events
         alert error.reason
       else
         Meteor.call 'remember', username, password, Meteor.userId()
-        Meteor.Router.to('/notifications-request') #FIXME: should work without this.
+        if window.webkitNotifications.checkPermission() is 1
+          Meteor.Router.to('/notifications-request') #FIXME: should work without this.
+        else
+          Meteor.Router.to('/') #FIXME: should work without this.
 
 Template.sign_in.events
   'submit #form-signin': (e,t) ->
@@ -32,7 +35,10 @@ Template.sign_in.events
         alert error.reason
       else
         Meteor.call 'connect', username, password, Meteor.userId()
-        Meteor.Router.to('/') #FIXME: should work without this.
+        if window.webkitNotifications.checkPermission() is 1
+          Meteor.Router.to('/notifications-request') #FIXME: should work without this.
+        else
+          Meteor.Router.to('/') #FIXME: should work without this.
 
 ########## Channels ##########
 
