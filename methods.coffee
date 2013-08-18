@@ -6,7 +6,7 @@ Meteor.methods
     if Meteor.isServer
       if _id?
         #FIXME: What if username = "; rm -rf /"
-        exec "cd ~/Development/hector/idletron.hect; hector identity remember #{username} #{password}", async ->
+        exec "cd $HECTOR_PATH; hector identity remember #{username} #{password}", async ->
           Meteor.call 'connect', username, password, _id
       return null
 
