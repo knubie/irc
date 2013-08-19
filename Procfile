@@ -1,2 +1,1 @@
-coffee: coffee -o tests/lib -cw tests
-testmongo: mongod --smallfiles --noprealloc --nojournal
+sass: sass --watch client/sass:client/css/

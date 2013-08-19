@@ -1,37 +1,10 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700)
-
-turquoise = #1ABC9C
-turquoise-dark = #16A085
-
-emerald = #2ECC71
-nephritis = #27AE60
-
-peter-river = #3498DB
-belize-hole = #2980B9
-
-amethyst = #9B59B6
-wisteria = #8E44AD
-
-wet-asphalt = #34495E
-midnight-blue = #2C3E50
-
-sun-flower = #F1C40F
-orange = #F39C12
-
-carrot = #E67E22
-pumpkin = #D35400
-
-alizarin = #E74C3C
-pomegranate = #C0392B
-
-clouds = #ECF0F1
-silver = #BDC3C7
-
-concrete = #95A5A6
-asbestos = #7F8C8D
+@import "media-queries"
+@import "prefixes"
+@import "colors"
 
 body
-  background-color: clouds
+  background-color: $clouds
   font-family: Helvetica, sans-serif
   font-size: 14px
   padding: 0
@@ -47,20 +20,11 @@ code
   color: #777
   font-size: 14px
 
-.headline 
-  width: 300px
-  margin: 0 auto
-  color: #FFF
-  font-size: 100px
-  text-align: center
-  font-weight: 700px
-  margin-top: 100px
-  height: 125px
-  text-shadow: 0 1px 0 #BDC3C7, 0 2px 0 #BDC3C7, 0 3px 0 #BDC3C7, 0 4px 0 #BDC3C7
-
 .header
   padding: 20px
-  background-color: wet-asphalt
+  +mobile-portrait
+    padding: 10px
+  background-color: $wet-asphalt
   position: fixed
   top: 0
   left: 0
@@ -70,6 +34,8 @@ code
     font-size: 24px
     font-weight: bold
     color: white
+    +mobile-portrait
+      font-size: 21px
   .top-nav
     float: right
     list-style: none
@@ -78,8 +44,11 @@ code
     li
       display: inline-block
       margin-left: 35px
+      +mobile-portrait
+        margin-left: 12px
       a
         color: white
+
 .channels
   color: #777
   height: 100%
@@ -90,6 +59,9 @@ code
   margin: 0
   margin-top: 25px
   position: fixed
+  +mobile-portrait
+    width: 100%
+    position: relative
   li
     margin: 10px 0
     width: 180px
@@ -104,29 +76,26 @@ code
       transition: .15s background-color, .15s color
       padding: 6px 0
     a:hover
-      color: peter-river
+      color: $peter-river
       text-decoration: none
-  li:hover > button 
+  li.channel:hover > button 
     display: inline-block
-  li.all:hover > button 
-    display:none
-
   .selected > a,
   .selected:hover > a
-    color: peter-river
+    color: $peter-river
     transition: .15s background-color, .15s color
+  .new-channel-li
+    .new-channel-link
+      color: $silver
+    .new-channel-link:hover
+      cursor: pointer
+      color: #777
+    .new-channel-form
+      display: none
+      .new-channel-input
+        width: 164px
+        font-size: 16px
 
-.new-channel-li
-  .new-channel-link
-    color: silver
-  .new-channel-link:hover
-    cursor: pointer
-    color: #777
-  .new-channel-form
-    display: none
-    .new-channel-input
-      width: 164px
-      font-size: 16px
 .messages, .notifications
   margin: 0
 
@@ -135,6 +104,11 @@ code
   top: 0
   left: 200px
   width: 760px
+  +mobile-portrait
+    width: 100%
+    position: relative
+    top: 0
+    left: 0
   .alert
     margin-top: -55px
   .channel-breadcrumb
@@ -163,20 +137,20 @@ code
     a:hover
       text-decoration: none
     .add-bot
-      background-color: peter-river
-      box-shadow: 0 2px 0 belize-hole
+      background-color: $peter-river
+      box-shadow: 0 2px 0 $belize-hole
     .settings
       background-color: silver
-      box-shadow: 0 2px 0 concrete
+      box-shadow: 0 2px 0 $concrete
   .user-count
-      color: #777
-      display: inline-block
-      font-size: 12px
-      i
-        position: relative
-        top: -2px
-        margin-right: 4px
-        opacity: 0.35
+    color: #777
+    display: inline-block
+    font-size: 12px
+    i
+      position: relative
+      top: -2px
+      margin-right: 4px
+      opacity: 0.35
 .messages
   margin-top: 20px
   margin-bottom: 72px
@@ -202,75 +176,72 @@ code
       font-weight: bold
       font-size: 14px
   .mention
-    border: 1px solid peter-river
+    border: 1px solid $peter-river
   .bot
-    background-color: silver
-
-.message.faded
-  background-color: clouds
-  box-shadow: 0 2px 0 clouds
-  .reply, small, p
-    opacity: 0.4
-  .divider
-    border-bottom: 2px solid rgba(0,0,0,0.02)
-
-.message
-  background-color: #fff
-  border-radius: 4px
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1)
-  margin-bottom: 10px
-  padding: 11px 15px
-  color: #777
-  position: relative
-  transition: .15s left, .15s opacity, .15s background-color, .15s color
-  p
-    font-size: 16px
-    line-height: 21px
-    font-weight: 300
-    margin: 0
-  .reply, small, p
-    transition: .15s left, .15s opacity, .15s background-color, .15s color
-  .reply
-    font-size: 12px
-    .normal
-      display: none
-    .operator
-      display: inline-block
-      color: peter-river
-      font-size: 30px
-      position: relative
-      bottom: -7px
-      margin-right: -2px
-      margin-top: -5px
-  .reply:hover 
-    border-bottom: 1px solid #ccc
-    cursor: pointer
-  .muted
-    color: rgba(0,0,0,0.4)
-    font-size: 12px
-  .divider
-    width: 100%
-    border-bottom: 2px solid rgba(0,0,0,0.06)
-    margin: 0 0 10px 0
-  .actions
-    font-size: 12px
-    opacity: 0
-    display: inline
-    .action
-      display: inline
-
-.message:hover
-  cursor: pointer
-  .actions
-    opacity: 1
-    i
+    background-color: $silver
+  .message.faded
+    background-color: $clouds
+    box-shadow: 0 2px 0 $clouds
+    .reply, small, p
       opacity: 0.4
-    .action
+    .divider
+      border-bottom: 2px solid rgba(0,0,0,0.02)
+  .message
+    background-color: #fff
+    border-radius: 4px
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1)
+    margin-bottom: 10px
+    padding: 11px 15px
+    color: #777
+    position: relative
+    transition: .15s left, .15s opacity, .15s background-color, .15s color
+    p
+      font-size: 16px
+      line-height: 21px
+      font-weight: 300
+      margin: 0
+    .reply, small, p
+      transition: .15s left, .15s opacity, .15s background-color, .15s color
+    .reply
+      font-size: 12px
+      .normal
+        display: none
+      .operator
+        display: inline-block
+        color: peter-river
+        font-size: 30px
+        position: relative
+        bottom: -7px
+        margin-right: -2px
+        margin-top: -5px
+    .reply:hover 
+      border-bottom: 1px solid #ccc
+      cursor: pointer
+    .muted
+      color: rgba(0,0,0,0.4)
+      font-size: 12px
+    .divider
+      width: 100%
+      border-bottom: 2px solid rgba(0,0,0,0.06)
+      margin: 0 0 10px 0
+    .actions
+      font-size: 12px
+      opacity: 0
       display: inline
-    .action:hover
-      color: #333
+      .action
+        display: inline
+  .message:hover
+    cursor: pointer
+    .actions
+      opacity: 1
       i
-        opacity: 0.8
+        opacity: 0.4
+      .action
+        display: inline
+      .action:hover
+        color: #333
+        i
+          opacity: 0.8
 
 .tt-dropdown-menu
   top: calc(100% \- 85px) !important
@@ -287,7 +258,7 @@ code
     p
       margin: 0
   .tt-is-under-cursor
-    background-color: peter-river
+    background-color: $peter-river
     color: white
 
 .twitter-typeahead
@@ -300,33 +271,35 @@ code
 
 .notifications > .message:hover
   cursor: pointer
-  background-color: belize-hole
+  background-color: $belize-hole
 
 .messages > li > a:link 
   color: #3498DB
 form 
   margin: 0
 
-.input-container
-  width: 760px
-  height: 62px
-  box-sizing: border-box
 #say-input, input.tt-hint
   font-size: 16px
   height: 32px
   line-height: normal
   background-color: white
   width: 760px
+  +mobile-portrait
+    width: 100%
   box-sizing: border-box
 
 #say-input::-webkit-input-placeholder, input.tt-hint
   color: rgba(0, 0, 0, 0.2)
 
 .marketing-section-signup
-  background-color: wet-asphalt
+  background-color: $wet-asphalt
   padding: 80px 0
 .container
   width: 960px
+  box-sizing: border-box
+  +mobile-portrait
+    width: 100%
+    padding: 10px
   color: white
   position: relative
   .heading
@@ -363,9 +336,14 @@ form
   color: rgba(255,255,255,0.3)
 
 .input-container
+  width: 760px
+  +mobile-portrait
+    width: calc(100% - 20px)
+  height: 62px
+  box-sizing: border-box
   position: fixed
   bottom: 0
-  background-color: clouds
+  background-color: $clouds
   padding: 10px 0
 
 .badge-info
@@ -378,7 +356,7 @@ form
 
 .selected
   .badge-info
-    background-color: belize-hole
+    background-color: $belize-hole
     color: white
 
 .channel-list
@@ -413,7 +391,7 @@ form
     box-sizing: border-box
     height: 35px
   input[type="submit"]
-    height 30px
+    height: 30px
     background-color: #3498DB
     box-shadow: 0 5px 0 #2980B9
     border: none
@@ -448,7 +426,7 @@ form
   color: #666
   margin-top: 9px
   .topic-edit, .topic-edit > a
-    color: silver
+    color: $silver
 
 #topic-form
   display: none
@@ -493,7 +471,7 @@ form
     top: -15px
     color: #bbb
   input
-    height 30px
+    height: 30px
     background-color: #3498DB
     box-shadow: 0 4px 0 #2980B9
     border: none
@@ -503,7 +481,7 @@ form
     width: 50px
     margin-right: 12px
   a
-    height 30px
+    height: 30px
     background-color: silver
     box-shadow: 0 4px 0 concrete
     border: none
