@@ -18,7 +18,8 @@ class Notification
 Session.setDefault 'channel.name', 'all'
 Session.setDefault 'channel.id', null
 # Push messages to the bottom by default (ie don't save scroll position).
-Session.setDefault 'scroll', false
+Session.setDefault 'scroll', 0
+#Session.setDefault 'position from bottom', 0
 
 ########## Subscriptions ##########
 
@@ -46,15 +47,17 @@ Meteor.startup ->
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
   $(window).scroll ->
+    Session.set 'scroll', \
+      $(document).height() - ($(window).scrollTop() + $(window).height())
     # If not scrolled to the bottom
-    if $(window).scrollTop() < $(document).height() - $(window).height()
-      Session.set 'scroll', true
-    else
-      Session.set 'scroll', false
-      handlers.messages.reset()
+    #if $(window).scrollTop() < $(document).height() - $(window).height()
+      #Session.set 'scroll', true
+    #else
+      #Session.set 'scroll', false
+      #handlers.messages.reset()
 
     # If close to top and messages handler is ready.
-    if $(window).scrollTop() <= 50 and handlers.messages.ready()
+    if $(window).scrollTop() <= 95 and handlers.messages.ready()
       # Load messages subscription next page.
       handlers.messages.loadNextPage()
       #TODO: change scroll position or something to prevent continuous loading of pages.

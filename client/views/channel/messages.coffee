@@ -12,11 +12,12 @@ Template.messages.rendered = ->
     #$('#say-input').typeahead
       #name: 'names'
       #local: nicks
+  # Keep scroll position when template rerenders,
+  # especially if document height changes.
+  $(window).scrollTop \
+    $(document).height() - $(window).height() - session.get('scroll')
 
-  if Session.equals 'scroll', false
-    $(window).scrollTop($(document).height() - $(window).height())
-
-Template.messages.events
+template.messages.events
   'click, tap .load-next': ->
     handlers.messages[Session.get 'channel.name'].loadNextPage()
 
