@@ -18,6 +18,7 @@ code {
 
 .header {
   padding: 20px;
+  transition: bottom 0.5s;
   background-color: #34495e;
   position: fixed;
   top: 0;
@@ -34,17 +35,40 @@ code {
     @media only screen and (min-width: 320px) and (max-width: 567px) {
       .header .logo {
         font-size: 21px; } }
+  .header .mobile-menu {
+    float: right;
+    width: 62px;
+    height: 62px;
+    padding: 21px;
+    box-sizing: border-box;
+    margin: -20px; }
+    @media only screen and (min-width: 568px) {
+      .header .mobile-menu {
+        display: none; } }
   .header .top-nav {
     float: right;
     list-style: none;
     color: white;
     margin: 0; }
+    @media only screen and (min-width: 320px) and (max-width: 567px) {
+      .header .top-nav {
+        display: none;
+        float: none;
+        margin-top: 10px; } }
+    .header .top-nav li.change-channel {
+      display: none; }
+      @media only screen and (min-width: 320px) and (max-width: 567px) {
+        .header .top-nav li.change-channel {
+          display: block; } }
     .header .top-nav li {
       display: inline-block;
       margin-left: 35px; }
       @media only screen and (min-width: 320px) and (max-width: 567px) {
         .header .top-nav li {
-          margin-left: 12px; } }
+          padding: 10px 0;
+          margin: 0;
+          display: block;
+          border-top: 1px solid #2c3e50; } }
       .header .top-nav li a {
         color: white; }
 
@@ -61,7 +85,8 @@ code {
   @media only screen and (min-width: 320px) and (max-width: 567px) {
     .channels {
       width: 100%;
-      position: relative; } }
+      position: relative;
+      display: none; } }
   .channels li {
     margin: 10px 0;
     width: 180px; }
@@ -114,6 +139,9 @@ code {
   .channel-container .channel-breadcrumb {
     color: #777777;
     margin-top: 25px; }
+    @media only screen and (min-width: 320px) and (max-width: 567px) {
+      .channel-container .channel-breadcrumb {
+        margin: 0; } }
     .channel-container .channel-breadcrumb .channel-name {
       color: #777777;
       font-size: 16px;
@@ -208,7 +236,7 @@ code {
         display: none; }
       .messages .message .reply .operator {
         display: inline-block;
-        color: peter-river;
+        color: #3498db;
         font-size: 30px;
         position: relative;
         bottom: -7px;
@@ -418,7 +446,7 @@ form {
     color: #777777;
     transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
   .page-head a:hover {
-    color: peter-river;
+    color: #3498db;
     text-decoration: none; }
   .page-head i {
     margin: 0 10px;

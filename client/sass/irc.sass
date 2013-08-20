@@ -22,6 +22,7 @@ code
 
 .header
   padding: 20px
+  transition: bottom .5s
   +mobile-portrait
     padding: 10px
   background-color: $wet-asphalt
@@ -36,16 +37,36 @@ code
     color: white
     +mobile-portrait
       font-size: 21px
+  .mobile-menu
+    float: right
+    width: 62px
+    height: 62px
+    padding: 21px
+    box-sizing: border-box
+    margin: -20px
+    +mobile-landscape-and-above
+      display: none
   .top-nav
+    +mobile-portrait
+      display: none
+      float: none
+      margin-top: 10px
     float: right
     list-style: none
     color: white
     margin: 0
+    li.change-channel
+      display: none
+      +mobile-portrait
+        display: block
     li
       display: inline-block
       margin-left: 35px
       +mobile-portrait
-        margin-left: 12px
+        padding: 10px 0
+        margin: 0
+        display: block
+        border-top: 1px solid $midnight-blue
       a
         color: white
 
@@ -62,6 +83,7 @@ code
   +mobile-portrait
     width: 100%
     position: relative
+    display: none
   li
     margin: 10px 0
     width: 180px
@@ -113,6 +135,8 @@ code
     margin-top: -55px
   .channel-breadcrumb
     color: #777
+    +mobile-portrait
+      margin: 0
     margin-top: 25px
     .channel-name
       color: #777
@@ -208,7 +232,7 @@ code
         display: none
       .operator
         display: inline-block
-        color: peter-river
+        color: $peter-river
         font-size: 30px
         position: relative
         bottom: -7px
@@ -414,7 +438,7 @@ form
     color: #777
     transition: .15s left, .15s opacity, .15s background-color, .15s color
   a:hover
-    color: peter-river
+    color: $peter-river
     text-decoration: none
   i
     margin: 0 10px

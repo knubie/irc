@@ -70,11 +70,7 @@ Template.channels.events
           $('#say-input').focus()
 
   'click .channel > a': (e,t) ->
-    ch = Channels.findOne {name: "#{@}"}
-    Session.set 'scroll', false
-    handlers.messages.reset()
-    Session.set 'channel.name', "#{@}"
-    Session.set 'channel.id', ch._id
+    $('.channel-container').show()
     $('#say-input').focus()
 
   'click .close': ->

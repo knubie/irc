@@ -58,6 +58,16 @@ Meteor.Router.add
     Meteor.call 'disconnect', Meteor.user().username
     Meteor.logout ->
       Meteor.Router.to('/')
+  '/channels/:channel': (channel) ->
+    if ch = Channels.findOne(name:"##{channel}")
+      Session.set 'scroll', 0
+      Session.set 'channel.name', ch.name
+      Session.set 'channel.id', ch._id
+      handlers.messages.reset()
+      return 'channel_main'
+    else
+      return 'not_found'
+    #TODO: no such channel
   '/channels/:channel/settings': (channel) ->
     if ch = Channels.findOne(name:"##{channel}")
       Session.set 'channel.name', ch.name
@@ -74,14 +84,6 @@ Meteor.Router.add
       return 'channel_users'
     else
       return 'not_found'
-  '/channels/:channel': (channel) ->
-    if ch = Channels.findOne(name:"##{channel}")
-      Session.set 'channel.name', ch.name
-      Session.set 'channel.id', ch._id
-      return 'channel_main'
-    else
-      return 'not_found'
-    #TODO: no such channel
   '/users/:username': (username) ->
     Session.set 'user_profile', Meteor.users.findOne({username})._id
     return 'user_profile'

@@ -40,7 +40,7 @@ Messages.find().observeChanges
 
 
 ########## Startup ##########
-#
+
 Meteor.startup ->
   # Store scroll position in a session variable. This keeps the scroll
   # position in place when receiving new messages, unless the user is
@@ -49,17 +49,10 @@ Meteor.startup ->
   $(window).scroll ->
     Session.set 'scroll', \
       $(document).height() - ($(window).scrollTop() + $(window).height())
-    # If not scrolled to the bottom
-    #if $(window).scrollTop() < $(document).height() - $(window).height()
-      #Session.set 'scroll', true
-    #else
-      #Session.set 'scroll', false
       #handlers.messages.reset()
 
     # If close to top and messages handler is ready.
     if $(window).scrollTop() <= 95 and handlers.messages.ready()
       # Load messages subscription next page.
       handlers.messages.loadNextPage()
-      #TODO: change scroll position or something to prevent continuous loading of pages.
-      # newHeight - oldHeight = difference
-      # scrollTop += difference
+

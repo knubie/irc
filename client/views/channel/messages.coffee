@@ -1,6 +1,9 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
+  #FIXME: this causes flickering on mobile safari (perhaps others)
+  $(window).scrollTop \
+    $(document).height() - $(window).height() - Session.get('scroll')
   if Session.equals 'channel.name', 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
@@ -14,10 +17,21 @@ Template.messages.rendered = ->
       #local: nicks
   # Keep scroll position when template rerenders,
   # especially if document height changes.
-  $(window).scrollTop \
-    $(document).height() - $(window).height() - session.get('scroll')
+  $('.mobile-menu').off 'touchstart'
+  $('.mobile-menu').off 'touchend'
+  $('.mobile-menu').on 'touchstart', ->
+    $(@).css('background-color', '#2C3E50') # midnight-blue
+  $('.mobile-menu').on 'touchend', ->
+    $(@).css('background-color', '#34495E') # wet-asphalt
+    $('.top-nav').toggle()
 
-template.messages.events
+  $('.change-channel').off 'click'
+  $('.change-channel').on 'click', ->
+    $('.channels').show()
+    $('.top-nav').hide()
+    $('.channel-container').hide()
+
+Template.messages.events
   'click, tap .load-next': ->
     handlers.messages[Session.get 'channel.name'].loadNextPage()
 
@@ -108,7 +122,7 @@ Template.message.events
     Meteor.users.update Meteor.userId()
     , $set: {'profile.channels': channels}
 
-  'click, tap': (e, t) ->
+  'click': (e, t) ->
     if Session.equals 'channel.name', 'all'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
@@ -159,3 +173,13 @@ Template.notification.events
   'click .close': ->
     # Do something
 
+
+Template.home_logged_out.rendered = ->
+  $('.mobile-menu').off 'click'
+  $('.mobile-menu').on 'click', ->
+    $('.top-nav').toggle()
+
+Template.sign_in.rendered = ->
+  $('.mobile-menu').off 'click'
+  $('.mobile-menu').on 'click', ->
+    $('.top-nav').toggle()
