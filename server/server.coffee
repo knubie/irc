@@ -1,7 +1,11 @@
-Meteor.users.update {}, $set: 'services.resume.loginTokens' : []
-console.log 'remove login tokens'
-
 Meteor.startup ->
+  # Log out all users when server starts.
+  # This is necessary so that users can reauthenticate with the irc daemon
+  Meteor.users.update {}
+  , {$set: {'services.resume.loginTokens' : []}}
+  , {multi: true}
+  console.log 'remove login tokens'
+
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.
   client.idletron = new Idletron
