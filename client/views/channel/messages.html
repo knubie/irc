@@ -31,7 +31,7 @@
     <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message {{message_class}}">
       <span class="reply">
         <span class="{{status}}">&bull;</span>
-        <strong>{{from}}</strong>
+        <a href="/users/{{from}}"><strong>{{from}}</strong></a>
         {{#if all}}
           <span class="muted">{{channel}}</span>
         {{/if}}

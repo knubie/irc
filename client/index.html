@@ -139,7 +139,7 @@
   <ul class="user-list">
     {{#each users}}
       <li>
-        <h3><a href="#">{{.}}</a></h3>
+      <h3><a href="/users/{{.}}">{{.}}</a></h3>
       </li>
     {{/each}}
   </ul>
@@ -226,20 +226,38 @@
 </template>
 
 <template name="user_profile">
-  {{#with user}}
-    <div class="container">
-      <div class="first vcard">
-        <div class="name">
-          {{username}}
+  <div class="user-profile">
+    {{#with user}}
+      <div class="container">
+        <div class="first vcard">
+          <div class="name">
+            {{username}}
+          </div>
+          <div class="stats">
+            <span class="joined-on">Joined on</span> {{joined}}
+          </div>
         </div>
-        <div class="stats">
-          Joined on {{joined}}
-        </div>
+        <div class="last">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#">Top</a></li>
+            <li class=""><a href="#">Trending</a></li>
+            <li class=""><a href="#">Categories</a></li>
+          </ul>
+          <ul class="user-channels">
+            {{#each channels}}
+              <li>
+                <div class="name">
+                  <a href="/channels/{{channel_url}}">
+                    {{.}}
+                  </a>
+                </div>
+                <div class="topic">
+                  {{topic}}
+                </div>
+              </li>
+            {{/each}}
+          </ul>
       </div>
-      <div class="last">
-        {{#each channels}}
-          {{.}}
-        {{/each}}
-    </div>
-  {{/with}}
+    {{/with}}
+  </div>
 </template>

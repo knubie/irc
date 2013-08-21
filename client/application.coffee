@@ -26,9 +26,18 @@ Session.setDefault 'scroll', 0
 @handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels'
-handlers.messages = Meteor.subscribeWithPagination 'messages', ->
-  Session.get('channel.name')
-, 30
+# Get channel for users not logged in.
+handlers.messages[Session.get('channel.name')] = Meteor.subscribeWithPagination 'messages', Session.get('channel.name'), 30
+# Wait 200ms for Meteor.user() to show up
+Meteor.setTimeout -> #FIXME: this is shameful
+  for channel of Meteor.user().profile.channels
+    console.log channel
+    handlers.messages[channel] = Meteor.subscribeWithPagination 'messages', channel, 30
+, 200
+
+#handlers.messages = Meteor.subscribeWithPagination 'messages', ->
+  #Session.get('channel.name')
+#, 30
 
 Messages.find().observeChanges
   added: (id, doc) ->
@@ -64,10 +73,10 @@ Meteor.startup ->
       #handlers.messages.reset()
 
     # If close to top and messages handler is ready.
-    if $(window).scrollTop() <= 95 and handlers.messages.ready()
+    if $(window).scrollTop() <= 95 and handlers.messages[Session.get('channel.name')].ready()
       # Load messages subscription next page.
-      console.log 'load next'
-      handlers.messages.loadNextPage()
+      Log.info 'load next'
+      handlers.messages[Session.get('channel.name')].loadNextPage()
 
   if Modernizr.touch
     $(window).on 'touchmove', (e) ->

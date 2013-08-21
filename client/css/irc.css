@@ -130,6 +130,15 @@ code {
   background-color: #ecf0f1;
   width: 760px;
   height: 75px; }
+  .channel-header .topic {
+    font-size: 16px;
+    font-weight: 300;
+    color: #666666;
+    margin-top: 9px; }
+    .channel-header .topic .topic-edit, .channel-header .topic .topic-edit > a {
+      color: #bdc3c7; }
+  .channel-header #topic-form {
+    display: none; }
 
 .channel-container {
   position: absolute;
@@ -233,6 +242,10 @@ code {
       line-height: 21px;
       font-weight: 300;
       margin: 0; }
+    .messages .message .reply a {
+      color: #777777; }
+    .messages .message .reply a:hover {
+      text-decoration: none; }
     .messages .message .reply, .messages .message small, .messages .message p {
       transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
     .messages .message .reply {
@@ -458,17 +471,6 @@ form {
     font-size: 16px;
     color: #777777; }
 
-.topic {
-  font-size: 16px;
-  font-weight: 300;
-  color: #666666;
-  margin-top: 9px; }
-  .topic .topic-edit, .topic .topic-edit > a {
-    color: #bdc3c7; }
-
-#topic-form {
-  display: none; }
-
 .settings-section {
   border-radius: 5px;
   border: 1px solid silver;
@@ -530,3 +532,36 @@ form {
     display: inline-block;
     padding-top: 4px;
     box-sizing: border-box; }
+
+.user-profile {
+  position: relative;
+  top: 25px; }
+  .user-profile .first.vcard {
+    color: #777777;
+    width: 200px; }
+    .user-profile .first.vcard .name {
+      font-size: 26px;
+      font-weight: bold; }
+    .user-profile .first.vcard .stats .joined-on {
+      color: #bdc3c7; }
+  .user-profile .last {
+    color: #777777;
+    position: absolute;
+    top: 0;
+    left: 200px;
+    font-weight: bold; }
+    .user-profile .last .user-channels {
+      list-style: none; }
+      .user-profile .last .user-channels li .name {
+        font-size: 16px; }
+      .user-profile .last .user-channels li .topic {
+        font-size: 14px;
+        color: #999999;
+        margin: 0 0 12px 0;
+        font-weight: normal; }
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+  background-color: #ecf0f1; }
+
+.explore-nav {
+  margin-top: 25px; }

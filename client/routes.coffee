@@ -68,7 +68,7 @@ Meteor.Router.add
       Session.set 'scroll', 0
       Session.set 'channel.name', ch.name
       Session.set 'channel.id', ch._id
-      handlers.messages.reset()
+      #handlers.messages[ch.name].reset()
       return 'channel_main'
     else
       return 'not_found'
@@ -102,6 +102,7 @@ Meteor.Router.filter 'checkLoggedIn', except: [
   'channel_users'
   'not_found'
   'user_profile'
+  'explore'
 ]
 #Meteor.Router.filter 'waitForMessages', only: 'channel_main'
 #TODO: add filter for sign in page to show signing in

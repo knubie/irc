@@ -80,7 +80,7 @@ Template.channel_header.helpers
 Template.channel.events
   'click a': (e,t) ->
     $('.channel-container').show()
-    $('#say-input').focus()
+    $('#say-input').focus() unless Modernizr.touch
 
   'click .close': ->
     Meteor.call 'part', Meteor.user().username, "#{@}"

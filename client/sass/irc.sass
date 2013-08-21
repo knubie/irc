@@ -128,6 +128,17 @@ code
   background-color: $clouds
   width: 760px
   height: 75px
+  .topic
+    font-size: 16px
+    font-weight: 300
+    color: #666
+    margin-top: 9px
+    .topic-edit, .topic-edit > a
+      color: $silver
+
+  #topic-form
+    display: none
+
 .channel-container
   position: absolute
   top: 0
@@ -229,6 +240,11 @@ code
       line-height: 21px
       font-weight: 300
       margin: 0
+    .reply
+      a
+        color: #777
+      a:hover
+        text-decoration: none
     .reply, small, p
       transition: .15s left, .15s opacity, .15s background-color, .15s color
     .reply
@@ -449,17 +465,6 @@ form
     margin: 0 10px
     font-size: 16px
     color: #777
-.topic
-  font-size: 16px
-  font-weight: 300
-  color: #666
-  margin-top: 9px
-  .topic-edit, .topic-edit > a
-    color: $silver
-
-#topic-form
-  display: none
-
 .settings-section
   border-radius: 5px
   border: 1px solid silver
@@ -522,3 +527,38 @@ form
     display: inline-block
     padding-top: 4px
     box-sizing: border-box
+
+.user-profile
+  position: relative
+  top: 25px
+  .first.vcard
+    color: #777
+    width: 200px
+    .name
+      font-size: 26px
+      font-weight: bold
+    .stats
+      .joined-on
+        color: $silver
+  .last
+    color: #777
+    position: absolute
+    top: 0
+    left: 200px
+    font-weight: bold
+    .user-channels
+      list-style: none
+      li
+        .name
+          font-size: 16px
+        .topic
+          font-size: 14px
+          color: #999
+          margin: 0 0 12px 0
+          font-weight: normal
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus
+  background-color: $clouds
+
+.explore-nav
+  margin-top: 25px

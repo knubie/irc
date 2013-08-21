@@ -56,7 +56,6 @@ Template.say.events
       e.preventDefault()
       message = t.find('#say-input').value
       $('#say-input').val('')
-      #TODO: use channel.id insted
       Meteor.call 'say', Meteor.user().username, Session.get('channel.name'), message
       user = Meteor.user()
       convo = ''
@@ -98,4 +97,7 @@ Template.user_profile.helpers
     moment(@createdAt).format('MMMM Do YYYY')
   channels: ->
     (channel for channel of @profile.channels)
-
+  topic: ->
+    Channels.findOne({name: "#{@}"}).topic
+  channel_url: ->
+    @match(/^(.)(.*)$/)[2]
