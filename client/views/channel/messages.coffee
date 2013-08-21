@@ -1,3 +1,4 @@
+
 ########## Messages ##########
 
 Template.messages.rendered = ->
@@ -35,23 +36,6 @@ Template.messages.events
   'click, tap .load-next': ->
     handlers.messages[Session.get 'channel.name'].loadNextPage()
 
-  'click .topic-edit > a': (e, t) ->
-    $('.topic').hide()
-    $('#topic-form').show()
-    $('#topic-name').focus()
-
-  'click #topic-form > .cancel': (e, t) ->
-    e.preventDefault()
-    $('.topic').show()
-    $('#topic-form').hide()
-
-  'submit #topic-form': (e,t) ->
-    e.preventDefault()
-    topic = t.find('#topic-name').value
-    Meteor.call 'topic', Meteor.user(), Session.get('channel.id'), topic
-    $('.topic').show()
-    $('#topic-form').hide()
-
 Template.messages.helpers
   messages: ->
     prev = null
@@ -69,14 +53,6 @@ Template.messages.helpers
       not in (Meteor.user().profile.channels[message.channel]?.ignore or []))
     else
       return (setPrev message for message in messages)
-  topic: ->
-    if Session.get('channel.name').isChannel()
-      Channels.findOne(Session.get 'channel.id')?.topic
-  op_status: ->
-    if Session.get('channel.name').isChannel() and Meteor.user()
-      Channels.findOne(Session.get 'channel.id')?.nicks[Meteor.user().username] is '@'
-    else
-      return no
   channel: ->
     Session.get 'channel.name'
   url_channel: ->
@@ -92,7 +68,15 @@ Template.message.rendered = ->
   p = $(@find('p'))
   ptext = p.html()
   # Linkify URLs.
-  ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>$1</a>"
+  #while regex.url.test ptext
+    #link_title = ''
+    #url = ptext.match regex.url
+    #$.ajax
+        #url: "http://textance.herokuapp.com/title/#{url[0]}"
+        #complete: (data) ->
+          #link_title = data.responseText
+
+    #ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>link_title</a>"
   # Linkify nicks.
   if @data.channel.isChannel()
     for nick, status of Channels.findOne(name: @data.channel).nicks

@@ -26,6 +26,7 @@ Meteor.methods
     # Join the channel in IRC.
     if Meteor.isServer
       client[username]?.join channel
+      client.idletron.join channel
     # Update user's channels object
     {channels} = Meteor.user().profile
     # Add the new channel if it's not there already.

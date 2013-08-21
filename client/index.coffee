@@ -40,97 +40,6 @@ Template.sign_in.events
         else
           Meteor.Router.to('/') #FIXME: should work without this.
 
-########## Channels ##########
-
-Template.channels.events
-  'click .new-channel-link': (e, t) ->
-    $('.new-channel-link').hide()
-    $('.new-channel-form').show()
-    $('.new-channel-input').focus()
-
-  'blur .new-channel-input': (e, t) ->
-    $('.new-channel-link').show()
-    $('.new-channel-form').hide()
-
-  'keydown .new-channel-input': (e, t) ->
-    keyCode = e.keyCode or e.which
-    if keyCode is 27
-      $('.new-channel-link').show()
-      $('.new-channel-form').hide()
-
-  'submit .new-channel-form': (e, t) ->
-    e.preventDefault()
-    name = t.find('.new-channel-input').value
-    t.find('.new-channel-input').value = ''
-    if name
-      Meteor.call 'join', Meteor.user().username, name, (err, channelId) ->
-        if channelId
-          Session.set 'channel.id', channelId
-          Session.set 'channel.name', name
-          $('#say-input').focus()
-
-  'click .channel > a': (e,t) ->
-    $('.channel-container').show()
-    $('#say-input').focus()
-
-  'click .close': ->
-    Meteor.call 'part', Meteor.user().username, "#{@}"
-    Session.set 'channel.name', 'all'
-    Session.set 'channel.id', null
-    Meteor.Router.to('/')
-
-Template.channels.helpers
-  channels: ->
-    if Meteor.user()
-      (channel for channel of Meteor.user().profile.channels)
-    else
-      [Session.get('channel.name')]
-    #Channels.find
-      #name: $in: (channel for channel of Meteor.user().profile.channels)
-    #.fetch()
-  unread: ->
-    if Meteor.user()
-      ignore_list = Meteor.user().profile.channels["#{@}"].ignore
-      Messages.find
-        channel: "#{@}"
-        read: false
-        from: $nin: ignore_list
-      .fetch().length or ''
-    else
-      return ''
-  unread_mentions: ->
-    if Meteor.user()
-      ignore_list = Meteor.user().profile.channels["#{@}"].ignore
-      Messages.find
-        channel: "#{@}"
-        read: false
-        convo: Meteor.user().username
-        from: $nin: ignore_list
-      .fetch().length or ''
-    else
-      return ''
-  selected: ->
-    if Session.equals 'channel.name', "#{@}" then 'selected' else ''
-  all: ->
-    if Session.equals 'channel.name', 'all' then 'selected' else ''
-  url_name: ->
-    "#{@}".match(/^(.)(.*)$/)[2]
-  private: ->
-    ch = Channels.findOne(name: "#{@}")
-    if ch?
-      's' in ch.modes or 'i' in ch.modes
-    else
-      no
-
-Template.channel_header.helpers
-  channel: ->
-    Session.get 'channel.name'
-  url_channel: ->
-    Session.get('channel.name').match(/^(#)?(.*)$/)[2]
-  users: ->
-    if Session.get('channel.name').isChannel()
-      Channels.findOne(Session.get 'channel.id')?.users
-
 ########## Notification Request ##########
 #
 Template.notification_request.rendered = ->
@@ -182,4 +91,11 @@ Template.users.helpers
 
 ########## User Profile ##########
 
-Template.user_profile.data = Meteor.users.findOne(Session.get('user_profile'))
+Template.user_profile.helpers
+  user: -> Meteor.users.findOne(Session.get('user_profile'))
+  joined: ->
+    console.log @
+    moment(@createdAt).format('MMMM Do YYYY')
+  channels: ->
+    (channel for channel of @profile.channels)
+

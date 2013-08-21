@@ -85,7 +85,7 @@ Meteor.Router.add
     else
       return 'not_found'
   '/users/:username': (username) ->
-    Session.set 'user_profile', Meteor.users.findOne({username})._id
+    Session.set 'user_profile', Meteor.users.findOne({username})?._id
     return 'user_profile'
 
 
@@ -96,4 +96,5 @@ Meteor.Router.filter 'checkLoggedIn', except: [
   'channel_main'
   'channel_users'
   'not_found'
+  'user_profile'
 ]

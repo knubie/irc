@@ -9,7 +9,7 @@
   transform: (doc) ->
     doc extends
       type: ->
-        if @owner = 'idletron'
+        if @owner is 'idletron'
           return 'normal'
         else
           {username} = Meteor.users.findOne(@owner)

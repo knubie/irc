@@ -4,7 +4,6 @@ Meteor.startup ->
   Meteor.users.update {}
   , {$set: {'services.resume.loginTokens' : []}}
   , {multi: true}
-  console.log 'remove login tokens'
 
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.

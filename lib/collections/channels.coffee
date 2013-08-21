@@ -10,7 +10,6 @@ class ChannelsCollection extends Meteor.Collection
     modes ?= []
     nicks = {}
     if not @findOne {name}
-      client.idletron.join name if Meteor.isServer
       @findOne(@insert {name, users, topic, nicks, modes})
     else
       @findOne({name})

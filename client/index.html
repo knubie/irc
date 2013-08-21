@@ -97,19 +97,31 @@
 
 <template name="channel_header">
   {{#unless all}}
-    <div class="channel-breadcrumb">
-      <a href="/channels/{{url_channel}}" class="channel-name">{{channel}}</a>
-      <span class="slash">&nbsp;/&nbsp;</span>
-      <a href="/channels/{{url_channel}}/users" class="user-count">
-        <i class="icon-user"></i><strong>{{users}}</strong> users
-      </a>
-    </div>
-    {{#if currentUser}}
-      <div class="buttons">
-        <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
-        <a class="add-bot">invite</a>
+    <div class="channel-header">
+      <div class="channel-breadcrumb">
+        <a href="/channels/{{url_channel}}" class="channel-name">{{channel}}</a>
+        <span class="slash">&nbsp;/&nbsp;</span>
+        <a href="/channels/{{url_channel}}/users" class="user-count">
+          <i class="icon-user"></i><strong>{{users}}</strong> users
+        </a>
       </div>
-    {{/if}}
+      {{#if currentUser}}
+        <div class="buttons">
+          <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
+          <a class="add-bot">invite</a>
+        </div>
+      {{/if}}
+      <div class="topic">
+        {{topic}}
+        {{#if op_status}}
+          <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
+        {{/if}}
+      </div>
+      <form id="topic-form">
+        <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{topic}}">
+        <a href="#" class="cancel">cancel</a>
+      </form>
+    </div>
   {{/unless}}
 </template>
 
@@ -131,121 +143,6 @@
       </li>
     {{/each}}
   </ul>
-</template>
-
-<template name="channels">
-  <ul class="channels">
-    {{#if currentUser}}
-      <li class="all-channels {{all}}">
-        <a href="/">
-          All channels
-        </a>
-      </li>
-    {{/if}}
-    {{#each channels}}
-      <li class="channel {{selected}}">
-        {{#if private}}<i class="icon-lock"></i> {{/if}}
-        <a href="/channels/{{url_name}}">
-          {{.}}
-          <span class="badge badge-info">{{unread}}</span>
-          <span class="badge badge-important">{{unread_mentions}}</span>
-        </a>
-        <button type="button" class="close">&times;</button>
-      </li>
-    {{/each}}
-    {{#if currentUser}}
-      <li class="new-channel-li">
-        <span class="new-channel-link">+ Add channel</span>
-        <form class="new-channel-form">
-          <input type="text" class="new-channel-input" autocomplete="off" placeholder="Add Channel">
-        </form>
-      </li>
-    {{/if}}
-  </ul>
-</template>
-
-<template name="messages">
-  <div class="topic">
-    {{topic}}
-    {{#if op_status}}
-      <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
-    {{/if}}
-  </div>
-  <form id="topic-form">
-    <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{topic}}">
-    <a href="#" class="cancel">cancel</a>
-  </form>
-  <ul class="messages nav nav-stacked">
-    {{#each messages}}
-      {{> message}}
-    {{/each}}
-  </ul>
-  {{#unless currentUser}}
-    <div class="alert alert-info">
-      <strong>
-        <a href="/" class="btn">
-          Sign up for free
-        </a>
-        to join this discussion.
-      </strong>
-      Already have an account?
-      <a href="/login">
-        Sign in to chat
-      </a>
-    </div>
-  {{/unless}}
-</template>
-
-<template name="message">
-  {{#if joinToPrev}}
-    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message join {{message_class}}">
-      <div class="divider"></div>
-      <small class="muted pull-right">{{timeAgo}}</small>
-      <p>{{text}}</p>
-    </li>
-  {{else}}
-    <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message {{message_class}}">
-      <span class="reply">
-        <span class="{{status}}">&bull;</span>
-        <strong>{{from}}</strong>
-        {{#if all}}
-          <span class="muted">{{channel}}</span>
-        {{/if}}
-      </span>
-      {{#unless self}}
-        {{#if currentUser}}
-          &nbsp;
-          <div class="actions">
-            <div class="action reply-action">
-              <i class="icon-share-alt"></i> Reply
-            </div>
-            &nbsp;
-            <div class="action ignore-action">
-              <i class="icon-volume-off"></i> Ignore
-            </div>
-            {{#if op_status}}
-              &nbsp;
-              <div class="action kick">
-                <i class="icon-share"></i> Kick
-              </div>
-              &nbsp;
-              <div class="action">
-                <i class="icon-ban-circle"></i> Ban
-              </div>
-            {{/if}}
-            {{#if isConvo}}
-              &nbsp;
-              <div class="action convo">
-                <i class="icon-comment"></i> View conversation
-              </div>
-            {{/if}}
-          </div>
-        {{/if}}
-      {{/unless}}
-      <small class="muted pull-right">{{timeAgo}}</small>
-      <p>{{text}}</p>
-    </li>
-  {{/if}}
 </template>
 
 <template name="say">
@@ -329,14 +226,20 @@
 </template>
 
 <template name="user_profile">
-  <div class="container">
-    <div class="vcard">
-      <div class="name">
-        {{username}}
+  {{#with user}}
+    <div class="container">
+      <div class="first vcard">
+        <div class="name">
+          {{username}}
+        </div>
+        <div class="stats">
+          Joined on {{joined}}
+        </div>
       </div>
-      <div class="stats">
-        Joined on Oct 07, 2010
-      </div>
+      <div class="last">
+        {{#each channels}}
+          {{.}}
+        {{/each}}
     </div>
-  </div>
+  {{/with}}
 </template>

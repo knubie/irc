@@ -123,6 +123,14 @@ code {
 .messages, .notifications {
   margin: 0; }
 
+.channel-header {
+  position: fixed;
+  top: 63px;
+  z-index: 99;
+  background-color: #ecf0f1;
+  width: 760px;
+  height: 90px; }
+
 .channel-container {
   position: absolute;
   top: 0;
@@ -151,7 +159,7 @@ code {
       color: silver; }
   .channel-container .buttons {
     position: absolute;
-    top: 25px;
+    top: 19px;
     right: 0; }
     .channel-container .buttons a {
       border: none;
@@ -181,7 +189,7 @@ code {
       opacity: 0.35; }
 
 .messages {
-  margin-top: 20px;
+  margin-top: 90px;
   margin-bottom: 72px; }
   .messages .offline .reply, .messages .offline small, .messages .offline p {
     opacity: 0.4; }
@@ -481,7 +489,7 @@ form {
 
 .user-list {
   list-style: none;
-  margin: 0; }
+  margin: 90px 0 0 0; }
   .user-list li {
     border-bottom: 1px solid #cccccc;
     padding-bottom: 10px;
