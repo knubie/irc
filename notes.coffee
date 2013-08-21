@@ -19,12 +19,13 @@
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`
-# Aggregated messages from all channels
+# Aggregated messages from all channels in a single feed
 # View conversation.
 # Notifications.
 # Persistent connection.
 # Full text search.*
 # Keyword subscriptions.*
+# Access with any client.
 #
 # Roadmap:
 # Add heroku like bot add-ons

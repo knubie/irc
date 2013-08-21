@@ -42,11 +42,23 @@ Messages.find().observeChanges
 ########## Startup ##########
 
 Meteor.startup ->
+  channelHeaderTop = 0
   # Store scroll position in a session variable. This keeps the scroll
   # position in place when receiving new messages, unless the user is
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
-  $(window).scroll ->
+  updateStuff = ->
+    currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
+
+    if currScroll > Session.get('scroll') and currScroll > 0 and channelHeaderTop < 0
+      channelHeaderTop = channelHeaderTop - (Session.get('scroll') - currScroll)
+      channelHeaderTop = 0 if channelHeaderTop > 0
+      $('.channel-header').css('-webkit-transform', "translate(0,#{channelHeaderTop}px)")
+    else if currScroll < Session.get('scroll') and currScroll > 0 and channelHeaderTop > -76
+      channelHeaderTop = channelHeaderTop - (Session.get('scroll') - currScroll)
+      channelHeaderTop = -76 if channelHeaderTop < -76
+      $('.channel-header').css('-webkit-transform', "translate(0,#{channelHeaderTop}px)")
+
     Session.set 'scroll', \
       $(document).height() - ($(window).scrollTop() + $(window).height())
       #handlers.messages.reset()
@@ -54,5 +66,12 @@ Meteor.startup ->
     # If close to top and messages handler is ready.
     if $(window).scrollTop() <= 95 and handlers.messages.ready()
       # Load messages subscription next page.
+      console.log 'load next'
       handlers.messages.loadNextPage()
 
+  if Modernizr.touch
+    $(window).on 'touchmove', (e) ->
+      touches = e.originalEvent.changedTouches
+      updateStuff()
+  else
+    $(window).scroll updateStuff

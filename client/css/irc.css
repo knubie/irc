@@ -126,10 +126,10 @@ code {
 .channel-header {
   position: fixed;
   top: 63px;
-  z-index: 99;
+  z-index: 98;
   background-color: #ecf0f1;
   width: 760px;
-  height: 90px; }
+  height: 75px; }
 
 .channel-container {
   position: absolute;
@@ -146,10 +146,7 @@ code {
     margin-top: -55px; }
   .channel-container .channel-breadcrumb {
     color: #777777;
-    margin-top: 25px; }
-    @media only screen and (min-width: 320px) and (max-width: 567px) {
-      .channel-container .channel-breadcrumb {
-        margin: 0; } }
+    margin: 13px 0 0 0; }
     .channel-container .channel-breadcrumb .channel-name {
       color: #777777;
       font-size: 16px;
@@ -189,7 +186,7 @@ code {
       opacity: 0.35; }
 
 .messages {
-  margin-top: 90px;
+  margin-top: 76px;
   margin-bottom: 72px; }
   .messages .offline .reply, .messages .offline small, .messages .offline p {
     opacity: 0.4; }
@@ -254,7 +251,7 @@ code {
       border-bottom: 1px solid #cccccc;
       cursor: pointer; }
     .messages .message .muted {
-      color: rgba(0, 0, 0, 0.4);
+      color: rgba(0, 0, 0, 0.2);
       font-size: 12px; }
     .messages .message .divider {
       width: 100%;

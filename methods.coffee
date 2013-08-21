@@ -52,6 +52,7 @@ Meteor.methods
     delete nicks[username]
     if _.isEmpty nicks
       Channels.remove ch._id
+      client.idletron.part channel
     else
       Channels.update ch._id, $set: {nicks}
     #Channels.findOne({name: channel}).part username

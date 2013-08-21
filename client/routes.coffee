@@ -38,6 +38,11 @@ Meteor.Router.filters
       return page
     else
       return 'home_logged_out'
+  'waitForMessages': (page) ->
+    if handlers.messages.ready()
+      return page
+    else
+      return 'loading'
 
 Meteor.Router.add
   '/': ->
@@ -98,3 +103,5 @@ Meteor.Router.filter 'checkLoggedIn', except: [
   'not_found'
   'user_profile'
 ]
+#Meteor.Router.filter 'waitForMessages', only: 'channel_main'
+#TODO: add filter for sign in page to show signing in
