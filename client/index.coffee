@@ -88,6 +88,12 @@ Template.users.helpers
   users: ->
     (nick for nick of Channels.findOne(Session.get('channel.id')).nicks).sort()
 
+##### logout ######
+Template.header.events
+  'click .signout': ->
+    Meteor.call 'disconnect', Meteor.user().username
+    Meteor.logout ->
+      Router.go '/'
 ########## User Profile ##########
 
 Template.user_profile.helpers

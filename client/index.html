@@ -5,6 +5,31 @@
 </head>
 
 <body>
+  {{renderPage}}
+</body>
+
+<template name="layout">
+  {{yield 'header'}}
+  {{yield}}
+</template>
+
+<template name="channel_layout">
+  {{yield 'header'}}
+  <div class="container">
+    {{yield channels}}
+    <div class="channel-container">
+      {{#unless all}}
+        {{yield 'channel_header'}}
+      {{/unless}}
+      {{yield messages}}
+      {{#unless all}}
+        {{> say}}
+      {{/unless}}
+    </div>
+  </div>
+</template>
+
+<template name="header">
   <div class="header header-logged-in">
     <div class="container">
       <a href="/" class="logo">idletron</a>
@@ -18,7 +43,7 @@
         <li><a href="/explore">Explore</a></li>
         {{#if currentUser}}
           <li><a href="/account">Account</a></li>
-          <li><a href="/logout">Sign out</a></li>
+          <li><a href="#" class="signout">Sign out</a></li>
         {{else}}
           <li><a href="/features">Features</a></li>
           <li><a href="/login">Sign in</a></li>
@@ -26,8 +51,7 @@
       </ul>
     </div>
   </div>
-  {{renderPage}}
-</body>
+</template>
 
 <template name="loading">
   loading..
@@ -238,11 +262,6 @@
           </div>
         </div>
         <div class="last">
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="#">Top</a></li>
-            <li class=""><a href="#">Trending</a></li>
-            <li class=""><a href="#">Categories</a></li>
-          </ul>
           <ul class="user-channels">
             {{#each channels}}
               <li>

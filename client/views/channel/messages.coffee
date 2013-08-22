@@ -32,10 +32,6 @@ Template.messages.rendered = ->
     $('.top-nav').hide()
     $('.channel-container').hide()
 
-Template.messages.events
-  'click, tap .load-next': ->
-    handlers.messages[Session.get 'channel.name'].loadNextPage()
-
 Template.messages.helpers
   messages: ->
     prev = null

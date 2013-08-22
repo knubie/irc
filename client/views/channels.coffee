@@ -60,6 +60,7 @@ Template.channel_header.events
 
 Template.channel_header.helpers
   channel: ->
+    console.log @
     Session.get 'channel.name'
   url_channel: ->
     Session.get('channel.name').match(/^(#)?(.*)$/)[2]
