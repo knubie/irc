@@ -21,7 +21,7 @@ Router.map ->
     path: '/channels/:channel'
     waitOn: ->
       channel = "##{@params.channel}"
-      handlers.messages[channel]# = Meteor.subscribe 'messages', channel, 30
+      handlers.messages[channel] or Meteor.subscribe 'messages', channel, 30
     data: -> Channels.findOne({name: "##{@params.channel}"})
     #TODO: make data the channel doc, then use {{with}} in the templates
     onBeforeRun: ->
