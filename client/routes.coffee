@@ -10,7 +10,7 @@ Router.configure
 Router.map ->
   @route 'home',
     path: '/'
-    template: 'channel_main'
+    template: do -> if Meteor.user() then 'channel_main' else 'home_logged_out'
     waitOn: ->
       handlers.messages.all
     data: -> {name: 'all'}
