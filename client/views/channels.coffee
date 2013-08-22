@@ -1,3 +1,37 @@
+Template.channel_header.helpers
+  channel: ->
+    @name
+  url_channel: ->
+    @name.match(/^(#)?(.*)$/)[2]
+  users: ->
+    if @name.isChannel()
+      @users
+  topic: ->
+    if @name.isChannel()
+      @topic
+  op_status: ->
+    if @name.isChannel() and Meteor.user()
+      @nicks[Meteor.user().username] is '@'
+    else
+      return no
+
+Template.channel_header.events
+  'click .topic-edit > a': (e, t) ->
+    $('.topic').hide()
+    $('#topic-form').show()
+    $('#topic-name').focus()
+
+  'click #topic-form > .cancel': (e, t) ->
+    e.preventDefault()
+    $('.topic').show()
+    $('#topic-form').hide()
+
+  'submit #topic-form': (e,t) ->
+    e.preventDefault()
+    topic = t.find('#topic-name').value
+    Meteor.call 'topic', Meteor.user(), @_id, topic
+    $('.topic').show()
+    $('#topic-form').hide()
 
 ########## Channels ##########
 
@@ -39,42 +73,6 @@ Template.channels.helpers
     #.fetch()
   all: ->
     if Session.equals 'channel.name', 'all' then 'selected' else ''
-
-Template.channel_header.events
-  'click .topic-edit > a': (e, t) ->
-    $('.topic').hide()
-    $('#topic-form').show()
-    $('#topic-name').focus()
-
-  'click #topic-form > .cancel': (e, t) ->
-    e.preventDefault()
-    $('.topic').show()
-    $('#topic-form').hide()
-
-  'submit #topic-form': (e,t) ->
-    e.preventDefault()
-    topic = t.find('#topic-name').value
-    Meteor.call 'topic', Meteor.user(), Session.get('channel.id'), topic
-    $('.topic').show()
-    $('#topic-form').hide()
-
-Template.channel_header.helpers
-  channel: ->
-    console.log @
-    Session.get 'channel.name'
-  url_channel: ->
-    Session.get('channel.name').match(/^(#)?(.*)$/)[2]
-  users: ->
-    if Session.get('channel.name').isChannel()
-      Channels.findOne(Session.get 'channel.id')?.users
-  topic: ->
-    if Session.get('channel.name').isChannel()
-      Channels.findOne(Session.get 'channel.id')?.topic
-  op_status: ->
-    if Session.get('channel.name').isChannel() and Meteor.user()
-      Channels.findOne(Session.get 'channel.id')?.nicks[Meteor.user().username] is '@'
-    else
-      return no
 
 ########## Channel ##########
 

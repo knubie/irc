@@ -5,14 +5,14 @@ Template.messages.rendered = ->
   #FIXME: this causes flickering on mobile safari (perhaps others)
   $(window).scrollTop \
     $(document).height() - $(window).height() - Session.get('scroll')
-  if Session.equals 'channel.name', 'all'
+  if @data.name is 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
     , ->
       $('.message').removeClass 'faded'
-  else if Session.get('channel.name').isChannel()
+  else if @data.name.isChannel()
     ch = Channels.findOne Session.get('channel.id')
-    nicks = (nick for nick of ch?.nicks) ? []
+    nicks = (nick for nick of @data.nicks) ? []
     #$('#say-input').typeahead
       #name: 'names'
       #local: nicks
@@ -35,11 +35,11 @@ Template.messages.rendered = ->
 Template.messages.helpers
   messages: ->
     prev = null
-    if Session.equals 'channel.name', 'all'
+    if @name is 'all'
       messages = Messages.find({}, {sort: {time: 1}}).fetch()
     else
       messages = Messages.find(
-        channel: Session.get 'channel.name'
+        channel: @name
       , sort: {time: 1}).fetch()
     setPrev = (msg) ->
       msg.prev = prev
@@ -50,12 +50,9 @@ Template.messages.helpers
     else
       return (setPrev message for message in messages)
   channel: ->
-    Session.get 'channel.name'
+    @name
   url_channel: ->
-    Session.get('channel.name').match(/^(#)?(.*)$/)[2]
-  users: ->
-    if Session.get('channel.name').isChannel()
-      Channels.findOne(Session.get 'channel.id')?.users
+    @name.match(/^(#)?(.*)$/)[2]
 
 ########## Message ##########
 
