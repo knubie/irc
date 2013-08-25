@@ -58,8 +58,7 @@ Template.channels.events
     if name
       Meteor.call 'join', Meteor.user().username, name, (err, channelId) ->
         if channelId
-          Session.set 'channel.id', channelId
-          Session.set 'channel.name', name
+          Router.go "/channels/#{name.match(/^(.)(.*)$/)[2]}"
           $('#say-input').focus()
 
 Template.channels.helpers
@@ -85,7 +84,7 @@ Template.channel.events
     Meteor.call 'part', Meteor.user().username, "#{@}"
     Session.set 'channel.name', 'all'
     Session.set 'channel.id', null
-    Meteor.Router.to('/')
+    Router.go('home')
 
 Template.channel.helpers
   selected: ->

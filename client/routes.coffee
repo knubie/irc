@@ -37,6 +37,7 @@ Router.map ->
       Session.set 'messages.page', 1
   @route 'channel_settings',
     path: '/channels/:channel/settings'
+    data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
       #FIXME: wait for Channel sub
       Deps.autorun =>

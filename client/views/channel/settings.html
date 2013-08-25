@@ -1,9 +1,82 @@
 <template name="channel_settings">
   <div class="container">
-    {{> channels}}
-    <div class="channel-container">
-      {{> channel_header}}
-      {{> settings}}
+    <div class="row">
+      <div class="col-sm-3">
+        {{> channels}}
+      </div>
+      <div class="channel-container col-sm-9">
+        {{> channel_header}}
+        {{> settings}}
+      </div>
     </div>
   </div>
 </template>
+
+<template name="settings">
+  {{#if op_status}}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Options</h3>
+      </div>
+      <div class="panel-body">
+        Private
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Operators</h3>
+      </div>
+      <div class="panel-body">
+        Add/remove Operators
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Bans</h3>
+      </div>
+      <div class="panel-body">
+        Ban/unban
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Bots</h3>
+      </div>
+      <div class="panel-body">
+        Manage bots
+      </div>
+    </div>
+
+  {{/if}}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Invite users</h3>
+    </div>
+    <div class="panel-body">
+      Invite users
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Ignore</h3>
+    </div>
+    <div class="panel-body">
+      <ul class="ignore-list">
+        {{#each ignore_list}}
+          <li>
+            {{.}}
+            <button type="button" class="close">&times;</button>
+          </li>
+        {{/each}}
+      </ul>
+      <form id="ignore-form">
+        <fieldset>
+          <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user" autocomplete="off">
+        <fieldset>
+      </form>
+      <input type="checkbox" id="inputIgnoreJoinPart"> Show join/part messages
+    </div>
+  </div>
+</template>
+

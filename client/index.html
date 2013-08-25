@@ -250,60 +250,6 @@
   </li>
 </template>
 
-<template name="settings">
-  {{#if op_status}}
-    <div class="settings-section">
-      <div class="section-heading">Options</div>
-      <form>
-        <fieldset>
-          <input type="text" class="form-control" id="inputTopic" placeholder="Enter topic">
-          <label>
-            <input id="privateCheckbox" type="checkbox" {{private_checked}}>
-            Private
-          </label>
-        </fieldset>
-      </form>
-    </div>
-    <div class="settings-section">
-      <div class="section-heading">Operators</div>
-      op user
-      op list
-    </div>
-    <div class="settings-section">
-      <div class="section-heading">Bans</div>
-      ban user
-      ban list
-    </div>
-    <div class="settings-section">
-      <div class="section-heading">Bots</div>
-      add bot
-      bot list
-    </div>
-  {{/if}}
-  <div class="settings-section">
-    <div class="section-heading">Invite users</div>
-    invite user:
-    invited users list
-  </div>
-  <div class="settings-section">
-    <div class="section-heading">Ignore</div>
-    <ul class="ignore-list">
-      {{#each ignore_list}}
-        <li>
-          {{.}}
-          <button type="button" class="close">&times;</button>
-        </li>
-      {{/each}}
-    </ul>
-    <form id="ignore-form">
-      <fieldset>
-        <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user" autocomplete="off">
-      <fieldset>
-    <form>
-    <input type="checkbox" id="inputIgnoreJoinPart"> Show join/part messages
-  </div>
-</template>
-
 <template name="user_profile">
   <div class="user-profile">
     {{#with user}}

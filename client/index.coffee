@@ -92,8 +92,8 @@ Template.users.helpers
 Template.header.events
   'click .signout': ->
     Meteor.call 'disconnect', Meteor.user().username
-    Meteor.logout ->
-      Router.go '/'
+    Meteor.logout -> Router.go 'home'
+
 ########## User Profile ##########
 
 Template.user_profile.helpers
