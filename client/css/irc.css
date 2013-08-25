@@ -1,10 +1,7 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css");
 body {
   background-color: #ecf0f1;
-  font-family: Helvetica, sans-serif;
-  font-size: 14px;
-  padding: 0;
-  padding-top: 63px; }
+  padding-top: 50px; }
 
 .fixed-width {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
@@ -14,197 +11,272 @@ body {
 
 code {
   color: #777777;
-  font-size: 14px; }
+  font-size: 14px;
+  border: 1px solid #e1e1e8;
+  background-color: #f7f7f9; }
 
-.header {
-  padding: 20px;
-  transition: bottom 0.5s;
+.btn-primary {
+  background-color: #3498db; }
+
+a {
+  color: #3498db; }
+
+input.form-control::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.3); }
+
+input.form-control {
+  border: 2px solid #bdc3c7;
+  box-shadow: none; }
+
+input.form-control:hover {
+  border-color: #95a5a6; }
+
+input.form-control:focus {
+  border-color: #3498db;
+  box-shadow: none; }
+
+.idletron-nav {
   background-color: #34495e;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 99; }
-  @media only screen and (min-width: 320px) and (max-width: 567px) {
-    .header {
-      padding: 10px; } }
-  .header .logo {
-    font-size: 24px;
-    font-weight: bold;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+  border-color: #2c3e50;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1); }
+  .idletron-nav .navbar-brand {
     color: white; }
-    @media only screen and (min-width: 320px) and (max-width: 567px) {
-      .header .logo {
-        font-size: 21px; } }
-  .header .mobile-menu {
-    float: right;
-    width: 62px;
-    height: 62px;
-    padding: 21px;
-    box-sizing: border-box;
-    margin: -20px; }
-    @media only screen and (min-width: 568px) {
-      .header .mobile-menu {
-        display: none; } }
-  .header .top-nav {
-    float: right;
-    list-style: none;
+  .idletron-nav .navbar-toggle {
+    border-color: #34495e; }
+  .idletron-nav .navbar-toggle:hover {
+    border-color: #2c3e50; }
+  .idletron-nav .navbar-nav > li > a {
+    color: #798795; }
+  .idletron-nav .navbar-btn {
+    background-color: #3498db;
     color: white;
-    margin: 0; }
-    @media only screen and (min-width: 320px) and (max-width: 567px) {
-      .header .top-nav {
-        display: none;
-        float: none;
-        margin-top: 10px; } }
-    .header .top-nav li.change-channel {
-      display: none; }
-      @media only screen and (min-width: 320px) and (max-width: 567px) {
-        .header .top-nav li.change-channel {
-          display: block; } }
-    .header .top-nav li {
-      display: inline-block;
-      margin-left: 35px; }
-      @media only screen and (min-width: 320px) and (max-width: 567px) {
-        .header .top-nav li {
-          padding: 10px 0;
-          margin: 0;
-          display: block;
-          border-top: 1px solid #2c3e50; } }
-      .header .top-nav li a {
-        color: white; }
+    border-color: #3498db; }
+
+.marketing-section-signup {
+  background-color: #34495e;
+  padding: 80px 0;
+  color: #798795;
+  font-size: 16px;
+  text-align: center; }
+  @media only screen and (min-width: 768px) {
+    .marketing-section-signup {
+      text-align: left; } }
+  @media only screen and (min-width: 1344px) {
+    .marketing-section-signup {
+      font-size: 21px; } }
+  .marketing-section-signup h1 {
+    color: white; }
+    @media only screen and (min-width: 1344px) {
+      .marketing-section-signup h1 {
+        font-size: 60px; } }
+  .marketing-section-signup p {
+    font-weight: 300;
+    line-height: 1.5; }
+  .marketing-section-signup a {
+    color: #3498db; }
+  .marketing-section-signup a:hover {
+    color: #2980b9; }
+  .marketing-section-signup #signup input, .marketing-section-signup #signup button {
+    margin-bottom: 15px;
+    border: none;
+    padding: 8px 12px;
+    width: 100%;
+    height: auto; }
+
+.signin-container {
+  color: #777777; }
+  .signin-container .col-sm-5 {
+    margin-top: 50px; }
+    @media only screen and (min-width: 768px) {
+      .signin-container .col-sm-5 {
+        margin-left: 29%; } }
+  .signin-container #signin input {
+    border: 2px solid #bdc3c7;
+    box-shadow: none;
+    margin-bottom: 15px; }
+  .signin-container #signin input, .signin-container #signin button {
+    padding: 8px 12px;
+    height: auto; }
+  .signin-container #signin input:hover {
+    border-color: #95a5a6; }
+  .signin-container #signin input:focus {
+    border-color: #3498db; }
+  .signin-container #signin .btn {
+    border: none;
+    transition: background-color ease-in-out 0.15s;
+    margin-top: 15px;
+    padding: 10px; }
+  .signin-container #signin .btn:focus {
+    background-color: #2980b9; }
+
+.input-container {
+  padding: 15px; }
+  .input-container #say-input {
+    border: 2px solid #bdc3c7;
+    box-shadow: none; }
+  .input-container #say-input:hover {
+    border-color: #95a5a6; }
+  .input-container #say-input:focus {
+    border-color: #3498db; }
+
+.channel-container .alert {
+  text-align: center; }
+.channel-container .buttons {
+  position: absolute;
+  top: 19px;
+  right: 0; }
+  .channel-container .buttons a {
+    border: none;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 10px;
+    padding: 3px 12px; }
+  .channel-container .buttons a:hover {
+    text-decoration: none; }
+  .channel-container .buttons .add-bot {
+    background-color: #3498db;
+    box-shadow: 0 2px 0 #2980b9; }
+  .channel-container .buttons .settings {
+    background-color: silver;
+    box-shadow: 0 2px 0 #95a5a6; }
+.channel-container .user-count {
+  color: #777777; }
 
 .channels {
   color: #777777;
-  height: 100%;
-  width: 200px;
   list-style: none;
   font-size: 18px;
   padding: 0;
   margin: 0;
   margin-top: 25px;
   position: fixed; }
+  @media screen and (min-width: 992px) {
+    .channels {
+      width: 213px; } }
+  @media screen and (min-width: 1200px) {
+    .channels {
+      width: 263px; } }
   @media only screen and (min-width: 320px) and (max-width: 567px) {
     .channels {
       width: 100%;
       position: relative;
       display: none; } }
-  .channels li {
-    margin: 10px 0;
-    width: 180px; }
-    .channels li button {
-      display: none; }
-    .channels li i {
-      opacity: 0.5;
-      vertical-align: baseline; }
-    .channels li a, .channels li form > input {
-      color: #777777;
-      font-size: 18px;
-      transition: 0.15s background-color, 0.15s color;
-      padding: 6px 0; }
-    .channels li a:hover {
-      color: #3498db;
-      text-decoration: none; }
+  .channels li button {
+    display: none; }
+  .channels li i {
+    opacity: 0.5;
+    vertical-align: baseline; }
+  .channels li a, .channels li form > input {
+    color: #777777;
+    transition: 0.15s background-color, 0.15s color;
+    padding: 4px;
+    display: block; }
+  .channels li a:hover {
+    color: #3498db;
+    text-decoration: none; }
   .channels li.channel:hover > button {
     display: inline-block; }
   .channels .selected > a,
   .channels .selected:hover > a {
     color: #3498db;
-    transition: 0.15s background-color, 0.15s color; }
-  .channels .new-channel-li .new-channel-link {
-    color: #bdc3c7; }
-  .channels .new-channel-li .new-channel-link:hover {
-    cursor: pointer;
-    color: #777777; }
-  .channels .new-channel-li .new-channel-form {
-    display: none; }
-    .channels .new-channel-li .new-channel-form .new-channel-input {
-      width: 164px;
-      font-size: 16px; }
+    transition: 0.15s background-color, 0.15s color;
+    font-weight: 500; }
+  .channels .new-channel-li {
+    margin-top: 5px; }
+    .channels .new-channel-li .new-channel-link {
+      color: #bdc3c7; }
+    .channels .new-channel-li .new-channel-link:hover {
+      cursor: pointer;
+      color: #777777; }
+    .channels .new-channel-li .new-channel-form {
+      display: none; }
+      .channels .new-channel-li .new-channel-form .new-channel-input {
+        font-size: 16px; }
 
 .messages, .notifications {
   margin: 0; }
 
 .channel-header {
+  width: 100%;
+  overflow-y: hidden;
   position: fixed;
-  top: 63px;
+  top: 50px;
   z-index: 98;
   background-color: #ecf0f1;
-  width: 760px;
-  height: 75px; }
+  padding: 15px; }
+  @media (min-width: 768px) {
+    .channel-header {
+      width: 562px; } }
+  @media (min-width: 992px) {
+    .channel-header {
+      width: 727px; } }
+  @media (min-width: 1200px) {
+    .channel-header {
+      width: 877px; } }
+  .channel-header .channel-breadcrumb {
+    color: #777777; }
+    .channel-header .channel-breadcrumb h3 {
+      display: inline;
+      font-size: 21px; }
+    .channel-header .channel-breadcrumb .channel-name {
+      color: #777777;
+      font-weight: bold; }
+    .channel-header .channel-breadcrumb .slash {
+      font-size: 18px;
+      color: silver; }
   .channel-header .topic {
+    display: block;
     font-size: 16px;
-    font-weight: 300;
     color: #666666;
-    margin-top: 9px; }
+    margin-top: 15px;
+    border-top: 1px solid #cccccc;
+    padding-top: 15px; }
     .channel-header .topic .topic-edit, .channel-header .topic .topic-edit > a {
       color: #bdc3c7; }
+  .channel-header .glyphicon {
+    color: #bdc3c7; }
+  .channel-header .channel-settings {
+    position: absolute;
+    top: 17px;
+    right: 150px;
+    color: #777777; }
+    .channel-header .channel-settings .glyphicon {
+      position: relative;
+      top: 1px; }
+  .channel-header .channel-invite {
+    position: absolute;
+    top: 14px;
+    right: 15px;
+    color: #3498db;
+    border: 1px solid #3498db;
+    background-color: transparent;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px; }
+  .channel-header .channel-invite:hover {
+    color: white;
+    background-color: #3498db; }
+    .channel-header .channel-invite:hover .glyphicon {
+      color: #ecf0f1;
+      font-size: 13px; }
   .channel-header #topic-form {
     display: none; }
 
-.channel-container {
-  position: absolute;
-  top: 0;
-  left: 200px;
-  width: 760px; }
-  @media only screen and (min-width: 320px) and (max-width: 567px) {
-    .channel-container {
-      width: 100%;
-      position: relative;
-      top: 0;
-      left: 0; } }
-  .channel-container .alert {
-    margin-top: -55px; }
-  .channel-container .channel-breadcrumb {
-    color: #777777;
-    margin: 13px 0 0 0; }
-    .channel-container .channel-breadcrumb .channel-name {
-      color: #777777;
-      font-size: 16px;
-      font-weight: bold; }
-    .channel-container .channel-breadcrumb .slash {
-      font-size: 16px;
-      color: silver; }
-  .channel-container .buttons {
-    position: absolute;
-    top: 19px;
-    right: 0; }
-    .channel-container .buttons a {
-      border: none;
-      color: white;
-      font-weight: bold;
-      text-transform: uppercase;
-      border-radius: 3px;
-      display: inline-block;
-      font-size: 10px;
-      padding: 3px 12px; }
-    .channel-container .buttons a:hover {
-      text-decoration: none; }
-    .channel-container .buttons .add-bot {
-      background-color: #3498db;
-      box-shadow: 0 2px 0 #2980b9; }
-    .channel-container .buttons .settings {
-      background-color: silver;
-      box-shadow: 0 2px 0 #95a5a6; }
-  .channel-container .user-count {
-    color: #777777;
-    display: inline-block;
-    font-size: 12px; }
-    .channel-container .user-count i {
-      position: relative;
-      top: -2px;
-      margin-right: 4px;
-      opacity: 0.35; }
-
 .messages {
-  margin-top: 76px;
-  margin-bottom: 72px; }
+  margin-top: 76px; }
   .messages .offline .reply, .messages .offline small, .messages .offline p {
     opacity: 0.4; }
   .messages .offline .actions {
     display: none; }
   .messages .offline .divider {
-    border-bottom: 2px solid rgba(0, 0, 0, 0.02); }
+    border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
   .messages .join {
-    margin-top: -23px; }
+    margin-top: -20px; }
   .messages .info {
     background-color: rgba(0, 0, 0, 0);
     box-shadow: none;
@@ -222,18 +294,18 @@ code {
   .messages .bot {
     background-color: #bdc3c7; }
   .messages .message.faded {
-    background-color: #ecf0f1;
+    background-color: #f7f9f9;
     box-shadow: 0 2px 0 #ecf0f1; }
     .messages .message.faded .reply, .messages .message.faded small, .messages .message.faded p {
       opacity: 0.4; }
     .messages .message.faded .divider {
-      border-bottom: 2px solid rgba(0, 0, 0, 0.02); }
+      border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
   .messages .message {
     background-color: white;
     border-radius: 4px;
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
-    padding: 11px 15px;
+    padding: 10px 15px 11px 15px;
     color: #777777;
     position: relative;
     transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
@@ -268,7 +340,7 @@ code {
       font-size: 12px; }
     .messages .message .divider {
       width: 100%;
-      border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
       margin: 0 0 10px 0; }
     .messages .message .actions {
       font-size: 12px;
@@ -280,14 +352,37 @@ code {
     cursor: pointer; }
     .messages .message:hover .actions {
       opacity: 1; }
-      .messages .message:hover .actions i {
-        opacity: 0.4; }
+      .messages .message:hover .actions .glyphicon {
+        color: #bdc3c7; }
       .messages .message:hover .actions .action {
         display: inline; }
       .messages .message:hover .actions .action:hover {
         color: #333333; }
         .messages .message:hover .actions .action:hover i {
           opacity: 0.8; }
+
+.user-profile {
+  position: relative;
+  top: 25px; }
+  .user-profile .first.vcard {
+    color: #777777; }
+    .user-profile .first.vcard .name {
+      font-size: 26px;
+      font-weight: bold; }
+    .user-profile .first.vcard .stats .joined-on {
+      color: #bdc3c7; }
+  .user-profile .last {
+    color: #777777;
+    font-weight: bold; }
+    .user-profile .last .user-channels {
+      list-style: none; }
+      .user-profile .last .user-channels li .name {
+        font-size: 16px; }
+      .user-profile .last .user-channels li .topic {
+        font-size: 14px;
+        color: #999999;
+        margin: 0 0 12px 0;
+        font-weight: normal; }
 
 .tt-dropdown-menu {
   top: calc(100% \- 85px) !important;
@@ -325,77 +420,8 @@ code {
 form {
   margin: 0; }
 
-#say-input, input.tt-hint {
-  font-size: 16px;
-  height: 32px;
-  line-height: normal;
-  background-color: white;
-  width: 760px;
-  box-sizing: border-box; }
-  @media only screen and (min-width: 320px) and (max-width: 567px) {
-    #say-input, input.tt-hint {
-      width: 100%; } }
-
-#say-input::-webkit-input-placeholder, input.tt-hint {
-  color: rgba(0, 0, 0, 0.2); }
-
-.marketing-section-signup {
-  background-color: #34495e;
-  padding: 80px 0; }
-
-.container {
-  width: 960px;
-  box-sizing: border-box;
-  color: white;
-  position: relative; }
-  @media only screen and (min-width: 320px) and (max-width: 567px) {
-    .container {
-      width: 100%;
-      padding: 10px; } }
-  .container .heading {
-    font-size: 70px;
-    font-weight: normal;
-    letter-spacing: -1px;
-    line-height: 1; }
-  .container .subhead {
-    font-size: 21px;
-    line-height: 1.5; }
-  .container #form-signup {
-    width: 320px;
-    float: right;
-    margin-left: 40px; }
-    .container #form-signup input, .container #form-signup input:focus {
-      width: 100%;
-      font-size: 16;
-      padding: 10px;
-      margin-bottom: 20px;
-      line-height: normal;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      border: none;
-      height: 40px;
-      box-sizing: border-box; }
-    .container #form-signup input[type="submit"] {
-      background-color: #3498db;
-      box-shadow: 0 5px 0 #2980b9;
-      border: none;
-      color: #ecf0f1;
-      font-weight: bold; }
-
 .privacy-print {
   color: rgba(255, 255, 255, 0.3); }
-
-.input-container {
-  width: 760px;
-  height: 62px;
-  box-sizing: border-box;
-  position: fixed;
-  bottom: 0;
-  background-color: #ecf0f1;
-  padding: 10px 0; }
-  @media only screen and (min-width: 320px) and (max-width: 567px) {
-    .input-container {
-      width: calc(100% - 20px); } }
 
 .badge-info {
   background-color: silver;
@@ -432,22 +458,6 @@ form {
         top: -2px;
         margin-right: 4px;
         opacity: 0.35; }
-
-#form-signin {
-  width: 320px;
-  margin: 100px auto; }
-  #form-signin input {
-    width: 320px;
-    box-sizing: border-box;
-    height: 35px; }
-  #form-signin input[type="submit"] {
-    height: 30px;
-    background-color: #3498db;
-    box-shadow: 0 5px 0 #2980b9;
-    border: none;
-    color: #ecf0f1;
-    font-weight: bold;
-    border-radius: 5px; }
 
 .page-head {
   position: fixed;
@@ -488,12 +498,12 @@ form {
 
 .user-list {
   list-style: none;
-  margin: 90px 0 0 0; }
+  margin-top: 120px;
+  padding: 0; }
   .user-list li {
-    border-bottom: 1px solid #cccccc;
     padding-bottom: 10px;
     margin-bottom: 10px;
-    color: #777777;
+    color: #bdc3c7;
     position: relative; }
     .user-list li h3 {
       font-size: 20px;
@@ -532,33 +542,6 @@ form {
     display: inline-block;
     padding-top: 4px;
     box-sizing: border-box; }
-
-.user-profile {
-  position: relative;
-  top: 25px; }
-  .user-profile .first.vcard {
-    color: #777777;
-    width: 200px; }
-    .user-profile .first.vcard .name {
-      font-size: 26px;
-      font-weight: bold; }
-    .user-profile .first.vcard .stats .joined-on {
-      color: #bdc3c7; }
-  .user-profile .last {
-    color: #777777;
-    position: absolute;
-    top: 0;
-    left: 200px;
-    font-weight: bold; }
-    .user-profile .last .user-channels {
-      list-style: none; }
-      .user-profile .last .user-channels li .name {
-        font-size: 16px; }
-      .user-profile .last .user-channels li .topic {
-        font-size: 14px;
-        color: #999999;
-        margin: 0 0 12px 0;
-        font-weight: normal; }
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
   background-color: #ecf0f1; }

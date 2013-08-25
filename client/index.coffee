@@ -6,7 +6,7 @@ Handlebars.registerHelper 'all', ->
   Session.equals 'channel.name', 'all'
 
 Template.home_logged_out.events
-  'submit #form-signup': (e,t) ->
+  'submit #signup': (e,t) ->
     e.preventDefault()
     username = t.find('#auth-nick').value
     email = t.find('#auth-email').value
@@ -26,7 +26,7 @@ Template.home_logged_out.events
           Meteor.Router.to('/') #FIXME: should work without this.
 
 Template.sign_in.events
-  'submit #form-signin': (e,t) ->
+  'submit #signin': (e,t) ->
     e.preventDefault()
     username = t.find('#signin-username').value
     password = t.find('#signin-password').value

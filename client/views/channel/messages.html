@@ -5,12 +5,23 @@
     {{/each}}
   </ul>
   {{#unless currentUser}}
-    <div class="alert alert-info">
+    <div class="alert alert-info visible-xs">
       <strong>
-        <a href="/" class="btn">
+        <a href="/" class="btn btn-primary">
           Sign up for free
         </a>
-        to join this discussion.
+      </strong>
+      &nbsp;&nbsp;or&nbsp;&nbsp;
+      <a href="/login">
+        Sign in to chat
+      </a>
+    </div>
+    <div class="alert alert-info hidden-xs">
+      <strong>
+        <a href="/" class="btn btn-primary">
+          Sign up for free
+        </a>
+        &nbsp;&nbsp;to join this discussion.
       </strong>
       Already have an account?
       <a href="/login">
@@ -41,26 +52,31 @@
           &nbsp;
           <div class="actions">
             <div class="action reply-action">
-              <i class="icon-share-alt"></i> Reply
+              <span class="glyphicon glyphicon-share-alt"></span>
+              Replay
             </div>
             &nbsp;
             <div class="action ignore-action">
-              <i class="icon-volume-off"></i> Ignore
+              <span class="glyphicon glyphicon-volume-off"></span>
+              Ignore
             </div>
             {{#if op_status}}
               &nbsp;
               <div class="action kick">
-                <i class="icon-share"></i> Kick
+                <span class="glyphicon glyphicon-share"></span>
+                Kick
               </div>
               &nbsp;
               <div class="action">
-                <i class="icon-ban-circle"></i> Ban
+                <span class="glyphicon glyphicon-ban-circle"></span>
+                Ban
               </div>
             {{/if}}
             {{#if isConvo}}
               &nbsp;
               <div class="action convo">
-                <i class="icon-comment"></i> View conversation
+                <span class="glyphicon glyphicon-comment"></span>
+                View conversation
               </div>
             {{/if}}
           </div>

@@ -11,7 +11,6 @@ Template.messages.rendered = ->
     , ->
       $('.message').removeClass 'faded'
   else if @data.name.isChannel()
-    ch = Channels.findOne Session.get('channel.id')
     nicks = (nick for nick of @data.nicks) ? []
     #$('#say-input').typeahead
       #name: 'names'

@@ -1,15 +1,14 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700)
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css")
 @import "media-queries"
 @import "prefixes"
 @import "colors"
 
 body
   background-color: $clouds
-  font-family: Helvetica, sans-serif
-  font-size: 14px
-  padding: 0
-  padding-top: 63px
+  padding-top: 50px
+  //font-family: 'Open Sans', Helvetica, sans-serif
 
+// Random shit
 .fixed-width
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace
 
@@ -19,148 +18,119 @@ body
 code
   color: #777
   font-size: 14px
+  border: 1px solid #e1e1e8
+  background-color: #f7f7f9
 
-.header
-  padding: 20px
-  transition: bottom .5s
-  +mobile-portrait
-    padding: 10px
+.btn-primary
+  background-color: $peter-river
+
+a
+  color: $peter-river
+
+input.form-control::-webkit-input-placeholder
+  color: rgba(0, 0, 0, 0.3)
+input.form-control
+  border: 2px solid $silver
+  box-shadow: none
+input.form-control:hover
+  border-color: $concrete
+input.form-control:focus
+  border-color: $peter-river
+  box-shadow: none
+
+// Nav
+.idletron-nav
   background-color: $wet-asphalt
-  position: fixed
-  top: 0
-  left: 0
-  right: 0
-  z-index: 99
-  .logo
-    font-size: 24px
-    font-weight: bold
-    color: white
-    +mobile-portrait
-      font-size: 21px
-  .mobile-menu
-    float: right
-    width: 62px
-    height: 62px
-    padding: 21px
-    box-sizing: border-box
-    margin: -20px
-    +mobile-landscape-and-above
-      display: none
-  .top-nav
-    +mobile-portrait
-      display: none
-      float: none
-      margin-top: 10px
-    float: right
-    list-style: none
-    color: white
-    margin: 0
-    li.change-channel
-      display: none
-      +mobile-portrait
-        display: block
-    li
-      display: inline-block
-      margin-left: 35px
-      +mobile-portrait
-        padding: 10px 0
-        margin: 0
-        display: block
-        border-top: 1px solid $midnight-blue
-      a
-        color: white
+  text-shadow: 0 -1px 0 rgba(0,0,0,.15)
+  border-color: $midnight-blue
+  box-shadow: 0 1px 0 rgba(255,255,255,.1)
+  .navbar-brand
+    color: #FFF
+  .navbar-toggle
+    border-color: $wet-asphalt
+  .navbar-toggle:hover
+    border-color: $midnight-blue
+  .navbar-nav > li > a
+    color: #798795
+  .navbar-btn
+    background-color: $peter-river
+    color: #FFF
+    border-color: $peter-river
 
-.channels
-  color: #777
-  height: 100%
-  width: 200px
-  list-style: none
-  font-size: 18px
-  padding: 0
-  margin: 0
-  margin-top: 25px
-  position: fixed
-  +mobile-portrait
-    width: 100%
-    position: relative
-    display: none
-  li
-    margin: 10px 0
-    width: 180px
-    button 
-      display: none
-    i
-      opacity: 0.5
-      vertical-align: baseline
-    a, form > input 
-      color: #777
-      font-size: 18px
-      transition: .15s background-color, .15s color
-      padding: 6px 0
-    a:hover
-      color: $peter-river
-      text-decoration: none
-  li.channel:hover > button 
-    display: inline-block
-  .selected > a,
-  .selected:hover > a
-    color: $peter-river
-    transition: .15s background-color, .15s color
-  .new-channel-li
-    .new-channel-link
-      color: $silver
-    .new-channel-link:hover
-      cursor: pointer
-      color: #777
-    .new-channel-form
-      display: none
-      .new-channel-input
-        width: 164px
-        font-size: 16px
-
-.messages, .notifications
-  margin: 0
-
-.channel-header
-  position: fixed
-  top: 63px
-  z-index: 98
-  background-color: $clouds
-  width: 760px
-  height: 75px
-  .topic
-    font-size: 16px
+// Sign up
+.marketing-section-signup
+  background-color: $wet-asphalt
+  padding: 80px 0
+  color: #798795
+  font-size: 16px
+  text-align: center
+  +tablet-portrait-and-above
+    text-align: left
+  +desktop
+    font-size: 21px
+  h1
+    +desktop
+      font-size: 60px
+    color: #FFF
+  p
     font-weight: 300
-    color: #666
-    margin-top: 9px
-    .topic-edit, .topic-edit > a
-      color: $silver
+    line-height: 1.5
+  a
+    color: $peter-river
+  a:hover
+    color: #2980B9
+  #signup
+    input, button
+      margin-bottom: 15px
+      border: none
+      padding: 8px 12px
+      width: 100%
+      height: auto
 
-  #topic-form
-    display: none
+// Sign in
+.signin-container
+  color: #777
+  .col-sm-5
+    +tablet-portrait-and-above
+      margin-left: 29%
+    margin-top: 50px
+  #signin
+    input
+      border: 2px solid $silver
+      box-shadow: none
+      margin-bottom: 15px
+    input, button
+      padding: 8px 12px
+      height: auto
+    input:hover
+      border-color: $concrete
+    input:focus
+      border-color: $peter-river
+    .btn
+      border: none
+      transition: background-color ease-in-out .15s
+      margin-top: 15px
+      padding: 10px
+    .btn:focus
+      background-color: $belize-hole
 
+// Message input
+.input-container
+  //position: fixed
+  padding: 15px
+  #say-input
+    border: 2px solid $silver
+    box-shadow: none
+  #say-input:hover
+    border-color: $concrete
+  #say-input:focus
+    border-color: $peter-river
+  
+
+// Channels
 .channel-container
-  position: absolute
-  top: 0
-  left: 200px
-  width: 760px
-  +mobile-portrait
-    width: 100%
-    position: relative
-    top: 0
-    left: 0
   .alert
-    margin-top: -55px
-  .channel-breadcrumb
-    color: #777
-    margin: 13px 0 0 0
-    .channel-name
-      color: #777
-      font-size: 16px
-      font-weight: bold
-    .slash
-      font-size: 16px
-      color: silver
+    text-align: center
   .buttons
     position: absolute
     top: 19px
@@ -184,25 +154,135 @@ code
       box-shadow: 0 2px 0 $concrete
   .user-count
     color: #777
-    display: inline-block
-    font-size: 12px
+.channels
+  @media screen and (min-width: 992px)
+    width: 213px
+  @media screen and (min-width: 1200px)
+    width: 263px
+  color: #777
+  list-style: none
+  font-size: 18px
+  padding: 0
+  margin: 0
+  margin-top: 25px
+  position: fixed
+  +mobile-portrait
+    width: 100%
+    position: relative
+    display: none
+  li
+    button 
+      display: none
     i
+      opacity: 0.5
+      vertical-align: baseline
+    a, form > input 
+      color: #777
+      transition: .15s background-color, .15s color
+      padding: 4px
+      display: block
+    a:hover
+      color: $peter-river
+      text-decoration: none
+  li.channel:hover > button 
+    display: inline-block
+  .selected > a,
+  .selected:hover > a
+    color: $peter-river
+    transition: .15s background-color, .15s color
+    font-weight: 500
+  .new-channel-li
+    margin-top: 5px
+    .new-channel-link
+      color: $silver
+    .new-channel-link:hover
+      cursor: pointer
+      color: #777
+    .new-channel-form
+      display: none
+      .new-channel-input
+        font-size: 16px
+
+.messages, .notifications
+  margin: 0
+
+.channel-header
+  @media (min-width: 768px)
+    width: 562px
+  @media (min-width: 992px)
+    width: 727px
+  @media (min-width: 1200px)
+    width: 877px
+  width: 100%
+  overflow-y: hidden
+  position: fixed
+  top: 50px
+  z-index: 98
+  background-color: $clouds
+  padding: 15px
+  .channel-breadcrumb
+    color: #777
+    h3
+      display: inline
+      font-size: 21px
+    .channel-name
+      color: #777
+      font-weight: bold
+    .slash
+      font-size: 18px
+      color: silver
+  .topic
+    display: block
+    font-size: 16px
+    color: #666
+    margin-top: 15px
+    border-top: 1px solid #ccc
+    padding-top: 15px
+    .topic-edit, .topic-edit > a
+      color: $silver
+  .glyphicon
+    color: $silver
+  .channel-settings
+    position: absolute
+    top: 17px
+    right: 150px
+    color: #777
+    .glyphicon
       position: relative
-      top: -2px
-      margin-right: 4px
-      opacity: 0.35
+      top: 1px
+  .channel-invite
+    position: absolute
+    top: 14px
+    right: 15px
+    color: $peter-river
+    border: 1px solid $peter-river
+    background-color: transparent
+    font-size: 10px
+    text-transform: uppercase
+    font-weight: 700
+    letter-spacing: 1px
+  .channel-invite:hover
+    color: white
+    background-color: $peter-river
+    .glyphicon
+      color: $clouds
+      font-size: 13px
+
+  #topic-form
+    display: none
+
+// Messages
 .messages
   margin-top: 76px
-  margin-bottom: 72px
   .offline
     .reply, small, p
       opacity: 0.4
     .actions
       display: none
     .divider
-      border-bottom: 2px solid rgba(0,0,0,0.02)
+      border-bottom: 1px solid rgba(0,0,0,0.02)
   .join
-    margin-top: -23px
+    margin-top: -20px
   .info
     background-color: rgba(0,0,0,0)
     box-shadow: none
@@ -220,18 +300,18 @@ code
   .bot
     background-color: $silver
   .message.faded
-    background-color: $clouds
+    background-color: #f7f9f9
     box-shadow: 0 2px 0 $clouds
     .reply, small, p
       opacity: 0.4
     .divider
-      border-bottom: 2px solid rgba(0,0,0,0.02)
+      border-bottom: 1px solid rgba(0,0,0,0.02)
   .message
     background-color: #fff
     border-radius: 4px
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1)
     margin-bottom: 10px
-    padding: 11px 15px
+    padding: 10px 15px 11px 15px
     color: #777
     position: relative
     transition: .15s left, .15s opacity, .15s background-color, .15s color
@@ -267,7 +347,7 @@ code
       font-size: 12px
     .divider
       width: 100%
-      border-bottom: 2px solid rgba(0,0,0,0.06)
+      border-bottom: 1px solid rgba(0,0,0,0.06)
       margin: 0 0 10px 0
     .actions
       font-size: 12px
@@ -279,14 +359,40 @@ code
     cursor: pointer
     .actions
       opacity: 1
-      i
-        opacity: 0.4
+      .glyphicon
+        color: #BDC3C7
       .action
         display: inline
       .action:hover
         color: #333
         i
           opacity: 0.8
+
+// User Profile
+.user-profile
+  position: relative
+  top: 25px
+  .first.vcard
+    color: #777
+    .name
+      font-size: 26px
+      font-weight: bold
+    .stats
+      .joined-on
+        color: $silver
+  .last
+    color: #777
+    font-weight: bold
+    .user-channels
+      list-style: none
+      li
+        .name
+          font-size: 16px
+        .topic
+          font-size: 14px
+          color: #999
+          margin: 0 0 12px 0
+          font-weight: normal
 
 .tt-dropdown-menu
   top: calc(100% \- 85px) !important
@@ -323,73 +429,22 @@ code
 form 
   margin: 0
 
-#say-input, input.tt-hint
-  font-size: 16px
-  height: 32px
-  line-height: normal
-  background-color: white
-  width: 760px
-  +mobile-portrait
-    width: 100%
-  box-sizing: border-box
+//#say-input, input.tt-hint
+  //font-size: 16px
+  //height: 32px
+  //line-height: normal
+  //background-color: white
+  //width: 760px
+  //+mobile-portrait
+    //width: 100%
+  //box-sizing: border-box
 
-#say-input::-webkit-input-placeholder, input.tt-hint
-  color: rgba(0, 0, 0, 0.2)
+//#say-input::-webkit-input-placeholder, input.tt-hint
+  //color: rgba(0, 0, 0, 0.2)
 
-.marketing-section-signup
-  background-color: $wet-asphalt
-  padding: 80px 0
-.container
-  width: 960px
-  box-sizing: border-box
-  +mobile-portrait
-    width: 100%
-    padding: 10px
-  color: white
-  position: relative
-  .heading
-    font-size: 70px
-    font-weight: normal
-    letter-spacing: -1px
-    line-height: 1
-  .subhead
-    font-size: 21px
-    line-height: 1.5
-  #form-signup
-    width: 320px
-    float: right
-    margin-left: 40px
-    input, input:focus 
-      width: 100%
-      font-size: 16
-      padding: 10px
-      margin-bottom: 20px
-      line-height: normal
-      border-radius: 5px
-      margin-bottom: 10px
-      border: none
-      height: 40px
-      box-sizing: border-box
-    input[type="submit"] 
-      background-color: #3498DB
-      box-shadow: 0 5px 0 #2980B9
-      border: none
-      color: #ECF0F1
-      font-weight: bold
 
 .privacy-print
   color: rgba(255,255,255,0.3)
-
-.input-container
-  width: 760px
-  +mobile-portrait
-    width: calc(100% - 20px)
-  height: 62px
-  box-sizing: border-box
-  position: fixed
-  bottom: 0
-  background-color: $clouds
-  padding: 10px 0
 
 .badge-info
   background-color: silver
@@ -427,22 +482,6 @@ form
         top: -2px
         margin-right: 4px
         opacity: 0.35
-
-#form-signin
-  width: 320px
-  margin: 100px auto
-  input
-    width: 320px
-    box-sizing: border-box
-    height: 35px
-  input[type="submit"]
-    height: 30px
-    background-color: #3498DB
-    box-shadow: 0 5px 0 #2980B9
-    border: none
-    color: #ECF0F1
-    font-weight: bold
-    border-radius: 5px
 
 .page-head
   position: fixed
@@ -483,12 +522,12 @@ form
 
 .user-list
   list-style: none
-  margin: 90px 0 0 0
+  margin-top: 120px
+  padding: 0
   li
-    border-bottom: 1px solid #ccc
     padding-bottom: 10px
     margin-bottom: 10px
-    color: #777
+    color: $silver
     position: relative
     h3
       font-size: 20px
@@ -527,35 +566,6 @@ form
     display: inline-block
     padding-top: 4px
     box-sizing: border-box
-
-.user-profile
-  position: relative
-  top: 25px
-  .first.vcard
-    color: #777
-    width: 200px
-    .name
-      font-size: 26px
-      font-weight: bold
-    .stats
-      .joined-on
-        color: $silver
-  .last
-    color: #777
-    position: absolute
-    top: 0
-    left: 200px
-    font-weight: bold
-    .user-channels
-      list-style: none
-      li
-        .name
-          font-size: 16px
-        .topic
-          font-size: 14px
-          color: #999
-          margin: 0 0 12px 0
-          font-weight: normal
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus
   background-color: $clouds

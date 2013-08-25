@@ -17,24 +17,24 @@ Router.map ->
     onBeforeRun: ->
       Session.set 'channel.name', 'all'
       Session.set 'channel.id', null
+  @route 'explore'
+  @route 'notification_request'
+  @route 'login',
+    template: 'sign_in'
+  #@route 'logout' # Is this even needed?
   @route 'channel_main',
     path: '/channels/:channel'
     waitOn: ->
       channel = "##{@params.channel}"
-      handlers.messages[channel] or Meteor.subscribe 'messages', channel, 30
+      handlers.messages[channel] or handlers.messages[channel] = Meteor.subscribe 'messages', channel, 30
+      #FIXME: why can't i use ?=
     data: -> Channels.findOne({name: "##{@params.channel}"})
-    #TODO: make data the channel doc, then use {{with}} in the templates
     onBeforeRun: ->
       Deps.autorun =>
         if ch = Channels.findOne({name: "##{@params.channel}"})
           Session.set 'channel.name', ch.name
           Session.set 'channel.id', ch._id
       Session.set 'messages.page', 1
-  @route 'explore'
-  @route 'notification_request'
-  @route 'login',
-    template: 'sign_in'
-  #@route 'logout' # Is this even needed?
   @route 'channel_settings',
     path: '/channels/:channel/settings'
     onBeforeRun: ->
@@ -49,6 +49,7 @@ Router.map ->
       #{}
   @route 'channel_users',
     path: '/channels/:channel/users'
+    data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
       #FIXME: wait for Channel sub
       Deps.autorun =>

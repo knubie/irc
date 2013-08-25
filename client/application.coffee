@@ -59,16 +59,29 @@ Meteor.startup ->
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
   updateStuff = ->
+    $channelHeader = $('.channel-header')
+    console.log $channelHeader
     currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
 
-    if currScroll > Session.get('scroll') and currScroll > 0 and channelHeaderTop < 0
-      channelHeaderTop = channelHeaderTop - (Session.get('scroll') - currScroll)
-      channelHeaderTop = 0 if channelHeaderTop > 0
-      $('.channel-header').css('-webkit-transform', "translate(0,#{channelHeaderTop}px)")
-    else if currScroll < Session.get('scroll') and currScroll > 0 and channelHeaderTop > -76
-      channelHeaderTop = channelHeaderTop - (Session.get('scroll') - currScroll)
-      channelHeaderTop = -76 if channelHeaderTop < -76
-      $('.channel-header').css('-webkit-transform', "translate(0,#{channelHeaderTop}px)")
+    if currScroll > Session.get('scroll') \ # Scrolling up
+    and currScroll > 0 \ # Not 'bouncing' past the bottom
+    and $channelHeader.height() < 78 # At least partially hidden
+
+      $channelHeader.height(
+        $channelHeader.height() - (Session.get('scroll') - currScroll)
+      )
+      if $channelHeader.height() > 78
+        $channelHeader.height(78)
+
+    else if currScroll < Session.get('scroll') \ # Scrolling down
+    and currScroll > 0 \ # Not 'bouncing' past the bottom
+    and $channelHeader.height() > 26 # Not totally hidden yet
+
+      $channelHeader.height(
+        $channelHeader.height() - (Session.get('scroll') - currScroll)
+      )
+      if $channelHeader.height() < 26
+        $channelHeader.height(26)
 
     Session.set 'scroll', \
       $(document).height() - ($(window).scrollTop() + $(window).height())

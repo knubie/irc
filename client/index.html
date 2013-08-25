@@ -1,5 +1,6 @@
 <head>
   <title>idletron</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport" />
   <!--<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
 </head>
@@ -30,27 +31,42 @@
 </template>
 
 <template name="header">
-  <div class="header header-logged-in">
+  <nav class="navbar navbar-inverse navbar-fixed-top idletron-nav">
     <div class="container">
-      <a href="/" class="logo">idletron</a>
-      <div class="mobile-menu">
-        <i class="icon-align-justify icon-white"></i>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".idletron-navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Idletron</a>
       </div>
-      <ul class="top-nav">
-        <li class="change-channel">
-          <a href="#">Channels</a>
-        </li>
-        <li><a href="/explore">Explore</a></li>
-        {{#if currentUser}}
-          <li><a href="/account">Account</a></li>
-          <li><a href="#" class="signout">Sign out</a></li>
-        {{else}}
-          <li><a href="/features">Features</a></li>
-          <li><a href="/login">Sign in</a></li>
-        {{/if}}
-      </ul>
+      <div class="collapse navbar-collapse idletron-navbar-collapse">
+        <!--<form class="navbar-form navbar-left" role="search">-->
+          <!--<div class="form-group">-->
+            <!--<input type="text" class="form-control" placeholder="Search">-->
+          <!--</div>-->
+        <!--</form>-->
+        <ul class="nav navbar-nav navbar-right">
+          <li class="{{active}}"><a href="/explore">Explore</a></li>
+          {{#if currentUser}}
+            <li class="{{active}}"><a href="/account">Account</a></li>
+            <li class="signout {{active}}"><a href="#">Sign out</a></li>
+          {{else}}
+            <li class="{{active}}"><a href="/features">Features</a></li>
+            <li class="{{active}}">
+              <!--<button type="button" class="btn btn-default navbar-btn">-->
+              <a href="/login">
+                Sign in
+              </a>
+              <!--</button>-->
+            </li>
+          {{/if}}
+        </ul>
+      </div>
     </div>
-  </div>
+  </nav>
 </template>
 
 <template name="loading">
@@ -64,29 +80,43 @@
 <template name="home_logged_out">
   <div class="marketing-section-signup">
     <div class="container">
-      <form id="form-signup">
-        <input type="text" id="auth-nick" placeholder="Pick a username" tabindex="1">
-        <input type="email" id="auth-email" placeholder="Your email" tabindex="2">
-        <input type="password" id="auth-pw" placeholder="Create a passphrase" tabindex="3">
-        <input type="submit" value="Sign up" tabindex="4">
-        <span class="privacy-print">By clicking "Sign up", you agree to our terms of service and privacy policy.</span>
-      </form>
-      <h1 class="heading">Join the conversation.</h1>
-      <p class="subhead">
-        Connect to our public network in seconds. Create and join channels, add bots or make your own. Need private channels?<br/>
-        <a href="/plans">Upgraded plans start at $5/mo.</a>
-      </p>
+      <div class="col-sm-8">
+        <h1>Join the conversation.</h1>
+        <p>
+          No more Chanserv, hostnames, or obscure modes, Idletron is modern IRC. Intuitive, mobile-first interface with a persistent connection, markdown support, and more.
+          <br/>
+          <a href="/plans">Upgraded plans start at $5/mo.</a>
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <form id="signup" role="signup">
+          <input class="form-control" type="text" id="auth-nick" placeholder="Pick a username" tabindex="1">
+          <input class="form-control" type="email" id="auth-email" placeholder="Your email" tabindex="2">
+          <input class="form-control" type="password" id="auth-pw" placeholder="Create a passphrase" tabindex="3">
+          <button type="submit" class="btn btn-primary" tabindex="4">Sign up</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <template name="sign_in">
-  <div class="container">
-    <div class="signin">
-      <form id="form-signin">
-        <input type="text" id="signin-username" placeholder="Username or email" tabindex="1">
-        <input type="password" id="signin-password" placeholder="Passphrase" tabindex="2">
-        <input type="submit" value="Sign in" tabindex="3">
+  <div class="container signin-container">
+    <div class="col-xs-12 col-sm-5">
+      <form id="signin" role="signin">
+        <div class="form-group">
+          <label for="signin-username">Username or email</label>
+          <input class="form-control" type="text" id="signin-username" tabindex="1">
+        </div>
+        <div class="form-group">
+          <label for="signin-password">Password</label>
+          <input class="form-control" type="password" id="signin-password" tabindex="2">
+        </div>
+        <button class="form-control btn btn-primary" type="submit" tabindex="3">
+          <strong>
+            Sign in
+          </strong>
+        </button>
       </form>
     </div>
   </div>
@@ -108,10 +138,14 @@
 
 <template name="channel_main">
   <div class="container">
-    {{> channels}}
-    <div class="channel-container">
-      {{> channel_header}}
-      {{> messages}}
+    <div class="row">
+      <div class="col-sm-3">
+        {{> channels}}
+      </div>
+      <div class="channel-container col-sm-9">
+        {{> channel_header}}
+        {{> messages}}
+      </div>
       {{#unless all}}
         {{> say}}
       {{/unless}}
@@ -121,40 +155,60 @@
 
 <template name="channel_header">
   {{#unless all}}
-    <div class="channel-header">
-      <div class="channel-breadcrumb">
-        <a href="/channels/{{url_channel}}" class="channel-name">{{channel}}</a>
-        <span class="slash">&nbsp;/&nbsp;</span>
-        <a href="/channels/{{url_channel}}/users" class="user-count">
-          <i class="icon-user"></i><strong>{{users}}</strong> users
-        </a>
-      </div>
-      {{#if currentUser}}
-        <div class="buttons">
-          <a href="/channels/{{url_channel}}/settings" class="settings">settings</a>
-          <a class="add-bot">invite</a>
+    <div class="row">
+      <div class="channel-header col-sm-7">
+        <div class="channel-breadcrumb">
+          <h3>
+            <a href="/channels/{{url_channel}}" class="">
+              {{channel}}
+            </a>
+          </h3>
+          <span class="slash">&nbsp;/&nbsp;</span>
+          <a href="/channels/{{url_channel}}/users" class="user-count">
+            <span class="glyphicon glyphicon-user"></span>
+            <strong>{{users}}</strong> users
+          </a>
+          <div class="topic">
+            {{topic}}
+            {{#if op_status}}
+              <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
+            {{/if}}
+          </div>
+          <form id="topic-form">
+            <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{topic}}">
+            <a href="#" class="cancel">cancel</a>
+          </form>
+          {{#if currentUser}}
+            <a href="/channels/{{url_channel}}/settings" class="channel-settings">
+              <span class="glyphicon glyphicon-cog"></span>
+              Settings
+            </a>
+            <a href="/channels/{{url_channel}}/settings" class="btn btn-default channel-invite">
+              Invite a friend
+            </a>
+          {{/if}}
         </div>
-      {{/if}}
-      <div class="topic">
-        {{topic}}
-        {{#if op_status}}
-          <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
+        {{#if currentUser}}
+          <!--<div class="buttons">-->
+            <!--<a href="/channels/{{url_channel}}/settings" class="settings">settings</a>-->
+            <!--<a class="add-bot">invite</a>-->
+          <!--</div>-->
         {{/if}}
       </div>
-      <form id="topic-form">
-        <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{topic}}">
-        <a href="#" class="cancel">cancel</a>
-      </form>
     </div>
   {{/unless}}
 </template>
 
 <template name="channel_users">
   <div class="container">
-    {{> channels}}
-    <div class="channel-container">
-      {{> channel_header}}
-      {{> users}}
+    <div class="row">
+      <div class="col-sm-3">
+        {{> channels}}
+      </div>
+      <div class="channel-container col-sm-9">
+        {{> channel_header}}
+        {{> users}}
+      </div>
     </div>
   </div>
 </template>
@@ -164,6 +218,7 @@
     {{#each users}}
       <li>
       <h3><a href="/users/{{.}}">{{.}}</a></h3>
+      Real Name
       </li>
     {{/each}}
   </ul>
@@ -172,9 +227,9 @@
 <template name="say">
   {{#unless all}}
     {{#if currentUser}}
-      <div class="input-container">
+      <div class="input-container col-sm-9 col-sm-offset-3">
         <form id="say">
-          <input tabindex="1" type="text" class="span6" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
+          <input tabindex="1" type="text" class="form-control" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
         </form>
       </div>
     {{/if}}
@@ -253,7 +308,10 @@
   <div class="user-profile">
     {{#with user}}
       <div class="container">
-        <div class="first vcard">
+        <div class="first vcard col-sm-3">
+          <a href="#" class="thumbnail">
+            <img src="http://placehold.it/200/ECF0F1" alt="Gravatar">
+          </a>
           <div class="name">
             {{username}}
           </div>
@@ -261,7 +319,7 @@
             <span class="joined-on">Joined on</span> {{joined}}
           </div>
         </div>
-        <div class="last">
+        <div class="last col-sm-3">
           <ul class="user-channels">
             {{#each channels}}
               <li>

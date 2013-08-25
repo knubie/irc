@@ -9,7 +9,6 @@ accounts-password
 accounts-ui
 jquery
 insecure
-bootstrap
 stylus
 standard-app-packages
 momentjs
@@ -18,3 +17,4 @@ paginated-subscription
 router
 user-status
 iron-router
+less
