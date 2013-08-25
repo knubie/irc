@@ -32,11 +32,14 @@ input.form-control::-webkit-input-placeholder
 input.form-control
   border: 2px solid $silver
   box-shadow: none
+  -webkit-appearance: none
 input.form-control:hover
   border-color: $concrete
+  -webkit-appearance: none
 input.form-control:focus
   border-color: $peter-river
   box-shadow: none
+  -webkit-appearance: none
 
 // Nav
 .idletron-nav
@@ -245,11 +248,18 @@ input.form-control:focus
   .channel-settings
     position: absolute
     top: 17px
-    right: 150px
+    right: 15px
     color: #777
+    font-size: 21px
+    +tablet-portrait-and-above
+      right: 150px
+      font-size: 14px
     .glyphicon
       position: relative
       top: 1px
+    .hidden-xs
+      +tablet-portrait-and-above
+        display: inline!important
   .channel-invite
     position: absolute
     top: 14px

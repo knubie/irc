@@ -26,14 +26,17 @@ input.form-control::-webkit-input-placeholder {
 
 input.form-control {
   border: 2px solid #bdc3c7;
-  box-shadow: none; }
+  box-shadow: none;
+  -webkit-appearance: none; }
 
 input.form-control:hover {
-  border-color: #95a5a6; }
+  border-color: #95a5a6;
+  -webkit-appearance: none; }
 
 input.form-control:focus {
   border-color: #3498db;
-  box-shadow: none; }
+  box-shadow: none;
+  -webkit-appearance: none; }
 
 .idletron-nav {
   background-color: #34495e;
@@ -242,11 +245,19 @@ input.form-control:focus {
   .channel-header .channel-settings {
     position: absolute;
     top: 17px;
-    right: 150px;
-    color: #777777; }
+    right: 15px;
+    color: #777777;
+    font-size: 21px; }
+    @media only screen and (min-width: 768px) {
+      .channel-header .channel-settings {
+        right: 150px;
+        font-size: 14px; } }
     .channel-header .channel-settings .glyphicon {
       position: relative;
       top: 1px; }
+    @media only screen and (min-width: 768px) {
+      .channel-header .channel-settings .hidden-xs {
+        display: inline !important; } }
   .channel-header .channel-invite {
     position: absolute;
     top: 14px;

@@ -1,5 +1,5 @@
 ########## Iron Router ##########
-#TODO: standardize all template names, session variables, and data contexts.
+
 Router.configure
   layout: 'layout'
   notFoundTemplate: 'not_found'
@@ -10,7 +10,8 @@ Router.configure
 Router.map ->
   @route 'home',
     path: '/'
-    template: do -> if Meteor.user() then 'channel_main' else 'home_logged_out'
+    #template: do -> if Meteor.user() then 'channel_main' else 'home_logged_out'
+    controller: 'ChannelController'
     waitOn: ->
       handlers.messages.all
     data: -> {name: 'all'}
@@ -66,3 +67,18 @@ Router.map ->
     onBeforeRun: ->
       {username} = @params
       Session.set 'user_profile', Meteor.users.findOne({username})?._id
+
+class @ChannelController extends RouteController
+  #renderTemplates:
+    #'channel_header': to: 'channel_header'
+    #'channels': to: 'channels'
+
+  run: ->
+    if Meteor.user()
+      @render 'channel_main'
+      @render
+        'header': to: 'header'
+    else
+      @render 'home_logged_out'
+      @render
+        'header': to: 'header'
