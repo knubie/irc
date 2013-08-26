@@ -37,6 +37,10 @@ input.form-control:focus {
   box-shadow: none;
   -webkit-appearance: none; }
 
+.modal-backdrop.in {
+  opacity: 0.5;
+  filter: alpha(opacity=50); }
+
 .idletron-nav {
   background-color: #34495e;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
