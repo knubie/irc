@@ -436,16 +436,12 @@ form {
   color: rgba(255, 255, 255, 0.3); }
 
 .badge-info {
-  background-color: silver;
+  background-color: #bdc3c7;
   margin-left: 6px;
   vertical-align: bottom;
   margin-bottom: 1px;
   color: white;
   text-shadow: none; }
-
-.selected .badge-info {
-  background-color: #2980b9;
-  color: white; }
 
 .channel-list {
   list-style: none; }

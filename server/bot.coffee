@@ -81,7 +81,6 @@ class @Idletron extends Client
       # Count the number of nicks in the nicks_in object
       users = (user for user of nicks).length
       if users is 1 # If Idletron is the only user left
-        console.log channel
         @part channel
       else
         # Update Channel.nicks with the nicks object sent from the network.

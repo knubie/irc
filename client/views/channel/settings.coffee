@@ -4,16 +4,17 @@ Template.settings.events
     ignoree = t.find('#inputIgnore').value
     t.find('#inputIgnore').value = ''
     {channels} = Meteor.user().profile
-    channels[Session.get('channel.name')]?.ignore.push ignoree
+    channels[@name]?.ignore.push ignoree
+    channels[@name]?.ignore = _.uniq channels[@name]?.ignore
     Meteor.users.update Meteor.userId()
-    , $set: 'profile.channels': _.uniq channels[Session.get 'channel.name']?.ignore
+    , $set: 'profile.channels': channels
 
   'click .close': (e,t) ->
     {channels} = Meteor.user().profile
     index = channels[Session.get('channel.name')]?.ignore.indexOf(@)
     channels[Session.get('channel.name')]?.ignore.splice(index, 1)
-    Meteor.users.update \
-      Meteor.userId(), $set: {'profile.channels': channels}
+    Meteor.users.update Meteor.userId()
+    , $set: 'profile.channels': channels
 
   'click #privateCheckbox': (e,t) ->
     channel = Channels.findOne Session.get('channel.id')
