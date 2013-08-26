@@ -104,11 +104,9 @@ Template.message.events
       # If there are any message to slideToggle...
       if $messagesFromOtherChannels.length > 0
         $messagesFromOtherChannels.slideToggle 400, =>
-          Session.set 'channel.name', @channel
-          Session.set 'channel.id', ch._id
+          Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
       else # No messages to slideToggle
-        Session.set 'channel.name', @channel
-        Session.set 'channel.id', ch._id
+        Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
 
   'click .convo': (e, t) ->
     $('.message')
