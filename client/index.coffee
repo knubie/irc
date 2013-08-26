@@ -8,9 +8,11 @@ Handlebars.registerHelper 'all', ->
 Template.home_logged_out.events
   'submit #signup': (e,t) ->
     e.preventDefault()
+    # Get credentials from the form
     username = t.find('#auth-nick').value
     email = t.find('#auth-email').value
     password = t.find('#auth-pw').value
+    # Create a new user
     _id = Accounts.createUser {username, email, password, profile:
       connection: off
       account: 'free'
@@ -19,11 +21,9 @@ Template.home_logged_out.events
       if error
         alert error.reason
       else
+        # Add account to hector
         Meteor.call 'remember', username, password, Meteor.userId()
-        if window.webkitNotifications.checkPermission() is 1
-          Meteor.Router.to('/notifications-request') #FIXME: should work without this.
-        else
-          Meteor.Router.to('/') #FIXME: should work without this.
+        Router.go 'home'
 
 Template.sign_in.events
   'submit #signin': (e,t) ->
@@ -35,10 +35,7 @@ Template.sign_in.events
         alert error.reason
       else
         Meteor.call 'connect', username, password, Meteor.userId()
-        if window.webkitNotifications.checkPermission() is 1
-          Meteor.Router.to('/notifications-request') #FIXME: should work without this.
-        else
-          Meteor.Router.to('/') #FIXME: should work without this.
+        Router.go 'home'
 
 ########## Notification Request ##########
 #

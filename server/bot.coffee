@@ -80,10 +80,14 @@ class @Idletron extends Client
             nicks[nick] = ''
       # Count the number of nicks in the nicks_in object
       users = (user for user of nicks).length
-      # Update Channel.nicks with the nicks object sent from the network.
-      Channels.update
-        name: channel
-      , {$set: {nicks, users}}
+      if users is 1 # If Idletron is the only user left
+        console.log channel
+        @part channel
+      else
+        # Update Channel.nicks with the nicks object sent from the network.
+        Channels.update
+          name: channel
+        , {$set: {nicks, users}}
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
       Messages.insert

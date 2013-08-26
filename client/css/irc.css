@@ -169,7 +169,8 @@ input.form-control:focus {
       position: relative;
       display: none; } }
   .channels li button {
-    display: none; }
+    display: none;
+    line-height: normal; }
   .channels li i {
     opacity: 0.5;
     vertical-align: baseline; }
@@ -177,7 +178,7 @@ input.form-control:focus {
     color: #777777;
     transition: 0.15s background-color, 0.15s color;
     padding: 4px;
-    display: block; }
+    display: inline-block; }
   .channels li a:hover {
     color: #3498db;
     text-decoration: none; }
@@ -279,7 +280,7 @@ input.form-control:focus {
     display: none; }
 
 .messages {
-  margin-top: 76px; }
+  margin-top: 108px; }
   .messages .offline .reply, .messages .offline small, .messages .offline p {
     opacity: 0.4; }
   .messages .offline .actions {

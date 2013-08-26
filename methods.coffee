@@ -1,6 +1,21 @@
 if Meteor.isServer
   exec = Npm.require('child_process').exec
 
+@remember = (username, password, cb) ->
+  console.log 'remember'
+  if Meteor.isServer
+    #FIXME: What if username = "; rm -rf /"
+    exec "cd $HECTOR_PATH; hector identity remember #{username} #{password}" \
+    , async cb
+
+@connect = (_id, cb) ->
+  console.log 'connect'
+  if Meteor.isServer
+    u = Meteor.users.findOne(_id)
+    client[username] ?= new Bot {_id, username: u.username, password: u.password}
+    client[username].connect()
+    async(cb)()
+
 Meteor.methods
   remember: (username, password, _id) ->
     if Meteor.isServer

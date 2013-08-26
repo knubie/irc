@@ -10,14 +10,14 @@ Router.configure
 Router.map ->
   @route 'home',
     path: '/'
-    #template: do -> if Meteor.user() then 'channel_main' else 'home_logged_out'
-    controller: 'ChannelController'
+    controller: 'HomeController'
     waitOn: ->
       handlers.messages.all
     data: -> {name: 'all'}
     onBeforeRun: ->
       Session.set 'channel.name', 'all'
       Session.set 'channel.id', null
+      Session.set 'messages.page', 1
   @route 'explore'
   @route 'notification_request'
   @route 'login',
@@ -68,7 +68,7 @@ Router.map ->
       {username} = @params
       Session.set 'user_profile', Meteor.users.findOne({username})?._id
 
-class @ChannelController extends RouteController
+class @HomeController extends RouteController
   #renderTemplates:
     #'channel_header': to: 'channel_header'
     #'channels': to: 'channels'

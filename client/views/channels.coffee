@@ -1,3 +1,9 @@
+Template.channel_main.rendered = ->
+  #if window.webkitNotifications.checkPermission() is 1 and not Modernizr.touch
+    #$('#notification-modal').modal
+      #backdrop: true
+      #keyboard: true
+
 Template.channel_header.helpers
   channel: ->
     @name

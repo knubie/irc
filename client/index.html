@@ -14,22 +14,6 @@
   {{yield}}
 </template>
 
-<template name="channel_layout">
-  {{yield 'header'}}
-  <div class="container">
-    {{yield channels}}
-    <div class="channel-container">
-      {{#unless all}}
-        {{yield 'channel_header'}}
-      {{/unless}}
-      {{yield messages}}
-      {{#unless all}}
-        {{> say}}
-      {{/unless}}
-    </div>
-  </div>
-</template>
-
 <template name="header">
   <nav class="navbar navbar-inverse navbar-fixed-top idletron-nav">
     <div class="container">
@@ -136,7 +120,28 @@
   </div>
 </template>
 
+<template name="notification_modal">
+  <div class="modal fade" id="notification-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Notifications</h4>
+        </div>
+        <div class="modal-body">
+          <p>Would you like to receive desktop notifications from @mentions and private messages? You can always change this later in your account settings.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-primary">Yes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</template>
+
 <template name="channel_main">
+  {{> notification_modal}}
   <div class="container">
     <div class="row">
       <div class="col-sm-3">

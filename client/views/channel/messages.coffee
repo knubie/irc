@@ -2,34 +2,30 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  #FIXME: this causes flickering on mobile safari (perhaps others)
+  # Keep scroll position when template rerenders,
+  # especially if document height changes.
   $(window).scrollTop \
     $(document).height() - $(window).height() - Session.get('scroll')
+
+  #Hover isolates messages from like channels
   if @data.name is 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
     , ->
       $('.message').removeClass 'faded'
+
+  # Store nicks in an array
   else if @data.name.isChannel()
     nicks = (nick for nick of @data.nicks) ? []
     #$('#say-input').typeahead
       #name: 'names'
       #local: nicks
-  # Keep scroll position when template rerenders,
-  # especially if document height changes.
-  $('.mobile-menu').off 'touchstart'
-  $('.mobile-menu').off 'touchend'
-  $('.mobile-menu').on 'touchstart', ->
-    $(@).css('background-color', '#2C3E50') # midnight-blue
-  $('.mobile-menu').on 'touchend', ->
-    $(@).css('background-color', '#34495E') # wet-asphalt
-    $('.top-nav').toggle()
-
-  $('.change-channel').off 'click'
-  $('.change-channel').on 'click', ->
-    $('.channels').show()
-    $('.top-nav').hide()
-    $('.channel-container').hide()
+  if Modernizr.touch
+    $(window).on 'touchmove', (e) ->
+      touches = e.originalEvent.changedTouches
+      updateStuff()
+  else
+    $(window).scroll updateStuff
 
 Template.messages.helpers
   messages: ->

@@ -19,26 +19,19 @@ Session.setDefault 'channel.name', 'all'
 Session.setDefault 'channel.id', null
 # Push messages to the bottom by default (ie don't save scroll position).
 Session.setDefault 'scroll', 0
-#Session.setDefault 'position from bottom', 0
+Session.setDefault 'messages.page', 1
 
 ########## Subscriptions ##########
 
 @handlers = {messages:{},channel:{}}
 handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels'
-# Get channel for users not logged in.
-#handlers.messages[Session.get('channel.name')] = Meteor.subscribeWithPagination 'messages', Session.get('channel.name'), 30
-# Wait 200ms for Meteor.user() to show up
-#Meteor.setTimeout -> #FIXME: this is shameful
-  #for channel of Meteor.user().profile.channels
-    #console.log channel
-    #handlers.messages[channel] = Meteor.subscribeWithPagination 'messages', channel, 30
-#, 200
-handlers.messages.all = Meteor.subscribe 'messages', 'all', 30
 Deps.autorun ->
+  limit = 30 * Session.get('messages.page')
+  handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   if Meteor.user()
     for channel of Meteor.user().profile.channels
-      handlers.messages[channel] = Meteor.subscribe 'messages', channel, 30
+      handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
 
 
 Messages.find().observeChanges
@@ -53,14 +46,12 @@ Messages.find().observeChanges
 ########## Startup ##########
 
 Meteor.startup ->
-  channelHeaderTop = 0
   # Store scroll position in a session variable. This keeps the scroll
   # position in place when receiving new messages, unless the user is
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
-  updateStuff = ->
+  @updateStuff = ->
     $channelHeader = $('.channel-header')
-    console.log $channelHeader
     currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
 
     if currScroll > Session.get('scroll') \ # Scrolling up
@@ -97,9 +88,3 @@ Meteor.startup ->
       , Session.get('messages.page') * 30
       #handlers.messages[Session.get('channel.name')].loadNextPage()
 
-  if Modernizr.touch
-    $(window).on 'touchmove', (e) ->
-      touches = e.originalEvent.changedTouches
-      updateStuff()
-  else
-    $(window).scroll updateStuff
