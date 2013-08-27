@@ -11,10 +11,7 @@ jquery
 insecure
 stylus
 standard-app-packages
-momentjs
 page-js-ie-support
-paginated-subscription
-router
 user-status
 iron-router
 less

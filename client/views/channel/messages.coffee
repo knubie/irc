@@ -31,11 +31,11 @@ Template.messages.helpers
   messages: ->
     prev = null
     if @name is 'all'
-      messages = Messages.find({}, {sort: {time: 1}}).fetch()
+      messages = Messages.find({}, {sort: {createdAt: 1}}).fetch()
     else
       messages = Messages.find(
         channel: @name
-      , sort: {time: 1}).fetch()
+      , sort: {createdAt: 1}).fetch()
     setPrev = (msg) ->
       msg.prev = prev
       prev = msg
@@ -130,7 +130,7 @@ Template.message.helpers
   isConvo: ->
     if @convo then yes else no
   timeAgo: ->
-    moment(@time).fromNow()
+    moment(@createdAt).fromNow()
   message_class: ->
     if @online() then @type() else "offline #{@type()}"
   op_status: ->
@@ -140,7 +140,7 @@ Template.message.helpers
     @type() is 'self'
 
 Template.notification.timeAgo = ->
-  moment(@time).fromNow()
+  moment(@createdAt).fromNow()
 
 Template.notification.events
   'click, tap li': ->
@@ -148,13 +148,3 @@ Template.notification.events
 
   'click .close': ->
     # Do something
-
-Template.home_logged_out.rendered = ->
-  $('.mobile-menu').off 'click'
-  $('.mobile-menu').on 'click', ->
-    $('.top-nav').toggle()
-
-Template.sign_in.rendered = ->
-  $('.mobile-menu').off 'click'
-  $('.mobile-menu').on 'click', ->
-    $('.top-nav').toggle()

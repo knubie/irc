@@ -106,3 +106,5 @@ Meteor.methods
       client[user.username].send 'TOPIC', channel.name, topic
     if channel.nicks[user.username] is '@'
       Channels.update channelId, $set: {topic}
+
+  date: -> (new Date()).getTime()

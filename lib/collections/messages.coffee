@@ -29,13 +29,24 @@
           online = yes
         return online
 
-Messages.allow
-  insert: (userId, message) ->
-    check message.text, validMessageText
-    userId is message.owner
-  update: (userId, message) ->
-    check message.text, validMessageText
-    userId is message.owner
-  remove: (userId, message) ->
-    userId is message.owner
+if Meteor.isServer
+  Messages.allow
+    insert: (userId, message) ->
+      check message.text, validMessageText
+      userId is message.owner
+    update: (userId, message) ->
+      check message.text, validMessageText
+      userId is message.owner
+    remove: (userId, message) ->
+      userId is message.owner
 
+  #Messages.deny
+    #insert: (userId, message) ->
+      #console.log 'deny'
+      #message.createdAt = (new Date()).getTime()
+      #false
+
+  #Messages.before
+    #insert: (userId, message) ->
+      #console.log 'messages before'
+      #message.createdAt = (new Date()).getTime()

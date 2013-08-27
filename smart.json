@@ -3,10 +3,11 @@
     "irc": {
       "git": "https://github.com/knubie/meteor-node-irc.git"
     },
-    "momentjs": {},
-    "paginated-subscription": {},
-    "router": {},
     "user-status": {},
-    "iron-router": {}
+    "iron-router": {},
+    "collection-hooks": {
+      "git": "https://github.com/matb33/meteor-collection-hooks.git",
+      "branch": "aop"
+    }
   }
 }

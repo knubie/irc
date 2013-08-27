@@ -66,15 +66,20 @@ Template.say.events
           '@': 'operator'
           '': 'normal'
 
-      Messages.insert
+      #FIXME: use before hooks when they work with 0.6.5
+      msgId = Messages.insert
         from: user.username
         channel: Session.get('channel.name')
         text: message
-        time: new Date
+        createdAt: (new Date()).getTime()
+        #createdAt: Meteor.call 'date'
+        #createdAt: 1377628149709
         owner: Meteor.userId()
         convo: convo
         status: if channelDoc.nicks? then status[channelDoc.nicks[user.username]] else 'normal'
         read: true
+      createdAt = Meteor.call 'date', (err, res) ->
+        Messages.update msgId, $set: createdAt: res
 
 Template.say.rendered = ->
   $('#say-input').focus()
