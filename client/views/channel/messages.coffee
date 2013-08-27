@@ -55,7 +55,13 @@ Template.message.rendered = ->
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
-  # Linkify URLs.
+  # Linkify & Imagify URLs.
+  ptext = ptext.replace regex.url, (str) ->
+    if str.match /\.(?:jpe?g|gif|png)/
+      "<a href=\"#{str}\" target=\"_blank\"><img src=\"#{str}\" alt=\"\"/></a>"
+    else
+      "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
+  #ptext = ptext.replace regex.image, "<img src=\"$&\" alt=\"\"/>"
   #while regex.url.test ptext
     #link_title = ''
     #url = ptext.match regex.url
@@ -142,7 +148,6 @@ Template.notification.events
 
   'click .close': ->
     # Do something
-
 
 Template.home_logged_out.rendered = ->
   $('.mobile-menu').off 'click'
