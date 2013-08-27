@@ -21,8 +21,7 @@ Router.map ->
   @route 'explore'
   @route 'notification_request'
   @route 'login',
-    template: 'sign_in'
-  #@route 'logout' # Is this even needed?
+    controller: 'LoginController'
   @route 'channel_main',
     path: '/channels/:channel'
     waitOn: ->
@@ -67,6 +66,15 @@ Router.map ->
     onBeforeRun: ->
       {username} = @params
       Session.set 'user_profile', Meteor.users.findOne({username})?._id
+
+class @LoginController extends RouteController
+  run: ->
+    if Meteor.user()
+      Router.go 'home'
+    else
+      @render 'sign_in' #TODO: change this name
+      @render
+        'header': to: 'header'
 
 class @HomeController extends RouteController
   #renderTemplates:
