@@ -9,7 +9,6 @@ Meteor.startup ->
     client[user.username] ?= new Bot
       _id: user._id
       username: user.username
-      password: 'suck-it'
     if user.services.resume.loginTokens.length > 0
       client[user.username].connect()
 

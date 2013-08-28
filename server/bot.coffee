@@ -10,7 +10,7 @@ class @Idletron extends Client
     super 'localhost', 'Idletron',
       port: 6667
       userName: 'Idletron'
-      password: 'password'
+      password: process.env.HECTOR_KEY
       realName: 'N/A'
       autoConnect: no
       autoRejoin: no
@@ -112,11 +112,10 @@ class @Idletron extends Client
         Channels.update {name: msg.args[1]}, $set: {modes}
 
 class @Bot extends Client
-  constructor: ({@_id, @username, @password}) ->
+  constructor: ({@_id, @username}) ->
     super 'localhost', @username,
       port: 6667
       userName: @username
-      #password: @password
       password: process.env.HECTOR_KEY
       realName: 'N/A'
       autoConnect: no

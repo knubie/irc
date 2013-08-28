@@ -34,7 +34,7 @@ Template.sign_in.events
       if error
         alert error.reason
       else
-        Meteor.call 'connect', username, password, Meteor.userId()
+        Meteor.call 'connect', username, Meteor.userId()
         Router.go 'home'
 
 ########## Notification Request ##########
