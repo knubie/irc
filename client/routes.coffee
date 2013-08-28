@@ -30,8 +30,12 @@ Router.map ->
       #FIXME: why can't i use ?=
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
+      channel = "##{@params.channel}"
+      if Meteor.user()
+        unless Meteor.user().profile.channels.hasOwnProperty(channel)
+          Meteor.call 'join', Meteor.user().username, channel
       Deps.autorun =>
-        if ch = Channels.findOne({name: "##{@params.channel}"})
+        if ch = Channels.findOne({name: channel})
           Session.set 'channel.name', ch.name
           Session.set 'channel.id', ch._id
       Session.set 'messages.page', 1
@@ -75,6 +79,15 @@ class @LoginController extends RouteController
       @render 'sign_in' #TODO: change this name
       @render
         'header': to: 'header'
+
+class @ChannelController extends RouteController
+  run: ->
+    if Meteor.user()
+      unless Meteor.user().profile.channels.hasOwnProperty(channel)
+        Meteor.call 'join', Meteor.user().username, channel
+        @render 'channel_main'
+        @render
+          'header': to: 'header'
 
 class @HomeController extends RouteController
   #renderTemplates:
