@@ -34,7 +34,8 @@ Template.sign_in.events
       if error
         alert error.reason
       else
-        Meteor.call 'connect', username, Meteor.userId()
+        if Meteor.user().profile.connection is off
+          Meteor.call 'connect', username, Meteor.userId()
         Router.go 'home'
 
 ########## Notification Request ##########

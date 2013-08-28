@@ -1,7 +1,4 @@
 Template.channel_main.rendered = ->
-  console.log 'suck it'
-  console.log window.webkitNotifications.checkPermission()
-  console.log Modernizr.touch
   if window.webkitNotifications.checkPermission() is 1 and not Modernizr.touch
     console.log 'do modal'
     console.log $('#notification-modal')

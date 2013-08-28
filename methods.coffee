@@ -13,7 +13,8 @@ Meteor.methods
   connect: (username, _id) ->
     if Meteor.isServer
       client[username] ?= new Bot {_id, username}
-      client[username].connect()
+      if Meteor.users.findOne(_id)?.profile.connection is off
+        client[username].connect()
 
   disconnect: (username) ->
     if Meteor.isServer
