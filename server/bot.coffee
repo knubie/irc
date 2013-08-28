@@ -116,7 +116,8 @@ class @Bot extends Client
     super 'localhost', @username,
       port: 6667
       userName: @username
-      password: @password
+      #password: @password
+      password: process.env.HECTOR_KEY
       realName: 'N/A'
       autoConnect: no
       autoRejoin: no
