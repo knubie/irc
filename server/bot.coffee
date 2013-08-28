@@ -37,7 +37,7 @@ class @Idletron extends Client
       #TODO: do this only once... instead of once for every client
 
     # Listen for incoming messages.
-    @on 'message', async (from, to, text, message) =>
+    @on 'message#', async (from, to, text, message) =>
       convo = ''
 
       # If message is a PM

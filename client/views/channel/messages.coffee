@@ -138,6 +138,8 @@ Template.message.helpers
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'
+  away: ->
+    Meteor.users.findOne(username: @from)?.profile.away
 
 Template.notification.timeAgo = ->
   moment(@createdAt).fromNow()

@@ -16,6 +16,7 @@
 #: nick autocomplete
 #: make timestamp update
 #: add regex for channels to link
+#: add message aggregator
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`

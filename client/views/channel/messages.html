@@ -43,6 +43,9 @@
       <span class="reply">
         <span class="{{status}}">&bull;</span>
         <a href="/users/{{from}}"><strong>{{from}}</strong></a>
+        {{#if away}}
+          <span class="glyphicon glyphicon-time"></span>
+        {{/if}}
         {{#if all}}
           <span class="muted">{{channel}}</span>
         {{/if}}

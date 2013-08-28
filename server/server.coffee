@@ -21,9 +21,13 @@ Meteor.startup ->
     for channel in Channels.find().fetch()
       client.idletron.join channel.name
 
+# When user loses session (closes window, etc)
 UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
+  Meteor.users.update userId, $set: 'profile.away': no
   # Do anything here?
 
+# When user renews session (reopens window, etc)
 UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
+  Meteor.users.update userId, $set: 'profile.away': yes
   # Do anything here?
   # Perhaps set away flag..
