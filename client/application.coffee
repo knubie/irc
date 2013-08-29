@@ -51,28 +51,29 @@ Meteor.startup ->
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
   @updateStuff = ->
-    $channelHeader = $('.channel-header')
-    currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
+    unless Modernizr.touch
+      $channelHeader = $('.channel-header')
+      currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
 
-    if currScroll > Session.get('scroll') \ # Scrolling up
-    and currScroll > 0 \ # Not 'bouncing' past the bottom
-    and $channelHeader.height() < 78 # At least partially hidden
+      if currScroll > Session.get('scroll') \ # Scrolling up
+      and currScroll > 0 \ # Not 'bouncing' past the bottom
+      and $channelHeader.height() < 78 # At least partially hidden
 
-      $channelHeader.height(
-        $channelHeader.height() - (Session.get('scroll') - currScroll)
-      )
-      if $channelHeader.height() > 78
-        $channelHeader.height(78)
+        $channelHeader.height(
+          $channelHeader.height() - (Session.get('scroll') - currScroll)
+        )
+        if $channelHeader.height() > 78
+          $channelHeader.height(78)
 
-    else if currScroll < Session.get('scroll') \ # Scrolling down
-    and currScroll > 0 \ # Not 'bouncing' past the bottom
-    and $channelHeader.height() > 26 # Not totally hidden yet
+      else if currScroll < Session.get('scroll') \ # Scrolling down
+      and currScroll > 0 \ # Not 'bouncing' past the bottom
+      and $channelHeader.height() > 26 # Not totally hidden yet
 
-      $channelHeader.height(
-        $channelHeader.height() - (Session.get('scroll') - currScroll)
-      )
-      if $channelHeader.height() < 26
-        $channelHeader.height(26)
+        $channelHeader.height(
+          $channelHeader.height() - (Session.get('scroll') - currScroll)
+        )
+        if $channelHeader.height() < 26
+          $channelHeader.height(26)
 
     Session.set 'scroll', \
       $(document).height() - ($(window).scrollTop() + $(window).height())
