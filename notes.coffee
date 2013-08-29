@@ -17,6 +17,8 @@
 #: make timestamp update
 #: add regex for channels to link
 #: add message aggregator
+#
+#FIXME: make users join a channel they navigate to.
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`
