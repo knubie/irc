@@ -33,7 +33,6 @@ Deps.autorun ->
     for channel of Meteor.user().profile.channels
       handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
 
-
 Messages.find().observeChanges
   added: (id, doc) ->
     unless doc.read

@@ -138,7 +138,7 @@ Template.message.helpers
   self: ->
     @type() is 'self'
   away: ->
-    Meteor.users.findOne(username: @from)?.profile.away
+    not Meteor.users.findOne(username: @from)?.profile.online
 
 Template.notification.timeAgo = ->
   moment(@createdAt).fromNow()
