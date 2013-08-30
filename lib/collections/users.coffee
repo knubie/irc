@@ -8,6 +8,21 @@
 #       mode: String
 
 if Meteor.isServer
+  Accounts.onCreateUser (options, user) ->
+    # Create defaults
+    profile =
+      connection: on
+      notifications: on
+      sounds: on
+      account: 'free'
+      channels: {}
+
+    # Augment/override with clien-side options
+    _.extend profile, options.profile
+
+    user.profile = profile
+    return user
+    
   Accounts.validateNewUser (user) ->
     check user.username, String
     return true

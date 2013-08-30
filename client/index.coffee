@@ -13,11 +13,7 @@ Template.home_logged_out.events
     email = t.find('#auth-email').value
     password = t.find('#auth-pw').value
     # Create a new user
-    _id = Accounts.createUser {username, email, password, profile:
-      connection: off
-      account: 'free'
-      channels: {}
-    }, (error) ->
+    _id = Accounts.createUser {username, email, password}, (error) ->
       if error
         alert error.reason
       else
