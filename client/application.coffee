@@ -37,11 +37,13 @@ Deps.autorun ->
 Messages.find().observeChanges
   added: (id, doc) ->
     unless doc.read
-      document.getElementById('beep').play()
+      if Meteor.user().profile.sounds
+        document.getElementById('beep').play()
       if doc.convo is Meteor.user().username and \
       doc.from not in Meteor.user().profile.channels[doc.channel].ignore
-        notifications[id] ?= new Notification doc.channel, doc.text
-        notifications[id].showOnce()
+        if Meteor.user().profile.notifications
+          notifications[id] ?= new Notification doc.channel, doc.text
+          notifications[id].showOnce()
 
 
 ########## Startup ##########
