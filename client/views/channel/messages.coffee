@@ -1,4 +1,3 @@
-
 ########## Messages ##########
 
 Template.messages.rendered = ->
