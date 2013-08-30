@@ -85,12 +85,6 @@ Template.say.events
 Template.say.rendered = ->
   $('#say-input').focus()
 
-########## Users ##########
-
-Template.users.helpers
-  users: ->
-    (nick for nick of Channels.findOne(Session.get('channel.id')).nicks).sort()
-
 ##### logout ######
 Template.header.events
   'click .signout': ->

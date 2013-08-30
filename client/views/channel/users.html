@@ -1,0 +1,25 @@
+<template name="channel_users">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        {{> channels}}
+      </div>
+      <div class="channel-container col-sm-9">
+        {{> channel_header}}
+        {{> users}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="users">
+  <ul class="user-list">
+    {{#each users}}
+      <li>
+      <h3>{{flag}}<a href="/users/{{nick}}">{{nick}}</a></h3>
+      Real Name
+      </li>
+    {{/each}}
+  </ul>
+</template>
+
