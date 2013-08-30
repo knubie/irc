@@ -23,7 +23,7 @@
 
 <template name="channel">
   <li class="channel {{selected}}">
-    {{#if private}}<i class="icon-lock"></i> {{/if}}
+    {{#if private}}<span class="glyphicon glyphicon-lock"></i>{{/if}}
     <a href="/channels/{{url_name}}">
       {{.}}
       <span class="badge badge-info">{{unread}}</span>

@@ -19,31 +19,22 @@
         <h3 class="panel-title">Options</h3>
       </div>
       <div class="panel-body">
-        Private
+        {{#constant}}
+          <label class="checkbox {{private_checked}}" for="privateCheckbox">
+            <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
+            Private
+          </label>
+        {{/constant}}
+        <!--<input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">-->
       </div>
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Operators</h3>
+        <h3 class="panel-title">Users</h3>
       </div>
       <div class="panel-body">
-        Add/remove Operators
-      </div>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Bans</h3>
-      </div>
-      <div class="panel-body">
+        Add/remove Operators<br/>
         Ban/unban
-      </div>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Bots</h3>
-      </div>
-      <div class="panel-body">
-        Manage bots
       </div>
     </div>
 
@@ -70,15 +61,19 @@
           </li>
         {{/each}}
       </ul>
-      <form id="ignore-form">
+      <form id="ignore-form" class="col-sm-6">
         <fieldset>
           <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user" autocomplete="off">
+        </fieldset>
         <fieldset>
+          {{#constant}}
+            <label class="checkbox" for="showHideJoins">
+              <input type="checkbox" value="" id="showHideJoins" data-toggle="checkbox">
+              Show join/part messages
+            </label>
+          {{/constant}}
+        </fieldset>
       </form>
-      <label class="checkbox" for="checkbox1">
-        <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">
-        Show join/part messages
-      </label>
     </div>
   </div>
 </template>

@@ -1,3 +1,17 @@
+# Set up flat checkboxes
+Template.settings.rendered = ->
+  $('[data-toggle="checkbox"]').each ->
+    $checkbox = $(this)
+    $checkbox.checkbox()
+
+# Preserver flat checkboxes
+Template.settings.preserve [
+  '.checkbox'
+  '#privateCheckbox'
+  '#showHideJoins'
+  '.icons'
+]
+
 Template.settings.events
   'submit #ignore-form': (e,t) ->
     e.preventDefault()
@@ -16,12 +30,17 @@ Template.settings.events
     Meteor.users.update Meteor.userId()
     , $set: 'profile.channels': channels
 
-  'click #privateCheckbox': (e,t) ->
+  'click label.checkbox[for="privateCheckbox"]': (e,t) ->
+  #'click #privateCheckbox': (e,t) ->
+    console.log 'click dat thang'
     channel = Channels.findOne Session.get('channel.id')
     if 's' in channel.modes or 'i' in channel.modes
       Meteor.call 'mode', Meteor.user(), Session.get('channel.name'), '-si'
     else
       Meteor.call 'mode', Meteor.user(), Session.get('channel.name'), '+si'
+
+  'click label.checkbox[for="showHideJoins"]': (e,t) ->
+    console.log 'cliked joinpart'
 
 Template.settings.helpers
   op_status: ->

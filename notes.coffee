@@ -18,7 +18,8 @@
 #: add regex for channels to link
 #: add message aggregator
 #
-#FIXME: make users join a channel they navigate to.
+#FIXME: make messages.page reset make sure the handle has the right number of messages.
+#TODO: play sound on new message, change page title.
 
 # Feature list:
 # Basic markdown support, *bold*, _underline_, `code`

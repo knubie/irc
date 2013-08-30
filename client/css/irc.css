@@ -37,6 +37,9 @@ input.form-control:focus {
   box-shadow: none;
   -webkit-appearance: none; }
 
+label {
+  color: #777777; }
+
 .modal-backdrop.in {
   opacity: 0.5;
   filter: alpha(opacity=50); }
@@ -126,31 +129,33 @@ input.form-control:focus {
   .input-container #say-input:focus {
     border-color: #3498db; }
 
-.channel-container .alert {
-  text-align: center; }
-.channel-container .buttons {
-  position: absolute;
-  top: 19px;
-  right: 0; }
-  .channel-container .buttons a {
-    border: none;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: 3px;
-    display: inline-block;
-    font-size: 10px;
-    padding: 3px 12px; }
-  .channel-container .buttons a:hover {
-    text-decoration: none; }
-  .channel-container .buttons .add-bot {
-    background-color: #3498db;
-    box-shadow: 0 2px 0 #2980b9; }
-  .channel-container .buttons .settings {
-    background-color: silver;
-    box-shadow: 0 2px 0 #95a5a6; }
-.channel-container .user-count {
-  color: #777777; }
+.channel-container {
+  padding-top: 108px; }
+  .channel-container .alert {
+    text-align: center; }
+  .channel-container .buttons {
+    position: absolute;
+    top: 19px;
+    right: 0; }
+    .channel-container .buttons a {
+      border: none;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 3px;
+      display: inline-block;
+      font-size: 10px;
+      padding: 3px 12px; }
+    .channel-container .buttons a:hover {
+      text-decoration: none; }
+    .channel-container .buttons .add-bot {
+      background-color: #3498db;
+      box-shadow: 0 2px 0 #2980b9; }
+    .channel-container .buttons .settings {
+      background-color: silver;
+      box-shadow: 0 2px 0 #95a5a6; }
+  .channel-container .user-count {
+    color: #777777; }
 
 .channels {
   color: #777777;
@@ -174,9 +179,10 @@ input.form-control:focus {
   .channels li button {
     display: none;
     line-height: normal; }
-  .channels li i {
-    opacity: 0.5;
-    vertical-align: baseline; }
+  .channels li .glyphicon {
+    font-size: 12px;
+    top: -1px;
+    margin-right: -6px; }
   .channels li a, .channels li form > input {
     color: #777777;
     transition: 0.15s background-color, 0.15s color;
@@ -185,8 +191,12 @@ input.form-control:focus {
   .channels li a:hover {
     color: #3498db;
     text-decoration: none; }
-  .channels li.channel:hover > button {
+  .channels li.channel:hover button {
     display: inline-block; }
+  .channels li.channel:hover .glyphicon {
+    color: #3498db; }
+  .channels .selected .glyphicon {
+    color: #3498db; }
   .channels .selected > a,
   .channels .selected:hover > a {
     color: #3498db;
@@ -282,105 +292,104 @@ input.form-control:focus {
   .channel-header #topic-form {
     display: none; }
 
-.messages {
-  margin-top: 108px; }
-  .messages .offline .reply, .messages .offline small, .messages .offline p {
-    opacity: 0.4; }
-  .messages .offline .actions {
+.messages .offline .reply, .messages .offline small, .messages .offline p {
+  opacity: 0.4; }
+.messages .offline .actions {
+  display: none; }
+.messages .offline .divider {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
+.messages .join {
+  margin-top: -20px; }
+.messages .info {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+  padding-top: 0px; }
+  .messages .info .reply, .messages .info .actions {
     display: none; }
-  .messages .offline .divider {
+  .messages .info p {
+    color: black;
+    text-shadow: 0 1px 0 white;
+    opacity: 0.3;
+    font-weight: bold;
+    font-size: 14px; }
+.messages .mention {
+  border: 1px solid #3498db; }
+.messages .bot {
+  background-color: #bdc3c7; }
+.messages .message.faded {
+  background-color: #f7f9f9;
+  box-shadow: 0 2px 0 #ecf0f1; }
+  .messages .message.faded .reply, .messages .message.faded small, .messages .message.faded p {
+    opacity: 0.4; }
+  .messages .message.faded .divider {
     border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
-  .messages .join {
-    margin-top: -20px; }
-  .messages .info {
-    background-color: rgba(0, 0, 0, 0);
-    box-shadow: none;
-    padding-top: 0px; }
-    .messages .info .reply, .messages .info .actions {
-      display: none; }
-    .messages .info p {
-      color: black;
-      text-shadow: 0 1px 0 white;
-      opacity: 0.3;
-      font-weight: bold;
-      font-size: 14px; }
-  .messages .mention {
-    border: 1px solid #3498db; }
-  .messages .bot {
-    background-color: #bdc3c7; }
-  .messages .message.faded {
-    background-color: #f7f9f9;
-    box-shadow: 0 2px 0 #ecf0f1; }
-    .messages .message.faded .reply, .messages .message.faded small, .messages .message.faded p {
-      opacity: 0.4; }
-    .messages .message.faded .divider {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
-  .messages .message {
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-    padding: 10px 15px 11px 15px;
-    color: #777777;
-    position: relative;
+.messages .message {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  padding: 10px 15px 11px 15px;
+  color: #777777;
+  position: relative;
+  transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
+  .messages .message p {
+    font-size: 16px;
+    line-height: 21px;
+    font-weight: 300;
+    margin: 0; }
+    .messages .message p img {
+      max-width: 100%;
+      max-height: 50vh; }
+  .messages .message .reply, .messages .message small, .messages .message p {
     transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
-    .messages .message p {
-      font-size: 16px;
-      line-height: 21px;
-      font-weight: 300;
-      margin: 0; }
-      .messages .message p img {
-        max-width: 100%;
-        max-height: 50vh; }
-    .messages .message .reply, .messages .message small, .messages .message p {
-      transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
-    .messages .message .reply {
-      font-size: 12px;
+  .messages .message .reply {
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 5px; }
+    .messages .message .reply .normal {
+      display: none; }
+    .messages .message .reply .operator {
       display: inline-block;
-      margin-bottom: 5px; }
-      .messages .message .reply .normal {
-        display: none; }
-      .messages .message .reply .operator {
-        display: inline-block;
-        color: #3498db;
-        font-size: 30px;
-        position: relative;
-        bottom: -7px;
-        margin-right: -2px;
-        margin-top: -17px; }
-      .messages .message .reply a {
-        color: #777777; }
-      .messages .message .reply a:hover {
-        text-decoration: none; }
-      .messages .message .reply .glyphicon-time {
-        top: 0;
-        color: #bdc3c7; }
-    .messages .message .reply:hover {
-      border-bottom: 1px solid #cccccc;
-      cursor: pointer; }
-    .messages .message .muted {
-      color: rgba(0, 0, 0, 0.2);
-      font-size: 12px; }
-    .messages .message .divider {
-      width: 100%;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      margin: 0 0 10px 0; }
-    .messages .message .actions {
-      font-size: 12px;
-      opacity: 0;
-      display: inline; }
-      .messages .message .actions .action {
-        display: inline; }
-        .messages .message .actions .action .glyphicon {
-          color: #bdc3c7; }
-      .messages .message .actions .action:hover {
-        color: #333333; }
-        .messages .message .actions .action:hover .glyphicon {
-          color: #777777; }
-  .messages .message:hover {
+      color: #3498db;
+      font-size: 30px;
+      position: relative;
+      bottom: -7px;
+      margin-right: -2px;
+      margin-top: -17px;
+      margin-bottom: -5px; }
+    .messages .message .reply a {
+      color: #777777; }
+    .messages .message .reply a:hover {
+      text-decoration: none; }
+    .messages .message .reply .glyphicon-time {
+      top: 0;
+      color: #bdc3c7; }
+  .messages .message .reply:hover {
+    border-bottom: 1px solid #cccccc;
     cursor: pointer; }
-    .messages .message:hover .actions {
-      opacity: 1; }
+  .messages .message .muted {
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 12px; }
+  .messages .message .divider {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    margin: 0 0 10px 0; }
+  .messages .message .actions {
+    font-size: 12px;
+    opacity: 0;
+    display: inline; }
+    .messages .message .actions .action {
+      display: inline; }
+      .messages .message .actions .action .glyphicon {
+        color: #bdc3c7; }
+    .messages .message .actions .action:hover {
+      color: #333333; }
+      .messages .message .actions .action:hover .glyphicon {
+        color: #777777; }
+.messages .message:hover {
+  cursor: pointer; }
+  .messages .message:hover .actions {
+    opacity: 1; }
 
 .user-profile {
   position: relative;

@@ -40,6 +40,8 @@ input.form-control:focus
   box-shadow: none
   -webkit-appearance: none
 
+label
+  color: #777
 .modal-backdrop.in
   opacity: 0.5
   filter: alpha(opacity=50)
@@ -135,6 +137,7 @@ input.form-control:focus
 
 // Channels
 .channel-container
+  padding-top: 108px
   .alert
     text-align: center
   .buttons
@@ -180,9 +183,10 @@ input.form-control:focus
     button 
       display: none
       line-height: normal
-    i
-      opacity: 0.5
-      vertical-align: baseline
+    .glyphicon
+      font-size: 12px
+      top: -1px
+      margin-right: -6px
     a, form > input 
       color: #777
       transition: .15s background-color, .15s color
@@ -191,8 +195,14 @@ input.form-control:focus
     a:hover
       color: $peter-river
       text-decoration: none
-  li.channel:hover > button 
-    display: inline-block
+  li.channel:hover
+    button 
+      display: inline-block
+    .glyphicon
+      color: $peter-river
+  .selected
+    .glyphicon
+      color: $peter-river
   .selected > a,
   .selected:hover > a
     color: $peter-river
@@ -287,7 +297,6 @@ input.form-control:focus
 
 // Messages
 .messages
-  margin-top: 108px
   .offline
     .reply, small, p
       opacity: 0.4
@@ -353,6 +362,7 @@ input.form-control:focus
         bottom: -7px
         margin-right: -2px
         margin-top: -17px
+        margin-bottom: -5px
       a
         color: #777
       a:hover
