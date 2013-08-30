@@ -348,7 +348,8 @@ label {
   .messages .message .reply {
     font-size: 12px;
     display: inline-block;
-    margin-bottom: 5px; }
+    margin-bottom: 5px;
+    box-sizing: content-box; }
     .messages .message .reply .normal {
       display: none; }
     .messages .message .reply .operator {
@@ -362,14 +363,9 @@ label {
       margin-bottom: -5px; }
     .messages .message .reply a {
       color: #777777; }
-    .messages .message .reply a:hover {
-      text-decoration: none; }
     .messages .message .reply .glyphicon-time {
       top: 0;
       color: #bdc3c7; }
-  .messages .message .reply:hover {
-    border-bottom: 1px solid #cccccc;
-    cursor: pointer; }
   .messages .message .muted {
     color: rgba(0, 0, 0, 0.2);
     font-size: 12px; }

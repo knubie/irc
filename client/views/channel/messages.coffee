@@ -3,6 +3,7 @@
 Template.messages.rendered = ->
   # Keep scroll position when template rerenders,
   # especially if document height changes.
+  $('.glyphicon-time').tooltip()
   $(window).scrollTop \
     $(document).height() - $(window).height() - Session.get('scroll')
 
@@ -138,6 +139,8 @@ Template.message.helpers
   self: ->
     @type() is 'self'
   away: ->
+    #TODO: make this change the user MODE in irc
+    #TODO: add time since last online
     not Meteor.users.findOne(username: @from)?.profile.online
 
 Template.notification.timeAgo = ->
