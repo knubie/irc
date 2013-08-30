@@ -1,0 +1,25 @@
+<template name="account">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <form role="account-settings">
+          <div class="form-group">
+            <label for="realNameForm">Real name</label>
+            <input class="form-control" id="realNameForm" placeholder="Real Name">
+          </div>
+          <div class="form-group">
+            <label class="checkbox" for="playSounds">
+              <input type="checkbox" value="" id="playSounds" data-toggle="checkbox">
+              Play sounds
+            </label>
+            <label class="checkbox" for="sendNotifications">
+              <input type="checkbox" value="" id="sendNotifications" data-toggle="checkbox">
+              Send notifications
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>

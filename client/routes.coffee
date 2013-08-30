@@ -70,6 +70,9 @@ Router.map ->
     onBeforeRun: ->
       {username} = @params
       Session.set 'user_profile', Meteor.users.findOne({username})?._id
+  @route 'account',
+    path: '/account'
+    data: Meteor.user()
 
 class @LoginController extends RouteController
   run: ->

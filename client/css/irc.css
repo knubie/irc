@@ -20,6 +20,9 @@ code {
 a {
   color: #3498db; }
 
+.thumbnail {
+  background-color: white; }
+
 input.form-control::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.3); }
 
