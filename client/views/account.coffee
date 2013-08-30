@@ -31,4 +31,6 @@ Template.account.events
 
 Template.account.events
   'click label.checkbox[for="sendNotifications"]': (e,t) ->
+    if window.webkitNotifications.checkPermission() is 1 and not Meteor.user().profile.notifications
+      webkitNotifications.requestPermission()
     Meteor.users.update(Meteor.userId(), $set: 'profile.notifications': not Meteor.user().profile.notifications)
