@@ -4,6 +4,7 @@ Router.configure
   layout: 'layout'
   notFoundTemplate: 'not_found'
   loadingTemplate: 'loading'
+  #FIXME: the loading template shows up on the home page.
   renderTemplates:
     'header': to: 'header'
 
@@ -25,6 +26,7 @@ Router.map ->
   @route 'channel_main',
     path: '/channels/:channel'
     waitOn: ->
+      #FIXME: this doesn't work in firefox.
       channel = "##{@params.channel}"
       if handlers.messages[channel]
         return handlers.messages[channel]

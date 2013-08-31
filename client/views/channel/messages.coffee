@@ -75,10 +75,7 @@ Template.message.rendered = ->
     #ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>link_title</a>"
   # Linkify nicks.
   if @data.channel.isChannel()
-    console.log ptext
     for nick of Channels.findOne(name: @data.channel).nicks
-      console.log "#{nick}:"
-      console.log ptext.match regex.nick(nick)
       ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
   while regex.code.test ptext

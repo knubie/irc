@@ -939,9 +939,9 @@
       .on("blured", this._setInputValueToQuery)
       .on("tabKeyed", this._handleSelection)
       .on("queryChanged", this._clearHint)
-      .on("queryChanged", this._clearSuggestions)
-      .on("queryChanged", this._getSuggestions)
-      .on("whitespaceChanged", this._updateHint)
+      .on("queryChanged enterKeyed", this._clearSuggestions)
+      .on("queryChanged enterKeyed", this._getSuggestions)
+      .on("whitespaceChanged enterKeyed", this._updateHint)
       .on("queryChanged whitespaceChanged", this._openDropdown)
       .on("queryChanged whitespaceChanged", this._setLanguageDirection)
       .on("escKeyed", this._closeDropdown)
@@ -977,6 +977,7 @@
         }
       },
       _updateHint: function() {
+        console.log('updateHint')
         var suggestion = this.dropdownView.getFirstSuggestion()
           , hint = suggestion ? suggestion.value : null
           , dropdownIsVisible = this.dropdownView.isVisible()
@@ -998,14 +999,20 @@
         }
       },
       _clearHint: function() {
+        console.log('clearHint')
         this.inputView.setHintValue("");
       },
       _clearSuggestions: function() {
+        console.log('clearSuggestions')
         this.dropdownView.clearSuggestions();
       },
       _setInputValueToQuery: function() {
+        console.log('set inputvalue to query')
+        console.log(this.inputView.getInputValue())
         //mark
-        this.inputView.setInputValue(this.inputView.query);
+        //this.inputView.setInputValue(this.inputView.getQuery());
+        //this.inputView.setInputValue(this.inputView.query);
+        this.inputView.setInputValue(this.inputView.getInputValue());
       },
       _setInputValueToSuggestionUnderCursor: function(e) {
         var suggestion = e.data;

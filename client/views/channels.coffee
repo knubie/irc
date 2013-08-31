@@ -1,14 +1,11 @@
-Template.channel_main.rendered = ->
-  if window.webkitNotifications.checkPermission() is 1 and not Modernizr.touch
-    console.log 'do modal'
-    console.log $('#notification-modal')
-    $('#notification-modal').modal
-      backdrop: true
-      keyboard: true
+#Template.channel_main.rendered = ->
+  #if window.webkitNotifications.checkPermission() is 1 and not Modernizr.touch
+    #$('#notification-modal').modal
+      #backdrop: true
+      #keyboard: true
 
 Template.channel_main.events
   'click #notification-modal .btn-primary': ->
-    console.log 'this is sparta'
     webkitNotifications.requestPermission()
 
 Template.channel_header.helpers
