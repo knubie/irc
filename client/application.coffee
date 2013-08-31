@@ -53,7 +53,8 @@ Meteor.startup ->
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
   @updateStuff = ->
-    unless Modernizr.touch
+    #unless Modernizr.touch
+    if false
       $channelHeader = $('.channel-header')
       currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
 
@@ -82,7 +83,7 @@ Meteor.startup ->
       #handlers.messages.reset()
 
     # If close to top and messages handler is ready.
-    if $(window).scrollTop() <= 95 and handlers.messages[Session.get('channel.name')].ready()
+    if $(window).scrollTop() <= 150 and handlers.messages[Session.get('channel.name')].ready()
       # Load messages subscription next page.
       Log.info 'load next'
       Session.set 'messages.page', Session.get('messages.page') + 1
@@ -90,4 +91,9 @@ Meteor.startup ->
       , Session.get('channel.name')
       , Session.get('messages.page') * 30
       #handlers.messages[Session.get('channel.name')].loadNextPage()
-
+    if Session.get('scroll') < 1 and Session.get('messages.page') > 1
+      Log.info 'reset handler'
+      Session.set 'messages.page', 1
+      handlers.messages[Session.get('channel.name')] = Meteor.subscribe 'messages'
+      , Session.get('channel.name')
+      , Session.get('messages.page') * 30

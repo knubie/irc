@@ -743,6 +743,7 @@
         this.$menu.hide();
       },
       _moveCursor: function(increment) {
+        //mark
         var $suggestions, $cur, nextIndex, $underCursor;
         if (!this.isVisible()) {
           return;
@@ -986,7 +987,7 @@
           , beginsWithQuery
           , match;
         if (hint && dropdownIsVisible && !inputHasOverflow) {
-//mark
+          //mark
           inputValue = this.inputView.getInputValue();
           inputQuery = inputValue.match(/.*@*@(\S*)/)[1];
           query = inputQuery.replace(/\s{2,}/g, " ").replace(/^\s+/g, "");
@@ -1003,7 +1004,8 @@
         this.dropdownView.clearSuggestions();
       },
       _setInputValueToQuery: function() {
-        this.inputView.setInputValue(this.inputView.getQuery());
+        //mark
+        this.inputView.setInputValue(this.inputView.query);
       },
       _setInputValueToSuggestionUnderCursor: function(e) {
         var suggestion = e.data;
@@ -1022,7 +1024,6 @@
         }
       },
       _handleSelection: function(e) {
-        console.log('test')
         var byClick = e.type === "suggestionSelected"
           , suggestion = byClick ? e.data : this.dropdownView.getSuggestionUnderCursor();
         //mark
@@ -1058,6 +1059,7 @@
         });
       },
       _autocomplete: function(e) {
+        console.log('autocomplete')
         var isCursorAtEnd, ignoreEvent, query, hint, suggestion;
         if (e.type === "rightKeyed" || e.type === "leftKeyed") {
           isCursorAtEnd = this.inputView.isCursorAtEnd();

@@ -4,11 +4,11 @@ Template.messages.rendered = ->
   # Keep scroll position when template rerenders,
   # especially if document height changes.
   $('.glyphicon-time').tooltip()
-  if Session.get('scroll') < 1
-    $(window).scrollTop 99999999
+  #if Session.get('scroll') < 1
+    #$(window).scrollTop 99999999
 
-  #$(window).scrollTop \
-    #$(document).height() - $(window).height() - Session.get('scroll')
+  $(window).scrollTop \
+    $(document).height() - $(window).height() - Session.get('scroll')
 
   #Hover isolates messages from like channels
   if @data.name is 'all'
@@ -20,19 +20,10 @@ Template.messages.rendered = ->
   # Store nicks in an array
   else if @data.name.isChannel()
     nicks = (nick for nick of @data.nicks) ? []
-    #$('#say-input').typeahead
-      #name: 'names'
-      #local: nicks
   if Modernizr.touch
-    $(window).on 'touchmove', (e) ->
-      Session.set 'scroll', \
-        $(document).height() - ($(window).scrollTop() + $(window).height())
-      #touches = e.originalEvent.changedTouches
-      #updateStuff()
+    $(window).on 'touchmove', updateStuff
   else
-    $(window).scroll ->
-      Session.set 'scroll', \
-        $(document).height() - ($(window).scrollTop() + $(window).height())
+    $(window).scroll updateStuff
 
 Template.messages.helpers
   messages: ->
@@ -84,7 +75,10 @@ Template.message.rendered = ->
     #ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>link_title</a>"
   # Linkify nicks.
   if @data.channel.isChannel()
-    for nick, status of Channels.findOne(name: @data.channel).nicks
+    console.log ptext
+    for nick of Channels.findOne(name: @data.channel).nicks
+      console.log "#{nick}:"
+      console.log ptext.match regex.nick(nick)
       ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
   while regex.code.test ptext

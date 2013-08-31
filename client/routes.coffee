@@ -26,7 +26,11 @@ Router.map ->
     path: '/channels/:channel'
     waitOn: ->
       channel = "##{@params.channel}"
-      handlers.messages[channel] or handlers.messages[channel] = Meteor.subscribe 'messages', channel, 30
+      if handlers.messages[channel]
+        return handlers.messages[channel]
+      else
+        return handlers.messages[channel] = Meteor.subscribe 'messages', channel, 30
+      #handlers.messages[channel] or handlers.messages[channel] = Meteor.subscribe 'messages', channel, 30
       #FIXME: why can't i use ?=
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
