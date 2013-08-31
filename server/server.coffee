@@ -28,6 +28,6 @@ UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
 
 # When user renews session (reopens window, etc)
 UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
-  #Meteor.users.update userId, $set: 'profile.away': yes
+  Meteor.users.update userId, $set: 'profile.awaySince': (new Date()).getTime()
   # Do anything here?
   # Perhaps set away flag..

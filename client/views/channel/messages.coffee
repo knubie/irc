@@ -4,8 +4,11 @@ Template.messages.rendered = ->
   # Keep scroll position when template rerenders,
   # especially if document height changes.
   $('.glyphicon-time').tooltip()
-  $(window).scrollTop \
-    $(document).height() - $(window).height() - Session.get('scroll')
+  if Session.get('scroll') < 1
+    $(window).scrollTop 99999999
+
+  #$(window).scrollTop \
+    #$(document).height() - $(window).height() - Session.get('scroll')
 
   #Hover isolates messages from like channels
   if @data.name is 'all'
@@ -22,10 +25,14 @@ Template.messages.rendered = ->
       #local: nicks
   if Modernizr.touch
     $(window).on 'touchmove', (e) ->
-      touches = e.originalEvent.changedTouches
-      updateStuff()
+      Session.set 'scroll', \
+        $(document).height() - ($(window).scrollTop() + $(window).height())
+      #touches = e.originalEvent.changedTouches
+      #updateStuff()
   else
-    $(window).scroll updateStuff
+    $(window).scroll ->
+      Session.set 'scroll', \
+        $(document).height() - ($(window).scrollTop() + $(window).height())
 
 Template.messages.helpers
   messages: ->
@@ -51,14 +58,18 @@ Template.messages.helpers
 
 ########## Message ##########
 
+Template.message.preserve ['iframe']
 Template.message.rendered = ->
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
   # Linkify & Imagify URLs.
   ptext = ptext.replace regex.url, (str) ->
+    #youtubeMatch = str.match regex.youtube
     if str.match /\.(?:jpe?g|gif|png)/
       "<a href=\"#{str}\" target=\"_blank\"><img src=\"#{str}\" alt=\"\"/></a>"
+    #else if youtubeMatch and youtubeMatch[1].length is 11
+      #"<iframe width=\"480\" height=\"360\" src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
     else
       "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
   #ptext = ptext.replace regex.image, "<img src=\"$&\" alt=\"\"/>"
@@ -142,6 +153,8 @@ Template.message.helpers
     #TODO: make this change the user MODE in irc
     #TODO: add time since last online
     not Meteor.users.findOne(username: @from)?.profile.online
+  awaySince: ->
+    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
 
 Template.notification.timeAgo = ->
   moment(@createdAt).fromNow()
