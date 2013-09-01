@@ -30,6 +30,10 @@ Template.say.events
       createdAt = Meteor.call 'date', (err, res) ->
         Messages.update msgId, $set: createdAt: res
 
+  'touchend #say-input': (e,t) ->
+    e.preventDefault()
+    t.find('#say-input').focus()
+
 Template.say.rendered = ->
   $('#say-input').focus()
   if @data.name.isChannel()

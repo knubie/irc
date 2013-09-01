@@ -97,3 +97,19 @@ Meteor.startup ->
       handlers.messages[Session.get('channel.name')] = Meteor.subscribe 'messages'
       , Session.get('channel.name')
       , Session.get('messages.page') * 30
+
+  # Images loaded hook
+  @onImagesLoad = (callback) ->
+    images = 0
+    $("img").each (key) ->
+      item = $(this)
+      img = new Image()
+      images++
+      img.onload = ->
+        images--
+      img.src = item.attr("src")
+    check = setInterval ->
+      if images is 0
+        callback()
+        clearInterval(check)
+    , 50
