@@ -99,7 +99,7 @@ Meteor.startup ->
       , Session.get('messages.page') * 30
 
   # Images loaded hook
-  @onImagesLoad = (callback) ->
+  @onImagesLoad = (callbacks) ->
     images = 0
     $("img").each (key) ->
       item = $(this)
@@ -107,9 +107,10 @@ Meteor.startup ->
       images++
       img.onload = ->
         images--
+        callbacks.each?()
       img.src = item.attr("src")
     check = setInterval ->
       if images is 0
-        callback()
+        callbacks.final?()
         clearInterval(check)
     , 50

@@ -10,9 +10,15 @@ Template.messages.rendered = ->
   $(window).scrollTop \
     $(document).height() - $(window).height() - Session.get('scroll')
 
-  onImagesLoad ->
-    $(window).scrollTop \
-      $(document).height() - $(window).height() - Session.get('scroll')
+  onImagesLoad
+    each: ->
+      console.log 'each'
+      $(window).scrollTop \
+        $(document).height() - $(window).height() - Session.get('scroll')
+    final: ->
+      'final'
+      $(window).scrollTop \
+        $(document).height() - $(window).height() - Session.get('scroll')
 
   #Hover isolates messages from like channels
   if @data.name is 'all'

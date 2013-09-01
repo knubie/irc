@@ -37,7 +37,13 @@ Template.say.events
 Template.say.rendered = ->
   $('#say-input').focus()
   if @data.name.isChannel()
-    nicks = (nick for nick of @data.nicks) ? []
-  $('#say-input').typeahead
-    name: 'names'
-    local: nicks
+    nicks = ({username: nick} for nick of @data.nicks) ? []
+  #$('#say-input').typeahead
+    #name: 'names'
+    #local: nicks
+  unless Modernizr.touch
+    $('#say-input').mention
+      delimiter: '@'
+      sensitive: true
+      queryBy: ['username']
+      users: nicks
