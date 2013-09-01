@@ -977,7 +977,6 @@
         }
       },
       _updateHint: function() {
-        console.log('updateHint')
         var suggestion = this.dropdownView.getFirstSuggestion()
           , hint = suggestion ? suggestion.value : null
           , dropdownIsVisible = this.dropdownView.isVisible()
@@ -999,16 +998,12 @@
         }
       },
       _clearHint: function() {
-        console.log('clearHint')
         this.inputView.setHintValue("");
       },
       _clearSuggestions: function() {
-        console.log('clearSuggestions')
         this.dropdownView.clearSuggestions();
       },
       _setInputValueToQuery: function() {
-        console.log('set inputvalue to query')
-        console.log(this.inputView.getInputValue())
         //mark
         //this.inputView.setInputValue(this.inputView.getQuery());
         //this.inputView.setInputValue(this.inputView.query);
@@ -1034,9 +1029,7 @@
         var byClick = e.type === "suggestionSelected"
           , suggestion = byClick ? e.data : this.dropdownView.getSuggestionUnderCursor();
         //mark
-        console.log(suggestion);
         if (suggestion) {
-          console.log(inputValue);
           inputValue = this.inputView.getInputValue();
           inputQuery = inputValue.match(/.*@*@(\S*)/)[1];
           query = inputQuery.replace(/\s{2,}/g, " ").replace(/^\s+/g, "");
@@ -1066,7 +1059,6 @@
         });
       },
       _autocomplete: function(e) {
-        console.log('autocomplete')
         var isCursorAtEnd, ignoreEvent, query, hint, suggestion;
         if (e.type === "rightKeyed" || e.type === "leftKeyed") {
           isCursorAtEnd = this.inputView.isCursorAtEnd();

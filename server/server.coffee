@@ -1,10 +1,4 @@
 Meteor.startup ->
-  # Log out all users when server starts.
-  # This is necessary so that users can reauthenticate with the irc daemon
-  #Meteor.users.update {}
-  #, {$set: {'services.resume.loginTokens' : []}}
-  #, {multi: true}
-
   Meteor.users.find().forEach (user) ->
     client[user.username] ?= new Bot
       _id: user._id
@@ -23,11 +17,8 @@ Meteor.startup ->
 
 # When user loses session (closes window, etc)
 UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
-  #Meteor.users.update userId, $set: 'profile.away': no
   # Do anything here?
 
 # When user renews session (reopens window, etc)
 UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
   Meteor.users.update userId, $set: 'profile.awaySince': (new Date()).getTime()
-  # Do anything here?
-  # Perhaps set away flag..

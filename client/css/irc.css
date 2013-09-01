@@ -295,37 +295,6 @@ label {
   .channel-header #topic-form {
     display: none; }
 
-.messages .offline .reply, .messages .offline small, .messages .offline p {
-  opacity: 0.4; }
-.messages .offline .actions {
-  display: none; }
-.messages .offline .divider {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
-.messages .join {
-  margin-top: -20px; }
-.messages .info {
-  background-color: rgba(0, 0, 0, 0);
-  box-shadow: none;
-  padding-top: 0px; }
-  .messages .info .reply, .messages .info .actions {
-    display: none; }
-  .messages .info p {
-    color: black;
-    text-shadow: 0 1px 0 white;
-    opacity: 0.3;
-    font-weight: bold;
-    font-size: 14px; }
-.messages .mention {
-  border: 1px solid #3498db; }
-.messages .bot {
-  background-color: #bdc3c7; }
-.messages .message.faded {
-  background-color: #f7f9f9;
-  box-shadow: 0 2px 0 #ecf0f1; }
-  .messages .message.faded .reply, .messages .message.faded small, .messages .message.faded p {
-    opacity: 0.4; }
-  .messages .message.faded .divider {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
 .messages .message {
   background-color: white;
   border-radius: 4px;
@@ -392,6 +361,37 @@ label {
   cursor: pointer; }
   .messages .message:hover .actions {
     opacity: 1; }
+.messages .offline .reply, .messages .offline small, .messages .offline p {
+  opacity: 0.4; }
+.messages .offline .actions {
+  display: none; }
+.messages .offline .divider {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
+.messages .join {
+  margin-top: -20px; }
+.messages .info {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+  padding-top: 0px; }
+  .messages .info .reply, .messages .info .actions {
+    display: none; }
+  .messages .info p {
+    color: black;
+    text-shadow: 0 1px 0 white;
+    opacity: 0.3;
+    font-weight: bold;
+    font-size: 14px; }
+.messages .mention {
+  border: 1px solid #3498db; }
+.messages .bot {
+  background-color: #bdc3c7; }
+.messages .message.faded {
+  background-color: #f7f9f9;
+  box-shadow: 0 2px 0 #ecf0f1; }
+  .messages .message.faded .reply, .messages .message.faded small, .messages .message.faded p {
+    opacity: 0.4; }
+  .messages .message.faded .divider {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
 
 .user-profile {
   position: relative;

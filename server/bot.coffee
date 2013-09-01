@@ -34,7 +34,6 @@ class @Idletron extends Client
     # Sets the channel topic.
     @on 'topic', async (channel, topic, nick, message) ->
       Channels.update {name: channel}, $set: {topic}
-      #TODO: do this only once... instead of once for every client
 
     # Listen for incoming messages.
     @on 'message#', async (from, to, text, message) =>
@@ -137,11 +136,6 @@ class @Bot extends Client
     # Log raw messages sent from the network.
     #@on 'raw', (msg) -> console.log msg
 
-    # Sets the channel topic.
-    @on 'topic', async (channel, topic, nick, message) ->
-      Channels.update {name: channel}, $set: {topic}
-      #TODO: do this only once... instead of once for every client
-
     # Listen for incoming messages.
     @on 'message', async (from, to, text, message) =>
       convo = ''
@@ -214,8 +208,8 @@ class @Bot extends Client
         from: 'system'
         convo: ''
         read: false
-      if nick is @username
-        Channels.find({name}).part @username
+      #if nick is @username
+        #Channels.find({name}).part @username
 
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick']

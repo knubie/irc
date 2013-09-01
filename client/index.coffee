@@ -32,6 +32,7 @@ Template.sign_in.events
           Meteor.call 'connect', username, Meteor.userId()
         Router.go 'home'
 
+
 ########## Notification Request ##########
 #
 Template.notification_request.rendered = ->
