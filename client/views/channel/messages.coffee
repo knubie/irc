@@ -112,7 +112,7 @@ Template.message.events
     Meteor.users.update Meteor.userId()
     , $set: {'profile.channels': channels}
 
-  'click': (e, t) ->
+  'click, touchend': (e, t) ->
     if Session.equals 'channel.name', 'all'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.

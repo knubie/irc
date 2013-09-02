@@ -48,6 +48,7 @@ Messages.find().observeChanges
 ########## Startup ##########
 
 Meteor.startup ->
+  FastClick.attach(document.body)
   # Store scroll position in a session variable. This keeps the scroll
   # position in place when receiving new messages, unless the user is
   # scrolled to the bottom, then it forces the scroll position to the

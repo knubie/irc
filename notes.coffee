@@ -16,7 +16,8 @@
 #: nick autocomplete
 #: make timestamp update
 #: add regex for channels to link
-#: add message aggregator
+#: add notifications aggregator
+#: remove 'all channels' link when there are no channels, and have some text that says 'use the add channel button to join channels, or use explore to find channels.'
 #
 #FIXME: make messages.page reset make sure the handle has the right number of messages.
 #TODO: play sound on new message, change page title.
