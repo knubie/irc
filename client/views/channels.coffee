@@ -63,7 +63,7 @@ Template.channels.events
 
   'submit .new-channel-form': (e, t) ->
     e.preventDefault()
-    name = t.find('.new-channel-input').value
+    name = "#" + t.find('.new-channel-input').value
     t.find('.new-channel-input').value = ''
     if name
       Meteor.call 'join', Meteor.user().username, name, (err, channelId) ->

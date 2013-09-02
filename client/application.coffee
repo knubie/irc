@@ -41,7 +41,7 @@ Messages.find().observeChanges
       if doc.convo is Meteor.user().username and \
       doc.from not in Meteor.user().profile.channels[doc.channel].ignore
         if Meteor.user().profile.notifications
-          notifications[id] ?= new Notification doc.channel, doc.text
+          notifications[id] ?= new Notification "#{doc.from} (#{doc.channel})", doc.text
           notifications[id].showOnce()
 
 

@@ -186,10 +186,12 @@ label
     button 
       display: none
       line-height: normal
-    .glyphicon
+    .glyphicon-lock
       font-size: 12px
       top: -1px
       margin-right: -6px
+    .batch-icon
+      margin-right: -4px
     a, form > input 
       color: #777
       transition: .15s background-color, .15s color
@@ -201,10 +203,10 @@ label
   li.channel:hover
     button 
       display: inline-block
-    .glyphicon
+    .glyphicon, .batch-icon
       color: $peter-river
   .selected
-    .glyphicon
+    .glyphicon, .batch-icon
       color: $peter-river
   .selected > a,
   .selected:hover > a
@@ -212,16 +214,23 @@ label
     transition: .15s background-color, .15s color
     font-weight: 500
   .new-channel-li
-    margin-top: 5px
-    .new-channel-link
-      color: $silver
-    .new-channel-link:hover
-      cursor: pointer
-      color: #777
+    margin-top: 10px
+    position: relative
+    //.new-channel-link
+      //color: $silver
+    //.new-channel-link:hover
+      //cursor: pointer
+      //color: #777
     .new-channel-form
       display: none
+      .pound
+        position: absolute
+        top: 6px
+        left: 7px
+        font-size: 16px
       .new-channel-input
         font-size: 16px
+        padding-left: 14px
 
 .messages, .notifications
   margin: 0
@@ -293,12 +302,26 @@ label
   .channel-invite:hover
     color: white
     background-color: $peter-river
-    .glyphicon
-      color: $clouds
-      font-size: 13px
 
   #topic-form
     display: none
+
+.btn-primary-outline
+  color: $peter-river
+  border: 1px solid $peter-river
+  background-color: transparent
+  font-size: 10px
+  text-transform: uppercase
+  font-weight: 700
+  letter-spacing: 1px
+  .glyphicon-plus
+    font-size: 8px
+    top: -1px
+
+.btn-primary-outline:hover
+  color: white
+  background-color: $peter-river
+  border: 1px solid $peter-river
 
 // Messages
 .messages
@@ -334,12 +357,7 @@ label
       .operator
         display: inline-block
         color: $peter-river
-        font-size: 30px
-        position: relative
-        bottom: -7px
-        margin-right: -2px
-        margin-top: -17px
-        margin-bottom: -5px
+        font-size: 10px
       a
         color: #777
       .glyphicon-time

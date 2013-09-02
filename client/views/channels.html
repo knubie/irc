@@ -1,7 +1,72 @@
+<template name="channel_main">
+  {{> notification_modal}}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        {{> channels}}
+      </div>
+      <div class="channel-container col-sm-9">
+        {{> channel_header}}
+        {{> messages}}
+      </div>
+      {{#unless all}}
+        {{> say}}
+      {{/unless}}
+    </div>
+  </div>
+</template>
+
+<template name="channel_header">
+  {{#unless all}}
+    <div class="row">
+      <div class="channel-header col-sm-7">
+        <div class="channel-breadcrumb">
+          <h3>
+            <a href="/channels/{{url_channel}}" class="">
+              {{channel}}
+            </a>
+          </h3>
+          <span class="slash">&nbsp;/&nbsp;</span>
+          <a href="/channels/{{url_channel}}/users" class="user-count">
+            <span class="glyphicon glyphicon-user"></span>
+            <strong>{{users}}</strong> users
+          </a>
+          <div class="topic">
+            {{topic}}
+            {{#if op_status}}
+              <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
+            {{/if}}
+          </div>
+          <form id="topic-form">
+            <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{topic}}">
+            <a href="#" class="cancel">cancel</a>
+          </form>
+          {{#if currentUser}}
+            <a href="/channels/{{url_channel}}/settings" class="channel-settings">
+              <span class="glyphicon glyphicon-cog"></span>
+              <span class="hidden-xs">Settings</span>
+            </a>
+            <a href="/channels/{{url_channel}}/settings" class="hidden-xs btn btn-default channel-invite">
+              Invite a friend
+            </a>
+          {{/if}}
+        </div>
+        {{#if currentUser}}
+          <!--<div class="buttons">-->
+            <!--<a href="/channels/{{url_channel}}/settings" class="settings">settings</a>-->
+            <!--<a class="add-bot">invite</a>-->
+          <!--</div>-->
+        {{/if}}
+      </div>
+    </div>
+  {{/unless}}
+</template>
+
 <template name="channels">
   <ul class="channels">
     {{#if currentUser}}
       <li class="all-channels {{all}}">
+        <span class="batch-icon">&#xf009;</span>
         <a href="/">
           All channels
         </a>
@@ -12,9 +77,13 @@
     {{/each}}
     {{#if currentUser}}
       <li class="new-channel-li">
-        <span class="new-channel-link">+ Add channel</span>
+        <span class="new-channel-link btn btn-default btn-primary-outline">
+          <span class="glyphicon glyphicon-plus"></span>
+          add channel
+        </span>
         <form class="new-channel-form">
-          <input type="text" class="new-channel-input form-control" autocomplete="off" placeholder="Add Channel">
+          <span class="pound">#</span>
+          <input type="text" class="new-channel-input form-control" autocomplete="off" placeholder="channel_name">
         </form>
       </li>
     {{/if}}
@@ -24,6 +93,7 @@
 <template name="channel">
   <li class="channel {{selected}}">
     {{#if private}}<span class="glyphicon glyphicon-lock"></i>{{/if}}
+    <span class="batch-icon">&#xf000;</span>
     <a href="/channels/{{url_name}}">
       {{.}}
       <span class="badge badge-info">{{unread}}</span>

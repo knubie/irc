@@ -39,7 +39,7 @@ Template.say.rendered = ->
     #local: nicks
   unless Modernizr.touch
     $('#say-input').mention
-      delimiter: '@'
+      delimiter: ' '
       sensitive: true
       queryBy: ['username']
       users: nicks
