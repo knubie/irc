@@ -32,14 +32,6 @@ Template.sign_in.events
           Meteor.call 'connect', username, Meteor.userId()
         Router.go 'home'
 
-  'touchend #signin-username': (e,t) ->
-    e.preventDefault()
-    t.find('#signin-username').focus()
-
-  'touchend #signin-password': (e,t) ->
-    e.preventDefault()
-    t.find('#signin-password').focus()
-
 ########## Notification Request ##########
 #
 Template.notification_request.rendered = ->

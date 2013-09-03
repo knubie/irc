@@ -59,6 +59,14 @@ class @Idletron extends Client
         status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
         read: true
 
+      if /^[?](.*)$/.test text # Listen for Wolfram queries.
+        query = text.replace /^[?]\s*/g, '' # Extract query.
+        wolfram.request query, (answer) =>
+          if answer
+            @say to, answer
+          else
+            @say to, "I don't know."
+
     # Listen for channel list response and populate
     # channel collection with the results.
     @on 'channellist_item', async (data) ->

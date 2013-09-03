@@ -5,6 +5,7 @@
 body
   background-color: $clouds
   padding-top: 50px
+  -webkit-font-smoothing: antialiased
   //font-family: 'Open Sans', Helvetica, sans-serif
 
 // Random shit
@@ -84,7 +85,7 @@ label
       font-size: 60px
     color: #FFF
   p
-    font-weight: 300
+    font-weight: 400
     line-height: 1.5
   a
     color: $peter-river
@@ -254,6 +255,11 @@ label
     h3
       display: inline
       font-size: 21px
+      .batch-icon
+        font-size: 21px
+        color: $silver
+        position: relative
+        bottom: -3px
     .channel-name
       color: #777
       font-weight: bold
@@ -337,11 +343,13 @@ label
     p
       font-size: 16px
       line-height: 21px
-      font-weight: 300
+      font-weight: 400
       margin: 0
       img
         max-width: 100%
         max-height: 50vh
+      a
+        font-weight: 400
     .reply, small, p
       transition: .15s left, .15s opacity, .15s background-color, .15s color
     .reply
@@ -375,20 +383,29 @@ label
       margin: 0 0 10px 0
     .actions
       font-size: 12px
-      opacity: 0
-      display: inline
+      display: none
       .action
         display: inline
         .glyphicon
           color: #BDC3C7
       .action:hover
         color: #333
+        cursor: pointer
         .glyphicon
           color: #777
   .message:hover
-    cursor: pointer
     .actions
-      opacity: 1
+      display: inline
+  .touch
+    .actions
+  .bot
+    background-color: $silver
+    color: #FFF
+    box-shadow: 0 2px 0 rgba(0,0,0,.3)
+    p
+      font-family: Menlo, monospace
+    .reply
+      color: #FFF
   .offline
     .reply, small, p
       opacity: 0.4

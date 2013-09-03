@@ -1,6 +1,7 @@
 body {
   background-color: #ecf0f1;
-  padding-top: 50px; }
+  padding-top: 50px;
+  -webkit-font-smoothing: antialiased; }
 
 .fixed-width {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
@@ -83,7 +84,7 @@ label {
       .marketing-section-signup h1 {
         font-size: 60px; } }
   .marketing-section-signup p {
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.5; }
   .marketing-section-signup a {
     color: #3498db; }
@@ -246,6 +247,11 @@ label {
     .channel-header .channel-breadcrumb h3 {
       display: inline;
       font-size: 21px; }
+      .channel-header .channel-breadcrumb h3 .batch-icon {
+        font-size: 21px;
+        color: #bdc3c7;
+        position: relative;
+        bottom: -3px; }
     .channel-header .channel-breadcrumb .channel-name {
       color: #777777;
       font-weight: bold; }
@@ -328,11 +334,13 @@ label {
   .messages .message p {
     font-size: 16px;
     line-height: 21px;
-    font-weight: 300;
+    font-weight: 400;
     margin: 0; }
     .messages .message p img {
       max-width: 100%;
       max-height: 50vh; }
+    .messages .message p a {
+      font-weight: 400; }
   .messages .message .reply, .messages .message small, .messages .message p {
     transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
   .messages .message .reply {
@@ -363,20 +371,26 @@ label {
     margin: 0 0 10px 0; }
   .messages .message .actions {
     font-size: 12px;
-    opacity: 0;
-    display: inline; }
+    display: none; }
     .messages .message .actions .action {
       display: inline; }
       .messages .message .actions .action .glyphicon {
         color: #bdc3c7; }
     .messages .message .actions .action:hover {
-      color: #333333; }
+      color: #333333;
+      cursor: pointer; }
       .messages .message .actions .action:hover .glyphicon {
         color: #777777; }
-.messages .message:hover {
-  cursor: pointer; }
-  .messages .message:hover .actions {
-    opacity: 1; }
+.messages .message:hover .actions {
+  display: inline; }
+.messages .bot {
+  background-color: #bdc3c7;
+  color: white;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3); }
+  .messages .bot p {
+    font-family: Menlo, monospace; }
+  .messages .bot .reply {
+    color: white; }
 .messages .offline .reply, .messages .offline small, .messages .offline p {
   opacity: 0.4; }
 .messages .offline .actions {

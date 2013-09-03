@@ -32,6 +32,7 @@ Template.messages.rendered = ->
     nicks = (nick for nick of @data.nicks) ? []
   if Modernizr.touch
     $(window).on 'touchmove', updateStuff
+    $('.message').addClass('touch')
   else
     $(window).scroll updateStuff
 
@@ -112,7 +113,7 @@ Template.message.events
     Meteor.users.update Meteor.userId()
     , $set: {'profile.channels': channels}
 
-  'click, touchend': (e, t) ->
+  'click': (e, t) ->
     if Session.equals 'channel.name', 'all'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
@@ -144,7 +145,10 @@ Template.message.helpers
   timeAgo: ->
     moment(@createdAt).fromNow()
   message_class: ->
-    if @online() then @type() else "offline #{@type()}"
+    if @from is 'Idletron'
+      return 'bot'
+    else
+      if @online() then @type() else "offline #{@type()}"
   op_status: ->
     if @channel.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'

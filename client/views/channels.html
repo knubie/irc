@@ -22,6 +22,7 @@
       <div class="channel-header col-sm-7">
         <div class="channel-breadcrumb">
           <h3>
+            <span class="batch-icon">&#xf003;</span>
             <a href="/channels/{{url_channel}}" class="">
               {{channel}}
             </a>
@@ -92,8 +93,12 @@
 
 <template name="channel">
   <li class="channel {{selected}}">
-    {{#if private}}<span class="glyphicon glyphicon-lock"></i>{{/if}}
-    <span class="batch-icon">&#xf000;</span>
+    {{#if private}}
+      <!--<span class="glyphicon glyphicon-lock"></i>-->
+      <span class="batch-icon">&#xf0c2;</span>
+    {{else}}
+      <span class="batch-icon">&#xf000;</span>
+    {{/if}}
     <a href="/channels/{{url_name}}">
       {{.}}
       <span class="badge badge-info">{{unread}}</span>
