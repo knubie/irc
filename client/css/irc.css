@@ -513,13 +513,20 @@ form {
   text-shadow: none; }
 
 .channel-list {
-  list-style: none; }
+  list-style: none;
+  margin-top: 25px;
+  padding: 0; }
   .channel-list li {
     border-bottom: 1px solid #cccccc;
     padding-bottom: 15px;
     margin-bottom: 15px;
     color: #777777;
     position: relative; }
+    .channel-list li .batch-icon {
+      float: left;
+      color: #bdc3c7;
+      font-size: 28px;
+      margin-right: 10px; }
     .channel-list li h3 {
       font-size: 20px;
       margin: 0; }
@@ -530,11 +537,12 @@ form {
       color: #777777;
       display: inline-block;
       font-size: 12px; }
-      .channel-list li .user-count i {
-        position: relative;
-        top: -2px;
-        margin-right: 4px;
-        opacity: 0.35; }
+      .channel-list li .user-count .glyphicon {
+        color: #bdc3c7;
+        top: 0; }
+
+.explore-nav {
+  margin-top: 25px; }
 
 .page-head {
   position: fixed;
@@ -621,9 +629,6 @@ form {
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
   background-color: #ecf0f1; }
-
-.explore-nav {
-  margin-top: 25px; }
 
 .badge-important {
   background-color: #3498db; }

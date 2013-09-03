@@ -551,14 +551,22 @@ form
   color: white
   text-shadow: none
 
+// Explore
 .channel-list
   list-style: none
+  margin-top: 25px
+  padding: 0
   li
     border-bottom: 1px solid #ccc
     padding-bottom: 15px
     margin-bottom: 15px
     color: #777
     position: relative
+    .batch-icon
+      float: left
+      color: $silver
+      font-size: 28px
+      margin-right: 10px
     h3
       font-size: 20px
       margin: 0
@@ -569,11 +577,13 @@ form
       color: #777
       display: inline-block
       font-size: 12px
-      i
-        position: relative
-        top: -2px
-        margin-right: 4px
-        opacity: 0.35
+      .glyphicon
+        color: $silver
+        top: 0
+
+
+.explore-nav
+  margin-top: 25px
 
 .page-head
   position: fixed
@@ -661,8 +671,6 @@ form
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus
   background-color: $clouds
 
-.explore-nav
-  margin-top: 25px
 .badge-important
   background-color: $peter-river
 
