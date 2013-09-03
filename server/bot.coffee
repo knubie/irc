@@ -26,7 +26,8 @@ class @Idletron extends Client
     ]
 
     # Log errors sent from the network.
-    @on 'error', async (msg) -> Log.error msg
+    @on 'error', async (msg) ->
+      Log.error msg
 
     # Log raw messages sent from the network.
     #@on 'raw', (msg) -> console.log msg

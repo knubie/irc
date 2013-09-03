@@ -11,7 +11,7 @@ if Meteor.isServer
   Accounts.onCreateUser (options, user) ->
     # Create defaults
     profile =
-      connection: on
+      connection: off
       notifications: on
       sounds: on
       account: 'free'

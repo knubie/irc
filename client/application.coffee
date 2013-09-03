@@ -27,6 +27,8 @@ Session.setDefault 'messages.page', 1
 handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels'
 Deps.autorun ->
+  console.log 'Deps.autorun'
+  console.log "page: #{Session.get('messages.page')}"
   limit = 30 * Session.get('messages.page')
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   if Meteor.user()
@@ -35,6 +37,7 @@ Deps.autorun ->
 
 Messages.find().observeChanges
   added: (id, doc) ->
+    console.log "doc added"
     unless doc.read
       if Meteor.user().profile.sounds
         document.getElementById('beep').play()
@@ -87,17 +90,11 @@ Meteor.startup ->
     if $(window).scrollTop() <= 150 and handlers.messages[Session.get('channel.name')].ready()
       # Load messages subscription next page.
       Log.info 'load next'
+      Log.info Session.get('messages.page')
       Session.set 'messages.page', Session.get('messages.page') + 1
-      handlers.messages[Session.get('channel.name')] = Meteor.subscribe 'messages'
-      , Session.get('channel.name')
-      , Session.get('messages.page') * 30
-      #handlers.messages[Session.get('channel.name')].loadNextPage()
     if Session.get('scroll') < 1 and Session.get('messages.page') > 1
       Log.info 'reset handler'
       Session.set 'messages.page', 1
-      handlers.messages[Session.get('channel.name')] = Meteor.subscribe 'messages'
-      , Session.get('channel.name')
-      , Session.get('messages.page') * 30
 
   # Images loaded hook
   @onImagesLoad = (callbacks) ->

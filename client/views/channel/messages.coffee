@@ -1,6 +1,7 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
+  $(window).off 'scroll'
   # Keep scroll position when template rerenders,
   # especially if document height changes.
   $('.glyphicon-time').tooltip()
@@ -16,9 +17,10 @@ Template.messages.rendered = ->
       $(window).scrollTop \
         $(document).height() - $(window).height() - Session.get('scroll')
     final: ->
-      'final'
+      console.log 'final'
       $(window).scrollTop \
         $(document).height() - $(window).height() - Session.get('scroll')
+
 
   #Hover isolates messages from like channels
   if @data.name is 'all'

@@ -26,6 +26,7 @@ Router.map ->
   @route 'channel_main',
     path: '/channels/:channel'
     waitOn: ->
+      Log.info 'waitOn'
       #FIXME: this doesn't work in firefox.
       channel = "##{@params.channel}"
       if handlers.messages[channel]
@@ -36,11 +37,13 @@ Router.map ->
       #FIXME: why can't i use ?=
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
+      Log.info 'onBeforeRun'
       channel = "##{@params.channel}"
       if Meteor.user()
         unless Meteor.user().profile.channels.hasOwnProperty(channel)
           Meteor.call 'join', Meteor.user().username, channel
       Deps.autorun =>
+        Log.info 'onBeforeRun autorun'
         if ch = Channels.findOne({name: channel})
           Session.set 'channel.name', ch.name
           Session.set 'channel.id', ch._id
