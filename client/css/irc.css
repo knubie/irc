@@ -384,6 +384,8 @@ label {
         color: #777777; }
 .messages .message:hover .actions {
   display: inline; }
+.messages .touch:hover .actions {
+  display: none; }
 .messages .bot {
   background-color: #bdc3c7;
   color: white;
