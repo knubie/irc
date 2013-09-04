@@ -35,9 +35,9 @@ Deps.autorun ->
     for channel of Meteor.user().profile.channels
       handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
 
+# Send Notifications.
 Messages.find().observeChanges
   added: (id, doc) ->
-    console.log "doc added"
     unless doc.read
       if Meteor.user().profile.sounds
         document.getElementById('beep').play()
@@ -45,6 +45,11 @@ Messages.find().observeChanges
       doc.from not in Meteor.user().profile.channels[doc.channel].ignore
         if Meteor.user().profile.notifications
           notifications[id] ?= new Notification "#{doc.from} (#{doc.channel})", doc.text
+          notifications[id].showOnce()
+
+      unless doc.channel.isChannel()
+        if Meteor.user().profile.notifications
+          notifications[id] ?= new Notification "#{doc.from}", doc.text
           notifications[id].showOnce()
 
 

@@ -57,14 +57,13 @@ Router.map ->
         #unless Meteor.user().profile.channels.hasOwnProperty(channel)
           #Meteor.call 'join', Meteor.user().username, channel
       if Meteor.user()
-        unless Meteor.user().profile.pms.hasOwnProperty(@params.user)
-          if Meteor.user().profile.pms?
-            {pms} = Meteor.user().profile
-          else
-            pms = {}
-          pms[@params.user] = {unread: 0}
-          # Update the User with the new PMs object.
-          Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
+        if Meteor.user().profile.pms?
+          {pms} = Meteor.user().profile
+        else
+          pms = {}
+        pms[@params.user] = {unread: 0} unless @params.user of pms
+        # Update the User with the new PMs object.
+        Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
       Session.set 'channel.name', @params.user
       #Deps.autorun =>
         #if u = Meteor.users.findOne({username: @params.user})
