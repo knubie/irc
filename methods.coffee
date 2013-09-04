@@ -71,9 +71,11 @@ Meteor.methods
 
   say: (username, channel, message) ->
     check username, validUsername
-    check channel, validChannelName
+    #check channel, validChannelName
+    #TODO: maybe check if valid username/channelname
     check message, validMessageText
     if Meteor.isServer
+      console.log channel
       client[username].say channel, message
     return null
 

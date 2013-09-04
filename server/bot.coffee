@@ -274,7 +274,7 @@ class @Bot extends Client
       #, {$set: {nicks}}
 
   say: (channel, text) ->
-    check channel, validChannelName
+    #check channel, validChannelName
     check text, validMessageText
     # Sends text to the specified channel and inserts a new Message doc.
     super channel, text

@@ -3,6 +3,9 @@
 Handlebars.registerHelper 'isChannel', ->
   Session.get('channel.name').isChannel()
 
+Handlebars.registerHelper 'isAll', ->
+  Session.equals 'channel.name', 'all'
+
 Template.home_logged_out.events
   'submit #signup': (e,t) ->
     e.preventDefault()
