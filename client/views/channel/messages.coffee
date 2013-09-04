@@ -58,7 +58,6 @@ Template.messages.helpers
 
 ########## Message ##########
 
-Template.message.preserve ['iframe']
 Template.message.rendered = ->
   # Get message text.
   p = $(@find('p'))
@@ -119,7 +118,7 @@ Template.message.events
         $('.message').not("[data-channel='#{@channel}']")
       ch = Channels.findOne {name: @channel}
       # If there are any message to slideToggle...
-      if $messagesFromOtherChannels.length > 0
+      if $messagesFromOtherChannels.length > 0 and not Modernizr.touch
         $messagesFromOtherChannels.slideToggle 400, =>
           Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
       else # No messages to slideToggle

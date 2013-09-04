@@ -43,7 +43,8 @@ Template.notification_request.rendered = ->
 
 Template.header.events
   'click .signout': ->
-    Meteor.call 'disconnect', Meteor.user().username
+    #TODO: create some kind of explicit disconnect.
+    #Meteor.call 'disconnect', Meteor.user().username
     Meteor.logout -> Router.go 'home'
 
 ########## User Profile ##########

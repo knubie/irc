@@ -3,8 +3,8 @@ Meteor.startup ->
     client[user.username] ?= new Bot
       _id: user._id
       username: user.username
-    if user.services.resume.loginTokens.length > 0
-      client[user.username].connect()
+    #if user.services.resume.loginTokens.length > 0
+    client[user.username].connect()
 
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.
