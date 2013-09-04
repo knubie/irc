@@ -1,7 +1,7 @@
 ########## Global helpers ##########
 
-Handlebars.registerHelper 'all', ->
-  Session.equals 'channel.name', 'all'
+Handlebars.registerHelper 'isChannel', ->
+  Session.get('channel.name').isChannel()
 
 Template.home_logged_out.events
   'submit #signup': (e,t) ->

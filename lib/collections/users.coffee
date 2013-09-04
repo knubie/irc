@@ -16,6 +16,7 @@ if Meteor.isServer
       sounds: on
       account: 'free'
       channels: {}
+      pms: {}
       awaySince: 0
 
     # Augment/override with clien-side options

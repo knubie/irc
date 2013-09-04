@@ -80,6 +80,8 @@ Template.channels.helpers
     #Channels.find
       #name: $in: (channel for channel of Meteor.user().profile.channels)
     #.fetch()
+  pms: ->
+    (pm for pm of Meteor.user().profile.pms)
   all: ->
     if Session.equals 'channel.name', 'all' then 'selected' else ''
 
@@ -128,3 +130,28 @@ Template.channel.helpers
       .fetch().length or ''
     else
       return ''
+
+Template.pm.helpers
+  selected: ->
+    if Session.equals 'channel.name', "#{@}" then 'selected' else ''
+  #unread: ->
+    #if Meteor.user()
+      #ignore_list = Meteor.user().profile.channels["#{@}"].ignore
+      #Messages.find
+        #channel: "#{@}"
+        #read: false
+        #from: $nin: ignore_list
+      #.fetch().length or ''
+    #else
+      #return ''
+  #unread_mentions: ->
+    #if Meteor.user()
+      #ignore_list = Meteor.user().profile.channels["#{@}"].ignore
+      #Messages.find
+        #channel: "#{@}"
+        #read: false
+        #convo: Meteor.user().username
+        #from: $nin: ignore_list
+      #.fetch().length or ''
+    #else
+      #return ''

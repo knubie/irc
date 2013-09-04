@@ -17,7 +17,7 @@
 </template>
 
 <template name="channel_header">
-  {{#unless all}}
+  {{#if isChannel}}
     <div class="row">
       <div class="channel-header col-sm-7">
         <div class="channel-breadcrumb">
@@ -60,7 +60,7 @@
         {{/if}}
       </div>
     </div>
-  {{/unless}}
+  {{/if}}
 </template>
 
 <template name="channels">
@@ -69,13 +69,18 @@
       <li class="all-channels {{all}}">
         <span class="batch-icon">&#xf009;</span>
         <a href="/">
-          All channels
+          All messages
         </a>
       </li>
     {{/if}}
     {{#each channels}}
       {{> channel}}
     {{/each}}
+    {{#if currentUser}}
+      {{#each pms}}
+        {{> pm}}
+      {{/each}}
+    {{/if}}
     {{#if currentUser}}
       <li class="new-channel-li">
         <span class="new-channel-link btn btn-default btn-primary-outline">
@@ -103,6 +108,18 @@
       {{.}}
       <span class="badge badge-info">{{unread}}</span>
       <span class="badge badge-important">{{unread_mentions}}</span>
+    </a>
+    <button type="button" class="close">&times;</button>
+  </li>
+</template>
+
+<template name="pm">
+  <li class="channel {{selected}}">
+    <span class="batch-icon">&#xf044;</span>
+    <a href="/messages/{{.}}">
+      {{.}}
+      <span class="badge badge-info"></span>
+      <span class="badge badge-important"></span>
     </a>
     <button type="button" class="close">&times;</button>
   </li>

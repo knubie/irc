@@ -19,6 +19,7 @@ Template.messages.rendered = ->
 
 
   #Hover isolates messages from like channels
+  console.log @data
   if @data.name is 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
@@ -82,8 +83,8 @@ Template.message.rendered = ->
 
     #ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>link_title</a>"
   # Linkify nicks.
-  if @data.channel.isChannel()
-    for nick of Channels.findOne(name: @data.channel).nicks
+  if @data.channel?.isChannel()
+    for nick of @data.channel.nicks
       ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
   # Markdownify other stuff.
   while regex.code.test ptext
@@ -147,7 +148,7 @@ Template.message.helpers
     else
       if @online() then @type() else "offline #{@type()}"
   op_status: ->
-    if @channel.isChannel() and Meteor.user()
+    if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'

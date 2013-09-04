@@ -151,37 +151,44 @@ class @Bot extends Client
 
       # If message is a PM
       if to is @username
-        channel = {name: from}
-        # Update user's channels object
-        {channels} = Meteor.users.findOne(@_id).profile
-        # Add the new channel if it's not there already.
-        unless channel of channels
-          channels[channel] =
-            ignore: []
-            verbose: false
-            unread: 0
-            mentions: 0
-          # Update the User with the new channels object.
-          Meteor.users.update @_id, $set: {'profile.channels': channels}
-      else
+        # Update user's PMs object
+        if Meteor.users.findOne(@_id).profile.pms?
+          {pms} = Meteor.users.findOne(@_id).profile
+        else pms = {}
+        pms[from] = {unread: 0} unless from of pms
+        # Update the User with the new PMs object.
+        Meteor.users.update @_id, $set: {'profile.pms': pms}
+        status =
+          '@': 'operator'
+          '': 'normal'
+        # Insert a new message
+        Messages.insert
+          from: from
+          channel: from
+          text: text
+          createdAt: (new Date()).getTime()
+          owner: @_id
+          read: false
+
+      else #Is to a channel.
         channel = Channels.find_or_create to
         for nick of channel.nicks
           if regex.nick(nick).test(text)
             convo = nick; break
 
-      status =
-        '@': 'operator'
-        '': 'normal'
-      # Insert a new message
-      Messages.insert
-        from: from
-        channel: channel.name
-        text: text
-        createdAt: (new Date()).getTime()
-        owner: @_id
-        convo: convo
-        status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
-        read: false
+        status =
+          '@': 'operator'
+          '': 'normal'
+        # Insert a new message
+        Messages.insert
+          from: from
+          channel: channel.name
+          text: text
+          createdAt: (new Date()).getTime()
+          owner: @_id
+          convo: convo
+          status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
+          read: false
 
     # Listen for channel list response and populate
     # channel collection with the results.

@@ -37,7 +37,6 @@ Router.map ->
       #FIXME: why can't i use ?=
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
-      Log.info 'onBeforeRun'
       channel = "##{@params.channel}"
       if Meteor.user()
         unless Meteor.user().profile.channels.hasOwnProperty(channel)
@@ -48,6 +47,22 @@ Router.map ->
           Session.set 'channel.name', ch.name
           Session.set 'channel.id', ch._id
       Session.set 'messages.page', 1
+  @route 'pms_main',
+    template: 'channel_main'
+    path: '/messages/:user'
+    data: -> {name: @params.user}
+    onBeforeRun: ->
+      #channel = "##{@params.channel}"
+      #if Meteor.user()
+        #unless Meteor.user().profile.channels.hasOwnProperty(channel)
+          #Meteor.call 'join', Meteor.user().username, channel
+      Session.set 'channel.name', @params.user
+      #Deps.autorun =>
+        #if u = Meteor.users.findOne({username: @params.user})
+          #Session.set 'channel.name', u.name
+          ##Session.set 'channel.id', u._id
+      Session.set 'messages.page', 1
+
   @route 'channel_settings',
     path: '/channels/:channel/settings'
     data: -> Channels.findOne({name: "##{@params.channel}"})
