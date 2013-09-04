@@ -94,9 +94,8 @@ Template.channel.events
 
   'click .close': ->
     Meteor.call 'part', Meteor.user().username, "#{@}"
-    Session.set 'channel.name', 'all'
-    Session.set 'channel.id', null
-    Router.go('home')
+    if "#{@}" is Session.get('channel.name')
+      Router.go('home')
 
 Template.channel.helpers
   selected: ->
@@ -134,16 +133,12 @@ Template.channel.helpers
 Template.pm.helpers
   selected: ->
     if Session.equals 'channel.name', "#{@}" then 'selected' else ''
-  #unread: ->
-    #if Meteor.user()
-      #ignore_list = Meteor.user().profile.channels["#{@}"].ignore
-      #Messages.find
-        #channel: "#{@}"
-        #read: false
-        #from: $nin: ignore_list
-      #.fetch().length or ''
-    #else
-      #return ''
+  unread: ->
+    console.log "#{@}"
+    Messages.find
+      channel: "#{@}"
+      read: false
+    .fetch().length or ''
   #unread_mentions: ->
     #if Meteor.user()
       #ignore_list = Meteor.user().profile.channels["#{@}"].ignore
@@ -155,3 +150,11 @@ Template.pm.helpers
       #.fetch().length or ''
     #else
       #return ''
+Template.pm.events
+  'click .close': ->
+    console.log 'close pm'
+    {pms} = Meteor.user().profile
+    delete pms["#{@}"]
+    Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
+    if "#{@}" is Session.get('channel.name')
+      Router.go('home')

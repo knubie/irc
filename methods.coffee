@@ -75,7 +75,6 @@ Meteor.methods
     #TODO: maybe check if valid username/channelname
     check message, validMessageText
     if Meteor.isServer
-      console.log channel
       client[username].say channel, message
     return null
 
