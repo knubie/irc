@@ -436,6 +436,8 @@ label {
       font-weight: bold; }
     .user-profile .first.vcard .stats .joined-on {
       color: #bdc3c7; }
+    .user-profile .first.vcard .btn {
+      margin-top: 10px; }
   .user-profile .last {
     color: #777777;
     font-weight: bold; }

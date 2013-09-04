@@ -134,7 +134,6 @@ Template.pm.helpers
   selected: ->
     if Session.equals 'channel.name', "#{@}" then 'selected' else ''
   unread: ->
-    console.log "#{@}"
     Messages.find
       channel: "#{@}"
       read: false

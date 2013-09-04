@@ -158,9 +158,6 @@ class @Bot extends Client
         pms[from] = {unread: 0} unless from of pms
         # Update the User with the new PMs object.
         Meteor.users.update @_id, $set: {'profile.pms': pms}
-        status =
-          '@': 'operator'
-          '': 'normal'
         # Insert a new message
         Messages.insert
           from: from
