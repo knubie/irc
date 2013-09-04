@@ -31,7 +31,7 @@ Template.say.events
         Messages.update msgId, $set: createdAt: res
 
 Template.say.rendered = ->
-  $('#say-input').focus()
+  $('#say-input').focus() unless Modernizr.touch
   if @data.name.isChannel()
     nicks = ({username: nick} for nick of @data.nicks) ? []
   #$('#say-input').typeahead
