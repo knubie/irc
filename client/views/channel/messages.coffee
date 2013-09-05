@@ -120,9 +120,15 @@ Template.message.events
       # If there are any message to slideToggle...
       if $messagesFromOtherChannels.length > 0 and not Modernizr.touch
         $messagesFromOtherChannels.slideToggle 400, =>
-          Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+          if @channel.isChannel()
+            Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+          else
+            Router.go "/messages/#{@channel}"
       else # No messages to slideToggle
-        Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+        if @channel.isChannel()
+          Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+        else
+          Router.go "/messages/#{@channel}"
 
   'click .convo': (e, t) ->
     $('.message')

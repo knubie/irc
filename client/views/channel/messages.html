@@ -44,7 +44,9 @@
         {{#if isChannel}}
           <span class="{{status}} batch-icon">&#xf151;</span>
         {{else}}
-          <span class="pm-icon batch-icon">&#xf158;</span>
+          {{#if isAll}}
+            <span class="pm-icon batch-icon">&#xf158;</span>
+          {{/if}}
         {{/if}}
         <a href="/users/{{from}}"><strong>{{from}}</strong></a>
         {{#if away}}
