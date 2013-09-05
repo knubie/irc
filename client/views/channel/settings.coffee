@@ -32,7 +32,6 @@ Template.settings.events
 
   'click label.checkbox[for="privateCheckbox"]': (e,t) ->
   #'click #privateCheckbox': (e,t) ->
-    console.log 'click dat thang'
     channel = Channels.findOne Session.get('channel.id')
     if 's' in channel.modes or 'i' in channel.modes
       Meteor.call 'mode', Meteor.user(), Session.get('channel.name'), '-si'
@@ -40,7 +39,6 @@ Template.settings.events
       Meteor.call 'mode', Meteor.user(), Session.get('channel.name'), '+si'
 
   'click label.checkbox[for="showHideJoins"]': (e,t) ->
-    console.log 'cliked joinpart'
 
 Template.settings.helpers
   op_status: ->

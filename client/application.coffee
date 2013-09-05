@@ -27,8 +27,6 @@ Session.setDefault 'messages.page', 1
 handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels'
 Deps.autorun ->
-  console.log 'Deps.autorun'
-  console.log "page: #{Session.get('messages.page')}"
   limit = 30 * Session.get('messages.page')
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   if Meteor.user()

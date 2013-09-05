@@ -42,11 +42,9 @@ if Meteor.isServer
 
   #Messages.deny
     #insert: (userId, message) ->
-      #console.log 'deny'
       #message.createdAt = (new Date()).getTime()
       #false
 
   #Messages.before
     #insert: (userId, message) ->
-      #console.log 'messages before'
       #message.createdAt = (new Date()).getTime()

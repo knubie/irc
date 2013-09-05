@@ -13,7 +13,6 @@ Template.messages.rendered = ->
 
   onImagesLoad
     final: ->
-      console.log 'final'
       $(window).scrollTop \
         $(document).height() - $(window).height() - Session.get('scroll')
 

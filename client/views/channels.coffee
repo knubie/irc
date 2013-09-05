@@ -151,7 +151,6 @@ Template.pm.helpers
       #return ''
 Template.pm.events
   'click .close': ->
-    console.log 'close pm'
     {pms} = Meteor.user().profile
     delete pms["#{@}"]
     Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
