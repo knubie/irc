@@ -41,7 +41,11 @@
   {{else}}
     <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message {{message_class}}">
       <span class="reply">
-        <span class="{{status}} batch-icon">&#xf151;</span>
+        {{#if isChannel}}
+          <span class="{{status}} batch-icon">&#xf151;</span>
+        {{else}}
+          <span class="pm-icon batch-icon">&#xf158;</span>
+        {{/if}}
         <a href="/users/{{from}}"><strong>{{from}}</strong></a>
         {{#if away}}
           <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="away"></span><span class="away-since">{{awaySince}}</span>

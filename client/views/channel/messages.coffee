@@ -157,6 +157,8 @@ Template.message.helpers
     not Meteor.users.findOne(username: @from)?.profile.online
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
+  isChannel: ->
+    @channel?.isChannel()
 
 Template.notification.timeAgo = ->
   moment(@createdAt).fromNow()

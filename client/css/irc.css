@@ -382,6 +382,10 @@ label {
       cursor: pointer; }
       .messages .message .actions .action:hover .glyphicon {
         color: #777777; }
+  .messages .message .pm-icon {
+    position: relative;
+    bottom: -1px;
+    font-size: 14px; }
 .messages .message:hover .actions {
   display: inline; }
 .messages .touch:hover .actions {
