@@ -30,6 +30,7 @@ Deps.autorun ->
   console.log 'Deps.autorun'
   console.log "page: #{Session.get('messages.page')}"
   limit = 30 * Session.get('messages.page')
+  #TODO: remove this handler
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   if Meteor.user()
     for channel of Meteor.user().profile.channels
@@ -90,6 +91,10 @@ Meteor.startup ->
     Session.set 'scroll', \
       $(document).height() - ($(window).scrollTop() + $(window).height())
       #handlers.messages.reset()
+    console.log "Document height: #{$(document).height()}"
+    console.log "Window scrollTop: #{$(window).scrollTop()}"
+    console.log "Window height: #{$(window).height()}"
+    console.log "Scroll position: #{Session.get('scroll')}"
 
     # If close to top and messages handler is ready.
     if $(window).scrollTop() <= 150 and handlers.messages[Session.get('channel.name')].ready()

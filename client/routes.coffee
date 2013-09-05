@@ -13,7 +13,7 @@ Router.map ->
     path: '/'
     controller: 'HomeController'
     waitOn: ->
-      handlers.messages.all
+      (handler for channel, handler of handlers.messages)
     data: -> {name: 'all'}
     onBeforeRun: ->
       Session.set 'channel.name', 'all'
@@ -26,7 +26,6 @@ Router.map ->
   @route 'channel_main',
     path: '/channels/:channel'
     waitOn: ->
-      Log.info 'waitOn'
       #FIXME: this doesn't work in firefox.
       channel = "##{@params.channel}"
       if handlers.messages[channel]
@@ -46,7 +45,7 @@ Router.map ->
         if ch = Channels.findOne({name: channel})
           Session.set 'channel.name', ch.name
           Session.set 'channel.id', ch._id
-      Session.set 'messages.page', 1
+      Session.set('messages.page', 1) unless Session.equals 'messages.page', 1
   @route 'pms_main',
     template: 'channel_main'
     path: '/messages/:user'

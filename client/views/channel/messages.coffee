@@ -8,15 +8,15 @@ Template.messages.rendered = ->
   #if Session.get('scroll') < 1
     #$(window).scrollTop 99999999
 
+  console.log "Messages rendered scroll position: #{Session.get('scroll')}"
   $(window).scrollTop \
     $(document).height() - $(window).height() - Session.get('scroll')
 
-  onImagesLoad
-    final: ->
-      console.log 'final'
-      $(window).scrollTop \
-        $(document).height() - $(window).height() - Session.get('scroll')
-
+  #onImagesLoad
+    #final: ->
+      #console.log 'Images loaded.'
+      #$(window).scrollTop \
+        #$(document).height() - $(window).height() - Session.get('scroll')
 
   #Hover isolates messages from like channels
   if @data.name is 'all'
