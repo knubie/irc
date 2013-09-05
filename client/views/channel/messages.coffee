@@ -111,7 +111,7 @@ Template.message.events
     , $set: {'profile.channels': channels}
 
   'click': (e, t) ->
-    if Session.equals 'channel.name', 'all'
+    if Session.equals 'channel.name', 'all' and not $(e.target).is('strong')
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $messagesFromOtherChannels = \
