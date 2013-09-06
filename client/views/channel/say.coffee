@@ -27,6 +27,7 @@ Template.say.events
         convo: convo
         status: if @nicks? then status[@nicks[user.username]] else 'normal'
         read: true
+      #FIXME: user beforeInsert hook instead
       createdAt = Meteor.call 'date', (err, res) ->
         Messages.update msgId, $set: createdAt: res
 

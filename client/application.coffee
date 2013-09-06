@@ -20,6 +20,7 @@ Session.setDefault 'channel.id', null
 # Push messages to the bottom by default (ie don't save scroll position).
 Session.setDefault 'scroll', 0
 Session.setDefault 'messages.page', 1
+Session.setDefault 'messages.rendered', false
 
 ########## Subscriptions ##########
 
@@ -27,9 +28,7 @@ Session.setDefault 'messages.page', 1
 handlers.user = Meteor.subscribe 'users'
 handlers.channel = Meteor.subscribe 'channels'
 Deps.autorun ->
-  console.log 'Deps.autorun'
-  console.log "page: #{Session.get('messages.page')}"
-  limit = 30 * Session.get('messages.page')
+  limit = (PERPAGE * Session.get('messages.page')) + PERPAGE
   #TODO: remove this handler
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   if Meteor.user()
@@ -53,7 +52,6 @@ Messages.find().observeChanges
           notifications[id] ?= new Notification "#{doc.from}", doc.text
           notifications[id].showOnce()
 
-
 ########## Startup ##########
 
 Meteor.startup ->
@@ -63,7 +61,6 @@ Meteor.startup ->
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
   @updateStuff = ->
-    #unless Modernizr.touch
     if false
       $channelHeader = $('.channel-header')
       currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
@@ -88,23 +85,28 @@ Meteor.startup ->
         if $channelHeader.height() < 26
           $channelHeader.height(26)
 
-    Session.set 'scroll', \
-      $(document).height() - ($(window).scrollTop() + $(window).height())
+    if ($(document).height() - ($(window).scrollTop() + $(window).height())) > $(document).height()
+      Session.set 'scroll', $(document).height()
+    else
+      Session.set 'scroll', \
+        $(document).height() - ($(window).scrollTop() + $(window).height())
+
+    console.log "onScroll: #{Session.get('scroll')}"
       #handlers.messages.reset()
-    console.log "Document height: #{$(document).height()}"
-    console.log "Window scrollTop: #{$(window).scrollTop()}"
-    console.log "Window height: #{$(window).height()}"
-    console.log "Scroll position: #{Session.get('scroll')}"
+    #console.log "Document height: #{$(document).height()}"
+    #console.log "Window scrollTop: #{$(window).scrollTop()}"
+    #console.log "Window height: #{$(window).height()}"
+    #console.log "Scroll position: #{Session.get('scroll')}"
 
     # If close to top and messages handler is ready.
-    if $(window).scrollTop() <= 150 and handlers.messages[Session.get('channel.name')].ready()
-      # Load messages subscription next page.
-      Log.info 'load next'
-      Log.info Session.get('messages.page')
-      Session.set 'messages.page', Session.get('messages.page') + 1
-    if Session.get('scroll') < 1 and Session.get('messages.page') > 1
-      Log.info 'reset handler'
-      Session.set 'messages.page', 1
+    #if $(window).scrollTop() <= 150 and handlers.messages[Session.get('channel.name')].ready() and Session.equals 'messages.rendered', true
+      ## Load messages subscription next page.
+      #Log.info 'load next'
+      #Log.info Session.get('messages.page')
+      #Session.set 'messages.page', Session.get('messages.page') + 1
+      #Session.set('messages.rendered', false)
+    #if Session.get('scroll') < 1 and Session.get('messages.page') > 1
+      #Session.set 'messages.page', 1
 
   # Images loaded hook
   @onImagesLoad = (callbacks) ->

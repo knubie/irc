@@ -55,7 +55,6 @@ Template.header.events
 Template.user_profile.helpers
   user: -> Meteor.users.findOne(Session.get('user_profile'))
   joined: ->
-    console.log @
     moment(@createdAt).format('MMMM Do YYYY')
   channels: ->
     (channel for channel of @profile.channels)

@@ -46,9 +46,28 @@ input.form-control:focus
 
 label
   color: #777
+
 .modal-backdrop.in
   opacity: 0.5
   filter: alpha(opacity=50)
+
+.btn-primary-outline
+  color: $peter-river
+  border: 1px solid $peter-river
+  background-color: transparent
+  font-size: 10px
+  text-transform: uppercase
+  font-weight: 700
+  letter-spacing: 1px
+  .glyphicon-plus
+    font-size: 8px
+    top: -1px
+
+.btn-primary-outline:hover
+  color: white
+  background-color: $peter-river
+  border: 1px solid $peter-river
+
 
 // Nav
 .idletron-nav
@@ -138,7 +157,6 @@ label
   #say-input:focus
     border-color: $peter-river
   
-
 // Channels
 .channel-container
   padding-top: 108px
@@ -167,6 +185,85 @@ label
       box-shadow: 0 2px 0 $concrete
   .user-count
     color: #777
+  .load-more
+    display: block
+    margin-bottom: 15px
+  .channel-header
+    @media (min-width: 768px)
+      width: 562px
+    @media (min-width: 992px)
+      width: 727px
+    @media (min-width: 1200px)
+      width: 877px
+    width: 100%
+    overflow-y: hidden
+    position: fixed
+    top: 50px
+    z-index: 98
+    background-color: $clouds
+    padding: 15px
+    .channel-breadcrumb
+      color: #777
+      h3
+        display: inline
+        font-size: 21px
+        .batch-icon
+          font-size: 21px
+          color: $silver
+          position: relative
+          bottom: -3px
+      .channel-name
+        color: #777
+        font-weight: bold
+      .slash
+        font-size: 18px
+        color: silver
+    .topic
+      display: none
+      font-size: 16px
+      color: #666
+      margin-top: 15px
+      border-top: 1px solid #ccc
+      padding-top: 15px
+      +tablet-landscape-and-above
+        display: block
+      .topic-edit, .topic-edit > a
+        color: $silver
+    .glyphicon
+      color: $silver
+    .channel-settings
+      position: absolute
+      top: 17px
+      right: 15px
+      color: #777
+      font-size: 21px
+      +tablet-portrait-and-above
+        right: 150px
+        font-size: 14px
+      .glyphicon
+        position: relative
+        top: 1px
+      .hidden-xs
+        +tablet-portrait-and-above
+          display: inline!important
+    .channel-invite
+      position: absolute
+      top: 14px
+      right: 15px
+      color: $peter-river
+      border: 1px solid $peter-river
+      background-color: transparent
+      font-size: 10px
+      text-transform: uppercase
+      font-weight: 700
+      letter-spacing: 1px
+    .channel-invite:hover
+      color: white
+      background-color: $peter-river
+
+    #topic-form
+      display: none
+
 .channels
   @media screen and (min-width: 992px)
     width: 213px
@@ -232,102 +329,6 @@ label
       .new-channel-input
         font-size: 16px
         padding-left: 14px
-
-.messages, .notifications
-  margin: 0
-
-.channel-header
-  @media (min-width: 768px)
-    width: 562px
-  @media (min-width: 992px)
-    width: 727px
-  @media (min-width: 1200px)
-    width: 877px
-  width: 100%
-  overflow-y: hidden
-  position: fixed
-  top: 50px
-  z-index: 98
-  background-color: $clouds
-  padding: 15px
-  .channel-breadcrumb
-    color: #777
-    h3
-      display: inline
-      font-size: 21px
-      .batch-icon
-        font-size: 21px
-        color: $silver
-        position: relative
-        bottom: -3px
-    .channel-name
-      color: #777
-      font-weight: bold
-    .slash
-      font-size: 18px
-      color: silver
-  .topic
-    display: none
-    font-size: 16px
-    color: #666
-    margin-top: 15px
-    border-top: 1px solid #ccc
-    padding-top: 15px
-    +tablet-landscape-and-above
-      display: block
-    .topic-edit, .topic-edit > a
-      color: $silver
-  .glyphicon
-    color: $silver
-  .channel-settings
-    position: absolute
-    top: 17px
-    right: 15px
-    color: #777
-    font-size: 21px
-    +tablet-portrait-and-above
-      right: 150px
-      font-size: 14px
-    .glyphicon
-      position: relative
-      top: 1px
-    .hidden-xs
-      +tablet-portrait-and-above
-        display: inline!important
-  .channel-invite
-    position: absolute
-    top: 14px
-    right: 15px
-    color: $peter-river
-    border: 1px solid $peter-river
-    background-color: transparent
-    font-size: 10px
-    text-transform: uppercase
-    font-weight: 700
-    letter-spacing: 1px
-  .channel-invite:hover
-    color: white
-    background-color: $peter-river
-
-  #topic-form
-    display: none
-
-.btn-primary-outline
-  color: $peter-river
-  border: 1px solid $peter-river
-  background-color: transparent
-  font-size: 10px
-  text-transform: uppercase
-  font-weight: 700
-  letter-spacing: 1px
-  .glyphicon-plus
-    font-size: 8px
-    top: -1px
-
-.btn-primary-outline:hover
-  color: white
-  background-color: $peter-river
-  border: 1px solid $peter-river
 
 // Messages
 .messages
@@ -474,26 +475,38 @@ label
           margin: 0 0 12px 0
           font-weight: normal
 
-//.tt-dropdown-menu
-  //top: calc(100% \- 85px) !important
-  //background-color: rgba(0,0,0,0)
-  //width: 760px
-  //.tt-suggestions
-    //padding-top: 5px
-  //.tt-suggestion
-    //padding: 3px 18px
-    //width: 760px
-    //box-sizing: border-box
-    //color: rgba(0,0,0,0.2)
-    //font-size: 16px
-    //p
-      //margin: 0
-  //.tt-is-under-cursor
-    //background-color: $peter-river
-    //color: white
+// Explore
+.channel-list
+  list-style: none
+  margin-top: 25px
+  padding: 0
+  li
+    border-bottom: 1px solid #ccc
+    padding-bottom: 15px
+    margin-bottom: 15px
+    color: #777
+    position: relative
+    .batch-icon
+      float: left
+      color: $silver
+      font-size: 28px
+      margin-right: 10px
+    h3
+      font-size: 20px
+      margin: 0
+    .user-count
+      position: absolute
+      top: 0
+      right: 0
+      color: #777
+      display: inline-block
+      font-size: 12px
+      .glyphicon
+        color: $silver
+        top: 0
 
-//.twitter-typeahead
-  //width: 100%
+.explore-nav
+  margin-top: 25px
 
 .dropdown-menu
   top: auto!important
@@ -556,39 +569,6 @@ form
   margin-bottom: 1px
   color: white
   text-shadow: none
-
-// Explore
-.channel-list
-  list-style: none
-  margin-top: 25px
-  padding: 0
-  li
-    border-bottom: 1px solid #ccc
-    padding-bottom: 15px
-    margin-bottom: 15px
-    color: #777
-    position: relative
-    .batch-icon
-      float: left
-      color: $silver
-      font-size: 28px
-      margin-right: 10px
-    h3
-      font-size: 20px
-      margin: 0
-    .user-count
-      position: absolute
-      top: 0
-      right: 0
-      color: #777
-      display: inline-block
-      font-size: 12px
-      .glyphicon
-        color: $silver
-        top: 0
-
-.explore-nav
-  margin-top: 25px
 
 .page-head
   position: fixed

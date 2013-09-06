@@ -1,4 +1,7 @@
 <template name="messages">
+  <span class="load-more btn btn-default btn-primary-outline">
+    load earlier messages
+  </span>
   <ul class="messages nav nav-stacked">
     {{#each messages}}
       {{> message}}
@@ -52,7 +55,7 @@
         {{#if away}}
           <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="away"></span><span class="away-since">{{awaySince}}</span>
         {{/if}}
-        {{#if all}}
+        {{#if isAll}}
           <span class="muted">{{channel}}</span>
         {{/if}}
       </span>
