@@ -91,13 +91,6 @@ Meteor.startup ->
       Session.set 'scroll', \
         $(document).height() - ($(window).scrollTop() + $(window).height())
 
-    console.log "onScroll: #{Session.get('scroll')}"
-      #handlers.messages.reset()
-    #console.log "Document height: #{$(document).height()}"
-    #console.log "Window scrollTop: #{$(window).scrollTop()}"
-    #console.log "Window height: #{$(window).height()}"
-    #console.log "Scroll position: #{Session.get('scroll')}"
-
     # If close to top and messages handler is ready.
     #if $(window).scrollTop() <= 150 and handlers.messages[Session.get('channel.name')].ready() and Session.equals 'messages.rendered', true
       ## Load messages subscription next page.

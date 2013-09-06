@@ -1,9 +1,7 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  console.log 'messages rendered.'
   Session.set('messages.rendered', true)
-  console.log Session.get('scroll')
 
   $('.glyphicon-time').tooltip()
 
@@ -118,11 +116,7 @@ Template.message.events
     , $set: {'profile.channels': channels}
 
   'click': (e, t) ->
-    console.log 'click message.'
-    console.log Session.equals('channel.name', 'all')
-    console.log not $(e.target).is('strong')
     if Session.equals('channel.name', 'all') and not $(e.target).is('strong')
-      console.log 'that\'s true'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $messagesFromOtherChannels = \
