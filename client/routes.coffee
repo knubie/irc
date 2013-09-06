@@ -14,6 +14,8 @@ Router.map ->
     controller: 'HomeController'
     waitOn: ->
       handlers.messages.all
+      #FIXME: 
+      #(handler for channel, handler of handlers.messages)
     data: -> {name: 'all'}
     onBeforeRun: ->
       Session.set 'channel.name', 'all'
@@ -26,27 +28,21 @@ Router.map ->
   @route 'channel_main',
     path: '/channels/:channel'
     waitOn: ->
-      Log.info 'waitOn'
       #FIXME: this doesn't work in firefox.
       channel = "##{@params.channel}"
       if handlers.messages[channel]
         return handlers.messages[channel]
       else
-        return handlers.messages[channel] = Meteor.subscribe 'messages', channel, 30
-      #handlers.messages[channel] or handlers.messages[channel] = Meteor.subscribe 'messages', channel, 30
+        return handlers.messages[channel] = Meteor.subscribe 'messages', channel, PERPAGE
+      #handlers.messages[channel] or handlers.messages[channel] = Meteor.subscribe 'messages', channel, PERPAGE
       #FIXME: why can't i use ?=
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
       channel = "##{@params.channel}"
-      if Meteor.user()
-        unless Meteor.user().profile.channels.hasOwnProperty(channel)
-          Meteor.call 'join', Meteor.user().username, channel
-      Deps.autorun =>
-        Log.info 'onBeforeRun autorun'
-        if ch = Channels.findOne({name: channel})
-          Session.set 'channel.name', ch.name
-          Session.set 'channel.id', ch._id
-      Session.set 'messages.page', 1
+      if Meteor.user() and not Meteor.user().profile.channels.hasOwnProperty(channel)
+        Meteor.call 'join', Meteor.user().username, channel
+      Session.set 'channel.name', channel
+      Session.set('messages.page', 1)
   @route 'pms_main',
     template: 'channel_main'
     path: '/messages/:user'

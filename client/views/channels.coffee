@@ -89,7 +89,6 @@ Template.channels.helpers
 
 Template.channel.events
   'click a': (e,t) ->
-    $('.channel-container').show()
     $('#say-input').focus() unless Modernizr.touch
 
   'click .close': ->

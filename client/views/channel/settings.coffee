@@ -23,35 +23,19 @@ Template.settings.events
     Meteor.users.update Meteor.userId()
     , $set: 'profile.channels': channels
 
-  'click .close': (e,t) ->
-    {channels} = Meteor.user().profile
-    index = channels[Session.get('channel.name')]?.ignore.indexOf(@)
-    channels[Session.get('channel.name')]?.ignore.splice(index, 1)
-    Meteor.users.update Meteor.userId()
-    , $set: 'profile.channels': channels
-
   'click label.checkbox[for="privateCheckbox"]': (e,t) ->
-  #'click #privateCheckbox': (e,t) ->
-    channel = Channels.findOne Session.get('channel.id')
-    if 's' in channel.modes or 'i' in channel.modes
-      Meteor.call 'mode', Meteor.user(), Session.get('channel.name'), '-si'
+    if 's' in @modes or 'i' in @modes
+      Meteor.call 'mode', Meteor.user(), @name, '-si'
     else
-      Meteor.call 'mode', Meteor.user(), Session.get('channel.name'), '+si'
+      Meteor.call 'mode', Meteor.user(), @name, '+si'
 
   'click label.checkbox[for="showHideJoins"]': (e,t) ->
 
 Template.settings.helpers
   op_status: ->
-    if Session.equals 'channel.name', 'all'
-      return no
-    else
-      Channels.findOne(Session.get 'channel.id')?.nicks[Meteor.user().username] is '@'
+    @nicks[Meteor.user().username] is '@'
   ignore_list: ->
-    Meteor.user().profile.channels[Session.get('channel.name')]?.ignore
+    Meteor.user().profile.channels[@name]?.ignore
   private_checked: ->
-    channel = Channels.findOne Session.get('channel.id')
-    if 's' in channel.modes or 'i' in channel.modes
-      return 'checked'
-    else
-      return ''
+    if 's' in @modes or 'i' in @modes then 'checked' else ''
 

@@ -1,13 +1,19 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  $(window).off 'scroll'
+  console.log 'messages rendered.'
+  Session.set('messages.rendered', true)
+  console.log Session.get('scroll')
+
+  $('.glyphicon-time').tooltip()
+
   # Keep scroll position when template rerenders,
   # especially if document height changes.
-  $('.glyphicon-time').tooltip()
-  #if Session.get('scroll') < 1
-    #$(window).scrollTop 99999999
-
+  #if ($(document).height() - ($(window).scrollTop() + $(window).height())) < 0
+  ## If scroll is negative, on screen keyboard is present
+    #$(window).scrollTop 99999
+  #else
+    #FIXME: on mobile the window scrolls to the appropriate height rigth before the new documents are loaded (it's not seamless)
   $(window).scrollTop \
     $(document).height() - $(window).height() - Session.get('scroll')
 
@@ -16,7 +22,6 @@ Template.messages.rendered = ->
       $(window).scrollTop \
         $(document).height() - $(window).height() - Session.get('scroll')
 
-
   #Hover isolates messages from like channels
   if @data.name is 'all'
     $('.message').hover ->
@@ -24,24 +29,23 @@ Template.messages.rendered = ->
     , ->
       $('.message').removeClass 'faded'
 
-  # Store nicks in an array
-  else if @data.name.isChannel()
-    nicks = (nick for nick of @data.nicks) ? []
   if Modernizr.touch
+    $(window).off 'touchmove'
     $(window).on 'touchmove', updateStuff
     $('.message').addClass('touch')
-  else
-    $(window).scroll updateStuff
+  $(window).off 'scroll'
+  $(window).scroll updateStuff
 
 Template.messages.helpers
   messages: ->
     prev = null
+    limit = PERPAGE * Session.get('messages.page')
     if @name is 'all'
-      messages = Messages.find({}, {sort: {createdAt: 1}}).fetch()
+      messages = Messages.find({}, {limit, sort: {createdAt: -1}}).fetch().reverse()
     else
-      messages = Messages.find(
+      messages = Messages.find({
         channel: @name
-      , sort: {createdAt: 1}).fetch()
+      }, {limit, sort: {createdAt: -1}}).fetch().reverse()
     setPrev = (msg) ->
       msg.prev = prev
       prev = msg
@@ -54,6 +58,10 @@ Template.messages.helpers
     @name
   url_channel: ->
     @name.match(/^(#)?(.*)$/)[2]
+
+Template.messages.events
+  'click .load-more': (e,t) ->
+    Session.set 'messages.page', Session.get('messages.page') + 1
 
 ########## Message ##########
 
@@ -110,7 +118,11 @@ Template.message.events
     , $set: {'profile.channels': channels}
 
   'click': (e, t) ->
-    if Session.equals 'channel.name', 'all' and not $(e.target).is('strong')
+    console.log 'click message.'
+    console.log Session.equals('channel.name', 'all')
+    console.log not $(e.target).is('strong')
+    if Session.equals('channel.name', 'all') and not $(e.target).is('strong')
+      console.log 'that\'s true'
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $messagesFromOtherChannels = \
@@ -164,13 +176,3 @@ Template.message.helpers
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
   isChannel: ->
     @channel?.isChannel()
-
-Template.notification.timeAgo = ->
-  moment(@createdAt).fromNow()
-
-Template.notification.events
-  'click, tap li': ->
-    $(window).scrollTop $("##{@_id}").offset().top - 10
-
-  'click .close': ->
-    # Do something
