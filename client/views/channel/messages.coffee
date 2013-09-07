@@ -89,7 +89,7 @@ Template.message.rendered = ->
   # Linkify nicks.
   if @data.channel?.isChannel()
     for nick of Channels.findOne(name: @data.channel).nicks
-      ptext = ptext.replace regex.nick(nick), "$1<a href=\"#\">$2</a>$3"
+      ptext = ptext.replace regex.nick(nick), "$1<a href=\"/users/$2\">$2</a>$3"
   # Markdownify other stuff.
   while regex.code.test ptext
     ptext = ptext.replace regex.code, '$1$2<code>$3</code>$4'
