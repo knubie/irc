@@ -3,14 +3,14 @@ Template.say.events
     keyCode = e.keyCode or e.which
     message = t.find('#say-input').value
     if keyCode is 9 # Tab
-      nickregex = /^(.*\s)(\S*)$/
+      nickregex = /^(.*\s)*(\S*)$/
       if matches = message.match nickregex
         nicks = (nick for nick of @nicks)
         nickstart = new RegExp matches[2], 'i'
         for nick in nicks
           if nick.match nickstart
             e.preventDefault()
-            $('#say-input').val("#{matches[1]}#{nick}")
+            $('#say-input').val("#{matches[1] or ''}#{nick}")
 
     if keyCode is 13 # Enter
       e.preventDefault()
