@@ -1,9 +1,19 @@
 Template.say.events
   'keydown #say': (e, t) ->
     keyCode = e.keyCode or e.which
-    if keyCode is 13
+    message = t.find('#say-input').value
+    if keyCode is 9 # Tab
+      nickregex = /^(.*\s)(\S*)$/
+      if matches = message.match nickregex
+        nicks = (nick for nick of @nicks)
+        nickstart = new RegExp matches[2], 'i'
+        for nick in nicks
+          if nick.match nickstart
+            e.preventDefault()
+            $('#say-input').val("#{matches[1]}#{nick}")
+
+    if keyCode is 13 # Enter
       e.preventDefault()
-      message = t.find('#say-input').value
       $('#say-input').val('')
       Meteor.call 'say', Meteor.user().username, @name, message
       user = Meteor.user()
