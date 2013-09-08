@@ -49,13 +49,13 @@ Meteor.methods
       client[username].part channel
 
     ch = Channels.findOne({name: channel})
-    {nicks} = ch
-    delete nicks[username]
-    if _.isEmpty nicks
-      Channels.remove ch._id
-      client.idletron.part channel
-    else
-      Channels.update ch._id, $set: {nicks}
+    if ch?
+      {nicks} = ch
+      delete nicks[username]
+      if _.isEmpty nicks
+        Channels.remove ch._id
+      else
+        Channels.update ch._id, $set: {nicks}
     #Channels.findOne({name: channel}).part username
       #part: (nick) ->
         #{nicks} = @

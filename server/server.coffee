@@ -1,4 +1,12 @@
 Meteor.startup ->
+  #TODO:
+  #users.each
+  # new client
+  #channels.each
+  # channel.nicks.each
+  #  @nick.join
+  # channel.nicks.each
+  #  nick.join
   Meteor.users.find().forEach (user) ->
     client[user.username] ?= new Bot
       _id: user._id

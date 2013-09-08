@@ -1,4 +1,3 @@
-
 # TODO: store user's profile as instance variables and create 
 # getter / setter methods in order to reduce db queries.
 #
@@ -76,27 +75,24 @@ class @Idletron extends Client
       Channels.update channel, $set: {users, topic}
 
     # Listen for 'names' requests.
-    @on 'names', async (channel, nicks_in) =>
-      #TODO: Either add rpl_isupport to hector, or remove from node-irc
-      nicks = {}
-      for nick, status of nicks_in
-        match = nick.match(/^(.)(.*)$/)
-        if match
-          if match[1] is '@'
-            nicks[match[2]] = match[1]
-          else
-            nicks[nick] = ''
-      # Count the number of nicks in the nicks_in object
-      users = (user for user of nicks).length
-      if users is 1 # If Idletron is the only user left
-        @part channel
-        Channels.remove
-          name: channel
-      else
-        # Update Channel.nicks with the nicks object sent from the network.
-        Channels.update
-          name: channel
-        , {$set: {nicks, users}}
+    #@on 'names', async (channel, nicks_in) =>
+      ##TODO: Either add rpl_isupport to hector, or remove from node-irc
+      #console.log "names==========#{channel}"
+      #console.log nicks_in
+      #nicks = {}
+      #for nick, status of nicks_in
+        #match = nick.match(/^(.)(.*)$/)
+        #if match
+          #if match[1] is '@'
+            #nicks[match[2]] = match[1]
+          #else
+            #nicks[nick] = ''
+      ## Count the number of nicks in the nicks_in object
+      #users = (user for user of nicks).length
+      ## Update Channel.nicks with the nicks object sent from the network.
+      #Channels.update
+        #name: channel
+      #, {$set: {nicks, users}}
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
       Messages.insert
@@ -112,6 +108,22 @@ class @Idletron extends Client
     for event in ['join', 'part', 'nick', 'kick']
       @on event, async (channel) => @send 'NAMES', channel
 
+    @on 'part', async (channel, nick, reason, message) =>
+      console.log "part #{nick}"
+      ch = Channels.findOne({name: channel})
+      if ch?
+        if nick of ch.nicks
+          console.log ch
+          if (nick for nick of ch.nicks).length is 2
+            @part channel
+            Channels.remove ch._id
+            console.log 'delete'
+        else
+          if (nick for nick of ch.nicks).length is 1
+            @part channel
+            Channels.remove ch._id
+            console.log 'delete'
+
     @on 'raw', async (msg) =>
       if msg.command is 'MODE'
         @send 'MODE', msg.args[0]
@@ -120,6 +132,25 @@ class @Idletron extends Client
         modes = msg.args[2].split('')
         modes.shift()
         Channels.update {name: msg.args[1]}, $set: {modes}
+
+      if msg.command is 'rpl_namreply'
+        channel = msg.args[2]
+        nicks_in = msg.args[3].split ' '
+        #TODO: Either add rpl_isupport to hector, or remove from node-irc
+        nicks = {}
+        for nick in nicks_in
+          match = nick.match(/^(.)(.*)$/)
+          if match
+            if match[1] is '@'
+              nicks[match[2]] = match[1]
+            else
+              nicks[nick] = ''
+        # Count the number of nicks in the nicks_in object
+        users = (user for user of nicks).length
+        # Update Channel.nicks with the nicks object sent from the network.
+        Channels.update
+          name: channel
+        , {$set: {nicks, users}}
 
 class @Bot extends Client
   constructor: ({@_id, @username}) ->
