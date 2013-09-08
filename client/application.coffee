@@ -117,3 +117,6 @@ Meteor.startup ->
         callbacks.final?()
         clearInterval(check)
     , 50
+  @scrollToPlace = ->
+    $(window).scrollTop \
+      $(document).height() - $(window).height() - Session.get('scroll')

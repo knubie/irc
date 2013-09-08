@@ -12,13 +12,8 @@ Template.messages.rendered = ->
     #$(window).scrollTop 99999
   #else
     #FIXME: on mobile the window scrolls to the appropriate height rigth before the new documents are loaded (it's not seamless)
-  $(window).scrollTop \
-    $(document).height() - $(window).height() - Session.get('scroll')
 
-  onImagesLoad
-    final: ->
-      $(window).scrollTop \
-        $(document).height() - $(window).height() - Session.get('scroll')
+  do scrollToPlace
 
   #Hover isolates messages from like channels
   if @data.name is 'all'
@@ -71,7 +66,7 @@ Template.message.rendered = ->
   ptext = ptext.replace regex.url, (str) ->
     #youtubeMatch = str.match regex.youtube
     if str.match /\.(?:jpe?g|gif|png)/
-      "<a href=\"#{str}\" target=\"_blank\"><img src=\"#{str}\" alt=\"\"/></a>"
+      "<a href=\"#{str}\" target=\"_blank\"><img onload=\"scrollToPlace();\" src=\"#{str}\" alt=\"\"/></a>"
     #else if youtubeMatch and youtubeMatch[1].length is 11
       #"<iframe width=\"480\" height=\"360\" src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
     else
