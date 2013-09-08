@@ -44,6 +44,11 @@
           <a href="#" class="cancel">cancel</a>
         </form>
         {{#if currentUser}}
+          <a href="/channels/{{url_channel}}/notifications" class="channel-notifications">
+            <span class="batch-icon">&#xf132;</span>
+            <span class="badge">2</span>
+            <span class="hidden-xs">Mentions</span>
+          </a>
           <a href="/channels/{{url_channel}}/settings" class="channel-settings">
             <span class="glyphicon glyphicon-cog"></span>
             <span class="hidden-xs">Settings</span>

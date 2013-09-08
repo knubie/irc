@@ -241,22 +241,34 @@ label {
         color: #bdc3c7; }
     .channel-container .channel-header .glyphicon {
       color: #bdc3c7; }
-    .channel-container .channel-header .channel-settings {
+    .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
       position: absolute;
       top: 17px;
       right: 15px;
       color: #777777;
       font-size: 21px; }
       @media only screen and (min-width: 768px) {
-        .channel-container .channel-header .channel-settings {
+        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
           right: 150px;
           font-size: 14px; } }
-      .channel-container .channel-header .channel-settings .glyphicon {
+      .channel-container .channel-header .channel-settings .glyphicon, .channel-container .channel-header .channel-notifications .glyphicon {
         position: relative;
         top: 1px; }
       @media only screen and (min-width: 768px) {
-        .channel-container .channel-header .channel-settings .hidden-xs {
+        .channel-container .channel-header .channel-settings .hidden-xs, .channel-container .channel-header .channel-notifications .hidden-xs {
           display: inline !important; } }
+      .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
+        color: #bdc3c7;
+        font-size: 14px;
+        margin-right: 6px; }
+      .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
+        padding: 1px 4px 2px;
+        font-size: 9px;
+        background-color: #3498db;
+        position: absolute;
+        left: 7px; }
+    .channel-container .channel-header .channel-notifications {
+      right: 240px; }
     .channel-container .channel-header .channel-invite {
       position: absolute;
       top: 14px;

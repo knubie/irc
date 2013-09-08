@@ -90,6 +90,8 @@ class @Idletron extends Client
       users = (user for user of nicks).length
       if users is 1 # If Idletron is the only user left
         @part channel
+        Channels.remove
+          name: channel
       else
         # Update Channel.nicks with the nicks object sent from the network.
         Channels.update
