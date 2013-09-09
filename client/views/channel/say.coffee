@@ -1,5 +1,6 @@
 Template.say.events
   'keydown #say': (e, t) ->
+    #TODO: figure out a way to not have to disable autocomplete
     keyCode = e.keyCode or e.which
     message = t.find('#say-input').value
     if keyCode is 9 # Tab
