@@ -1,12 +1,15 @@
 @import "media-queries"
 @import "prefixes"
 @import "colors"
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900,700italic,900italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800)
 
 body
   background-color: $clouds
   padding-top: 50px
   -webkit-font-smoothing: antialiased
+  //font-family: Helvetica, sans-serif
   //font-family: 'Open Sans', Helvetica, sans-serif
+  font-family: 'Roboto', Helvetica, sans-serif
 
 // Random shit
 .fixed-width
@@ -336,7 +339,7 @@ label
   .selected:hover > a
     color: $peter-river
     transition: .15s background-color, .15s color
-    font-weight: 500
+    font-weight: 600
   .new-channel-li
     margin-top: 10px
     position: relative
@@ -360,10 +363,10 @@ label
 .messages
   .message
     background-color: #fff
-    border-radius: 4px
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1)
+    border-radius: 3px
+    box-shadow: 0px 2px 1px rgba(0,0,0,.05)
     margin-bottom: 10px
-    padding: 10px 15px 11px 15px
+    padding: 10px 12px 11px
     color: #777
     position: relative
     transition: .15s left, .15s opacity, .15s background-color, .15s color
@@ -373,6 +376,7 @@ label
       font-weight: 400
       margin: 0
       word-wrap: break-word
+      font-family: 'Open Sans'
       img
         max-width: 100%
         max-height: 50vh
@@ -381,13 +385,10 @@ label
     .reply, small, p
       transition: .15s left, .15s opacity, .15s background-color, .15s color
     .reply
-      font-size: 12px
+      font-size: 14px
       display: inline-block
       margin-bottom: 5px
       box-sizing: content-box
-      .away-since
-        margin-left: 2px
-        color: $silver
       .normal
         display: none
       .operator
@@ -399,6 +400,11 @@ label
       .glyphicon-time
         top: 0
         color: #BDC3C7
+        font-size: 12px
+      .away-since
+        margin-left: 2px
+        color: $silver
+        font-size: 12px
     .reply:hover 
       //border-bottom: 1px solid #ccc
       //cursor: pointer
@@ -407,7 +413,7 @@ label
       font-size: 12px
     .divider
       width: 100%
-      border-bottom: 1px solid rgba(0,0,0,0.06)
+      border-bottom: 1px solid #ECF0F1
       margin: 0 0 10px 0
     .actions
       font-size: 12px

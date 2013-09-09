@@ -1,7 +1,9 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900,700italic,900italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800);
 body {
   background-color: #ecf0f1;
   padding-top: 50px;
-  -webkit-font-smoothing: antialiased; }
+  -webkit-font-smoothing: antialiased;
+  font-family: "Roboto", Helvetica, sans-serif; }
 
 .fixed-width {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
@@ -332,7 +334,7 @@ label {
   .channels .selected:hover > a {
     color: #3498db;
     transition: 0.15s background-color, 0.15s color;
-    font-weight: 500; }
+    font-weight: 600; }
   .channels .new-channel-li {
     margin-top: 10px;
     position: relative; }
@@ -349,10 +351,10 @@ label {
 
 .messages .message {
   background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.05);
   margin-bottom: 10px;
-  padding: 10px 15px 11px 15px;
+  padding: 10px 12px 11px;
   color: #777777;
   position: relative;
   transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
@@ -361,7 +363,8 @@ label {
     line-height: 21px;
     font-weight: 400;
     margin: 0;
-    word-wrap: break-word; }
+    word-wrap: break-word;
+    font-family: "Open Sans"; }
     .messages .message p img {
       max-width: 100%;
       max-height: 50vh; }
@@ -370,13 +373,10 @@ label {
   .messages .message .reply, .messages .message small, .messages .message p {
     transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
   .messages .message .reply {
-    font-size: 12px;
+    font-size: 14px;
     display: inline-block;
     margin-bottom: 5px;
     box-sizing: content-box; }
-    .messages .message .reply .away-since {
-      margin-left: 2px;
-      color: #bdc3c7; }
     .messages .message .reply .normal {
       display: none; }
     .messages .message .reply .operator {
@@ -387,13 +387,18 @@ label {
       color: #777777; }
     .messages .message .reply .glyphicon-time {
       top: 0;
-      color: #bdc3c7; }
+      color: #bdc3c7;
+      font-size: 12px; }
+    .messages .message .reply .away-since {
+      margin-left: 2px;
+      color: #bdc3c7;
+      font-size: 12px; }
   .messages .message .muted {
     color: rgba(0, 0, 0, 0.2);
     font-size: 12px; }
   .messages .message .divider {
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid #ecf0f1;
     margin: 0 0 10px 0; }
   .messages .message .actions {
     font-size: 12px;
