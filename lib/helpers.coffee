@@ -8,4 +8,4 @@ String::isChannel = -> /^[#](.*)$/.test @
   underline: /(^|<\/[^>]*>)([^<>]*)_([^<>]*)_([^<>]*)(?=$|<)/g
   nick: (nick) -> new RegExp "(^|\\s)(@?#{nick})($|([:,.!?]|[^\\S]))", ['g']
 
-@PERPAGE = 60
+@PERPAGE = 20

@@ -24,6 +24,8 @@ Template.channel_header.helpers
       @nicks[Meteor.user().username] is '@'
     else
       return no
+  unread_mentions: ->
+    Meteor.user().profile.channels[@name].mentions.length or ''
 
 Template.channel_header.events
   'click .topic-edit > a': (e, t) ->
@@ -109,25 +111,10 @@ Template.channel.helpers
     "#{@}".match(/^(.)(.*)$/)[2]
   unread: ->
     if Meteor.user()
-      ignore_list = Meteor.user().profile.channels["#{@}"].ignore
-      Messages.find
-        channel: "#{@}"
-        read: false
-        from: $nin: ignore_list
-      .fetch().length or ''
-    else
-      return ''
+      Meteor.user().profile.channels["#{@}"].unread.length or ''
   unread_mentions: ->
     if Meteor.user()
-      ignore_list = Meteor.user().profile.channels["#{@}"].ignore
-      Messages.find
-        channel: "#{@}"
-        read: false
-        convo: Meteor.user().username
-        from: $nin: ignore_list
-      .fetch().length or ''
-    else
-      return ''
+      Meteor.user().profile.channels["#{@}"].mentions.length or ''
 
 Template.pm.helpers
   selected: ->

@@ -16,7 +16,14 @@
   <ul class="user-list">
     {{#each users}}
       <li>
-      <h3>{{flag}}<a href="/users/{{nick}}">{{nick}}</a></h3>
+      <h3>
+        {{flag}}
+        <a href="/users/{{nick}}">{{nick}}</a>
+        {{#if away}}
+          <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
+        {{/if}}
+          
+      </h3>
       Real Name
       </li>
     {{/each}}

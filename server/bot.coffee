@@ -1,8 +1,3 @@
-# TODO: store user's profile as instance variables and create 
-# getter / setter methods in order to reduce db queries.
-#
-# TODO: move database operations to the client.
-
 class @Idletron extends Client
   constructor: ->
     @channels = {}
@@ -277,6 +272,7 @@ class @Bot extends Client
   connect: ->
     # Connect to the IRC network.
     super async =>
+      console.log 'connected'
       # Set connecting status to on.
       Meteor.users.update @_id, $set: {'profile.connection': on}
       # Join subscribed channels.

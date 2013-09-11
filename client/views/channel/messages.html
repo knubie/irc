@@ -1,7 +1,9 @@
 <template name="messages">
-  <span class="load-more btn btn-default btn-primary-outline">
-    load earlier messages
-  </span>
+  {{#if loadMore}}
+    <span class="load-more btn btn-default btn-primary-outline">
+      load earlier messages
+    </span>
+  {{/if}}
   <ul class="messages nav nav-stacked">
     {{#each messages}}
       {{> message}}
@@ -53,7 +55,7 @@
         {{/if}}
         <a href="/users/{{from}}"><strong>{{from}}</strong></a>
         {{#if away}}
-          <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="away"></span><span class="away-since">{{awaySince}}</span>
+        <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
         {{/if}}
         {{#if isAll}}
           <span class="muted">{{channel}}</span>
@@ -84,18 +86,17 @@
                 Ban
               </div>
             {{/if}}
-            {{#if isConvo}}
-              &nbsp;
-              <div class="action convo">
-                <span class="glyphicon glyphicon-comment"></span>
-                View conversation
-              </div>
-            {{/if}}
           </div>
         {{/if}}
       {{/unless}}
       <small class="muted pull-right">{{timeAgo}}</small>
       <p>{{text}}</p>
+      {{#if isConvo}}
+        <div class="action convo">
+          <span class="batch-icon">&#xf000;</span>
+          View conversation
+        </div>
+      {{/if}}
     </li>
   {{/if}}
 </template>

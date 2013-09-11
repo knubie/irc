@@ -72,27 +72,20 @@ Router.map ->
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
       #FIXME: wait for Channel sub
-      Deps.autorun =>
-        if ch = Channels.findOne({name: "##{@params.channel}"})
-          Session.set 'channel.name', ch.name
-          Session.set 'channel.id', ch._id
-    #data: ->
-      #Session.set 'channel.name', @params.channel
-      #Session.set 'channel.id', Channels.findOne({name: @params.channel})._id
-      #{}
+      channel = "##{@params.channel}"
+      Session.set 'channel.name', channel
   @route 'channel_users',
     path: '/channels/:channel/users'
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
-      #FIXME: wait for Channel sub
-      Deps.autorun =>
-        if ch = Channels.findOne({name: "##{@params.channel}"})
-          Session.set 'channel.name', ch.name
-          Session.set 'channel.id', ch._id
-    #data: ->
-      #Session.set 'channel.name', @params.channel
-      #Session.set 'channel.id', Channels.findOne({name: @params.channel})._id
-      #{}
+      channel = "##{@params.channel}"
+      Session.set 'channel.name', channel
+  @route 'channel_mentions',
+    path: '/channels/:channel/mentions'
+    data: -> Channels.findOne({name: "##{@params.channel}"})
+    onBeforeRun: ->
+      channel = "##{@params.channel}"
+      Session.set 'channel.name', channel
   @route 'user_profile',
     path: '/users/:username'
     data: -> Meteor.users.findOne({username: @params.username})

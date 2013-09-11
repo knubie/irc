@@ -1,0 +1,70 @@
+<template name="channel_mentions">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        {{> channels}}
+      </div>
+      <div class="channel-container col-sm-9">
+        {{> channel_header}}
+        {{> mentions}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="mentions">
+  {{#if loadMore}}
+    <span class="load-more btn btn-default btn-primary-outline">
+      load earlier messages
+    </span>
+  {{/if}}
+  <ul class="messages nav nav-stacked">
+    {{#each mentions}}
+      {{> mention}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="mention">
+  <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message {{message_class}}">
+    <span class="reply">
+      <a href="/users/{{from}}"><strong>{{from}}</strong></a>
+      {{#if away}}
+      <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
+      {{/if}}
+    </span>
+    &nbsp;
+    <div class="actions">
+      <div class="action reply-action">
+        <span class="glyphicon glyphicon-share-alt"></span>
+        Reply
+      </div>
+      &nbsp;
+      <div class="action ignore-action">
+        <span class="glyphicon glyphicon-volume-off"></span>
+        Ignore
+      </div>
+      <!--{{#if op_status}}-->
+        <!--&nbsp;-->
+        <!--<div class="action kick">-->
+          <!--<span class="glyphicon glyphicon-share"></span>-->
+          <!--Kick-->
+        <!--</div>-->
+        <!--&nbsp;-->
+        <!--<div class="action">-->
+          <!--<span class="glyphicon glyphicon-ban-circle"></span>-->
+          <!--Ban-->
+        <!--</div>-->
+      <!--{{/if}}-->
+    </div>
+    <small class="muted pull-right">{{timeAgo}}</small>
+    <p>{{text}}</p>
+    <!--{{#if isConvo}}-->
+      <!--<div class="action convo">-->
+        <!--<span class="batch-icon">&#xf000;</span>-->
+        <!--View conversation-->
+      <!--</div>-->
+    <!--{{/if}}-->
+  </li>
+</template>
+

@@ -44,9 +44,9 @@
           <a href="#" class="cancel">cancel</a>
         </form>
         {{#if currentUser}}
-          <a href="/channels/{{url_channel}}/notifications" class="channel-notifications">
+          <a href="/channels/{{url_channel}}/mentions" class="channel-notifications">
             <span class="batch-icon">&#xf132;</span>
-            <span class="badge">2</span>
+            <span class="badge">{{unread_mentions}}</span>
             <span class="hidden-xs">Mentions</span>
           </a>
           <a href="/channels/{{url_channel}}/settings" class="channel-settings">
@@ -58,12 +58,6 @@
           </a>
         {{/if}}
       </div>
-      {{#if currentUser}}
-        <!--<div class="buttons">-->
-          <!--<a href="/channels/{{url_channel}}/settings" class="settings">settings</a>-->
-          <!--<a class="add-bot">invite</a>-->
-        <!--</div>-->
-      {{/if}}
     </div>
   </div>
 </template>

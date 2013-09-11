@@ -47,6 +47,20 @@ Template.messages.helpers
       not in (Meteor.user().profile.channels[message.channel]?.ignore or []))
     else
       return (setPrev message for message in messages)
+  loadMore: ->
+    limit = PERPAGE * Session.get('messages.page')
+    if @name is 'all'
+      messages = Messages.find({}, {limit, sort: {createdAt: -1}}).fetch().reverse()
+      messagesTotal = Messages.find({}, {sort: {createdAt: -1}}).fetch().reverse()
+    else
+      messages = Messages.find({
+        channel: @name
+      }, {limit, sort: {createdAt: -1}}).fetch().reverse()
+      messagesTotal = Messages.find({
+        channel: @name
+      }, {sort: {createdAt: -1}}).fetch().reverse()
+
+    messages.length < messagesTotal.length
   channel: ->
     @name
   url_channel: ->
@@ -159,7 +173,6 @@ Template.message.helpers
     @type() is 'self'
   away: ->
     #TODO: make this change the user MODE in irc
-    #TODO: add time since last online
     not Meteor.users.findOne(username: @from)?.profile.online
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
