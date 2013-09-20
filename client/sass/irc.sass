@@ -3,13 +3,14 @@
 @import "colors"
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900,700italic,900italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800)
 
+$foreground: #777
 body
   background-color: $clouds
   padding-top: 50px
   -webkit-font-smoothing: antialiased
-  //font-family: Helvetica, sans-serif
+  font-family: Helvetica, sans-serif
   //font-family: 'Open Sans', Helvetica, sans-serif
-  font-family: 'Roboto', Helvetica, sans-serif
+  //font-family: 'Roboto', Helvetica, sans-serif
 
 // Random shit
 .tooltip
@@ -30,7 +31,7 @@ body
   text-decoration: underline
 
 code
-  color: #777
+  color: $foreground
   font-size: 14px
   border: 1px solid #e1e1e8
   background-color: #f7f7f9
@@ -59,7 +60,7 @@ input.form-control:focus
   -webkit-appearance: none
 
 label
-  color: #777
+  color: $foreground
 
 .modal-backdrop.in
   opacity: 0.5
@@ -148,7 +149,7 @@ label
 
 // Sign in
 .signin-container
-  color: #777
+  color: $foreground
   .col-sm-5
     +tablet-portrait-and-above
       margin-left: 29%
@@ -212,10 +213,11 @@ label
       background-color: silver
       box-shadow: 0 2px 0 $concrete
   .user-count
-    color: #777
+    color: $foreground
   .load-more
     display: block
-    margin-bottom: 15px
+    width: 200px
+    margin: 0 auto 15px
   .channel-header
     @media (min-width: 768px)
       width: 562px
@@ -231,7 +233,7 @@ label
     background-color: $clouds
     padding: 15px
     .channel-breadcrumb
-      color: #777
+      color: $foreground
       h3
         display: inline
         font-size: 21px
@@ -241,7 +243,7 @@ label
           position: relative
           bottom: -3px
       .channel-name
-        color: #777
+        color: $foreground
         font-weight: bold
       .slash
         font-size: 18px
@@ -263,7 +265,7 @@ label
       position: absolute
       top: 17px
       right: 15px
-      color: #777
+      color: $foreground
       font-size: 21px
       +tablet-portrait-and-above
         right: 150px
@@ -309,7 +311,7 @@ label
     width: 213px
   @media screen and (min-width: 1200px)
     width: 263px
-  color: #777
+  color: $foreground
   list-style: none
   font-size: 18px
   padding: 0
@@ -331,7 +333,7 @@ label
     .batch-icon
       margin-right: -4px
     a, form > input 
-      color: #777
+      color: $foreground
       transition: .15s background-color, .15s color
       padding: 4px
       display: inline-block
@@ -358,7 +360,7 @@ label
       //color: $silver
     //.new-channel-link:hover
       //cursor: pointer
-      //color: #777
+      //color: $foreground
     .new-channel-form
       display: none
       .pound
@@ -378,7 +380,7 @@ label
     box-shadow: 0px 2px 1px rgba(0,0,0,.05)
     margin-bottom: 10px
     padding: 10px 12px
-    color: #777
+    color: $foreground
     position: relative
     transition: .15s left, .15s opacity, .15s background-color, .15s color
     p
@@ -387,7 +389,7 @@ label
       font-weight: 400
       margin: 0
       word-wrap: break-word
-      font-family: 'Open Sans'
+      //font-family: 'Open Sans'
       img
         max-width: 100%
         max-height: 50vh
@@ -396,7 +398,7 @@ label
     .reply, small, p
       transition: .15s left, .15s opacity, .15s background-color, .15s color
     .reply
-      font-size: 14px
+      font-size: 12px
       display: inline-block
       margin-bottom: 5px
       box-sizing: content-box
@@ -407,7 +409,9 @@ label
         color: $peter-river
         font-size: 10px
       a
-        color: #777
+        color: $foreground
+      a:hover
+        color: $peter-river
       .glyphicon-time
         top: 0
         color: #BDC3C7
@@ -459,9 +463,10 @@ label
   .bot
     background-color: $silver
     color: #FFF
-    box-shadow: 0 2px 0 rgba(0,0,0,.3)
+    box-shadow: 0 2px 1px rgba(0, 0, 0, 0.25)
     p
-      font-family: Menlo, monospace
+      font-family: Roboto
+      font-size: 18px
     .reply
       color: #FFF
   .offline
@@ -480,10 +485,9 @@ label
     .reply, .actions
       display: none
     p
-      color: black
+      color: #999
       text-shadow: 0 1px 0 white
-      opacity: 0.3
-      font-weight: bold
+      font-weight: 600
       font-size: 14px
   .mention
     border: 1px solid $peter-river
@@ -502,7 +506,7 @@ label
   position: relative
   top: 25px
   .first.vcard
-    color: #777
+    color: $foreground
     .name
       font-size: 26px
       font-weight: bold
@@ -512,7 +516,7 @@ label
     .btn
       margin-top: 10px
   .last
-    color: #777
+    color: $foreground
     font-weight: bold
     .user-channels
       list-style: none
@@ -534,7 +538,7 @@ label
     border-bottom: 1px solid #ccc
     padding-bottom: 15px
     margin-bottom: 15px
-    color: #777
+    color: $foreground
     position: relative
     .batch-icon
       float: left
@@ -548,7 +552,7 @@ label
       position: absolute
       top: 0
       right: 0
-      color: #777
+      color: $foreground
       display: inline-block
       font-size: 12px
       .glyphicon
@@ -632,7 +636,7 @@ form
   box-sizing: border-box
   a
     margin-right: 97px
-    color: #777
+    color: $foreground
     transition: .15s left, .15s opacity, .15s background-color, .15s color
   a:hover
     color: $peter-river
@@ -640,7 +644,7 @@ form
   i
     margin: 0 10px
     font-size: 16px
-    color: #777
+    color: $foreground
 .settings-section
   border-radius: 5px
   border: 1px solid silver
@@ -648,7 +652,7 @@ form
   padding: 10px
   width: 760px
   box-sizing: border-box
-  color: #777
+  color: $foreground
   margin-top: 25px
   .section-heading
     font-size: 16px
@@ -671,7 +675,7 @@ form
 
 .notification-request-container
   text-align: center
-  color: #777
+  color: $foreground
   margin-top: 50px
   h3
     font-size: 20px
@@ -709,3 +713,92 @@ form
 .badge-important
   background-color: $peter-river
 
+
+
+.btn-two
+  display: inline-block
+  *display: inline
+  padding: 4px 12px
+  margin-bottom: 0
+  *margin-left: .3em
+  font-size: 14px
+  line-height: 20px
+  color: #333333
+  text-align: center
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75)
+  vertical-align: middle
+  cursor: pointer
+  background-color: #f5f5f5
+  *background-color: #e6e6e6
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6)
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6))
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6)
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6)
+  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6)
+  background-repeat: repeat-x
+  border: 1px solid #cccccc
+  *border: 0
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
+  border-bottom-color: #b3b3b3
+  -webkit-border-radius: 4px
+  -moz-border-radius: 4px
+  border-radius: 4px
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0)
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)
+  *zoom: 1
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)
+
+.btn-two:hover,
+.btn-two:focus,
+.btn-two:active,
+.btn-two.active,
+.btn-two.disabled,
+.btn-two[disabled]
+  color: #333333
+  background-color: #e6e6e6
+  *background-color: #d9d9d9
+
+.btn-two:active,
+.btn-two.active
+  background-color: #cccccc \9
+
+.btn-two:first-child
+  *margin-left: 0
+
+.btn-two:hover,
+.btn-two:focus
+  color: #333333
+  text-decoration: none
+  background-position: 0 -15px
+  -webkit-transition: background-position 0.1s linear
+  -moz-transition: background-position 0.1s linear
+  -o-transition: background-position 0.1s linear
+  transition: background-position 0.1s linear
+
+.btn-two:focus
+  outline: thin dotted #333
+  outline: 5px auto -webkit-focus-ring-color
+  outline-offset: -2px
+
+
+.btn-two.active,
+.btn-two:active
+  background-image: none
+  outline: 0
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)
+  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)
+
+
+.btn-two.disabled,
+.btn-two[disabled]
+  cursor: default
+  background-image: none
+  opacity: 0.65
+  filter: alpha(opacity=65)
+  -webkit-box-shadow: none
+  -moz-box-shadow: none
+  box-shadow: none

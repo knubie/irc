@@ -1,90 +1,40 @@
-########## Notifications ##########
-notifications = {}
-class Notification
-  constructor: (title, message) ->
-    if window.webkitNotifications.checkPermission() is 0
-      @self = window.webkitNotifications.createNotification 'icon.png', title, message
-      @count = 0
-  show: ->
-    @self.show()
-    @count++
-  showOnce: ->
-    if @count < 1
-      @self.show()
-
 ########## Defaults ##########
 
-# Currently selected channel for viewing messages.
-Session.setDefault 'channel.name', 'all'
-Session.setDefault 'channel.id', null
-# Push messages to the bottom by default (ie don't save scroll position).
-Session.setDefault 'scroll', 0
-Session.setDefault 'messages.page', 1
+Session.setDefault 'channel.name', 'all' #Current channel.
+Session.setDefault 'channel.id', null # Current channel id
+Session.setDefault 'scroll', 0 # Scroll position
+Session.setDefault 'messages.page', 1 # Messages handler pagination
 Session.setDefault 'messages.rendered', false
+
 
 ########## Subscriptions ##########
 
-@handlers = {messages:{},channel:{}}
-handlers.user = Meteor.subscribe 'users'
-handlers.channel = Meteor.subscribe 'channels'
+@handlers =
+  user: Meteor.subscribe 'users'
+  channel: Meteor.subscribe 'channels'
+  messages: {}
+  mentions: {}
 Deps.autorun ->
   limit = (PERPAGE * Session.get('messages.page')) + PERPAGE
-  #TODO: remove this handler
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
-  if Meteor.user()
-    for channel of Meteor.user().profile.channels
-      handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
+  for channel of Meteor.user()?.profile.channels
+    handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
+    handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
 
-# Send Notifications.
-Messages.find().observeChanges
-  added: (id, doc) ->
-    unless doc.read
-      if Meteor.user().profile.sounds
-        document.getElementById('beep').play()
-      if doc.convo is Meteor.user().username and \
-      doc.from not in Meteor.user().profile.channels[doc.channel].ignore
-        if Meteor.user().profile.notifications
-          notifications[id] ?= new Notification "#{doc.from} (#{doc.channel})", doc.text
-          notifications[id].showOnce()
-
-      unless doc.channel.isChannel()
-        if Meteor.user().profile.notifications
-          notifications[id] ?= new Notification "#{doc.from}", doc.text
-          notifications[id].showOnce()
 
 ########## Startup ##########
 
 Meteor.startup ->
+  # Set up FastClick for more responsive touch events.
   FastClick.attach(document.body)
+
   # Store scroll position in a session variable. This keeps the scroll
   # position in place when receiving new messages, unless the user is
   # scrolled to the bottom, then it forces the scroll position to the
   # bottom even when new messages get rendered.
-  @updateStuff = ->
-    if false
-      $channelHeader = $('.channel-header')
-      currScroll = $(document).height() - ($(window).scrollTop() + $(window).height())
-
-      if currScroll > Session.get('scroll') \ # Scrolling up
-      and currScroll > 0 \ # Not 'bouncing' past the bottom
-      and $channelHeader.height() < 78 # At least partially hidden
-
-        $channelHeader.height(
-          $channelHeader.height() - (Session.get('scroll') - currScroll)
-        )
-        if $channelHeader.height() > 78
-          $channelHeader.height(78)
-
-      else if currScroll < Session.get('scroll') \ # Scrolling down
-      and currScroll > 0 \ # Not 'bouncing' past the bottom
-      and $channelHeader.height() > 26 # Not totally hidden yet
-
-        $channelHeader.height(
-          $channelHeader.height() - (Session.get('scroll') - currScroll)
-        )
-        if $channelHeader.height() < 26
-          $channelHeader.height(26)
-
+  @rememberScrollPosition = ->
+    $doc = $(document)
+    $win = $(window)
     if ($(document).height() - ($(window).scrollTop() + $(window).height())) > $(document).height()
       Session.set 'scroll', $(document).height()
     else
@@ -120,3 +70,8 @@ Meteor.startup ->
   @scrollToPlace = ->
     $(window).scrollTop \
       $(document).height() - $(window).height() - Session.get('scroll')
+
+  @isElementInViewport = (el) ->
+    rect = el.getBoundingClientRect()
+    rect.top >= 160 && rect.left >= 0 && rect.bottom <= $(window).height()
+

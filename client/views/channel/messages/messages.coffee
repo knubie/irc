@@ -1,33 +1,36 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
+  console.log 'rendered'
   Session.set('messages.rendered', true)
 
   $('.glyphicon-time').tooltip()
 
-  # Keep scroll position when template rerenders,
-  # especially if document height changes.
-  #if ($(document).height() - ($(window).scrollTop() + $(window).height())) < 0
-  ## If scroll is negative, on screen keyboard is present
-    #$(window).scrollTop 99999
-  #else
-    #FIXME: on mobile the window scrolls to the appropriate height rigth before the new documents are loaded (it's not seamless)
+  # Keep scroll position when template rerenders
+  scrollToPlace()
+  # Set up listeners for scroll position
+  if Modernizr.touch
+    $(window).off 'touchmove'
+    $(window).on 'touchmove', rememberScrollPosition
+    $('.message').addClass('touch')
+  $(window).off 'scroll'
+  $(window).scroll rememberScrollPosition
 
-  do scrollToPlace
+
+  $(window).off 'resize'
+  $('.message').each (i) ->
+    el = @
+    $(window).on 'resize scroll', ->
+      #console.log "#{$(@).find('p').text()}: #{isElementInViewport @}"
+      doc = Messages.findOne($(el).attr('id'))
+      if not doc.read and doc.from and isElementInViewport el
+        Messages.update doc._id, $set: {'read': true}
 
   #Hover isolates messages from like channels
   if @data.name is 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
-    , ->
-      $('.message').removeClass 'faded'
-
-  if Modernizr.touch
-    $(window).off 'touchmove'
-    $(window).on 'touchmove', updateStuff
-    $('.message').addClass('touch')
-  $(window).off 'scroll'
-  $(window).scroll updateStuff
+    , -> $('.message').removeClass 'faded'
 
 Template.messages.helpers
   messages: ->
@@ -85,16 +88,6 @@ Template.message.rendered = ->
       #"<iframe width=\"480\" height=\"360\" src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
     else
       "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
-  #ptext = ptext.replace regex.image, "<img src=\"$&\" alt=\"\"/>"
-  #while regex.url.test ptext
-    #link_title = ''
-    #url = ptext.match regex.url
-    #$.ajax
-        #url: "http://textance.herokuapp.com/title/#{url[0]}"
-        #complete: (data) ->
-          #link_title = data.responseText
-
-    #ptext = ptext.replace regex.url, "<a href='$1' target='_blank'>link_title</a>"
   # Linkify nicks.
   if @data.channel?.isChannel()
     for nick of Channels.findOne(name: @data.channel).nicks
@@ -108,8 +101,9 @@ Template.message.rendered = ->
     ptext = ptext.replace regex.underline, '$1$2<span class="underline">$3</span>$4'
   p.html(ptext)
 
-  if not @data.read and @data.from
-    Messages.update @data._id, $set: {'read': true}
+  #console.log "#{@data.text}: #{isElementInViewport @find('li')}"
+  #if not @data.read and @data.from and isElementInViewport @find('li')
+    #Messages.update @data._id, $set: {'read': true}
 
 Template.message.events
   'click .reply-action': ->
@@ -171,6 +165,8 @@ Template.message.helpers
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'
+  bot: ->
+    @from is 'Idletron'
   away: ->
     #TODO: make this change the user MODE in irc
     not Meteor.users.findOne(username: @from)?.profile.online

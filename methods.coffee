@@ -35,8 +35,8 @@ Meteor.methods
       channels[channel] =
         ignore: []
         verbose: false
-        unread: 0
-        mentions: 0
+        unread: []
+        mentions: []
     # Update the User with the new channels object.
     Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
 

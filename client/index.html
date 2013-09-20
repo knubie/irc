@@ -13,7 +13,9 @@
 <template name="layout">
   {{yield 'header'}}
   {{yield}}
-  <audio id="beep" src="/beep.wav"/>
+  {{#constant}}
+    <audio id="beep" src="/beep.wav"/>
+  {{/constant}}
 </template>
 
 <template name="header">
@@ -87,48 +89,48 @@
   </div>
   <div class="container">
     <div class="feature-row row">
-      <div class="col-sm-1">
-        <span class="glyphicon glyphicon-phone"></span>
-      </div>
-      <div class="col-sm-3">
-        <h3>Responsive Design</h3>
+      <div class="col-sm-4">
+        <h3>
+          <span class="glyphicon glyphicon-phone"></span>
+          Responsive Design
+        </h3>
         Idletron was designed from the ground up to be usable accross all device types and sizes.
       </div>
-      <div class="col-sm-1">
-        <span class="batch-icon">&#xf0b0;</span>
-      </div>
-      <div class="col-sm-3">
-        <h3>Always connected</h3>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf0b0;</span>
+          Always connected
+        </h3>
         Never miss a message. No need to set up a BNC or a client on a remote server. Persistent connections come standard with Idletron out of the box, no server necessary.
       </div>
-      <div class="col-sm-1">
-        <span class="batch-icon">&#xf0d4;</span>
-      </div>
-      <div class="col-sm-3">
-        <h3>Message feeds</h3>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf0d4;</span>
+          Message feeds
+        </h3>
         View messages from all your subscribed channels in one feed, or group them into related feeds.
       </div>
     </div>
     <div class="feature-row row">
-      <div class="col-sm-1">
-        <span class="batch-icon">&#xf009;</span>
-      </div>
-      <div class="col-sm-3">
-        <h3>View conversation</h3>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf009;</span>
+          View conversation
+        </h3>
         Isolate conversations between two people in busy channels.
       </div>
-      <div class="col-sm-1">
-        <span class="batch-icon">&#xf060;</span>
-      </div>
-      <div class="col-sm-3">
-        <h3>Universal access</h3>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf060;</span>
+          Universal access
+        </h3>
         Idletron is just IRC, so you can access it from any IRC client with your username and password.
       </div>
-      <div class="col-sm-1">
-        <span class="batch-icon">&#xf139;</span>
-      </div>
-      <div class="col-sm-3">
-        <h3>Limited markdown</h3>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf139;</span>
+          Limited markdown
+        </h3>
         Supports basic markdown like <span class="underline">_underline_</span>, <strong>*bold*</strong>, <i>**italic**</i>, and <code>`code`</code>.
       </div>
     </div>

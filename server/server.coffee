@@ -19,6 +19,7 @@ Meteor.startup ->
     Messages.find({owner: user._id}).observeChanges
       added: (id, doc) ->
         unless doc.read
+          user = Meteor.users.findOne(user._id)
           {channels} = user.profile
           unless typeof channels[doc.channel].unread is 'object'
             channels[doc.channel].unread = []
@@ -36,6 +37,7 @@ Meteor.startup ->
       changed: (id, fields) ->
         if fields.read
           doc = Messages.findOne(id)
+          user = Meteor.users.findOne(user._id)
           {channels} = user.profile
           unless typeof channels[doc.channel].unread is 'object'
             channels[doc.channel].unread = []

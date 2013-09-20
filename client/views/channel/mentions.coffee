@@ -1,6 +1,12 @@
 Template.mentions.helpers
   mentions: ->
-    Meteor.user().profile.channels[@name].mentions.length
+    limit = PERPAGE * Session.get('messages.page')
+    Messages.find({
+      channel: @name
+      convo: Meteor.user().username
+    }, {limit, sort: {createdAt: -1}}).fetch().reverse()
+    #(Messages.findOne(id) \
+      #for id in Meteor.user().profile.channels[@name].mentions)
   loadMore: ->
     limit = PERPAGE * Session.get('messages.page')
     messages = Messages.find({
@@ -14,3 +20,6 @@ Template.mentions.helpers
       convo: Meteor.user().username
     }).fetch().length
 
+Template.mention.helpers
+  timeAgo: ->
+    moment(@createdAt).fromNow()

@@ -30,12 +30,8 @@ Router.map ->
     waitOn: ->
       #FIXME: this doesn't work in firefox.
       channel = "##{@params.channel}"
-      if handlers.messages[channel]
-        return handlers.messages[channel]
-      else
-        return handlers.messages[channel] = Meteor.subscribe 'messages', channel, PERPAGE
-      #handlers.messages[channel] or handlers.messages[channel] = Meteor.subscribe 'messages', channel, PERPAGE
-      #FIXME: why can't i use ?=
+      handlers.messages[channel] ? \
+        Meteor.subscribe 'messages', channel, PERPAGE
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
       channel = "##{@params.channel}"
@@ -66,7 +62,6 @@ Router.map ->
           #Session.set 'channel.name', u.name
           ##Session.set 'channel.id', u._id
       Session.set 'messages.page', 1
-
   @route 'channel_settings',
     path: '/channels/:channel/settings'
     data: -> Channels.findOne({name: "##{@params.channel}"})
@@ -83,6 +78,10 @@ Router.map ->
   @route 'channel_mentions',
     path: '/channels/:channel/mentions'
     data: -> Channels.findOne({name: "##{@params.channel}"})
+    waitOn: ->
+      channel = "##{@params.channel}"
+      handlers.mentions[channel] ? \
+      Meteor.subscribe 'mentions', channel, PERPAGE
     onBeforeRun: ->
       channel = "##{@params.channel}"
       Session.set 'channel.name', channel

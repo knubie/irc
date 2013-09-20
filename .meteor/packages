@@ -10,8 +10,7 @@ accounts-ui
 insecure
 stylus
 standard-app-packages
-page-js-ie-support
 user-status
-iron-router
 less
 npm
+iron-router
