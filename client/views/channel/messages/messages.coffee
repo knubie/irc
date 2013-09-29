@@ -112,12 +112,12 @@ Template.message.events
     $('#say-input').focus()
 
   'click .ignore-action': ->
-    #TODO: extract this pattern into an update method
-    {channels} = Meteor.user().profile
-    channels[@channel].ignore.push @from
-    channels[@channel].ignore = _.uniq channels[@channel].ignore
-    Meteor.users.update Meteor.userId()
-    , $set: {'profile.channels': channels}
+    if confirm("Are you sure you want to ignore #{@from}? (You can un-ignore them later in your channel settings.)")
+      {channels} = Meteor.user().profile
+      channels[@channel].ignore.push @from
+      channels[@channel].ignore = _.uniq channels[@channel].ignore
+      Meteor.users.update Meteor.userId()
+      , $set: {'profile.channels': channels}
 
   'click': (e, t) ->
     if Session.equals('channel.name', 'all') and not $(e.target).is('strong')

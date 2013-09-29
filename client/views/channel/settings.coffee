@@ -23,6 +23,13 @@ Template.settings.events
     Meteor.users.update Meteor.userId()
     , $set: 'profile.channels': channels
 
+  'click .close': (e,t) ->
+    {channels} = Meteor.user().profile
+    index = channels[Session.get('channel.name')]?.ignore.indexOf(@)
+    channels[Session.get('channel.name')]?.ignore.splice(index, 1)
+    Meteor.users.update Meteor.userId()
+    , $set: 'profile.channels': channels
+
   'click label.checkbox[for="privateCheckbox"]': (e,t) ->
     if 's' in @modes or 'i' in @modes
       Meteor.call 'mode', Meteor.user(), @name, '-si'
