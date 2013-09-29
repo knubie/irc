@@ -83,6 +83,11 @@ Meteor.methods
       client[user.username].kick channel, username, reason
     return null
 
+  invite: (user, channel, username) ->
+    if Meteor.isServer
+      client[user.username].invite username, channel
+    return null
+
   mode: (user, channel, mode) ->
     if Meteor.isServer
       client[user.username].send 'MODE', channel, mode

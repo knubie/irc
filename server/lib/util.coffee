@@ -2,7 +2,6 @@ parseString = Meteor.require('xml2js').parseString
 request = Npm.require('request')
 @client = {}
 @async = (cb) -> Meteor.bindEnvironment cb, (err) -> console.log err
-
 @wolfram = {}
 
 wolfram.request = (query, cb) ->

@@ -218,7 +218,9 @@ label {
     top: 50px;
     z-index: 98;
     background-color: #ecf0f1;
-    padding: 15px; }
+    padding: 15px;
+    box-shadow: 0px 4px 5px -3px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #bdc3c7; }
     @media (min-width: 768px) {
       .channel-container .channel-header {
         width: 562px; } }
@@ -300,6 +302,14 @@ label {
     .channel-container .channel-header .channel-invite:hover {
       color: white;
       background-color: #3498db; }
+    .channel-container .channel-header .invite-dropdown {
+      padding: 10px;
+      right: 15px;
+      left: auto;
+      top: 45px !important;
+      bottom: auto !important; }
+      .channel-container .channel-header .invite-dropdown input {
+        margin-right: 5px; }
     .channel-container .channel-header #topic-form {
       display: none; }
 
@@ -372,7 +382,8 @@ label {
   padding: 10px 12px;
   color: #777777;
   position: relative;
-  transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color; }
+  transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color, 1s border-color;
+  border: 1px solid transparent; }
   .messages .message p {
     font-size: 16px;
     line-height: 21px;
@@ -390,7 +401,8 @@ label {
     font-size: 12px;
     display: inline-block;
     margin-bottom: 5px;
-    box-sizing: content-box; }
+    box-sizing: content-box;
+    color: #bdc3c7; }
     .messages .message .reply .normal {
       display: none; }
     .messages .message .reply .operator {

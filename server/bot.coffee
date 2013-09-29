@@ -1,3 +1,14 @@
+class Tron extends Client
+  constructor: (listeners) ->
+    @on 'message#', (from, to, text, message) =>
+      if /^[>](.+)$/.test text # Listen for Wolfram queries.
+        query = text.replace /^[>]\s*/g, '' # Extract query.
+        wolfram.request query, (answer) =>
+          if answer
+            @say to, answer
+          else
+            @say to, "I don't know."
+
 class @Idletron extends Client
   constructor: ->
     @channels = {}
@@ -312,6 +323,9 @@ class @Bot extends Client
 
   kick: (channel, username, reason = '') ->
     @send 'KICK', channel, username, reason
+
+  invite: (username, channel) ->
+    @send 'INVITE', username, channel
       
   # Helper funciton
 

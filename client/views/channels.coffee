@@ -45,6 +45,18 @@ Template.channel_header.events
     $('.topic').show()
     $('#topic-form').hide()
 
+  'click .channel-invite': (e,t) ->
+    $('#invite-username').focus()
+
+  'submit #invite-form': (e,t) ->
+    e.preventDefault()
+    username = t.find('#invite-username').value
+    Meteor.call 'invite', Meteor.user(), @name, username
+    t.find('#invite-username').value = ''
+    $('.invite-dropdown').dropdown('toggle')
+
+  'click .dropdown-menu input': (e,t) -> e.stopPropagation()
+
 ########## Channels ##########
 
 Template.channels.events

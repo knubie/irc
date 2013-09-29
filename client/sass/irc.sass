@@ -232,6 +232,8 @@ label
     z-index: 98
     background-color: $clouds
     padding: 15px
+    box-shadow: 0px 4px 5px -3px rgba(0, 0, 0, 0.05)
+    border-bottom: 1px solid $silver
     .channel-breadcrumb
       color: $foreground
       h3
@@ -302,6 +304,14 @@ label
     .channel-invite:hover
       color: white
       background-color: $peter-river
+    .invite-dropdown
+      padding: 10px
+      right: 15px
+      left: auto
+      top: 45px !important
+      bottom: auto !important
+      input
+        margin-right: 5px
 
     #topic-form
       display: none
@@ -382,7 +392,8 @@ label
     padding: 10px 12px
     color: $foreground
     position: relative
-    transition: .15s left, .15s opacity, .15s background-color, .15s color
+    transition: .15s left, .15s opacity, .15s background-color, .15s color, 1s border-color
+    border: 1px solid transparent
     p
       font-size: 16px
       line-height: 21px
@@ -402,6 +413,7 @@ label
       display: inline-block
       margin-bottom: 5px
       box-sizing: content-box
+      color: $silver
       .normal
         display: none
       .operator

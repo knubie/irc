@@ -24,13 +24,11 @@
       <div class="channel-breadcrumb">
         <h3>
           <span class="batch-icon">&#xf003;</span>
-          <a href="/channels/{{url_channel}}" class="">
-            {{channel}}
-          </a>
+          <a href="/channels/{{url_channel}}" class="">{{channel}}</a>
         </h3>
         <span class="slash">&nbsp;/&nbsp;</span>
+        <span class="glyphicon glyphicon-user"></span>
         <a href="/channels/{{url_channel}}/users" class="user-count">
-          <span class="glyphicon glyphicon-user"></span>
           <strong>{{users}}</strong> users
         </a>
         <div class="topic">
@@ -53,9 +51,15 @@
             <span class="glyphicon glyphicon-cog"></span>
             <span class="hidden-xs">Settings</span>
           </a>
-          <a href="/channels/{{url_channel}}/settings" class="hidden-xs btn btn-default channel-invite">
+          <span class="hidden-xs btn btn-default channel-invite" data-toggle="dropdown">
             Invite a friend
-          </a>
+          </span>
+          <div class="dropdown-menu invite-dropdown" role="invite">
+            <form id="invite-form">
+              <input type="text" id="invite-username" class="form-control" autocomplete="off" placeholder="Type in a user">
+              <a href="#" class="cancel">Cancel</a>
+            </form>
+          </div>
         {{/if}}
       </div>
     </div>

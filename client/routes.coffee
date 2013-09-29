@@ -30,8 +30,7 @@ Router.map ->
     waitOn: ->
       #FIXME: this doesn't work in firefox.
       channel = "##{@params.channel}"
-      handlers.messages[channel] ? \
-        Meteor.subscribe 'messages', channel, PERPAGE
+      handlers.messages[channel] ? Meteor.subscribe 'messages',channel,PERPAGE
     data: -> Channels.findOne({name: "##{@params.channel}"})
     onBeforeRun: ->
       channel = "##{@params.channel}"
@@ -80,8 +79,7 @@ Router.map ->
     data: -> Channels.findOne({name: "##{@params.channel}"})
     waitOn: ->
       channel = "##{@params.channel}"
-      handlers.mentions[channel] ? \
-      Meteor.subscribe 'mentions', channel, PERPAGE
+      handlers.mentions[channel] ? Meteor.subscribe 'mentions',channel,PERPAGE
     onBeforeRun: ->
       channel = "##{@params.channel}"
       Session.set 'channel.name', channel

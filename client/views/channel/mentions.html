@@ -26,7 +26,7 @@
 </template>
 
 <template name="mention">
-  <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message {{message_class}}">
+  <li id="{{_id}}" data-nick="{{from}}" data-channel="{{channel}}" class="message {{readClass}}">
     <span class="reply">
       <a href="/users/{{from}}"><strong>{{from}}</strong></a>
       {{#if away}}

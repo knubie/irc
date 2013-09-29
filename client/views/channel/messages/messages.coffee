@@ -1,13 +1,12 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  console.log 'rendered'
   Session.set('messages.rendered', true)
 
   $('.glyphicon-time').tooltip()
 
-  # Keep scroll position when template rerenders
-  scrollToPlace()
+  scrollToPlace() # Keep scroll position when template rerenders
+
   # Set up listeners for scroll position
   if Modernizr.touch
     $(window).off 'touchmove'
@@ -16,17 +15,15 @@ Template.messages.rendered = ->
   $(window).off 'scroll'
   $(window).scroll rememberScrollPosition
 
-
   $(window).off 'resize'
   $('.message').each (i) ->
     el = @
     $(window).on 'resize scroll', ->
-      #console.log "#{$(@).find('p').text()}: #{isElementInViewport @}"
       doc = Messages.findOne($(el).attr('id'))
       if not doc.read and doc.from and isElementInViewport el
         Messages.update doc._id, $set: {'read': true}
 
-  #Hover isolates messages from like channels
+  # Hover isolates messages from like channels
   if @data.name is 'all'
     $('.message').hover ->
       $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
@@ -82,11 +79,15 @@ Template.message.rendered = ->
   # Linkify & Imagify URLs.
   ptext = ptext.replace regex.url, (str) ->
     #youtubeMatch = str.match regex.youtube
-    if str.match /\.(?:jpe?g|gif|png)/
-      "<a href=\"#{str}\" target=\"_blank\"><img onload=\"scrollToPlace();\" src=\"#{str}\" alt=\"\"/></a>"
+    if str.match /\.(?:jpe?g|gif|png)/ # Image
+      """
+        <a href="#{str}" target="_blank">
+          <img onload="scrollToPlace();" src="#{str}" alt=""/>
+        </a>
+      """
     #else if youtubeMatch and youtubeMatch[1].length is 11
       #"<iframe width=\"480\" height=\"360\" src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
-    else
+    else # All other links
       "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
   # Linkify nicks.
   if @data.channel?.isChannel()

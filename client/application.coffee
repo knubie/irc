@@ -41,32 +41,6 @@ Meteor.startup ->
       Session.set 'scroll', \
         $(document).height() - ($(window).scrollTop() + $(window).height())
 
-    # If close to top and messages handler is ready.
-    #if $(window).scrollTop() <= 150 and handlers.messages[Session.get('channel.name')].ready() and Session.equals 'messages.rendered', true
-      ## Load messages subscription next page.
-      #Log.info 'load next'
-      #Log.info Session.get('messages.page')
-      #Session.set 'messages.page', Session.get('messages.page') + 1
-      #Session.set('messages.rendered', false)
-    #if Session.get('scroll') < 1 and Session.get('messages.page') > 1
-      #Session.set 'messages.page', 1
-
-  # Images loaded hook
-  @onImagesLoad = (callbacks) ->
-    images = 0
-    $("img").each (key) ->
-      item = $(this)
-      img = new Image()
-      images++
-      img.onload = ->
-        images--
-        callbacks.each?()
-      img.src = item.attr("src")
-    check = setInterval ->
-      if images is 0
-        callbacks.final?()
-        clearInterval(check)
-    , 50
   @scrollToPlace = ->
     $(window).scrollTop \
       $(document).height() - $(window).height() - Session.get('scroll')
