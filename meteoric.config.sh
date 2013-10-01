@@ -5,7 +5,7 @@ APP_HOST=54.200.103.249
 #ROOT_URL=mycustom.url.com
 
 # Comment this if your host is not an EC2 instance
-EC2_PEM_FILE=~/Dropbox/ssh\ keys/matt_new.pem
+EC2_PEM_FILE=~/.ssh/idletron_ec2.pem
 
 # What's your project's Git repo?
 GIT_URL=https://github.com/knubie/irc.git
