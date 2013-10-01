@@ -207,6 +207,9 @@ label {
       box-shadow: 0 2px 0 #95a5a6; }
   .channel-container .user-count {
     color: #777777; }
+  .channel-container .user-count:hover {
+    cursor: pointer;
+    text-decoration: underline; }
   .channel-container .load-more {
     display: block;
     width: 200px;

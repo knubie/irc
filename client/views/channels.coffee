@@ -58,7 +58,6 @@ Template.channel_header.events
   'click .dropdown-menu input': (e,t) -> e.stopPropagation()
 
   'click .user-count': (e,t) ->
-    scroll = Session.get 'scroll'
     if $('.user-list-container').is(':visible')
       $('.user-list-container').hide()
       $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
