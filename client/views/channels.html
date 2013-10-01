@@ -11,6 +11,9 @@
         {{/if}}
         {{> messages}}
       </div>
+      <div class="user-list-container col-sm-2">
+        {{> users}}
+      </div>
       {{#unless isAll}}
         {{> say}}
       {{/unless}}
@@ -64,6 +67,23 @@
       </div>
     </div>
   </div>
+</template>
+
+<template name="users">
+  <ul class="user-list">
+    {{#each users}}
+      <li>
+      <h3>
+        <a href="/users/{{nick}}">{{flag}}{{nick}}</a>
+        {{#if away}}
+          <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
+        {{/if}}
+          
+      </h3>
+      Real Name
+      </li>
+    {{/each}}
+  </ul>
 </template>
 
 <template name="channels">

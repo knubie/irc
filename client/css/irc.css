@@ -652,17 +652,24 @@ form {
   .settings-section .ignore-list {
     width: 200px; }
 
+.user-list-container {
+  display: none; }
+
 .user-list {
   list-style: none;
-  padding: 0; }
+  padding: 0;
+  position: fixed;
+  margin-top: 130px; }
   .user-list li {
-    padding-bottom: 10px;
     margin-bottom: 10px;
     color: #bdc3c7;
-    position: relative; }
+    position: relative;
+    font-size: 12px; }
     .user-list li h3 {
-      font-size: 20px;
+      font-size: 16px;
       margin: 0; }
+      .user-list li h3 .glyphicon {
+        font-size: 12px; }
 
 .notification-request-container {
   text-align: center;

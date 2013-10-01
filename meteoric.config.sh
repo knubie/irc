@@ -1,11 +1,11 @@
 # IP or URL of the server you want to deploy to
-APP_HOST=54.213.110.127
+APP_HOST=54.200.103.249
 
 # If you want a different ROOT_URL, when using a load balancer for instance, set it here
 #ROOT_URL=mycustom.url.com
 
 # Comment this if your host is not an EC2 instance
-EC2_PEM_FILE=~/.ssh/idletron.pem
+EC2_PEM_FILE=~/Dropbox/ssh\ keys/matt_new.pem
 
 # What's your project's Git repo?
 GIT_URL=https://github.com/knubie/irc.git

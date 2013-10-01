@@ -7,6 +7,11 @@ Handlebars.registerHelper 'isAll', ->
   Session.equals 'channel.name', 'all'
 
 Template.home_logged_out.events
+  'click #signup-with-github': (e,t) ->
+    console.log 'sign up with github'
+    Meteor.loginWithGithub (error) ->
+      console.log error if error
+
   'submit #signup': (e,t) ->
     e.preventDefault()
     # Get credentials from the form

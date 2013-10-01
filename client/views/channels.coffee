@@ -57,6 +57,15 @@ Template.channel_header.events
 
   'click .dropdown-menu input': (e,t) -> e.stopPropagation()
 
+  'click .user-count': (e,t) ->
+    if $('.user-list-container').is(':visible')
+      $('.user-list-container').hide()
+      $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
+    else
+      $('.user-list-container').show()
+      $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
+      
+
 ########## Channels ##########
 
 Template.channels.events
@@ -154,3 +163,14 @@ Template.pm.events
     Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
     if "#{@}" is Session.get('channel.name')
       Router.go('home')
+
+Template.users.helpers
+  users: ->
+    ({nick, flag} for nick, flag of @nicks).sort()
+    #Meteor.users.find
+      #'profile.channels':
+        #$all: [@name]
+  away: ->
+    not Meteor.users.findOne({username: @nick})?.profile.online
+  awaySince: ->
+    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.profile.awaySince).humanize()

@@ -1,5 +1,14 @@
 Meteor.startup ->
 
+  # first, remove configuration entry in case service is already configured
+  Accounts.loginServiceConfiguration.remove
+    service: "github"
+
+  Accounts.loginServiceConfiguration.insert
+    service: "weibo"
+    clientId: "20da6e29dafcf36ad05a"
+    secret: "d11c42acaba2bc3a9f847c1aa46657b193ab5f6c"
+
   Meteor.users.find().forEach (user) ->
     # Connect to IRC
     client[user.username] ?= new Bot user
