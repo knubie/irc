@@ -1,4 +1,9 @@
-#Template.channel_main.rendered = ->
+Template.channel_main.rendered = ->
+  console.log @data.name
+  if @data.name.isChannel()
+    $set = {}
+    $set["profile.channels.#{@data.name}.unread"] = []
+    Meteor.users.update Meteor.userId(), {$set}
   #if window.webkitNotifications.checkPermission() is 1 and not Modernizr.touch
     #$('#notification-modal').modal
       #backdrop: true
@@ -25,7 +30,7 @@ Template.channel_header.helpers
     else
       return no
   unread_mentions: ->
-    Meteor.user().profile.channels[@name].mentions.length or ''
+    Meteor.user().profile.channels[@name].mentions?.length or ''
 
 Template.channel_header.events
   'click .topic-edit > a': (e, t) ->
@@ -135,7 +140,7 @@ Template.channel.helpers
       Meteor.user().profile.channels["#{@}"].unread.length or ''
   unread_mentions: ->
     if Meteor.user()
-      Meteor.user().profile.channels["#{@}"].mentions.length or ''
+      Meteor.user().profile.channels["#{@}"].mentions?.length or ''
 
 Template.pm.helpers
   selected: ->

@@ -237,9 +237,9 @@ label {
       color: #777777; }
       .channel-container .channel-header .channel-breadcrumb h3 {
         display: inline;
-        font-size: 21px; }
+        font-size: 18px; }
         .channel-container .channel-header .channel-breadcrumb h3 .batch-icon {
-          font-size: 21px;
+          font-size: 18px;
           color: #bdc3c7;
           position: relative;
           bottom: -3px; }
@@ -266,7 +266,6 @@ label {
     .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
       position: absolute;
       top: 17px;
-      right: 15px;
       color: #777777;
       font-size: 21px; }
       @media only screen and (min-width: 768px) {
@@ -281,16 +280,31 @@ label {
           display: inline !important; } }
       .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
         color: #bdc3c7;
-        font-size: 14px;
+        font-size: 19px;
         margin-right: 6px; }
+        @media only screen and (min-width: 768px) {
+          .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
+            font-size: 14px; } }
       .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
-        padding: 1px 4px 2px;
+        padding: 2px 4px 1px;
         font-size: 9px;
         background-color: #3498db;
         position: absolute;
-        left: 7px; }
+        left: 9px;
+        top: 4px; }
+        @media only screen and (min-width: 768px) {
+          .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
+            left: 7px; } }
+    .channel-container .channel-header .channel-settings {
+      right: 15px; }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .channel-settings {
+          right: 150px; } }
     .channel-container .channel-header .channel-notifications {
-      right: 240px; }
+      right: 40px; }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .channel-notifications {
+          right: 240px; } }
     .channel-container .channel-header .channel-invite {
       position: absolute;
       top: 14px;

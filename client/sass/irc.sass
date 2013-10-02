@@ -241,9 +241,9 @@ label
       color: $foreground
       h3
         display: inline
-        font-size: 21px
+        font-size: 18px
         .batch-icon
-          font-size: 21px
+          font-size: 18px
           color: $silver
           position: relative
           bottom: -3px
@@ -269,7 +269,6 @@ label
     .channel-settings, .channel-notifications
       position: absolute
       top: 17px
-      right: 15px
       color: $foreground
       font-size: 21px
       +tablet-portrait-and-above
@@ -283,16 +282,27 @@ label
           display: inline!important
       .batch-icon
         color: #BDC3C7
-        font-size: 14px
+        font-size: 19px
         margin-right: 6px
+        +tablet-portrait-and-above
+          font-size: 14px
       .badge
-        padding: 1px 4px 2px
+        padding: 2px 4px 1px
         font-size: 9px
         background-color: $peter-river
         position: absolute
-        left: 7px
+        left: 9px
+        top: 4px
+        +tablet-portrait-and-above
+          left: 7px
+    .channel-settings
+      right: 15px
+      +tablet-portrait-and-above
+        right: 150px
     .channel-notifications
-      right: 240px
+      right: 40px
+      +tablet-portrait-and-above
+        right: 240px
     .channel-invite
       position: absolute
       top: 14px
