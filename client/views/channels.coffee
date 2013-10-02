@@ -66,9 +66,11 @@ Template.channel_header.events
     if $('.user-list-container').is(':visible')
       $('.user-list-container').hide()
       $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
+      scrollToPlace() # Keep scroll position when template rerenders
     else
       $('.user-list-container').show()
       $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
+      scrollToPlace() # Keep scroll position when template rerenders
       
 
 ########## Channels ##########
@@ -172,9 +174,9 @@ Template.pm.events
 Template.users.helpers
   users: ->
     ({nick, flag} for nick, flag of @nicks).sort()
-    #Meteor.users.find
-      #'profile.channels':
-        #$all: [@name]
+    #query = {}
+    #query["profile.channels.#{@name}"] = {$exists: true}
+    #Meteor.users.find(query)
   away: ->
     not Meteor.users.findOne({username: @nick})?.profile.online
   awaySince: ->

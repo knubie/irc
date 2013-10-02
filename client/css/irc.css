@@ -181,7 +181,7 @@ label {
     border-color: #3498db; }
 
 .channel-container {
-  padding-top: 108px; }
+  padding-top: 123px; }
   .channel-container .alert {
     text-align: center; }
   .channel-container .buttons {
@@ -357,7 +357,9 @@ label {
     top: -1px;
     margin-right: -6px; }
   .channels li .batch-icon {
-    margin-right: -4px; }
+    margin-right: -4px;
+    font-size: 15px;
+    color: #bdc3c7; }
   .channels li a, .channels li form > input {
     color: #777777;
     transition: 0.15s background-color, 0.15s color;
@@ -676,17 +678,27 @@ form {
   list-style: none;
   padding: 0;
   position: fixed;
-  margin-top: 130px; }
+  margin-top: 130px;
+  width: 15%; }
   .user-list li {
     margin-bottom: 10px;
     color: #bdc3c7;
     position: relative;
-    font-size: 12px; }
+    font-size: 11px; }
     .user-list li h3 {
-      font-size: 16px;
+      font-size: 15px;
       margin: 0; }
+      .user-list li h3 a {
+        color: #777777; }
+      .user-list li h3 a:hover {
+        color: #3498db; }
+      .user-list li h3 a.away {
+        color: #bdc3c7; }
+      .user-list li h3 a.away:hover {
+        color: #3498db; }
       .user-list li h3 .glyphicon {
-        font-size: 12px; }
+        font-size: 12px;
+        top: 0; }
 
 .notification-request-container {
   text-align: center;
