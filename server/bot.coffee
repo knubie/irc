@@ -252,17 +252,29 @@ class @Bot extends Client
       , {$set: {nicks, users}}
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
+      text = "#{nick} was kicked by #{kicker}."
+      text = text + " \"#{reason}\"" if reason
       Messages.insert
         owner: @_id
         channel: channel
-        text: "#{nick} was kicked by #{kicker}! \"#{reason}\""
+        text: text
         createdAt: (new Date()).getTime()
         from: 'system'
         convo: ''
         read: false
       #if nick is @username
         #Channels.find({name}).part @username
-
+    @on 'join', async (channel, nick, message) =>
+      unless Channels.findOne({name: channel}).nicks[nick]?
+        Messages.insert
+          owner: @_id
+          channel: channel
+          text: "#{nick} has joined the channel."
+          createdAt: (new Date()).getTime()
+          from: 'system'
+          convo: ''
+          read: false
+        
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick']
       @on event, async (channel) => @send 'NAMES', channel

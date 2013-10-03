@@ -268,7 +268,9 @@ label
       color: $silver
     .channel-settings, .channel-notifications
       position: absolute
-      top: 17px
+      top: 15px
+      +tablet-portrait-and-above
+        top: 17px
       color: $foreground
       font-size: 21px
       +tablet-portrait-and-above
@@ -488,12 +490,13 @@ label
       display: none
       
   .bot
-    background-color: $silver
+    background-color: #ced3d7
     color: #FFF
-    box-shadow: 0 2px 1px rgba(0, 0, 0, 0.25)
+    box-shadow: 0 2px 1px rgba(0, 0, 0, 0.18)
     p
       font-family: Roboto
       font-size: 18px
+      text-shadow: rgba(0,0,0,.1) 1px 1px 3px
     .reply
       color: #FFF
   .offline
@@ -516,10 +519,10 @@ label
       text-shadow: 0 1px 0 white
       font-weight: 600
       font-size: 14px
+      a
+        font-weight: 600
   .mention
     border: 1px solid $peter-river
-  .bot
-    background-color: $silver
   .message.faded
     background-color: #f7f9f9
     box-shadow: 0 2px 0 $clouds

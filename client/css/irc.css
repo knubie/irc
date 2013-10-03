@@ -265,9 +265,12 @@ label {
       color: #bdc3c7; }
     .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
       position: absolute;
-      top: 17px;
+      top: 15px;
       color: #777777;
       font-size: 21px; }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+          top: 17px; } }
       @media only screen and (min-width: 768px) {
         .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
           right: 150px;
@@ -475,12 +478,13 @@ label {
 .messages .touch:hover .actions {
   display: none; }
 .messages .bot {
-  background-color: #bdc3c7;
+  background-color: #ced3d7;
   color: white;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.25); }
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.18); }
   .messages .bot p {
     font-family: Roboto;
-    font-size: 18px; }
+    font-size: 18px;
+    text-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px; }
   .messages .bot .reply {
     color: white; }
 .messages .offline .reply, .messages .offline small, .messages .offline p {
@@ -502,10 +506,10 @@ label {
     text-shadow: 0 1px 0 white;
     font-weight: 600;
     font-size: 14px; }
+    .messages .info p a {
+      font-weight: 600; }
 .messages .mention {
   border: 1px solid #3498db; }
-.messages .bot {
-  background-color: #bdc3c7; }
 .messages .message.faded {
   background-color: #f7f9f9;
   box-shadow: 0 2px 0 #ecf0f1; }

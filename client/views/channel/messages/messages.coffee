@@ -160,7 +160,10 @@ Template.message.helpers
     if @from is 'Idletron'
       return 'bot'
     else
-      if @online() then @type() else "offline #{@type()}"
+      if @type() is 'info'
+        return 'info'
+      else
+        if @online() then @type() else "offline #{@type()}"
   op_status: ->
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
