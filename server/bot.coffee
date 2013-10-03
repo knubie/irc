@@ -59,7 +59,7 @@ class @Idletron extends Client
         from: from
         channel: channel.name
         text: text
-        createdAt: (new Date()).getTime()
+        createdAt: new Date()
         owner: 'idletron'
         convo: convo
         status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
@@ -105,7 +105,7 @@ class @Idletron extends Client
         owner: 'idletron'
         channel: channel
         text: "#{nick} was kicked by #{kicker}! \"#{reason}\""
-        createdAt: (new Date()).getTime()
+        createdAt: new Date()
         from: 'system'
         convo: ''
         read: false
@@ -202,7 +202,7 @@ class @Bot extends Client
           from: from
           channel: from
           text: text
-          createdAt: (new Date()).getTime()
+          createdAt: new Date()
           owner: @_id
           read: false
 
@@ -220,7 +220,7 @@ class @Bot extends Client
           from: from
           channel: channel.name
           text: text
-          createdAt: (new Date()).getTime()
+          createdAt: new Date()
           owner: @_id
           convo: convo
           status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
@@ -258,7 +258,7 @@ class @Bot extends Client
         owner: @_id
         channel: channel
         text: text
-        createdAt: (new Date()).getTime()
+        createdAt: new Date()
         from: 'system'
         convo: ''
         read: false

@@ -1,5 +1,4 @@
 Template.channel_main.rendered = ->
-  console.log @data.name
   if @data.name.isChannel()
     $set = {}
     $set["profile.channels.#{@data.name}.unread"] = []
@@ -9,6 +8,15 @@ Template.channel_main.rendered = ->
     #$('#notification-modal').modal
       #backdrop: true
       #keyboard: true
+
+  if Meteor.user().profile.channels[@data.name].userList
+    $('.user-list-container').show()
+    $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
+    scrollToPlace() # Keep scroll position when template rerenders
+  else
+    $('.user-list-container').hide()
+    $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
+    scrollToPlace() # Keep scroll position when template rerenders
 
 Template.channel_main.events
   'click #notification-modal .btn-primary': ->
@@ -65,10 +73,18 @@ Template.channel_header.events
 
   'click .user-count': (e,t) ->
     if $('.user-list-container').is(':visible')
+      $set = {}
+      $set["profile.channels.#{@name}.userList"] = false
+      Meteor.users.update(Meteor.userId(), {$set})
+
       $('.user-list-container').hide()
       $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
       scrollToPlace() # Keep scroll position when template rerenders
     else
+      $set = {}
+      $set["profile.channels.#{@name}.userList"] = true
+      Meteor.users.update(Meteor.userId(), {$set})
+
       $('.user-list-container').show()
       $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
       scrollToPlace() # Keep scroll position when template rerenders
