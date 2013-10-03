@@ -4,6 +4,7 @@ Template.channel_main.rendered = ->
     $set = {}
     $set["profile.channels.#{@data.name}.unread"] = []
     Meteor.users.update Meteor.userId(), {$set}
+    #Messages.update {channel: @data.name, read: false}, {$set: {read: true}}
   #if window.webkitNotifications.checkPermission() is 1 and not Modernizr.touch
     #$('#notification-modal').modal
       #backdrop: true

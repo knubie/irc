@@ -15,47 +15,47 @@ Meteor.startup ->
     client[user.username].connect()
 
   # Observe messages to create unread count
-  Messages.find().observeChanges
-    added: (id, doc) ->
-      unless doc.read
-        user = Meteor.users.findOne(doc.owner)
-        {unread} = user.profile.channels[doc.channel]
-        {mentions} = user.profile.channels[doc.channel]
+  #Messages.find({read: false}).observeChanges
+    #added: (id, doc) ->
+      #unless doc.read
+        #user = Meteor.users.findOne(doc.owner)
+        #{unread} = user.profile.channels[doc.channel]
+        #{mentions} = user.profile.channels[doc.channel]
 
-        # Update unread count
-        unread = [] unless typeof unread is 'object' #TODO: remove this
-        unread.push id if unread.indexOf(id) is -1
+        ## Update unread count
+        #unread = [] unless typeof unread is 'object' #TODO: remove this
+        #unread.push id if unread.indexOf(id) is -1
 
-        # Update mentions count
-        if doc.convo is user.username \
-        and doc.from not in user.profile.channels[doc.channel].ignore
-          mentions = [] unless typeof mentions is 'object' #TODO: remove this
-          mentions.push id if mentions.indexOf(id) is -1
+        ## Update mentions count
+        #if doc.convo is user.username \
+        #and doc.from not in user.profile.channels[doc.channel].ignore
+          #mentions = [] unless typeof mentions is 'object' #TODO: remove this
+          #mentions.push id if mentions.indexOf(id) is -1
 
-        # Update user doc
-        $set = {}
-        $set["profile.channels.#{doc.channel}.unread"] = unread
-        $set["profile.channels.#{doc.channel}.mentions"] = mentions
-        Meteor.users.update(doc.owner, {$set})
+        ## Update user doc
+        #$set = {}
+        #$set["profile.channels.#{doc.channel}.unread"] = unread
+        #$set["profile.channels.#{doc.channel}.mentions"] = mentions
+        #Meteor.users.update(doc.owner, {$set})
 
-    changed: (id, fields) ->
-      if fields.read
-        doc = Messages.findOne(id)
-        user = Meteor.users.findOne(doc.owner)
-        {channels} = user.profile
-        unless typeof channels[doc.channel].unread is 'object'
-          channels[doc.channel].unread = []
-        if (i = channels[doc.channel].unread.indexOf(id)) > -1
-          channels[doc.channel].unread.splice i, 1
-        #channels[doc.channel].unread = _.uniq channels[doc.channel].unread
-        if doc.convo is user.username and \
-        doc.from not in user.profile.channels[doc.channel].ignore
-          unless typeof channels[doc.channel].mentions is 'object'
-            channels[doc.channel].mentions = []
-          if (i = channels[doc.channel].mentions.indexOf(id)) > -1
-            channels[doc.channel].mentions.splice i, 1
-          #channels[doc.channel].mentions = _.uniq channels[doc.channel].mentions
-        Meteor.users.update(doc.owner, {$set: {'profile.channels': channels}})
+    #changed: (id, fields) ->
+      #if fields.read
+        #doc = Messages.findOne(id)
+        #user = Meteor.users.findOne(doc.owner)
+        #{channels} = user.profile
+        #unless typeof channels[doc.channel].unread is 'object'
+          #channels[doc.channel].unread = []
+        #if (i = channels[doc.channel].unread.indexOf(id)) > -1
+          #channels[doc.channel].unread.splice i, 1
+        ##channels[doc.channel].unread = _.uniq channels[doc.channel].unread
+        #if doc.convo is user.username and \
+        #doc.from not in user.profile.channels[doc.channel].ignore
+          #unless typeof channels[doc.channel].mentions is 'object'
+            #channels[doc.channel].mentions = []
+          #if (i = channels[doc.channel].mentions.indexOf(id)) > -1
+            #channels[doc.channel].mentions.splice i, 1
+          ##channels[doc.channel].mentions = _.uniq channels[doc.channel].mentions
+        #Meteor.users.update(doc.owner, {$set: {'profile.channels': channels}})
 
         #unless doc.channel.isChannel() #PM
           #if Meteor.user().profile.notifications
