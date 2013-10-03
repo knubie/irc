@@ -60,6 +60,13 @@ input.form-control:focus {
 label {
   color: #777777; }
 
+label.checkbox {
+  color: #777777;
+  line-height: 16px;
+  margin-bottom: 25px; }
+  label.checkbox p {
+    font-weight: normal; }
+
 .modal-backdrop.in {
   opacity: 0.5;
   filter: alpha(opacity=50); }
@@ -660,20 +667,25 @@ form {
     font-size: 16px;
     color: #777777; }
 
-.settings-section {
-  border-radius: 5px;
-  border: 1px solid silver;
-  background-color: white;
-  padding: 10px;
-  width: 760px;
-  box-sizing: border-box;
-  color: #777777;
-  margin-top: 25px; }
-  .settings-section .section-heading {
-    font-size: 16px;
-    font-weight: bold; }
-  .settings-section .ignore-list {
-    width: 200px; }
+.settings-panel {
+  color: #777777; }
+  .settings-panel .disclaimer {
+    font-style: italic; }
+  .settings-panel #topic-form-settings label, .settings-panel #ignore-form-settings label {
+    display: block; }
+  .settings-panel #topic-form-settings input.form-control, .settings-panel #ignore-form-settings input.form-control {
+    display: inline-block; }
+  .settings-panel #topic-form-settings input[type="text"], .settings-panel #ignore-form-settings input[type="text"] {
+    width: 290px; }
+  .settings-panel #topic-form-settings button.btn-default, .settings-panel #ignore-form-settings button.btn-default {
+    border: none;
+    background-color: #bdc3c7;
+    color: white;
+    margin-left: 5px; }
+  .settings-panel #channel-modes {
+    border-top: 1px solid #ecf0f1;
+    margin-top: 25px;
+    padding-top: 10px; }
 
 .user-list-container {
   display: none; }

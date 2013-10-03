@@ -14,68 +14,95 @@
 
 <template name="settings">
   {{#if op_status}}
-    <div class="panel panel-default">
+    <div class="panel panel-default settings-panel">
       <div class="panel-heading">
-        <h3 class="panel-title">Options</h3>
+        <h3 class="panel-title">Channel Settings</h3>
       </div>
       <div class="panel-body">
-        {{#constant}}
-          <label class="checkbox {{private_checked}}" for="privateCheckbox">
-            <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
-            Private
-          </label>
-        {{/constant}}
+        <span class="disclaimer">These settings affect everyone in the channel, only <a href="#">operators</a> can change them.</span>
+        <br/>
+        <br/>
+        <form id="topic-form-settings">
+          <fieldset>
+            <label for="topic-name-settings">
+              Channel Topic
+            </label>
+            <input type="text" class="form-control" id="topic-name-settings" placeholder="Channel topic" autocomplete="off">
+            <button type="submit" class="btn btn-default">Update</button>
+          </fieldset>
+        </form>
+        <form id="channel-modes">
+          <fieldset>
+            <label class="checkbox {{private_checked}}" for="privateCheckbox">
+              <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
+              Private
+              <p>
+                Hide this repository from the public. Only invited users can join.
+              </p>
+            </label>
+            <label class="checkbox" for="readonlyCheckbox">
+              <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+              Read-only
+              <p>
+                Only channel operators can send messages, but anyone can subscribe. Useful for blogs, news-feeds, etc.
+              </p>
+            </label>
+          </fieldset>
+        </form>
         <!--<input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">-->
       </div>
     </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Users</h3>
-      </div>
-      <div class="panel-body">
-        Add/remove Operators<br/>
-        Ban/unban
-      </div>
-    </div>
-
   {{/if}}
 
-  <div class="panel panel-default">
+  <div class="panel panel-default settings-panel">
     <div class="panel-heading">
-      <h3 class="panel-title">Invite users</h3>
+      <h3 class="panel-title">Channel Preferences</h3>
     </div>
     <div class="panel-body">
-      Invite users
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Filters</h3>
-    </div>
-    <div class="panel-body">
-      <ul class="ignore-list list-group">
-        {{#each ignore_list}}
-          <li class="list-group-item">
-            {{.}}
-            <button type="button" class="close">&times;</button>
-          </li>
-        {{/each}}
-      </ul>
-      <form id="ignore-form" class="col-sm-6">
+      <span class="disclaimer">These settings are local, they only affect you and are specific to this channel.</span>
+      <br/>
+      <br/>
+      <form id="ignore-form-settings">
         <fieldset>
-          <input type="text" class="form-control" id="inputIgnore" placeholder="Ignore user" autocomplete="off">
+          <label for="ignore-list-settings">
+            Ignore List
+          </label>
+          <ul class="ignore-list list-group">
+            {{#each ignore_list}}
+              <li class="list-group-item">
+                {{.}}
+                <button type="button" class="close">&times;</button>
+              </li>
+            {{/each}}
+          </ul>
+          <input type="text" class="form-control" id="ignore-username-settings" placeholder="Add a user to your ignore list" autocomplete="off">
+          <button type="submit" class="btn btn-default">Ignore</button>
         </fieldset>
+      </form>
+      <form id="channel-modes">
         <fieldset>
-          {{#constant}}
-            <label class="checkbox" for="showHideJoins">
-              <input type="checkbox" value="" id="showHideJoins" data-toggle="checkbox">
-              Show join / part messages
-            </label>
-            <label class="checkbox" for="showHideAway">
-              <input type="checkbox" value="" id="showHideAway" data-toggle="checkbox">
-              Show away / return messages
-            </label>
-          {{/constant}}
+          Show when users...
+          <label class="checkbox {{private_checked}}" for="privateCheckbox">
+            <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
+            Join / Part
+            <p>
+              Displays a notice when users join or leave the channel.
+            </p>
+          </label>
+          <label class="checkbox" for="readonlyCheckbox">
+            <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+            Go Away / Return
+            <p>
+              Shows a notice when users go away, i.e. when they close the window or their computer.
+            </p>
+          </label>
+          <label class="checkbox" for="readonlyCheckbox">
+            <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+            Inline images
+            <p>
+              Render and display images from image links.
+            </p>
+          </label>
         </fieldset>
       </form>
     </div>

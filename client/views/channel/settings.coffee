@@ -1,8 +1,8 @@
 # Set up flat checkboxes
 Template.settings.rendered = ->
-  $('[data-toggle="checkbox"]').each ->
-    $checkbox = $(this)
-    $checkbox.checkbox()
+  #$('[data-toggle="checkbox"]').each ->
+    #$checkbox = $(this)
+    #$checkbox.checkbox()
 
 # Preserver flat checkboxes
 Template.settings.preserve [
@@ -13,10 +13,10 @@ Template.settings.preserve [
 ]
 
 Template.settings.events
-  'submit #ignore-form': (e,t) ->
+  'submit #ignore-form-settings': (e,t) ->
     e.preventDefault()
-    ignoree = t.find('#inputIgnore').value
-    t.find('#inputIgnore').value = ''
+    ignoree = t.find('#ignore-username-settings').value
+    t.find('#ignore-username-settings').value = ''
     {channels} = Meteor.user().profile
     channels[@name]?.ignore.push ignoree
     channels[@name]?.ignore = _.uniq channels[@name]?.ignore

@@ -264,16 +264,18 @@ class @Bot extends Client
         read: false
       #if nick is @username
         #Channels.find({name}).part @username
-    @on 'join', async (channel, nick, message) =>
-      unless Channels.findOne({name: channel}).nicks[nick]?
-        Messages.insert
-          owner: @_id
-          channel: channel
-          text: "#{nick} has joined the channel."
-          createdAt: (new Date()).getTime()
-          from: 'system'
-          convo: ''
-          read: false
+    #@on 'join', async (channel, nick, message) =>
+      #unless Channels.findOne({name: channel}).nicks[nick]? \
+      #or nick is @username \
+      #or nick is 'Idletron'
+        #Messages.insert
+          #owner: @_id
+          #channel: channel
+          #text: "#{nick} has joined the channel."
+          #createdAt: (new Date()).getTime()
+          #from: 'system'
+          #convo: ''
+          #read: false
         
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick']
@@ -295,7 +297,7 @@ class @Bot extends Client
   connect: ->
     # Connect to the IRC network.
     super async =>
-      console.log 'connected'
+      console.log "connected #{@username}"
       # Set connecting status to on.
       Meteor.users.update @_id, $set: {'profile.connection': on}
       # Join subscribed channels.

@@ -39,16 +39,9 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="{{active}}"><a href="/explore">Explore</a></li>
           {{#if currentUser}}
-            <li class="dropdown">
-              <a href="#">
-                {{currentUser.username}} <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li class="{{active}}"><a href="/inbox">Inbox</a></li>
-                <li class="{{active}}"><a href="/account">Account</a></li>
-                <li class="signout {{active}}"><a href="#">Sign out</a></li>
-              </ul>
-            </li>
+            <li class="{{active}}"><a href="/inbox">Inbox</a></li>
+            <li class="{{active}}"><a href="/account">Account</a></li>
+            <li class="signout {{active}}"><a href="#">Sign out</a></li>
           {{else}}
             <li class="{{active}}"><a href="/features">Features</a></li>
             <li class="{{active}}">

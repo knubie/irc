@@ -61,6 +61,12 @@ input.form-control:focus
 
 label
   color: $foreground
+label.checkbox
+  color: $foreground
+  line-height: 16px
+  margin-bottom: 25px
+  p
+    font-weight: normal
 
 .modal-backdrop.in
   opacity: 0.5
@@ -675,21 +681,27 @@ form
     margin: 0 10px
     font-size: 16px
     color: $foreground
-.settings-section
-  border-radius: 5px
-  border: 1px solid silver
-  background-color: white
-  padding: 10px
-  width: 760px
-  box-sizing: border-box
+.settings-panel
   color: $foreground
-  margin-top: 25px
-  .section-heading
-    font-size: 16px
-    font-weight: bold
-
-  .ignore-list
-    width: 200px
+  .disclaimer
+    font-style: italic
+    
+  #topic-form-settings, #ignore-form-settings
+    label
+      display: block
+    input.form-control
+      display: inline-block
+    input[type="text"]
+      width: 290px
+    button.btn-default
+      border: none
+      background-color: $silver
+      color: white
+      margin-left: 5px
+  #channel-modes
+    border-top: 1px solid $clouds
+    margin-top: 25px
+    padding-top: 10px
 
 .user-list-container
   display: none
