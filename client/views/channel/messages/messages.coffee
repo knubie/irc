@@ -21,6 +21,7 @@ Template.messages.rendered = ->
     $(window).on 'resize scroll', ->
       doc = Messages.findOne($(el).attr('id'))
       if not doc.read and doc.from and isElementInViewport el
+        console.log 'update msg'
         Messages.update doc._id, $set: {'read': true}
 
   # Hover isolates messages from like channels

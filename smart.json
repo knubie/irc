@@ -5,10 +5,7 @@
     },
     "user-status": {},
     "iron-router": {},
-    "collection-hooks": {
-      "git": "https://github.com/matb33/meteor-collection-hooks.git",
-      "branch": "aop"
-    },
+    "collection-hooks": {},
     "npm": {}
   }
 }
