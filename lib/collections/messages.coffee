@@ -6,6 +6,7 @@
 #   type    : 'normal' / 'mention' / 'self'
 #   time    : Date
 #   read    : Boolean
+#   mobile  : Boolean
 @Messages = new Meteor.Collection 'messages',
   transform: (doc) ->
     doc extends

@@ -38,6 +38,7 @@ Template.say.events
         convo: convo
         status: if channel.nicks? then status[channel.nicks[user.username]] else 'normal'
         read: true
+        mobile: Modernizr.touch
 
 Template.say.rendered = ->
   $('#say-input').focus() unless Modernizr.touch

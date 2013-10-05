@@ -4,6 +4,7 @@ Template.messages.rendered = ->
   Session.set('messages.rendered', true)
 
   $('.glyphicon-time').tooltip()
+  $('.glyphicon-phone').tooltip()
 
   scrollToPlace() # Keep scroll position when template rerenders
 

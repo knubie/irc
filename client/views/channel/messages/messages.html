@@ -55,7 +55,10 @@
           {{/if}}
           <a href="/users/{{from}}"><strong>{{from}}</strong></a>
           {{#if away}}
-          <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
+            <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
+          {{/if}}
+          {{#if mobile}}
+            <span class="glyphicon glyphicon-phone" data-toggle="tooltip" title="Sent from mobile"></span>
           {{/if}}
           {{#if isAll}}
             <span class="muted">{{channel}}</span>
