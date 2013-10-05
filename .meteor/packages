@@ -6,13 +6,11 @@
 preserve-inputs
 coffeescript
 accounts-password
-accounts-ui
 insecure
 stylus
 standard-app-packages
 user-status
 less
-npm
 iron-router
 accounts-github
 collection-hooks

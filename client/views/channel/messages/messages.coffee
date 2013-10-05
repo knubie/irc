@@ -71,6 +71,10 @@ Template.messages.events
   'click .load-more': (e,t) ->
     Session.set 'messages.page', Session.get('messages.page') + 1
 
+  'click .login-from-channel': (e,t) ->
+    # Remember this channel so we can join it after logging in
+    Session.set('joinAfterLogin', @name)
+
 ########## Message ##########
 
 Template.message.rendered = ->

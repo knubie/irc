@@ -25,7 +25,10 @@ Template.home_logged_out.events
       else
         # Add account to hector
         Meteor.call 'remember', username, password, Meteor.userId()
-        Router.go 'home'
+        if Session.get('joinAfterLogin')
+          Router.go "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
+        else
+          Router.go 'home'
 
 Template.sign_in.events
   'submit #signin': (e,t) ->

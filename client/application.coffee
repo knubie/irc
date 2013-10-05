@@ -5,6 +5,7 @@ Session.setDefault 'channel.id', null # Current channel id
 Session.setDefault 'scroll', 0 # Scroll position
 Session.setDefault 'messages.page', 1 # Messages handler pagination
 Session.setDefault 'messages.rendered', false
+Session.setDefault 'joinAfterLogin', null
 
 
 ########## Subscriptions ##########

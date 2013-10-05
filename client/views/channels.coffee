@@ -1,15 +1,12 @@
 Template.channel_main.rendered = ->
   if @data.name.isChannel()
+    # Remove all unread messages for this channel
     $set = {}
     $set["profile.channels.#{@data.name}.unread"] = []
     Meteor.users.update Meteor.userId(), {$set}
     #Messages.update {channel: @data.name, read: false}, {$set: {read: true}}
-  #if window.webkitNotifications.checkPermission() is 1 and not Modernizr.touch
-    #$('#notification-modal').modal
-      #backdrop: true
-      #keyboard: true
 
-  if Meteor.user().profile.channels[@data.name].userList
+  if @data.name.isChannel() and Meteor.user().profile.channels[@data.name].userList
     $('.user-list-container').show()
     $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
     scrollToPlace() # Keep scroll position when template rerenders
