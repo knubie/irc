@@ -64,28 +64,28 @@ if Meteor.isServer
       $set["profile.channels.#{doc.channel}.mentions"] = mentions
       Meteor.users.update(doc.owner, {$set})
 
-    Messages.before.update (userId, doc, fieldNames, modifier, options) ->
+  Messages.before.update (userId, doc, fieldNames, modifier, options) ->
 
-      console.log doc._id
-      console.log modifier['$set'].read
-      if modifier['$set'].read
-      #if fields.read
-        #doc = Messages.findOne(id)
-        id = doc._id
-        user = Meteor.users.findOne(doc.owner)
-        {channels} = user.profile
-        unless typeof channels[doc.channel].unread is 'object'
-          channels[doc.channel].unread = []
-        if (i = channels[doc.channel].unread.indexOf(id)) > -1
-          console.log 'doc in unread array'
-          channels[doc.channel].unread.splice i, 1
-        ##channels[doc.channel].unread = _.uniq channels[doc.channel].unread
-        if doc.convo is user.username and \
-        doc.from not in user.profile.channels[doc.channel].ignore
-          unless typeof channels[doc.channel].mentions is 'object'
-            channels[doc.channel].mentions = []
-          if (i = channels[doc.channel].mentions.indexOf(id)) > -1
-            console.log 'doc in mentions array'
-            channels[doc.channel].mentions.splice i, 1
-          ##channels[doc.channel].mentions = _.uniq channels[doc.channel].mentions
-        Meteor.users.update(doc.owner, {$set: {'profile.channels': channels}})
+    console.log doc._id
+    console.log modifier['$set'].read
+    if modifier['$set'].read
+    #if fields.read
+      #doc = Messages.findOne(id)
+      id = doc._id
+      user = Meteor.users.findOne(doc.owner)
+      {channels} = user.profile
+      unless typeof channels[doc.channel].unread is 'object'
+        channels[doc.channel].unread = []
+      if (i = channels[doc.channel].unread.indexOf(id)) > -1
+        console.log 'doc in unread array'
+        channels[doc.channel].unread.splice i, 1
+      ##channels[doc.channel].unread = _.uniq channels[doc.channel].unread
+      if doc.convo is user.username and \
+      doc.from not in user.profile.channels[doc.channel].ignore
+        unless typeof channels[doc.channel].mentions is 'object'
+          channels[doc.channel].mentions = []
+        if (i = channels[doc.channel].mentions.indexOf(id)) > -1
+          console.log 'doc in mentions array'
+          channels[doc.channel].mentions.splice i, 1
+        ##channels[doc.channel].mentions = _.uniq channels[doc.channel].mentions
+      Meteor.users.update(doc.owner, {$set: {'profile.channels': channels}})

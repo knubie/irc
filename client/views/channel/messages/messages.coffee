@@ -105,6 +105,8 @@ Template.message.rendered = ->
     ptext = ptext.replace regex.bold, '$1$2<strong>$3</strong>$4'
   while regex.underline.test ptext
     ptext = ptext.replace regex.underline, '$1$2<span class="underline">$3</span>$4'
+  while regex.channel.test ptext
+    ptext = ptext.replace regex.channel, ' <a href="/channels/$1">#$1</a>'
   p.html(ptext)
 
   #console.log "#{@data.text}: #{isElementInViewport @find('li')}"
