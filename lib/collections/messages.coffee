@@ -41,6 +41,11 @@ if Meteor.isServer
     remove: (userId, message) ->
       userId is message.owner
 
+  Messages.before.insert (userId, doc) ->
+    if doc.owner isnt 'idletron' \
+    and doc.from is Meteor.users.findOne(doc.owner).username
+      doc.createdAt = new Date()
+
   Messages.after.insert (userId, doc) ->
     unless doc.read
       id = doc._id
@@ -66,8 +71,6 @@ if Meteor.isServer
 
   Messages.before.update (userId, doc, fieldNames, modifier, options) ->
 
-    console.log doc._id
-    console.log modifier['$set'].read
     if modifier['$set'].read
     #if fields.read
       #doc = Messages.findOne(id)
