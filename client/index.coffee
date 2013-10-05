@@ -41,7 +41,10 @@ Template.sign_in.events
       else
         if Meteor.user().profile.connection is off
           Meteor.call 'connect', username, Meteor.userId()
-        Router.go 'home'
+        if Session.get('joinAfterLogin')
+          Router.go "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
+        else
+          Router.go 'home'
 
 ########## Notification Request ##########
 #
