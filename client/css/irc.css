@@ -315,6 +315,11 @@ label.checkbox {
       @media only screen and (min-width: 768px) {
         .channel-container .channel-header .channel-notifications {
           right: 240px; } }
+    .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover {
+      color: #3498db;
+      text-decoration: none; }
+      .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon {
+        color: rgba(52, 152, 219, 0.5); }
     .channel-container .channel-header .channel-invite {
       position: absolute;
       top: 14px;
