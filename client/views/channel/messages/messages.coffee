@@ -1,8 +1,6 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  Session.set('messages.rendered', true)
-
   $('.glyphicon-time').tooltip()
   $('.glyphicon-phone').tooltip()
 
@@ -17,13 +15,13 @@ Template.messages.rendered = ->
   $(window).scroll rememberScrollPosition
 
   $(window).off 'resize'
-  $('.message').each (i) ->
-    el = @
-    $(window).on 'resize scroll', ->
-      doc = Messages.findOne($(el).attr('id'))
-      if not doc.read and doc.from and isElementInViewport el
-        console.log 'update msg'
-        Messages.update doc._id, $set: {'read': true}
+  #$('.message').each (i) ->
+    #el = @
+    #$(window).on 'resize scroll', ->
+      #doc = Messages.findOne($(el).attr('id'))
+      #if not doc.read and doc.from and isElementInViewport el
+        #console.log 'update msg'
+        #Messages.update doc._id, $set: {'read': true}
 
   # Hover isolates messages from like channels
   if @data.name is 'all'
@@ -109,10 +107,6 @@ Template.message.rendered = ->
   while regex.channel.test ptext
     ptext = ptext.replace regex.channel, ' <a href="/channels/$1">#$1</a>'
   p.html(ptext)
-
-  #console.log "#{@data.text}: #{isElementInViewport @find('li')}"
-  #if not @data.read and @data.from and isElementInViewport @find('li')
-    #Messages.update @data._id, $set: {'read': true}
 
 Template.message.events
   'click .reply-action': ->

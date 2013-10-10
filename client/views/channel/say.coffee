@@ -16,29 +16,33 @@ Template.say.events
     if keyCode is 13 # Enter
       e.preventDefault()
       $('#say-input').val('')
-      Meteor.call 'say', Meteor.user().username, @name, message
-      user = Meteor.user()
-      channel = Channels.findOne({name: @name})
-      convo = ''
-      for nick of channel.nicks
-        if regex.nick(nick).test(message)
-          convo = nick
-          break
-
-      status =
-        '@': 'operator'
-        '': 'normal'
-
       Messages.insert
-        from: user.username
-        channel: channel.name
+        from: Meteor.user().username
+        channel: @name
         text: message
-        createdAt: new Date()
-        owner: Meteor.userId()
-        convo: convo
-        status: if channel.nicks? then status[channel.nicks[user.username]] else 'normal'
-        read: true
         mobile: Modernizr.touch
+        createdAt: new Date()
+      #user = Meteor.user()
+      #channel = Channels.findOne({name: @name})
+      #convo = ''
+      #for nick of channel.nicks
+        #if regex.nick(nick).test(message)
+          #convo = nick
+          #break
+
+      #status =
+        #'@': 'operator'
+        #'': 'normal'
+
+      #Messages.insert
+        #from: user.username
+        #channel: channel.name
+        #text: message
+        #createdAt: new Date()
+        #convo: convo
+        #status: if channel.nicks? then status[channel.nicks[user.username]] else 'normal'
+        #read: true
+        #mobile: Modernizr.touch
 
 Template.say.rendered = ->
   $('#say-input').focus() unless Modernizr.touch

@@ -43,27 +43,6 @@ class @Idletron extends Client
 
     # Listen for incoming messages.
     @on 'message#', async (from, to, text, message) =>
-      convo = ''
-
-      # If message is a PM
-      channel = Channels.find_or_create to
-      for nick of channel.nicks
-        if regex.nick(nick).test(text)
-          convo = nick; break
-
-      status =
-        '@': 'operator'
-        '': 'normal'
-      # Insert a new message
-      Messages.insert
-        from: from
-        channel: channel.name
-        text: text
-        createdAt: new Date()
-        owner: 'idletron'
-        convo: convo
-        status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
-        read: true
 
       if /^[?](.*)$/.test text # Listen for Wolfram queries.
         query = text.replace /^[?]\s*/g, '' # Extract query.
@@ -183,48 +162,6 @@ class @Bot extends Client
 
     # Log raw messages sent from the network.
     #@on 'raw', (msg) -> console.log msg
-
-    # Listen for incoming messages.
-    @on 'message', async (from, to, text, message) =>
-      convo = ''
-
-      # If message is a PM
-      if to is @username
-        # Update user's PMs object
-        if Meteor.users.findOne(@_id).profile.pms?
-          {pms} = Meteor.users.findOne(@_id).profile
-        else pms = {}
-        pms[from] = {unread: 0} unless from of pms
-        # Update the User with the new PMs object.
-        Meteor.users.update @_id, $set: {'profile.pms': pms}
-        # Insert a new message
-        Messages.insert
-          from: from
-          channel: from
-          text: text
-          createdAt: new Date()
-          owner: @_id
-          read: false
-
-      else #Is to a channel.
-        channel = Channels.find_or_create to
-        for nick of channel.nicks
-          if regex.nick(nick).test(text)
-            convo = nick; break
-
-        status =
-          '@': 'operator'
-          '': 'normal'
-        # Insert a new message
-        Messages.insert
-          from: from
-          channel: channel.name
-          text: text
-          createdAt: new Date()
-          owner: @_id
-          convo: convo
-          status: if channel.nicks? then status[channel.nicks[from]] else 'normal'
-          read: false
 
     # Listen for channel list response and populate
     # channel collection with the results.

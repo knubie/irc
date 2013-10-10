@@ -5,7 +5,8 @@ Meteor.methods
   remember: (username, password, _id) ->
     if Meteor.isServer
       if _id?
-        #FIXME: What if username = "; rm -rf /"
+        #FIXME: This is very insecure. Let IRC server read from mongo directly.
+        # What if username == "; rm -rf /"
         exec "cd $HECTOR_PATH; hector identity remember #{username} #{password}", async ->
           Meteor.call 'connect', username, _id
       return null
