@@ -17,8 +17,9 @@ class Notification
 Messages.find().observeChanges
   added: (id, msg) ->
     unless msg.read
+      console.log 'beep'
       # Beep on new message
-      $('#beep')[0].play() if Meteor.user().profile.sounds
+      #$('#beep')[0].play() if Meteor.user().profile.sounds
 
       if Meteor.user().profile.notifications
         if msg.convo is Meteor.user().username \ # Mentioned
