@@ -256,17 +256,17 @@ label.checkbox {
       .channel-container .channel-header .channel-breadcrumb .slash {
         font-size: 18px;
         color: silver; }
-    .channel-container .channel-header .topic {
+    .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
       display: none;
       font-size: 16px;
       color: #666666;
       margin-top: 15px;
       border-top: 1px solid #cccccc;
       padding-top: 15px; }
-      @media only screen and (min-width: 1024px) {
-        .channel-container .channel-header .topic {
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
           display: block; } }
-      .channel-container .channel-header .topic .topic-edit, .channel-container .channel-header .topic .topic-edit > a {
+      .channel-container .channel-header .topic .topic-edit, .channel-container .channel-header .topic .topic-edit > a, .channel-container .channel-header #topic-form .topic-edit, .channel-container .channel-header #topic-form .topic-edit > a {
         color: #bdc3c7; }
     .channel-container .channel-header .glyphicon {
       color: #bdc3c7; }

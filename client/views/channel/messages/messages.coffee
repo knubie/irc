@@ -14,15 +14,6 @@ Template.messages.rendered = ->
   $(window).off 'scroll'
   $(window).scroll rememberScrollPosition
 
-  $(window).off 'resize'
-  #$('.message').each (i) ->
-    #el = @
-    #$(window).on 'resize scroll', ->
-      #doc = Messages.findOne($(el).attr('id'))
-      #if not doc.read and doc.from and isElementInViewport el
-        #console.log 'update msg'
-        #Messages.update doc._id, $set: {'read': true}
-
   # Hover isolates messages from like channels
   if @data.name is 'all'
     $('.message').hover ->
@@ -152,40 +143,33 @@ Template.message.events
 
 Template.message.helpers
   joinToPrev: ->
-    unless @prev is null
-      @prev.from is @from \
-      and @prev.channel is @channel \
-      and not @mentions(Meteor.user().username) \
-      and not @prev.mentions(Meteor.user().username)
+    @prev isnt null \
+    and @prev.channel is @channel \
+    and @prev.from is @from \
+    and not @mentions(Meteor.user().username) \
+    and not @prev.mentions(Meteor.user().username)
   isConvo: ->
     if @convo then yes else no
   timeAgo: ->
     moment(@createdAt).fromNow()
-  message_class: ->
-    if @from is 'Idletron'
-      return 'bot'
-    else
-      if @type() is 'info'
-        return 'info'
-      else
-        if @online()
-          if @mentions(Meteor.user().username)
-            return 'mention'
-          else
-            return 'normal'
-        else
-          if @mentions(Meteor.user().username)
-            return 'offline mention'
-          else
-            return 'offline normal'
-
+  offline: ->
+    if @channel?.isChannel() \
+    and @from not of Channels.findOne({name: @channel})?.nicks
+      return 'offline'
+  mention: ->
+    if @mentions(Meteor.user().username)
+      return 'mention'
   op_status: ->
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
     @type() is 'self'
+  info: ->
+    if @from is 'system'
+      return 'info'
   bot: ->
-    @from is 'Idletron'
+    if @from is 'Idletron'
+      return 'bot'
   away: ->
     #TODO: make this change the user MODE in irc
     not Meteor.users.findOne(username: @from)?.profile.online

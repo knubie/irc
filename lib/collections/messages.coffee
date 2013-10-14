@@ -28,15 +28,6 @@
             return 'info'
           else
             if @convo is username then 'mention' else 'normal'
-      online: ->
-        online = no
-        if @channel?.isChannel()
-          if channel = Channels.findOne {name: @channel}
-            for nick of channel.nicks
-              if @from is nick then online = yes; break
-        else
-          online = yes
-        return online
 
 if Meteor.isServer
   Messages.allow
