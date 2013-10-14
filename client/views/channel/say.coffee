@@ -22,6 +22,9 @@ Template.say.events
       Messages.insert
         channel: @name
         text: message
+        mobile: Modernizr.touch
+        createdAt: new Date()
+        from: Meteor.user().username
 
       #user = Meteor.user()
 

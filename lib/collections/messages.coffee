@@ -40,9 +40,6 @@ if Meteor.isServer
 Messages.before.insert (userId, doc) ->
   if Meteor.isServer
     doc.createdAt = new Date()
-  if Meteor.isClient
-    doc.from = Meteor.user().username
-    #doc.mobile = Modernizr.touch
 
 Messages.after.insert (userId, doc) ->
   if Meteor.isServer

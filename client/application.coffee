@@ -9,7 +9,9 @@ Session.setDefault 'joinAfterLogin', null
 
 
 onNewMessage = (msg) ->
+  console.log 'new msg'
   if Meteor.user().profile.sounds
+    console.log 'beep'
     # Play beep sound
     $('#beep')[0].play()
 
@@ -36,15 +38,22 @@ onNewMessage = (msg) ->
   mentions: {}
 Deps.autorun ->
   limit = (PERPAGE * Session.get('messages.page')) + PERPAGE
-  handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
-  for channel of Meteor.user()?.profile.channels
-    handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit,
-      onReady: ->
-        Messages.find({channel}).observeChanges
-          added: (id, msg) =>
-            if @ready
-              onNewMessage(msg)
-    handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
+  handlers.messages.all = Meteor.subscribe 'messages', 'all', limit,
+    onReady: ->
+      console.log "all onReady"
+  #for channel of Meteor.user()?.profile.channels
+  _.map Meteor.user()?.profile.channels, (value, channel, list) ->
+    unless handlers.messages[channel]?.ready()
+      console.log "set handler for #{channel}"
+      handlers.messages[channel]?.stop()
+      handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit,
+        onReady: ->
+          Messages.find({channel}).observeChanges
+            added: (id, msg) =>
+              if @ready
+                onNewMessage(msg)
+
+    #handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
 
 
 ########## Startup ##########
