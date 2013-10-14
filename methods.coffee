@@ -24,6 +24,13 @@ Meteor.methods
   join: (username, channel) ->
     check username, validUsername
     check channel, validChannelName
+
+    #join = _.compose addChannel, addUserChannel, joinIRC, addJoinMessage
+    #addChannel
+    #addUserChannel
+      #joinIRC
+      #addJoinMessage
+
     newChannel = Channels.find_or_create(channel)
     # Join the channel in IRC.
     if Meteor.isServer
@@ -39,36 +46,44 @@ Meteor.methods
         unread: []
         mentions: []
         userList: false
-    # Update the User with the new channels object.
-    Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
+      # Update the User with the new channels object.
+      Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
 
     return newChannel._id or null
 
   part: (username, channel) ->
     check username, validUsername
     check channel, validChannelName
+
+    #removeChannel()
+      #partIRC()
+      #addPartMessage()
+
+    #TODO: create new user-channel collection.
+    # This will replace embeded docs in user's 'profile.channels' field.
+    # Add a collection hook when adding or remove user-channel docs
+    # to join/part a channel in IRC.
+
     if Meteor.isServer
+      # Part the from the channel
       client[username].part channel
 
-    ch = Channels.findOne({name: channel})
-    if ch?
+    if ch = Channels.findOne({name: channel})
       {nicks} = ch
+      # Remove user from channel's nick list.
       delete nicks[username]
-      if _.isEmpty nicks
-        Channels.remove ch._id
+      if _.isEmpty nicks # If no users left.
+        Channels.remove ch._id # Remove channel.
       else
+        # Update channel with new nick list
         Channels.update ch._id, $set: {nicks}
-    #Channels.findOne({name: channel}).part username
-      #part: (nick) ->
-        #{nicks} = @
-        #delete nicks[nick]
-        #if _.isEmpty nicks
-          #Channels.remove @_id
-        #else
-          #Channels.update @_id, $set: {nicks}
-    {channels} = Meteor.user().profile
-    delete channels[channel]
-    Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
+
+    # Remove channel from user's channel list
+    update Meteor.users, Meteor.userId(), "profile.channels"
+    , (channels) ->
+      delete channels[channel]
+      return channels
+      
     return null
 
   say: (username, channel, message) ->
@@ -100,5 +115,3 @@ Meteor.methods
       client[user.username].send 'TOPIC', channel.name, topic
     if channel.nicks[user.username] is '@'
       Channels.update channelId, $set: {topic}
-
-  date: -> (new Date()).getTime()

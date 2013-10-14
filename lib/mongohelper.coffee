@@ -2,14 +2,12 @@
   # Set up this object to pass in to the mongo update method.
   $set = {}
 
-  # Access the field we want to update based on the 'field' argument.
-  # e.g. field = "profile.channels.#test.ignore"
-  iteratee = _.reduce field.split('.'), (memo, accessor) ->
-    memo[accessor]
+  # Create the $set object for mongo's update method by passing
+  # the doc's 'field' to the 'update' argument.
+  $set[field] = _.compose(update, _.reduce) field.split('.')
+  , (memo, accessor) ->
+    memo[accessor] # Get field from the doc.
   , collection.findOne(query)
-
-  # Creat the final $set object by calling our iterator function
-  $set[field] = update(iteratee)
 
   # Update the mongo collection.
   collection.update query, {$set}

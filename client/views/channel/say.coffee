@@ -15,20 +15,15 @@ Template.say.events
 
     if keyCode is 13 # Enter
       e.preventDefault()
+
       $('#say-input').val('')
+
+      # Server sends message to IRC before insert.
       Messages.insert
-        from: Meteor.user().username
         channel: @name
         text: message
-        mobile: Modernizr.touch
-        createdAt: new Date()
+
       #user = Meteor.user()
-      #channel = Channels.findOne({name: @name})
-      #convo = ''
-      #for nick of channel.nicks
-        #if regex.nick(nick).test(message)
-          #convo = nick
-          #break
 
       #status =
         #'@': 'operator'

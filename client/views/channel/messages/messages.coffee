@@ -153,7 +153,10 @@ Template.message.events
 Template.message.helpers
   joinToPrev: ->
     unless @prev is null
-      @prev.from is @from and @prev.channel is @channel and @type() isnt 'mention' and @prev.type() isnt 'mention'
+      @prev.from is @from \
+      and @prev.channel is @channel \
+      and not @mentions(Meteor.user().username) \
+      and not @prev.mentions(Meteor.user().username)
   isConvo: ->
     if @convo then yes else no
   timeAgo: ->
@@ -165,7 +168,17 @@ Template.message.helpers
       if @type() is 'info'
         return 'info'
       else
-        if @online() then @type() else "offline #{@type()}"
+        if @online()
+          if @mentions(Meteor.user().username)
+            return 'mention'
+          else
+            return 'normal'
+        else
+          if @mentions(Meteor.user().username)
+            return 'offline mention'
+          else
+            return 'offline normal'
+
   op_status: ->
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'

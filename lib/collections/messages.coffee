@@ -8,8 +8,15 @@
 #   read    : Boolean
 #   mobile  : Boolean
 @Messages = new Meteor.Collection 'messages',
+  #TODO: replace (doc) -> with
+  # extend
+  #   type: ->
+  #   ...
+  # leave out destination for partial application
   transform: (doc) ->
     doc extends
+      mentions: (user) ->
+        regex.nick(user).test(@text)
       type: ->
         if @owner is 'idletron'
           return 'normal'
@@ -36,15 +43,16 @@ if Meteor.isServer
     insert: (userId, message) ->
       check message.text, validMessageText
       true
-    update: (userId, message) ->
-      check message.text, validMessageText
-      userId is message.owner
-    remove: (userId, message) ->
-      userId is message.owner
+    update: -> false
+    remove: -> false
 
-  Messages.before.insert (userId, doc) ->
+Messages.before.insert (userId, doc) ->
+  if Meteor.isServer
     doc.createdAt = new Date()
+  if Meteor.isClient
+    doc.from = Meteor.user().username
+    #doc.mobile = Modernizr.touch
 
-  Messages.after.insert (userId, doc) ->
+Messages.after.insert (userId, doc) ->
+  if Meteor.isServer
     client[Meteor.users.findOne(userId).username].say doc.channel, doc.text
-

@@ -231,6 +231,11 @@ class @Bot extends Client
         #TODO: Notify user of error, redirect to login.
         Meteor.users.update @_id, $set: 'services.resume.loginTokens' : []
 
+    # Listen for incoming messages.
+    @on 'message#', async (from, to, text, message) =>
+      console.log 'got msg'
+      Meteor.call 'onSay', @_id
+
   connect: ->
     # Connect to the IRC network.
     super async =>

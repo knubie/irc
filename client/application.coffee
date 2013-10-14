@@ -8,6 +8,25 @@ Session.setDefault 'messages.rendered', false
 Session.setDefault 'joinAfterLogin', null
 
 
+onNewMessage = (msg) ->
+  if Meteor.user().profile.sounds
+    # Play beep sound
+    $('#beep')[0].play()
+
+  if Meteor.user().profile.notifications
+    if regex.nick(Meteor.user().username).test(msg.text) \
+    and msg.from not in Meteor.user().profile.channels[msg.channel].ignore
+      window.webkitNotifications.createNotification('icon.png'
+      , "#{msg.from} (#{msg.channel})"
+      , msg.text)
+      .show()
+
+    if not msg.channel.isChannel() # Private message
+      window.webkitNotifications.createNotification('icon.png'
+      , "#{msg.from} (#{msg.channel})"
+      , msg.text)
+      .show()
+
 ########## Subscriptions ##########
 
 @handlers =
@@ -19,7 +38,12 @@ Deps.autorun ->
   limit = (PERPAGE * Session.get('messages.page')) + PERPAGE
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   for channel of Meteor.user()?.profile.channels
-    handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
+    handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit,
+      onReady: ->
+        Messages.find({channel}).observeChanges
+          added: (id, msg) =>
+            if @ready
+              onNewMessage(msg)
     handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
 
 
