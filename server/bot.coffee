@@ -232,9 +232,7 @@ class @Bot extends Client
         Meteor.users.update @_id, $set: 'services.resume.loginTokens' : []
 
     # Listen for incoming messages.
-    @on 'message#', async (from, to, text, message) =>
-      console.log 'got msg'
-      Meteor.call 'onSay', @_id
+    #@on 'message#', async (from, to, text, message) =>
 
   connect: ->
     # Connect to the IRC network.

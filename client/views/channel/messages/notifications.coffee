@@ -27,7 +27,6 @@ class Notification
         #if msg.convo is Meteor.user().username \ # Mentioned
         #and msg.from not in Meteor.user().profile.channels[msg.channel].ignore
           #new Notification("#{msg.from} (#{msg.channel})", msg.text).showOnce()
-
         #if not msg.channel.isChannel() # Private message
           #new Notification("#{msg.from}", msg.text).showOnce()
 
