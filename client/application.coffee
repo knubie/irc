@@ -74,8 +74,8 @@ Deps.autorun ->
 
 ########## Beeps / Notifications ##########
 
-#Messages.find().observeChanges
-  #added: beepAndNotify
+Messages.find().observeChanges
+  added: beepAndNotify
 
 ########## Startup ##########
 
