@@ -8,53 +8,74 @@ Session.setDefault 'messages.rendered', false
 Session.setDefault 'joinAfterLogin', null
 
 
-onNewMessage = (msg) ->
-  console.log 'new msg'
-  if Meteor.user().profile.sounds
-    console.log 'beep'
-    # Play beep sound
-    $('#beep')[0].play()
+# beep :: Action(UI)
+beep = (message) ->
+  # Check if sounds are enabled in the user profile.
+  if Meteor.user().profile.sounds and notIgnored(message)
+    $('#beep')[0].play() # Play beep sound
+  return message
 
-  if Meteor.user().profile.notifications
-    if regex.nick(Meteor.user().username).test(msg.text) \
-    and msg.from not in Meteor.user().profile.channels[msg.channel].ignore
-      window.webkitNotifications.createNotification('icon.png'
-      , "#{msg.from} (#{msg.channel})"
-      , msg.text)
-      .show()
+# notIgnored :: Messages -> Boolean
+notIgnored = (message) ->
+  # Not in ignore-list
+  message.from not in Meteor.user().profile.channels[message.channel].ignore
 
-    if not msg.channel.isChannel() # Private message
-      window.webkitNotifications.createNotification('icon.png'
-      , "#{msg.from} (#{msg.channel})"
-      , msg.text)
-      .show()
+# isMentioned :: Messages -> Boolean
+isMentioned = (message) ->
+  notIgnored(message) \
+  # Username appears in message text.
+  and regex.nick(Meteor.user().username).test(message.text)
+
+# notIgnored :: Messages -> Boolean
+isPM = (message) ->
+  not message.channel.isChannel()
+
+# shouldSendNotification :: Message -> NotificationParams
+shouldSendNotification = (message) ->
+  if Meteor.user().profile.notifications \
+  and (isMentioned(message) or isPM(message)) \
+  and notIgnored
+    return {
+      image: 'icon.png'
+      title: "#{message.from} (#{message.channel})"
+      text: message.text
+    }
+
+# createNotification :: NotificationParams -> Notification
+sendNotification = (params) ->
+  if params
+    window.webkitNotifications.createNotification(params.image, params.title, params.text)
+    .show()
+
+# dispatchNotification :: Message -> Action(UI)
+dispatchNotification = _.compose sendNotification, shouldSendNotification
+
+beepAndNotify = (id, message) ->
+  if handlers.messages[message.channel].ready()
+    _.compose(dispatchNotification, beep) message
 
 ########## Subscriptions ##########
 
 @handlers =
   user: Meteor.subscribe 'users'
   channel: Meteor.subscribe 'channels'
-  messages: {}
-  mentions: {}
+  messages: new Object
+  mentions: new Object
+
 Deps.autorun ->
   limit = (PERPAGE * Session.get('messages.page')) + PERPAGE
-  handlers.messages.all = Meteor.subscribe 'messages', 'all', limit,
-    onReady: ->
-      console.log "all onReady"
-  #for channel of Meteor.user()?.profile.channels
-  _.map Meteor.user()?.profile.channels, (value, channel, list) ->
+  handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
+  for channel of Meteor.user()?.profile.channels
+  #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
     unless handlers.messages[channel]?.ready()
-      console.log "set handler for #{channel}"
       handlers.messages[channel]?.stop()
-      handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit,
-        onReady: ->
-          Messages.find({channel}).observeChanges
-            added: (id, msg) =>
-              if @ready
-                onNewMessage(msg)
-
+      handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
     #handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
 
+########## Beeps / Notifications ##########
+
+Messages.find().observeChanges
+  added: beepAndNotify
 
 ########## Startup ##########
 
