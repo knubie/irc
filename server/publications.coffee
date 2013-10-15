@@ -1,5 +1,12 @@
 Meteor.publish 'users', -> Meteor.users.find()
-Meteor.publish 'channels', -> Channels.find()
+Meteor.publish 'publicChannels', ->
+  #Channels.find {private: {$ne: true}}
+  Channels.find modes: $nin: ['s', 'i']
+Meteor.publish 'joinedChannels', ->
+  query = {}
+  username = Meteor.users.findOne(@userId).username
+  query["nicks.#{username}"] = {$exists: true}
+  Channels.find query
 Meteor.publish 'messages', (channel, limit) ->
   if channel is 'all'
     Messages.find {}, {limit, sort:{createdAt: -1}}

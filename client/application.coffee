@@ -1,12 +1,4 @@
-########## Defaults ##########
-
-Session.setDefault 'channel.name', 'all' #Current channel.
-Session.setDefault 'channel.id', null # Current channel id
-Session.setDefault 'scroll', 0 # Scroll position
-Session.setDefault 'messages.page', 1 # Messages handler pagination
-Session.setDefault 'messages.rendered', false
-Session.setDefault 'joinAfterLogin', null
-
+########## Functions ##########
 
 # beep :: Action(UI)
 beep = (message) ->
@@ -54,11 +46,21 @@ beepAndNotify = (id, message) ->
   if handlers.messages[message.channel].ready()
     _.compose(dispatchNotification, beep) message
 
+########## Defaults ##########
+
+Session.setDefault 'channel.name', 'all' #Current channel.
+Session.setDefault 'channel.id', null # Current channel id
+Session.setDefault 'scroll', 0 # Scroll position
+Session.setDefault 'messages.page', 1 # Messages handler pagination
+Session.setDefault 'messages.rendered', false
+Session.setDefault 'joinAfterLogin', null # Which channel to join after signing up or logging in.
+
 ########## Subscriptions ##########
 
 @handlers =
   user: Meteor.subscribe 'users'
-  channel: Meteor.subscribe 'channels'
+  publicChannels: Meteor.subscribe 'publicChannels'
+  joinedChannels: Meteor.subscribe 'joinedChannels'
   messages: new Object
   mentions: new Object
 
@@ -67,15 +69,13 @@ Deps.autorun ->
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   for channel of Meteor.user()?.profile.channels
   #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
-    unless handlers.messages[channel]?.ready()
-      handlers.messages[channel]?.stop()
-      handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
+    handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
     #handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
 
 ########## Beeps / Notifications ##########
 
-Messages.find().observeChanges
-  added: beepAndNotify
+#Messages.find().observeChanges
+  #added: beepAndNotify
 
 ########## Startup ##########
 

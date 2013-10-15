@@ -64,6 +64,9 @@ Router.map ->
   @route 'channel_settings',
     path: '/channels/:channel/settings'
     data: -> Channels.findOne({name: "##{@params.channel}"})
+    waitOn: ->
+      channel = "##{@params.channel}"
+      handlers.joinedChannels
     onBeforeRun: ->
       #FIXME: wait for Channel sub
       channel = "##{@params.channel}"

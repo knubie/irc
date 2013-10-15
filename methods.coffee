@@ -108,6 +108,10 @@ Meteor.methods
   mode: (user, channel, mode) ->
     if Meteor.isServer
       client[user.username].send 'MODE', channel, mode
+      if mode is '-si'
+        Channels.update {name: channel}, $set: {private: false}
+      if mode is '+si'
+        Channels.update {name: channel}, $set: {private: true}
 
   topic: (user, channelId, topic) ->
     channel = Channels.findOne(channelId)
