@@ -147,8 +147,8 @@ Template.message.helpers
     @prev isnt null \
     and @prev.channel is @channel \
     and @prev.from is @from \
-    and not @mentions(Meteor.user().username) \
-    and not @prev.mentions(Meteor.user().username)
+    and not @mentions(Meteor.user()?.username) \
+    and not @prev.mentions(Meteor.user()?.username)
   isConvo: ->
     mentions = []
     for nick of Channels.findOne(name:@channel).nicks
@@ -162,7 +162,7 @@ Template.message.helpers
     and @from not of Channels.findOne({name: @channel})?.nicks
       return 'offline'
   mention: ->
-    if @mentions(Meteor.user().username)
+    if @mentions(Meteor.user()?.username)
       return 'mention'
   isMentioned: ->
     @mentions(Meteor.user().username)
