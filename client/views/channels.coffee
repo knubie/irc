@@ -192,6 +192,8 @@ Template.users.helpers
     #query["profile.channels.#{@name}"] = {$exists: true}
     #Meteor.users.find(query)
   away: ->
-    not Meteor.users.findOne({username: @nick})?.profile.online
+    Meteor.users.findOne({username: @nick}) \
+    and not Meteor.users.findOne({username: @nick}).profile.online
+    #Meteor.users.findOne({username: @nick})?.profile.online
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.profile.awaySince).humanize()

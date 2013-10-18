@@ -338,10 +338,12 @@ label.checkbox {
       padding: 10px;
       right: 15px;
       left: auto;
-      top: 45px !important;
+      top: 42px !important;
       bottom: auto !important; }
       .channel-container .channel-header .invite-dropdown input {
-        margin-right: 5px; }
+        margin-right: 5px;
+        display: inline-block;
+        width: 200px; }
     .channel-container .channel-header #topic-form {
       display: none; }
 

@@ -44,6 +44,16 @@ class @Idletron extends Client
     # Listen for incoming messages.
     @on 'message#', async (from, to, text, message) =>
 
+      unless Meteor.users.findOne({username: from})
+        # Server sends message to IRC before insert.
+        Messages.insert
+          channel: to
+          text: text
+          mobile: false
+          createdAt: new Date()
+          from: from
+          owner: 'server'
+
       if /^[?](.*)$/.test text # Listen for Wolfram queries.
         query = text.replace /^[?]\s*/g, '' # Extract query.
         wolfram.request query, (answer) =>
@@ -201,6 +211,7 @@ class @Bot extends Client
         read: false
       #if nick is @username
         #Channels.find({name}).part @username
+
     #@on 'join', async (channel, nick, message) =>
       #unless Channels.findOne({name: channel}).nicks[nick]? \
       #or nick is @username \

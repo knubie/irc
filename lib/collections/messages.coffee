@@ -17,17 +17,12 @@
     doc extends
       mentions: (user) ->
         regex.nick(user).test(@text)
-      type: ->
-        if @owner is 'idletron'
-          return 'normal'
-        else
-          {username} = Meteor.users.findOne(@owner)
-          if @from is username
-            return 'self'
-          else if @from is 'system'
-            return 'info'
-          else
-            if @convo is username then 'mention' else 'normal'
+      mentioned: ->
+        mentions = []
+        for nick of Channels.findOne(name:@channel).nicks
+          if @mentions nick
+            mentions.push nick
+        return mentions
 
 if Meteor.isServer
   Messages.allow
@@ -38,9 +33,22 @@ if Meteor.isServer
     remove: -> false
 
 Messages.before.insert (userId, doc) ->
-  if Meteor.isServer
+  if Meteor.isServer and doc.owner isnt 'server'
     doc.createdAt = new Date()
 
 Messages.after.insert (userId, doc) ->
-  if Meteor.isServer
+  if Meteor.isServer and doc.owner isnt 'server'
     client[Meteor.users.findOne(userId).username].say doc.channel, doc.text
+  if Meteor.isServer
+    for nick of Channels.findOne(name:doc.channel).nicks
+      if regex.nick(nick).test(doc.text) \
+      and user = Meteor.users.findOne(username:nick)
+        if doc.from not in user.profile.channels[doc.channel].ignore
+          update Meteor.users, {username:nick}
+          , "profile.channels.#{doc.channel}.mentions"
+          , (mentions) ->
+            unless Object::toString.call(mentions) is '[object Array]'
+              mentions = []
+            mentions.push doc._id unless doc._id in mentions
+            return mentions
+

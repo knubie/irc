@@ -101,8 +101,9 @@ Template.message.rendered = ->
 
 Template.message.events
   'click .reply-action': ->
-    $('#say-input').val("@#{@from} ")
+    $('#say-input').val("@#{@from}")
     $('#say-input').focus()
+    $('#say-input').trigger($.Event('keypress', {which: 13}))
 
   'click .ignore-action': ->
     if confirm("Are you sure you want to ignore #{@from}? (You can un-ignore them later in your channel settings.)")
@@ -135,7 +136,7 @@ Template.message.events
   'click .convo': (e, t) ->
     $('.message')
     .not("[data-nick='#{@from}']")
-    .not("[data-nick='#{@convo}']")
+    .not("[data-nick='#{@mentioned()[0]}']")
     .slideToggle 400
 
   'click .kick': (e, t) ->
@@ -149,7 +150,11 @@ Template.message.helpers
     and not @mentions(Meteor.user().username) \
     and not @prev.mentions(Meteor.user().username)
   isConvo: ->
-    if @convo then yes else no
+    mentions = []
+    for nick of Channels.findOne(name:@channel).nicks
+      if @mentions nick
+        mentions.push nick
+    mentions.length is 1
   timeAgo: ->
     moment(@createdAt).fromNow()
   offline: ->
@@ -159,11 +164,14 @@ Template.message.helpers
   mention: ->
     if @mentions(Meteor.user().username)
       return 'mention'
+  isMentioned: ->
+    @mentions(Meteor.user().username)
   op_status: ->
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   self: ->
-    @type() is 'self'
+    #@type() is 'self'
+    false
   info: ->
     if @from is 'system'
       return 'info'

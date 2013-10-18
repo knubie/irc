@@ -3,7 +3,9 @@
 # beep :: Action(UI)
 beep = (message) ->
   # Check if sounds are enabled in the user profile.
-  if Meteor.user().profile.sounds and notIgnored(message)
+  if Meteor.user().profile.sounds \
+  and notIgnored(message) \
+  and message.from isnt Meteor.user().username
     $('#beep')[0].play() # Play beep sound
   return message
 
@@ -25,8 +27,7 @@ isPM = (message) ->
 # shouldSendNotification :: Message -> NotificationParams
 shouldSendNotification = (message) ->
   if Meteor.user().profile.notifications \
-  and (isMentioned(message) or isPM(message)) \
-  and notIgnored
+  and (isMentioned(message) or isPM(message))
     return {
       image: 'icon.png'
       title: "#{message.from} (#{message.channel})"
