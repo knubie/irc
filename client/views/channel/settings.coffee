@@ -20,7 +20,6 @@ Template.settings.events
     t.find('#ignore-username-settings').value = ''
 
   'click .close': (e,t) ->
-
     update Meteor.users, Meteor.userId()
     , "profile.channels.#{Session.get('channel.name')}.ignore"
     , (ignore) => _.reject ignore, (nick) => nick is "#{@}"
