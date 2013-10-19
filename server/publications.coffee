@@ -15,10 +15,6 @@ Meteor.publish 'messages', (channel, limit) ->
 
 Meteor.publish 'mentions', (channel, limit) ->
   user = Meteor.users.findOne(@userId)
-  if channel is 'all'
-    Messages.find
-      convo: user.username
-    , {limit, sort:{createdAt: -1}}
-  else
-    Messages.find {channel}
-    , {limit, sort:{createdAt: -1}}
+  Messages.find
+    convos: $in: [user.username]
+  , {limit, sort:{createdAt: -1}}

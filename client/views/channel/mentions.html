@@ -18,11 +18,15 @@
       load earlier messages
     </span>
   {{/if}}
-  <ul class="messages nav nav-stacked">
-    {{#each mentions}}
-      {{> mention}}
-    {{/each}}
-  </ul>
+  {{#if mentions}}
+    <ul class="messages nav nav-stacked">
+      {{#each mentions}}
+        {{> mention}}
+      {{/each}}
+    </ul>
+  {{else}}
+    You have no mentions.
+  {{/if}}
 </template>
 
 <template name="mention">

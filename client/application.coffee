@@ -27,6 +27,7 @@ isPM = (message) ->
 # shouldSendNotification :: Message -> NotificationParams
 shouldSendNotification = (message) ->
   if Meteor.user().profile.notifications \
+  and Message.from isnt Meteor.user().username \
   and (isMentioned(message) or isPM(message))
     return {
       image: 'icon.png'
@@ -71,7 +72,7 @@ Deps.autorun ->
   for channel of Meteor.user()?.profile.channels
   #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
     handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
-    #handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
+    handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
 
 ########## Beeps / Notifications ##########
 

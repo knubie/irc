@@ -33,8 +33,15 @@ if Meteor.isServer
     remove: -> false
 
 Messages.before.insert (userId, doc) ->
-  if Meteor.isServer and doc.owner isnt 'server'
-    doc.createdAt = new Date()
+  if Meteor.isServer
+    if doc.owner isnt 'server'
+      doc.createdAt = new Date()
+    doc.convos = []
+    for nick of Channels.findOne(name:doc.channel).nicks
+      if regex.nick(nick).test(doc.text) \
+      and user = Meteor.users.findOne(username:nick)
+        if doc.from not in user.profile.channels[doc.channel].ignore
+          doc.convos.push nick
 
 Messages.after.insert (userId, doc) ->
   if Meteor.isServer and doc.owner isnt 'server'
