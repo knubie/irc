@@ -83,15 +83,15 @@ Template.message.rendered = ->
   ptext = p.html()
   # Linkify & Imagify URLs.
   ptext = ptext.replace regex.url, (str) ->
-    #youtubeMatch = str.match regex.youtube
+    youtubeMatch = str.match regex.youtube
     if str.match /\.(?:jpe?g|gif|png)/ # Image
       """
         <a href="#{str}" target="_blank">
           <img onload="scrollToPlace();" src="#{str}" alt=""/>
         </a>
       """
-    #else if youtubeMatch and youtubeMatch[1].length is 11
-      #"<iframe width=\"480\" height=\"360\" src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
+    else if youtubeMatch and youtubeMatch[1].length is 11
+      "<iframe width=\"480\" height=\"360\" src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
     else # All other links
       "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
   # Linkify nicks.
