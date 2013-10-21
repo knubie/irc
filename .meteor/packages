@@ -11,6 +11,5 @@ stylus
 standard-app-packages
 user-status
 less
-iron-router
 accounts-github
 collection-hooks

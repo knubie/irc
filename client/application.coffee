@@ -27,7 +27,7 @@ isPM = (message) ->
 # shouldSendNotification :: Message -> NotificationParams
 shouldSendNotification = (message) ->
   if Meteor.user().profile.notifications \
-  and Message.from isnt Meteor.user().username \
+  and message.from isnt Meteor.user().username \
   and (isMentioned(message) or isPM(message))
     return {
       image: 'icon.png'
@@ -45,7 +45,7 @@ sendNotification = (params) ->
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
 beepAndNotify = (id, message) ->
-  if handlers.messages[message.channel].ready()
+  if handlers.messages[message.channel]?.ready()
     _.compose(dispatchNotification, beep) message
 
 ########## Defaults ##########
@@ -67,12 +67,12 @@ Session.setDefault 'joinAfterLogin', null # Which channel to join after signing 
   mentions: new Object
 
 Deps.autorun ->
-  limit = (PERPAGE * Session.get('messages.page')) + PERPAGE
+  limit = (PERPAGE * Session.get('messages.page'))
   handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
   for channel of Meteor.user()?.profile.channels
   #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
     handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
-    handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
+    #handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
 
 ########## Beeps / Notifications ##########
 
@@ -92,15 +92,29 @@ Meteor.startup ->
   @rememberScrollPosition = ->
     $doc = $(document)
     $win = $(window)
-    if ($(document).height() - ($(window).scrollTop() + $(window).height())) > $(document).height()
-      Session.set 'scroll', $(document).height()
+    # if scrolltop + window.height >= document.height
+    # window.scrolltop(document.height)
+    #if ($(document).height() - ($(window).scrollTop() + $(window).height())) > $(document).height()
+      #Session.set 'scroll', $(document).height()
+    #else
+      #Session.set 'scroll', \
+        #$(document).height() - ($(window).scrollTop() + $(window).height())
+
+    if ($(window).scrollTop() + $(window).height()) >= $(document).height()
+      Session.set 'scroll', 0
     else
-      Session.set 'scroll', \
-        $(document).height() - ($(window).scrollTop() + $(window).height())
+      Session.set 'scroll', $(document).height() - $(window).scrollTop() + $(window).height()
 
   @scrollToPlace = ->
-    $(window).scrollTop \
-      $(document).height() - $(window).height() - Session.get('scroll')
+    if Session.equals 'scroll', 0
+    #if ($(window).scrollTop() + $(window).height()) >= $(document).height()
+      $(window).scrollTop $(document).height()
+    #$(window).scrollTop \
+      #$(document).height() - $(window).height() - Session.get('scroll')
+      #
+  @stayInPlace = ->
+    $(window).scrollTop $(document).height() - Session.get('scroll') - $(window).height()
+
 
   @isElementInViewport = (el) ->
     rect = el.getBoundingClientRect()

@@ -11,7 +11,10 @@ Meteor.publish 'messages', (channel, limit) ->
   if channel is 'all'
     Messages.find {}, {limit, sort:{createdAt: -1}}
   else
-    Messages.find {channel}, {limit, sort:{createdAt: -1}}
+    Messages.find({channel}, {limit, sort:{createdAt: -1}}).observeChanges
+      added: (id, fields) =>
+        @added 'messages', id, fields 
+        @ready()
 
 Meteor.publish 'mentions', (channel, limit) ->
   user = Meteor.users.findOne(@userId)

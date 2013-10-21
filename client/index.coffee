@@ -1,5 +1,23 @@
 ########## Global helpers ##########
 
+Handlebars.registerHelper 'session', (input) ->
+  Session.get input
+
+Handlebars.registerHelper 'page', (page) ->
+  Session.equals 'page', page
+
+Handlebars.registerHelper 'pageIsHome', ->
+  Session.equals 'page', 'home'
+
+Handlebars.registerHelper 'pageIsLogin', ->
+  Session.equals 'page', 'login'
+
+Handlebars.registerHelper 'pageIsChannel', ->
+  Session.equals 'page', 'channel'
+
+Handlebars.registerHelper 'pageIsLoading', ->
+  Session.equals 'page', 'loading'
+
 Handlebars.registerHelper 'isChannel', ->
   Session.get('channel.name').isChannel()
 
@@ -39,12 +57,13 @@ Template.sign_in.events
       if error
         alert error.reason
       else
+        console.log 'logging in...'
         if Meteor.user().profile.connection is off
           Meteor.call 'connect', username, Meteor.userId()
         if Session.get('joinAfterLogin')
-          Router.go "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
+          page "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
         else
-          Router.go 'home'
+          page '/'
 
 ########## Notification Request ##########
 #

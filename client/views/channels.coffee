@@ -1,4 +1,5 @@
 Template.channel_main.rendered = ->
+  console.log @data
   if @data.name.isChannel()
     # Remove all unread messages for this channel
     $set = {}
@@ -9,15 +10,20 @@ Template.channel_main.rendered = ->
   if @data.name.isChannel() and Meteor.user().profile.channels[@data.name].userList
     $('.user-list-container').show()
     $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
-    scrollToPlace() # Keep scroll position when template rerenders
+    #scrollToPlace() # Keep scroll position when template rerenders
   else
     $('.user-list-container').hide()
     $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
-    scrollToPlace() # Keep scroll position when template rerenders
+    #scrollToPlace() # Keep scroll position when template rerenders
 
 Template.channel_main.events
   'click #notification-modal .btn-primary': ->
     webkitNotifications.requestPermission()
+
+Template.channel_main.data = ->
+  #console.log Channels.findOne(name:Session.get('channel.name'))
+  Channels.findOne(name:Session.get('channel.name')) or {name: 'all'}
+
 
 Template.channel_header.helpers
   channel: ->
@@ -36,7 +42,7 @@ Template.channel_header.helpers
     else
       return no
   unread_mentions: ->
-    Meteor.user().profile.channels[@name].mentions?.length or ''
+    Meteor.user().profile.channels[@name]?.mentions?.length or ''
 
 Template.channel_header.events
   'click .topic-edit > a': (e, t) ->
@@ -76,7 +82,7 @@ Template.channel_header.events
 
       $('.user-list-container').hide()
       $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
-      scrollToPlace() # Keep scroll position when template rerenders
+      #scrollToPlace() # Keep scroll position when template rerenders
     else
       $set = {}
       $set["profile.channels.#{@name}.userList"] = true
@@ -84,7 +90,7 @@ Template.channel_header.events
 
       $('.user-list-container').show()
       $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
-      scrollToPlace() # Keep scroll position when template rerenders
+      #scrollToPlace() # Keep scroll position when template rerenders
       
 
 ########## Channels ##########
@@ -195,5 +201,11 @@ Template.users.helpers
     Meteor.users.findOne({username: @nick}) \
     and not Meteor.users.findOne({username: @nick}).profile.online
     #Meteor.users.findOne({username: @nick})?.profile.online
+  awayClass: ->
+    if Meteor.users.findOne({username: @nick}) \
+    and not Meteor.users.findOne({username: @nick}).profile.online
+      return 'away'
+    else
+      return ''
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.profile.awaySince).humanize()

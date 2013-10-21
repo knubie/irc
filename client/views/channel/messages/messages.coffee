@@ -1,10 +1,12 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
+  console.log 'messages rendered.'
   $('.glyphicon-time').tooltip()
   $('.glyphicon-phone').tooltip()
 
-  scrollToPlace() # Keep scroll position when template rerenders
+  #scrollToPlace() # Keep scroll position when template rerenders
+  $(window).scrollTop $(document).height()
 
   # Set up listeners for scroll position
   if Modernizr.touch
@@ -23,35 +25,43 @@ Template.messages.rendered = ->
 Template.messages.helpers
   messages: ->
     prev = null
-    limit = PERPAGE * Session.get('messages.page')
-    if @name is 'all'
-      messages = Messages.find({}, {limit, sort: {createdAt: -1}}).fetch().reverse()
-    else
-      messages = Messages.find({
-        channel: @name
-      }, {limit, sort: {createdAt: -1}}).fetch().reverse()
-    setPrev = (msg) ->
-      msg.prev = prev
-      prev = msg
-    if Meteor.user()
-      return (setPrev message for message in messages when message.from \
-      not in (Meteor.user().profile.channels[message.channel]?.ignore or []))
-    else
-      return (setPrev message for message in messages)
-  loadMore: ->
-    limit = PERPAGE * Session.get('messages.page')
-    if @name is 'all'
-      messages = Messages.find({}, {limit, sort: {createdAt: -1}}).fetch().reverse()
-      messagesTotal = Messages.find({}, {sort: {createdAt: -1}}).fetch().reverse()
-    else
-      messages = Messages.find({
-        channel: @name
-      }, {limit, sort: {createdAt: -1}}).fetch().reverse()
-      messagesTotal = Messages.find({
-        channel: @name
-      }, {sort: {createdAt: -1}}).fetch().reverse()
+    selector = if @name is 'all' then {} else {channel: @name}
 
-    messages.length < messagesTotal.length
+    Messages.find selector,
+      sort:
+        createdAt: 1
+      transform: (doc) ->
+        doc extends
+          mentions: (user) ->
+            regex.nick(user).test(@text)
+          mentioned: ->
+            mentions = []
+            for nick of Channels.findOne(name:@channel).nicks
+              if @mentions nick
+                mentions.push nick
+            return mentions
+
+        doc.prev = prev unless prev?._id is doc._id
+        console.log "current: #{doc.text} | prev: #{prev?.text}"
+
+        prev = doc
+
+    #setPrev = (msg) ->
+      #msg.prev = prev
+      #prev = msg
+    #if Meteor.user()
+      #Session.set 'messages', (setPrev message for message in messages when message.from \
+      #not in (Meteor.user().profile.channels[message.channel]?.ignore or []))
+    #else
+      #Session.set 'messages', (setPrev message for message in messages)
+
+    #return messages
+  loadMore: ->
+    true
+    #if @name is 'all'
+      #Messages.find().length >= PERPAGE
+    #else
+      #Messages.find({channel: @name}).length >= PERPAGE
   channel: ->
     @name
   url_channel: ->
@@ -99,6 +109,8 @@ Template.message.rendered = ->
     ptext = ptext.replace regex.channel, ' <a href="/channels/$1">#$1</a>'
   p.html(ptext)
 
+  scrollToPlace() # Keep scroll position when template rerenders
+
 Template.message.events
   'click .reply-action': ->
     $('#say-input').val("@#{@from}")
@@ -124,14 +136,14 @@ Template.message.events
       if $messagesFromOtherChannels.length > 0 and not Modernizr.touch
         $messagesFromOtherChannels.slideToggle 400, =>
           if @channel.isChannel()
-            Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+            page "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
           else
-            Router.go "/messages/#{@channel}"
+            page "/messages/#{@channel}"
       else # No messages to slideToggle
         if @channel.isChannel()
-          Router.go "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+          page "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
         else
-          Router.go "/messages/#{@channel}"
+          page "/messages/#{@channel}"
 
   'click .convo': (e, t) ->
     $('.message')

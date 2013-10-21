@@ -3,16 +3,16 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-3">
-        {{> channels}}
+        {{> channels data}}
       </div>
       <div class="channel-container col-sm-9">
         {{#if isChannel}}
-          {{> channel_header}}
+          {{> channel_header data}}
         {{/if}}
         {{> messages}}
       </div>
       <div class="user-list-container col-sm-2">
-        {{> users}}
+        {{> users data}}
       </div>
       {{#unless isAll}}
         {{> say}}
@@ -74,7 +74,7 @@
     {{#each users}}
       <li>
       <h3>
-        <a href="/users/{{nick}}" {{#if away}}class="away"{{/if}}>{{flag}}{{nick}}</a>
+        <a href="/users/{{nick}}" class="{{awayClass}}">{{flag}}{{nick}}</a>
         {{#if away}}
           <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
         {{/if}}
