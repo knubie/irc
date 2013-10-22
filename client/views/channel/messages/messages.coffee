@@ -1,7 +1,6 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  console.log 'messages rendered.'
   $('.glyphicon-time').tooltip()
   $('.glyphicon-phone').tooltip()
 
@@ -25,26 +24,27 @@ Template.messages.rendered = ->
 Template.messages.helpers
   messages: ->
     prev = null
-    selector = if @name is 'all' then {} else {channel: @name}
+    notIn = { $nin: Meteor.user().profile.channels["#{@name}"].ignore }
+    selector = if @name is 'all' then {from: notIn} else {channel: @name, from: notIn}
 
     Messages.find selector,
       sort:
         createdAt: 1
       transform: (doc) ->
-        doc extends
-          mentions: (user) ->
-            regex.nick(user).test(@text)
-          mentioned: ->
-            mentions = []
-            for nick of Channels.findOne(name:@channel).nicks
-              if @mentions nick
-                mentions.push nick
-            return mentions
+        doc.mentions = (user) ->
+          regex.nick(user).test(@text)
+        doc.mentioned = ->
+          mentions = []
+          for nick of Channels.findOne(name:@channel).nicks
+            if @mentions nick
+              mentions.push nick
+          return mentions
 
-        doc.prev = prev unless prev?._id is doc._id
-        console.log "current: #{doc.text} | prev: #{prev?.text}"
+        unless prev?._id is doc._id
+          doc.prev = prev
+          prev = doc
 
-        prev = doc
+        return doc
 
     #setPrev = (msg) ->
       #msg.prev = prev
@@ -57,11 +57,11 @@ Template.messages.helpers
 
     #return messages
   loadMore: ->
-    true
-    #if @name is 'all'
-      #Messages.find().length >= PERPAGE
-    #else
-      #Messages.find({channel: @name}).length >= PERPAGE
+    #true
+    if @name is 'all'
+      Messages.find().length >= PERPAGE
+    else
+      Messages.find({channel: @name}).length >= PERPAGE
   channel: ->
     @name
   url_channel: ->
@@ -192,7 +192,8 @@ Template.message.helpers
       return 'bot'
   away: ->
     #TODO: make this change the user MODE in irc
-    not Meteor.users.findOne(username: @from)?.profile.online
+    Meteor.users.findOne({username: @nick}) \
+    and not Meteor.users.findOne(username: @from)?.profile.online
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
   isChannel: ->

@@ -1,3 +1,6 @@
+Template.channel_settings.data = ->
+  Channels.findOne(name:Session.get('channel.name'))
+
 Template.settings.helpers
   op_status: ->
     @nicks[Meteor.user().username] is '@'

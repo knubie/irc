@@ -419,7 +419,8 @@ label.checkbox {
   color: #777777;
   position: relative;
   transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color, 1s border-color;
-  border: 1px solid transparent; }
+  border: 1px solid transparent;
+  transition-delay: 0.5s; }
   .messages .message p {
     font-size: 16px;
     line-height: 21px;

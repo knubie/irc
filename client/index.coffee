@@ -13,10 +13,16 @@ Handlebars.registerHelper 'pageIsLogin', ->
   Session.equals 'page', 'login'
 
 Handlebars.registerHelper 'pageIsChannel', ->
-  Session.equals 'page', 'channel'
+  Session.equals('page', 'channel')
+
+Handlebars.registerHelper 'pageIsMentions', ->
+  Session.equals('page', 'mentions')
 
 Handlebars.registerHelper 'pageIsLoading', ->
   Session.equals 'page', 'loading'
+
+Handlebars.registerHelper 'pageIsSettings', ->
+  Session.equals 'page', 'settings'
 
 Handlebars.registerHelper 'isChannel', ->
   Session.get('channel.name').isChannel()
@@ -70,7 +76,7 @@ Template.sign_in.events
 Template.notification_request.rendered = ->
   document.querySelector('.allow-notifications').addEventListener 'click', ->
     webkitNotifications.requestPermission()
-    Meteor.Router.to('/')
+    page '/'
 
 ########## Header ##########
 

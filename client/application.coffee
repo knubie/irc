@@ -62,7 +62,6 @@ Session.setDefault 'joinAfterLogin', null # Which channel to join after signing 
 @handlers =
   user: Meteor.subscribe 'users'
   publicChannels: Meteor.subscribe 'publicChannels'
-  joinedChannels: Meteor.subscribe 'joinedChannels'
   messages: new Object
   mentions: new Object
 
@@ -72,7 +71,9 @@ Deps.autorun ->
   for channel of Meteor.user()?.profile.channels
   #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
     handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
-    #handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
+    handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
+  if Meteor.user()
+    handlers.joinedChannels = Meteor.subscribe 'joinedChannels'
 
 ########## Beeps / Notifications ##########
 
@@ -85,38 +86,38 @@ Meteor.startup ->
   # Set up FastClick for more responsive touch events.
   FastClick.attach(document.body)
 
-  # Store scroll position in a session variable. This keeps the scroll
-  # position in place when receiving new messages, unless the user is
-  # scrolled to the bottom, then it forces the scroll position to the
-  # bottom even when new messages get rendered.
-  @rememberScrollPosition = ->
-    $doc = $(document)
-    $win = $(window)
-    # if scrolltop + window.height >= document.height
-    # window.scrolltop(document.height)
-    #if ($(document).height() - ($(window).scrollTop() + $(window).height())) > $(document).height()
-      #Session.set 'scroll', $(document).height()
-    #else
-      #Session.set 'scroll', \
-        #$(document).height() - ($(window).scrollTop() + $(window).height())
+# Store scroll position in a session variable. This keeps the scroll
+# position in place when receiving new messages, unless the user is
+# scrolled to the bottom, then it forces the scroll position to the
+# bottom even when new messages get rendered.
+@rememberScrollPosition = ->
+  $doc = $(document)
+  $win = $(window)
+  # if scrolltop + window.height >= document.height
+  # window.scrolltop(document.height)
+  #if ($(document).height() - ($(window).scrollTop() + $(window).height())) > $(document).height()
+    #Session.set 'scroll', $(document).height()
+  #else
+    #Session.set 'scroll', \
+      #$(document).height() - ($(window).scrollTop() + $(window).height())
 
-    if ($(window).scrollTop() + $(window).height()) >= $(document).height()
-      Session.set 'scroll', 0
-    else
-      Session.set 'scroll', $(document).height() - $(window).scrollTop() + $(window).height()
+  if ($(window).scrollTop() + $(window).height()) >= $(document).height()
+    Session.set 'scroll', 0
+  else
+    Session.set 'scroll', $(document).height() - $(window).scrollTop() + $(window).height()
 
-  @scrollToPlace = ->
-    if Session.equals 'scroll', 0
-    #if ($(window).scrollTop() + $(window).height()) >= $(document).height()
-      $(window).scrollTop $(document).height()
-    #$(window).scrollTop \
-      #$(document).height() - $(window).height() - Session.get('scroll')
-      #
-  @stayInPlace = ->
-    $(window).scrollTop $(document).height() - Session.get('scroll') - $(window).height()
+@scrollToPlace = ->
+  if Session.equals 'scroll', 0
+  #if ($(window).scrollTop() + $(window).height()) >= $(document).height()
+    $(window).scrollTop $(document).height()
+  #$(window).scrollTop \
+    #$(document).height() - $(window).height() - Session.get('scroll')
+    #
+@stayInPlace = ->
+  $(window).scrollTop $(document).height() - Session.get('scroll') - $(window).height()
 
 
-  @isElementInViewport = (el) ->
-    rect = el.getBoundingClientRect()
-    rect.top >= 160 && rect.left >= 0 && rect.bottom <= $(window).height()
+@isElementInViewport = (el) ->
+  rect = el.getBoundingClientRect()
+  rect.top >= 160 && rect.left >= 0 && rect.bottom <= $(window).height()
 

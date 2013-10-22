@@ -104,20 +104,16 @@ class @Idletron extends Client
       @on event, async (channel) => @send 'NAMES', channel
 
     @on 'part', async (channel, nick, reason, message) =>
-      console.log "part #{nick}"
       ch = Channels.findOne({name: channel})
       if ch?
         if nick of ch.nicks
-          console.log ch
           if (nick for nick of ch.nicks).length is 2
             @part channel
             Channels.remove ch._id
-            console.log 'delete'
         else
           if (nick for nick of ch.nicks).length is 1
             @part channel
             Channels.remove ch._id
-            console.log 'delete'
 
     @on 'raw', async (msg) =>
       if msg.command is 'MODE'

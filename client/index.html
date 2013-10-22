@@ -19,7 +19,13 @@
     {{> sign_in}}
   {{/if}}
   {{#if pageIsChannel}}
-    {{> channel_main}}
+      {{> channel_main}}
+  {{/if}}
+  {{#if pageIsMentions}}
+    {{> channel_mentions}}
+  {{/if}}
+  {{#if pageIsSettings}}
+    {{> channel_settings}}
   {{/if}}
   {{#if pageIsLoading}}
     {{> channel_loading}}
