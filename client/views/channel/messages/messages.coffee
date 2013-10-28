@@ -45,7 +45,6 @@ Template.messages.helpers
           prev = new Message doc
 
         new Message doc
-
   loadMore: ->
     #true
     if @channel?
@@ -190,3 +189,5 @@ Template.message.helpers
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
   isChannel: ->
     @channel?.isChannel()
+  isAll: ->
+    Session.equals('channel', null)

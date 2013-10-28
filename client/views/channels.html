@@ -5,7 +5,7 @@
         <div class="col-sm-3">
           {{> channels data}}
         </div>
-        <div class="channel-container col-sm-9">
+        <div class="channel-container col-sm-{{channelCol}}">
           {{#if data.channel}}
             {{> channelHeader data}}
           {{/if}}
@@ -14,9 +14,11 @@
           {{> settings data}}
         </div>
         {{#if data.channel}}
-          <div class="user-list-container col-sm-2">
-            {{> users}}
-          </div>
+          {{#if userList}}
+            <div class="user-list-container col-sm-2">
+              {{> users}}
+            </div>
+          {{/if}}
           {{> say}}
         {{/if}}
       </div>

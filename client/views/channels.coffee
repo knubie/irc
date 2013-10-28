@@ -1,5 +1,12 @@
 Template.channelPage.data = ->
   {channel: Session.get('channel'), subpage: Session.get('channelSubpage')}
+Template.channelPage.userList = ->
+  Meteor.user().profile.channels[@channel.name].userList
+Template.channelPage.channelCol = ->
+  if Meteor.user().profile.channels[@channel.name].userList
+    '7'
+  else
+    '9'
 
 Template.channelHeader.helpers
   channelURL: ->
@@ -101,6 +108,7 @@ Template.channels.events
           $('#say-input').focus()
 
 ########## Channel ##########
+#
 Template.channel.events
   'click a': (e,t) ->
     $('#say-input').focus() unless Modernizr.touch
@@ -161,6 +169,8 @@ Template.pm.events
     Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
     if "#{@}" is Session.get('channel.name')
       page '/'
+
+########## Users ##########
 
 Template.users.helpers
   users: ->

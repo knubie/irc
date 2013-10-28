@@ -691,9 +691,6 @@ form {
     margin-top: 25px;
     padding-top: 10px; }
 
-.user-list-container {
-  display: none; }
-
 .user-list {
   list-style: none;
   padding: 0;
