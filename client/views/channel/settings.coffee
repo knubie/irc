@@ -1,20 +1,17 @@
-Template.channel_settings.data = ->
-  Channels.findOne(name:Session.get('channel.name'))
-
 Template.settings.helpers
   op_status: ->
-    @nicks[Meteor.user().username] is '@'
+    @channel.nicks[Meteor.user().username] is '@'
   ignore_list: ->
-    Meteor.user().profile.channels[@name]?.ignore
+    Meteor.user().profile.channels[@channel.name]?.ignore
   private_checked: ->
-    if 's' in @modes or 'i' in @modes then 'checked' else ''
+    if 's' in @channel.modes or 'i' in @channel.modes then 'checked' else ''
 
 Template.settings.events
   'submit #ignore-form-settings': (e,t) ->
     e.preventDefault()
 
     update Meteor.users, Meteor.userId()
-    , "profile.channels.#{@name}.ignore"
+    , "profile.channels.#{@channel.name}.ignore"
     , (ignore) ->
       ignore.push t.find('#ignore-username-settings').value
       _.uniq ignore
@@ -24,18 +21,18 @@ Template.settings.events
 
   'click .close': (e,t) ->
     update Meteor.users, Meteor.userId()
-    , "profile.channels.#{Session.get('channel.name')}.ignore"
+    , "profile.channels.#{Session.get('channel').name}.ignore"
     , (ignore) => _.reject ignore, (nick) => nick is "#{@}"
 
 
   'click label.checkbox[for="privateCheckbox"]': (e,t) ->
-    if 's' in @modes or 'i' in @modes
-      Meteor.call 'mode', Meteor.user(), @name, '-si'
+    if 's' in @channel.modes or 'i' in @channel.modes
+      Meteor.call 'mode', Meteor.user(), @channel.name, '-si'
     else
-      Meteor.call 'mode', Meteor.user(), @name, '+si'
+      Meteor.call 'mode', Meteor.user(), @channel.name, '+si'
 
   'click label.checkbox[for="showHideJoins"]': (e,t) ->
-    if 'm' in @modes
-      Meteor.call 'mode', Meteor.user(), @name, '-m'
+    if 'm' in @channel.modes
+      Meteor.call 'mode', Meteor.user(), @channel.name, '-m'
     else
-      Meteor.call 'mode', Meteor.user(), @name, '+m'
+      Meteor.call 'mode', Meteor.user(), @channel.name, '+m'

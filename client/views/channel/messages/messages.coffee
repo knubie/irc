@@ -1,12 +1,6 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
-  $('.glyphicon-time').tooltip()
-  $('.glyphicon-phone').tooltip()
-
-  #scrollToPlace() # Keep scroll position when template rerenders
-  $(window).scrollTop $(document).height()
-
   # Set up listeners for scroll position
   if Modernizr.touch
     $(window).off 'touchmove'
@@ -16,56 +10,50 @@ Template.messages.rendered = ->
   $(window).scroll rememberScrollPosition
 
   # Hover isolates messages from like channels
-  if @data.name is 'all'
-    $('.message').hover ->
-      $(".message").not("[data-channel='#{$(this).attr('data-channel')}']").addClass 'faded'
-    , -> $('.message').removeClass 'faded'
+  unless @channel?
+    $(document).on
+      mouseenter: ->
+        $(".message")
+        .not("[data-channel='#{$(this).attr('data-channel')}']")
+        .addClass 'faded'
+      mouseleave: ->
+        $('.message').removeClass 'faded'
+    , '.message'
 
 Template.messages.helpers
   messages: ->
     prev = null
-    notIn = { $nin: Meteor.user().profile.channels["#{@name}"].ignore }
-    selector = if @name is 'all' then {from: notIn} else {channel: @name, from: notIn}
+    that = this
+    selector = if @channel? then {channel: @channel.name} else {}
+    #FIXME: this breaks the template engine.
+    #if Meteor.user()? and @channel?
+      #selector.from =
+        #$nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
 
     Messages.find selector,
       sort:
         createdAt: 1
       transform: (doc) ->
-        doc.mentions = (user) ->
-          regex.nick(user).test(@text)
-        doc.mentioned = ->
-          mentions = []
-          for nick of Channels.findOne(name:@channel).nicks
-            if @mentions nick
-              mentions.push nick
-          return mentions
-
-        unless prev?._id is doc._id
+        # Sometimes transform gets called multiple times
+        # when a new doc gets added. In that case, 'prev' and 'doc'
+        # are the same object. We need to prevent docs
+        # from assigning previous to themselves.
+        if prev?._id is doc._id
+          doc.prev = prev.prev
+        else
           doc.prev = prev
-          prev = doc
+          prev = new Message doc
 
-        return doc
+        new Message doc
 
-    #setPrev = (msg) ->
-      #msg.prev = prev
-      #prev = msg
-    #if Meteor.user()
-      #Session.set 'messages', (setPrev message for message in messages when message.from \
-      #not in (Meteor.user().profile.channels[message.channel]?.ignore or []))
-    #else
-      #Session.set 'messages', (setPrev message for message in messages)
-
-    #return messages
   loadMore: ->
     #true
-    if @name is 'all'
-      Messages.find().length >= PERPAGE
+    if @channel?
+      Messages.find({channel: @channel.name}).length >= PERPAGE
     else
-      Messages.find({channel: @name}).length >= PERPAGE
-  channel: ->
-    @name
+      Messages.find().length >= PERPAGE
   url_channel: ->
-    @name.match(/^(#)?(.*)$/)[2]
+    @channel.name.match(/^(#)?(.*)$/)[2]
 
 Template.messages.events
   'click .load-more': (e,t) ->
@@ -73,11 +61,14 @@ Template.messages.events
 
   'click .login-from-channel': (e,t) ->
     # Remember this channel so we can join it after logging in
-    Session.set('joinAfterLogin', @name)
+    Session.set('joinAfterLogin', @channel.name)
 
 ########## Message ##########
 
 Template.message.rendered = ->
+  $('.glyphicon-time').tooltip()
+  $('.glyphicon-phone').tooltip()
+
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
@@ -150,13 +141,14 @@ Template.message.events
     .not("[data-nick='#{@from}']")
     .not("[data-nick='#{@mentioned()[0]}']")
     .slideToggle 400
+    #TODO: Hide messages mentioning other users.
 
   'click .kick': (e, t) ->
     Meteor.call 'kick', Meteor.user(), @channel, @from
 
 Template.message.helpers
   joinToPrev: ->
-    @prev isnt null \
+    @prev? \
     and @prev.channel is @channel \
     and @prev.from is @from \
     and not @mentions(Meteor.user()?.username) \

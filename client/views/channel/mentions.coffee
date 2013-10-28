@@ -1,14 +1,10 @@
-Template.channel_mentions.data = ->
-  #console.log Channels.findOne(name:Session.get('channel.name'))
-  Channels.findOne(name:Session.get('channel.name'))
-
 ########## Mentions ##########
 
 Template.mentions.helpers
   mentions: ->
     limit = PERPAGE * Session.get('messages.page')
     Messages.find({
-      channel: @name
+      channel: @channel.name
       convos: $in: [Meteor.user().username]
     }, {limit, sort: {createdAt: -1}}).fetch().reverse()
   loadMore: ->
@@ -30,9 +26,10 @@ Template.mentions.helpers
 #Template.mention.rendered = ->
   #Messages.update @data._id, $set: {'read': true}
 
-Template.mention.rendered = ->
+Template.mentions.rendered = ->
   scrollToPlace() # Keep scroll position when template rerenders
 
+Template.mention.rendered = ->
   update Meteor.users, Meteor.userId()
   , "profile.channels.#{@data.channel}.mentions"
   , (mentions) =>

@@ -1,43 +1,79 @@
-channelController = (ctx) ->
-  if ctx?.params?.channel
-    channel = "##{ctx.params.channel}"
-    Session.set 'page', 'loading'
-    Session.set 'channel.name', channel
-    Session.set 'messages.page', 1
-    # Join channel if not already in it.
-    if channel not in Meteor.user()?.profile.channels
-      Meteor.call 'join', Meteor.user().username, channel
-    # Wait until this stuff is ready before changing page.
-    Deps.autorun ->
-      if handlers.joinedChannels.ready() and scrollToPlace?
-        Session.set('page', 'channel')
+controller = (opts) ->
+  Deps.autorun (c) ->
+    if not opts.handler? or opts.handler.ready()
+      opts.after?()
+      Session.set 'page', opts.page()
+      c.stop()
 
 page '/', ->
-  Session.set 'channel.name', 'all'
-  Session.set 'channel.id', null
-  Session.set 'messages.page', 1
-  Session.set 'page', 'home'
+  controller
+    page: ->
+      if Meteor.user()
+        'channel'
+      else
+        'home'
+    after: ->
+        Session.set 'subPage', 'messages'
+        Session.set 'channel', null
 
 page '/login', ->
-  if Meteor.user()
-    page('/')
-  else
-    Session.set('page', 'login')
+  controller
+    page: -> 'login'
+    after: -> page('/') if Meteor.user()
 
+page '/explore', ->
+  controller
+    handler: handlers.publicChannels
+    page: -> 'explore'
 
 page '/channels/:channel', (ctx) ->
-  channelController(ctx)
-
-page '/channels/:channel/mentions', (ctx) ->
-  if ctx?.params?.channel
-    channel = "##{ctx.params.channel}"
-    Session.set 'channel.name', channel
-  Session.set('page', 'mentions')
+  channel = "##{ctx.params.channel}"
+  controller
+    handler: do ->
+      if Meteor.user()?
+        handlers.joinedChannels
+      else
+        handlers.publicChannels
+    after: ->
+      Session.set 'messages.page', 1
+      if Meteor.user()? and not Meteor.user()?.profile.channels[channel]?
+        Meteor.call 'join', Meteor.user().username, channel
+      Session.set 'channel', Channels.findOne({name: channel})
+      Session.set 'subPage', 'messages'
+    page: ->
+      if Meteor.user()?
+        'channel'
+      else
+        if channelDoc = Channels.findOne({name: channel})
+          'channel'
+        else
+          'notFound'
 
 page '/channels/:channel/settings', (ctx) ->
-  if ctx?.params?.channel
-    channel = "##{ctx.params.channel}"
-    Session.set 'channel.name', channel
-  Session.set('page', 'settings')
+  channel = "##{ctx.params.channel}"
+  controller
+    handler: do ->
+      if Meteor.user()? then handlers.joinedChannels else handlers.publicChannels
+    after: ->
+      Session.set 'channel', Channels.findOne({name: channel})
+      Session.set 'subPage', 'settings'
+    page: ->
+      if channelDoc = Channels.findOne({name: channel})
+        'channel'
+      else
+        'notFound'
+
+page '/channels/:channel/mentions', (ctx) ->
+  channel = "##{ctx.params.channel}"
+  controller
+    handler: handlers.mentions[channel]
+    after: ->
+      Session.set 'channel', Channels.findOne({name: channel})
+      Session.set 'subPage', 'mentions'
+    page: ->
+      if channelDoc = Channels.findOne({name: channel})
+        'channel'
+      else
+        'notFound'
 
 do page

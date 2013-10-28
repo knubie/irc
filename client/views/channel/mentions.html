@@ -1,32 +1,20 @@
-<template name="channel_mentions">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-3">
-        {{> channels}}
-      </div>
-      <div class="channel-container col-sm-9">
-        {{> channel_header}}
-        {{> mentions}}
-      </div>
-    </div>
-  </div>
-</template>
-
 <template name="mentions">
-  {{#if loadMore}}
-    <span class="load-more btn btn-default btn-primary-outline">
-      load earlier messages
-    </span>
-  {{/if}}
-  {{#if mentions}}
-    <ul class="messages nav nav-stacked">
-      {{#each mentions}}
-        {{> mention}}
-      {{/each}}
-    </ul>
-  {{else}}
-    You have no mentions.
-  {{/if}}
+  {{#subPage "mentions"}}
+    {{#if loadMore}}
+      <span class="load-more btn btn-default btn-primary-outline">
+        load earlier messages
+      </span>
+    {{/if}}
+    {{#if mentions}}
+      <ul class="messages nav nav-stacked">
+        {{#each mentions}}
+          {{> mention}}
+        {{/each}}
+      </ul>
+    {{else}}
+      You have no mentions.
+    {{/if}}
+  {{/subPage}}
 </template>
 
 <template name="mention">

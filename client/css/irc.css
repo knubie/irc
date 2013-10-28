@@ -419,8 +419,7 @@ label.checkbox {
   color: #777777;
   position: relative;
   transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color, 1s border-color;
-  border: 1px solid transparent;
-  transition-delay: 0.5s; }
+  border: 1px solid transparent; }
   .messages .message p {
     font-size: 16px;
     line-height: 21px;
@@ -525,13 +524,10 @@ label.checkbox {
       font-weight: 600; }
 .messages .mention {
   border: 1px solid #3498db; }
-.messages .message.faded {
-  background-color: #f7f9f9;
-  box-shadow: 0 2px 0 #ecf0f1; }
-  .messages .message.faded .reply, .messages .message.faded small, .messages .message.faded p {
-    opacity: 0.4; }
-  .messages .message.faded .divider {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
+.messages .message.faded .reply, .messages .message.faded small, .messages .message.faded p {
+  opacity: 0.2; }
+.messages .message.faded .divider {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
 
 .user-profile {
   position: relative;

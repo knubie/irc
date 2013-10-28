@@ -52,6 +52,8 @@ Meteor.methods
     return newChannel._id or null
 
   part: (username, channel) ->
+    console.log channel
+    console.log username
     check username, validUsername
     check channel, validChannelName
 

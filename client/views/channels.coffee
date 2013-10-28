@@ -1,50 +1,18 @@
-Template.channel_main.rendered = ->
-  console.log @data
-  if @data.name.isChannel()
-    # Remove all unread messages for this channel
-    $set = {}
-    $set["profile.channels.#{@data.name}.unread"] = []
-    Meteor.users.update Meteor.userId(), {$set}
-    #Messages.update {channel: @data.name, read: false}, {$set: {read: true}}
+Template.channelPage.data = ->
+  {channel: Session.get('channel'), subpage: Session.get('channelSubpage')}
 
-  if @data.name.isChannel() and Meteor.user().profile.channels[@data.name].userList
-    $('.user-list-container').show()
-    $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
-    #scrollToPlace() # Keep scroll position when template rerenders
-  else
-    $('.user-list-container').hide()
-    $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
-    #scrollToPlace() # Keep scroll position when template rerenders
-
-Template.channel_main.events
-  'click #notification-modal .btn-primary': ->
-    webkitNotifications.requestPermission()
-
-Template.channel_main.data = ->
-  #console.log Channels.findOne(name:Session.get('channel.name'))
-  Channels.findOne(name:Session.get('channel.name')) or {name: 'all'}
-
-
-Template.channel_header.helpers
-  channel: ->
-    @name
-  url_channel: ->
-    @name.match(/^(#)?(.*)$/)[2]
-  users: ->
-    if @name.isChannel()
-      @users
-  topic: ->
-    if @name.isChannel()
-      @topic
+Template.channelHeader.helpers
+  channelURL: ->
+    @channel.name.match(/^(#)?(.*)$/)[2]
   op_status: ->
-    if @name.isChannel() and Meteor.user()
-      @nicks[Meteor.user().username] is '@'
+    if @channel.name.isChannel() and Meteor.user()
+      @channel.nicks[Meteor.user().username] is '@'
     else
       return no
   unread_mentions: ->
-    Meteor.user().profile.channels[@name]?.mentions?.length or ''
+    Meteor.user().profile.channels[@channel.name]?.mentions?.length or ''
 
-Template.channel_header.events
+Template.channelHeader.events
   'click .topic-edit > a': (e, t) ->
     $('.topic').hide()
     $('#topic-form').show()
@@ -68,7 +36,7 @@ Template.channel_header.events
   'submit #invite-form': (e,t) ->
     e.preventDefault()
     username = t.find('#invite-username').value
-    Meteor.call 'invite', Meteor.user(), @name, username
+    Meteor.call 'invite', Meteor.user(), @channel.name, username
     t.find('#invite-username').value = ''
     $('.invite-dropdown').dropdown('toggle')
 
@@ -77,7 +45,7 @@ Template.channel_header.events
   'click .user-count': (e,t) ->
     if $('.user-list-container').is(':visible')
       $set = {}
-      $set["profile.channels.#{@name}.userList"] = false
+      $set["profile.channels.#{@channel.name}.userList"] = false
       Meteor.users.update(Meteor.userId(), {$set})
 
       $('.user-list-container').hide()
@@ -85,7 +53,7 @@ Template.channel_header.events
       #scrollToPlace() # Keep scroll position when template rerenders
     else
       $set = {}
-      $set["profile.channels.#{@name}.userList"] = true
+      $set["profile.channels.#{@channel.name}.userList"] = true
       Meteor.users.update(Meteor.userId(), {$set})
 
       $('.user-list-container').show()
@@ -94,6 +62,17 @@ Template.channel_header.events
       
 
 ########## Channels ##########
+
+Template.channels.helpers
+  channels: ->
+    if Meteor.user()
+      ({name: channel, channel: @channel} for channel of Meteor.user().profile.channels)
+    else
+      @channel.name
+  pms: ->
+    (pm for pm of Meteor.user().profile.pms)
+  all: ->
+    if @channel then '' else 'selected'
 
 Template.channels.events
   'click .new-channel-link': (e, t) ->
@@ -121,51 +100,39 @@ Template.channels.events
           page "/channels/#{name.match(/^(.)(.*)$/)[2]}"
           $('#say-input').focus()
 
-Template.channels.helpers
-  channels: ->
-    if Meteor.user()
-      (channel for channel of Meteor.user().profile.channels)
-    else
-      [Session.get('channel.name')]
-    #Channels.find
-      #name: $in: (channel for channel of Meteor.user().profile.channels)
-    #.fetch()
-  pms: ->
-    (pm for pm of Meteor.user().profile.pms)
-  all: ->
-    if Session.equals 'channel.name', 'all' then 'selected' else ''
-
 ########## Channel ##########
-
 Template.channel.events
   'click a': (e,t) ->
     $('#say-input').focus() unless Modernizr.touch
 
   'click .close': ->
-    Meteor.call 'part', Meteor.user().username, "#{@}"
+    Meteor.call 'part', Meteor.user().username, @name
     update Meteor.users, Meteor.userId()
-    , "profile.channels.#{Session.get('channel.name')}"
-    , (ignore) => _.reject ignore, (nick) => nick is "#{@}"
-    if "#{@}" is Session.get('channel.name')
+    , "profile.channels"
+    , (channels) =>
+      delete channels[@name]
+      return channels
+    if @name is @channel.name
       page '/'
 
 Template.channel.helpers
   selected: ->
-    if Session.equals 'channel.name', "#{@}" then 'selected' else ''
+    if @channel?.name is @name then 'selected' else ''
+    #if Session.equals 'channel.name', "#{@}" then 'selected' else ''
   private: ->
-    ch = Channels.findOne(name: "#{@}")
+    ch = Channels.findOne(name: @name)
     if ch?
       's' in ch.modes or 'i' in ch.modes
     else
       no
-  url_name: ->
-    "#{@}".match(/^(.)(.*)$/)[2]
+  url: ->
+    @name.match(/^(.)(.*)$/)[2]
   unread: ->
     if Meteor.user()
-      Meteor.user().profile.channels["#{@}"].unread.length or ''
+      Meteor.user().profile.channels[@name].unread.length or ''
   unread_mentions: ->
     if Meteor.user()
-      Meteor.user().profile.channels["#{@}"].mentions?.length or ''
+      Meteor.user().profile.channels[@name].mentions?.length or ''
 
 Template.pm.helpers
   selected: ->
@@ -186,6 +153,7 @@ Template.pm.helpers
       #.fetch().length or ''
     #else
       #return ''
+
 Template.pm.events
   'click .close': ->
     {pms} = Meteor.user().profile
@@ -196,7 +164,8 @@ Template.pm.events
 
 Template.users.helpers
   users: ->
-    ({nick, flag} for nick, flag of @nicks).sort()
+    if @channel?
+      ({nick, flag} for nick, flag of @channel.nicks).sort()
     #query = {}
     #query["profile.channels.#{@name}"] = {$exists: true}
     #Meteor.users.find(query)

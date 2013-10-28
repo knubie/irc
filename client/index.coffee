@@ -4,7 +4,12 @@ Handlebars.registerHelper 'session', (input) ->
   Session.get input
 
 Handlebars.registerHelper 'page', (page) ->
-  Session.equals 'page', page
+  if Session.equals 'page', page
+    Template._page
+
+Handlebars.registerHelper 'subPage', (page) ->
+  if Session.equals 'subPage', page
+    Template._page
 
 Handlebars.registerHelper 'pageIsHome', ->
   Session.equals 'page', 'home'
@@ -30,7 +35,9 @@ Handlebars.registerHelper 'isChannel', ->
 Handlebars.registerHelper 'isAll', ->
   Session.equals 'channel.name', 'all'
 
-Template.home_logged_out.events
+########## Home / Login ##########
+
+Template.home.events
   'click #signup-with-github': (e,t) ->
     console.log 'sign up with github'
     Meteor.loginWithGithub (error) ->
@@ -50,11 +57,11 @@ Template.home_logged_out.events
         # Add account to hector
         Meteor.call 'remember', username, password, Meteor.userId()
         if Session.get('joinAfterLogin')
-          Router.go "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
+          page "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
         else
-          Router.go 'home'
+          page '/'
 
-Template.sign_in.events
+Template.login.events
   'submit #signin': (e,t) ->
     e.preventDefault()
     username = t.find('#signin-username').value
@@ -63,7 +70,6 @@ Template.sign_in.events
       if error
         alert error.reason
       else
-        console.log 'logging in...'
         if Meteor.user().profile.connection is off
           Meteor.call 'connect', username, Meteor.userId()
         if Session.get('joinAfterLogin')

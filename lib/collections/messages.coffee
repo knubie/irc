@@ -7,22 +7,20 @@
 #   time    : Date
 #   read    : Boolean
 #   mobile  : Boolean
+class @Message
+  constructor: (doc) ->
+    @[k] = doc[k] for k of doc
+  mentions: (user) ->
+    regex.nick(user).test(@text)
+  mentioned: ->
+    mentions = []
+    for nick of Channels.findOne(name:@channel).nicks
+      if @mentions nick
+        mentions.push nick
+    return mentions
+
 @Messages = new Meteor.Collection 'messages',
-  #TODO: replace (doc) -> with
-  # extend
-  #   type: ->
-  #   ...
-  # leave out destination for partial application
-  transform: (doc) ->
-    doc extends
-      mentions: (user) ->
-        regex.nick(user).test(@text)
-      mentioned: ->
-        mentions = []
-        for nick of Channels.findOne(name:@channel).nicks
-          if @mentions nick
-            mentions.push nick
-        return mentions
+  transform: (doc) -> new Message doc
 
 if Meteor.isServer
   Messages.allow
@@ -41,17 +39,12 @@ Messages.before.insert (userId, doc) ->
       if regex.nick(nick).test(doc.text) \
       and user = Meteor.users.findOne(username:nick)
         if doc.from not in user.profile.channels[doc.channel].ignore
+
+          # Push the nick to the Message's convo array.
           doc.convos.push nick
 
-Messages.after.insert (userId, doc) ->
-  if Meteor.isServer and doc.owner isnt 'server'
-    client[Meteor.users.findOne(userId).username].say doc.channel, doc.text
-  if Meteor.isServer
-    for nick of Channels.findOne(name:doc.channel).nicks
-      if regex.nick(nick).test(doc.text) \
-      and user = Meteor.users.findOne(username:nick)
-        if doc.from not in user.profile.channels[doc.channel].ignore
-          update Meteor.users, {username:nick}
+          # Update the mentioned user's profile with a new Message.
+          update Meteor.users, user._id
           , "profile.channels.#{doc.channel}.mentions"
           , (mentions) ->
             unless Object::toString.call(mentions) is '[object Array]'
@@ -59,3 +52,6 @@ Messages.after.insert (userId, doc) ->
             mentions.push doc._id unless doc._id in mentions
             return mentions
 
+Messages.after.insert (userId, doc) ->
+  if Meteor.isServer and doc.owner isnt 'server'
+    client[Meteor.users.findOne(userId).username].say doc.channel, doc.text

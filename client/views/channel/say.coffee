@@ -6,7 +6,7 @@ Template.say.events
     if keyCode is 9 # Tab
       nickregex = /^(.*\s)*(\S*)$/
       if matches = message.match nickregex
-        nicks = (nick for nick of @nicks)
+        nicks = (nick for nick of @channel.nicks)
         nickstart = new RegExp matches[2], 'i'
         for nick in nicks
           if nick.match nickstart
@@ -20,32 +20,18 @@ Template.say.events
 
       # Server sends message to IRC before insert.
       Messages.insert
-        channel: @name
+        channel: @channel.name
         text: message
         mobile: Modernizr.touch
         createdAt: new Date()
         from: Meteor.user().username
 
-      #user = Meteor.user()
-
-      #status =
-        #'@': 'operator'
-        #'': 'normal'
-
-      #Messages.insert
-        #from: user.username
-        #channel: channel.name
-        #text: message
-        #createdAt: new Date()
-        #convo: convo
-        #status: if channel.nicks? then status[channel.nicks[user.username]] else 'normal'
-        #read: true
-        #mobile: Modernizr.touch
-
 Template.say.rendered = ->
+  # Auto-focus 'say' input.
   $('#say-input').focus() unless Modernizr.touch
-  if @data.name.isChannel()
-    nicks = ({username: nick} for nick of @data.nicks) ? []
+
+  # Create array of nicks for autocomplete.
+  nicks = ({username: nick} for nick of @channel?.nicks) ? []
   $('#say-input').mention
     delimiter: '@'
     sensitive: true

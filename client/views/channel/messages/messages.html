@@ -1,39 +1,41 @@
 <template name="messages">
-  {{#if loadMore}}
-    <span class="load-more btn btn-default btn-primary-outline">
-      load earlier messages
-    </span>
-  {{/if}}
-  <ul class="messages nav nav-stacked">
-    {{#each messages}}
-      {{> message}}
-    {{/each}}
-  </ul>
-  {{#unless currentUser}}
-    <div class="alert alert-info visible-xs">
-      <strong>
-        <a href="/" class="btn btn-primary login-from-channel">
-          Sign up for free
+  {{#subPage "messages"}}
+    {{#if loadMore}}
+      <span class="load-more btn btn-default btn-primary-outline">
+        load earlier messages
+      </span>
+    {{/if}}
+    <ul class="messages nav nav-stacked">
+      {{#each messages}}
+        {{> message}}
+      {{/each}}
+    </ul>
+    {{#unless currentUser}}
+      <div class="alert alert-info visible-xs">
+        <strong>
+          <a href="/" class="btn btn-primary login-from-channel">
+            Sign up for free
+          </a>
+        </strong>
+        &nbsp;&nbsp;or&nbsp;&nbsp;
+        <a href="/login" class='login-from-channel'>
+          Sign in to chat
         </a>
-      </strong>
-      &nbsp;&nbsp;or&nbsp;&nbsp;
-      <a href="/login" class='login-from-channel'>
-        Sign in to chat
-      </a>
-    </div>
-    <div class="alert alert-info hidden-xs">
-      <strong>
-        <a href="/" class="btn btn-primary login-from-channel">
-          Sign up for free
+      </div>
+      <div class="alert alert-info hidden-xs">
+        <strong>
+          <a href="/" class="btn btn-primary login-from-channel">
+            Sign up for free
+          </a>
+          &nbsp;&nbsp;to join this discussion.
+        </strong>
+        Already have an account?
+        <a href="/login" class="login-from-channel">
+          Sign in to chat
         </a>
-        &nbsp;&nbsp;to join this discussion.
-      </strong>
-      Already have an account?
-      <a href="/login" class="login-from-channel">
-        Sign in to chat
-      </a>
-    </div>
-  {{/unless}}
+      </div>
+    {{/unless}}
+  {{/subPage}}
 </template>
 
 <template name="message">

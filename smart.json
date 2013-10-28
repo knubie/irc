@@ -1,11 +1,6 @@
 {
   "packages": {
-    "irc": {
-      "git": "https://github.com/knubie/meteor-node-irc.git"
-    },
     "user-status": {},
-    "iron-router": {},
-    "collection-hooks": {},
-    "npm": {}
+    "collection-hooks": {}
   }
 }

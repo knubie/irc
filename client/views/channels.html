@@ -1,56 +1,59 @@
-<template name="channel_main">
-  {{> notification_modal}}
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-3">
-        {{> channels data}}
-      </div>
-      <div class="channel-container col-sm-9">
-        {{#if isChannel}}
-          {{> channel_header data}}
+<template name="channelPage">
+  {{#page "channel"}}
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          {{> channels data}}
+        </div>
+        <div class="channel-container col-sm-9">
+          {{#if data.channel}}
+            {{> channelHeader data}}
+          {{/if}}
+          {{> messages data}}
+          {{> mentions data}}
+          {{> settings data}}
+        </div>
+        {{#if data.channel}}
+          <div class="user-list-container col-sm-2">
+            {{> users}}
+          </div>
+          {{> say}}
         {{/if}}
-        {{> messages}}
       </div>
-      <div class="user-list-container col-sm-2">
-        {{> users data}}
-      </div>
-      {{#unless isAll}}
-        {{> say}}
-      {{/unless}}
     </div>
-  </div>
+  {{/page}}
 </template>
 
-<template name="channel_header">
+<template name="channelHeader">
   <div class="row">
     <div class="channel-header col-sm-7">
       <div class="channel-breadcrumb">
         <h3>
           <span class="batch-icon">&#xf003;</span>
-          <a href="/channels/{{url_channel}}" class="">{{channel}}</a>
+          <a href="/channels/{{channelURL}}" class="">{{channel.name}}</a>
         </h3>
         <span class="slash">&nbsp;/&nbsp;</span>
         <span class="glyphicon glyphicon-user"></span>
         <span class="user-count">
-          <strong>{{users}}</strong> users
+          <strong>{{channel.users}}</strong> users
         </span>
         <div class="topic">
-          {{topic}}
+          {{channel.topic}}
           {{#if op_status}}
             <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
           {{/if}}
         </div>
         <form id="topic-form">
-          <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{topic}}">
+          <input type="text" id="topic-name" autocomplete="off" placeholder="No topic set." value="{{channel.topic}}">
           <a href="#" class="cancel">cancel</a>
         </form>
         {{#if currentUser}}
-          <a href="/channels/{{url_channel}}/mentions" class="channel-notifications">
+          <a href="/channels/{{channelURL}}/mentions" class="channel-notifications">
             <span class="batch-icon">&#xf132;</span>
             <span class="badge">{{unread_mentions}}</span>
             <span class="hidden-xs">Mentions</span>
           </a>
-          <a href="/channels/{{url_channel}}/settings" class="channel-settings">
+          <a href="/channels/{{channelURL}}/settings" class="channel-settings">
             <span class="glyphicon glyphicon-cog"></span>
             <span class="hidden-xs">Settings</span>
           </a>
@@ -70,19 +73,21 @@
 </template>
 
 <template name="users">
-  <ul class="user-list">
-    {{#each users}}
-      <li>
-      <h3>
-        <a href="/users/{{nick}}" class="{{awayClass}}">{{flag}}{{nick}}</a>
-        {{#if away}}
-          <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
-        {{/if}}
-      </h3>
-      Real Name
-      </li>
-    {{/each}}
-  </ul>
+  {{#subPage "messages"}}
+    <ul class="user-list">
+      {{#each users}}
+        <li>
+        <h3>
+          <a href="/users/{{nick}}" class="{{awayClass}}">{{flag}}{{nick}}</a>
+          {{#if away}}
+            <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
+          {{/if}}
+        </h3>
+        Real Name
+        </li>
+      {{/each}}
+    </ul>
+  {{/subPage}}
 </template>
 
 <template name="channels">
@@ -126,8 +131,8 @@
     {{else}}
       <span class="batch-icon">&#xf006;</span>
     {{/if}}
-    <a href="/channels/{{url_name}}">
-      {{.}}
+    <a href="/channels/{{url}}">
+      {{name}}
       <span class="badge badge-info">{{unread}}</span>
       <span class="badge badge-important">{{unread_mentions}}</span>
     </a>
@@ -146,3 +151,113 @@
   </li>
 </template>
 
+<template name="settings">
+  {{#subPage "settings"}}
+    {{#if op_status}}
+      <div class="panel panel-default settings-panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">Channel Settings</h3>
+        </div>
+        <div class="panel-body">
+          <span class="disclaimer">These settings affect everyone in the channel, only <a href="#">operators</a> can change them.</span>
+          <br/>
+          <br/>
+          <form id="topic-form-settings">
+            <fieldset>
+              <label for="topic-name-settings">
+                Channel Topic
+              </label>
+              <input type="text" class="form-control" id="topic-name-settings" placeholder="Channel topic" autocomplete="off">
+              <button type="submit" class="btn btn-default">Update</button>
+            </fieldset>
+          </form>
+          <form id="channel-modes">
+            <fieldset>
+              <label class="checkbox {{private_checked}}" for="privateCheckbox">
+                <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
+                Private
+                <p>
+                  Hide this repository from the public. Only invited users can join.
+                </p>
+              </label>
+              <label class="checkbox" for="readonlyCheckbox">
+                <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+                Read-only
+                <p>
+                  Only channel operators can send messages, but anyone can subscribe. Useful for blogs, news-feeds, etc.
+                </p>
+              </label>
+            </fieldset>
+          </form>
+          <!--<input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">-->
+        </div>
+      </div>
+    {{/if}}
+
+    <div class="panel panel-default settings-panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Channel Preferences</h3>
+      </div>
+      <div class="panel-body">
+        <span class="disclaimer">These settings are local, they only affect you and are specific to this channel.</span>
+        <br/>
+        <br/>
+        <form id="ignore-form-settings">
+          <fieldset>
+            <label for="ignore-list-settings">
+              Ignore List
+            </label>
+            <ul class="ignore-list list-group">
+              {{#each ignore_list}}
+                <li class="list-group-item">
+                  {{.}}
+                  <button type="button" class="close">&times;</button>
+                </li>
+              {{/each}}
+            </ul>
+            <input type="text" class="form-control" id="ignore-username-settings" placeholder="Add a user to your ignore list" autocomplete="off">
+            <button type="submit" class="btn btn-default">Ignore</button>
+          </fieldset>
+        </form>
+        <form id="channel-modes">
+          <fieldset>
+            Show when users...
+            <label class="checkbox {{private_checked}}" for="privateCheckbox">
+              <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
+              Join / Part
+              <p>
+                Displays a notice when users join or leave the channel.
+              </p>
+            </label>
+            <label class="checkbox" for="readonlyCheckbox">
+              <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+              Go Away / Return
+              <p>
+                Shows a notice when users go away, i.e. when they close the window or their computer.
+              </p>
+            </label>
+            <label class="checkbox" for="readonlyCheckbox">
+              <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+              Inline images
+              <p>
+                Render and display images from image links.
+              </p>
+            </label>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  {{/subPage}}
+</template>
+
+<template name="say">
+  {{#subPage "messages"}}
+    {{#if currentUser}}
+      <div class="input-container col-sm-9 col-sm-offset-3">
+        <form id="say">
+          <input tabindex="1" autocapitalize="off" autocorrect="off" type="email" class="form-control" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
+        </form>
+      </div>
+    {{/if}}
+  {{/subPage}}
+</template>
