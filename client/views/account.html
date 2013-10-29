@@ -1,25 +1,27 @@
 <template name="account">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-6">
-        <form role="account-settings">
-          <div class="form-group">
-            <label for="realNameForm">Real name</label>
-            <input class="form-control" id="realNameForm" placeholder="Real Name">
-          </div>
-          <div class="form-group">
-            <label class="checkbox {{soundsChecked}}" for="playSounds">
-              <input type="checkbox" value="" {{soundsChecked}} id="playSounds" data-toggle="checkbox">
-              Play sounds
-            </label>
-            <label class="checkbox {{notificationsChecked}}" for="sendNotifications">
-              <input type="checkbox" value="" {{notificationsChecked}} id="sendNotifications" data-toggle="checkbox">
-              Send notifications
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+  {{#page "account"}}
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <form role="account-settings">
+            <div class="form-group">
+              <label for="realNameForm">Real name</label>
+              <input class="form-control" id="realNameForm" placeholder="Real Name">
+            </div>
+            <div class="form-group">
+              <label class="checkbox {{soundsChecked}}" for="playSounds">
+                <input type="checkbox" value="" {{soundsChecked}} id="playSounds" data-toggle="checkbox">
+                Play sounds
+              </label>
+              <label class="checkbox {{notificationsChecked}}" for="sendNotifications">
+                <input type="checkbox" value="" {{notificationsChecked}} id="sendNotifications" data-toggle="checkbox">
+                Send notifications
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
+  {{/page}}
 </template>

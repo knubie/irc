@@ -3,7 +3,7 @@ Template.channelPage.data = ->
 Template.channelPage.userList = ->
   Meteor.user().profile.channels[@channel.name].userList
 Template.channelPage.channelCol = ->
-  if Meteor.user().profile.channels[@channel.name].userList
+  if @channel? and Meteor.user().profile.channels[@channel.name].userList
     '7'
   else
     '9'

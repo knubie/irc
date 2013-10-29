@@ -1,3 +1,5 @@
+Template.account.data = -> Meteor.user()
+
 Template.account.helpers
   soundsChecked: ->
     if @profile.sounds

@@ -26,6 +26,10 @@ page '/explore', ->
     handler: handlers.publicChannels
     page: -> 'explore'
 
+page '/account', ->
+  controller
+    page: -> 'account'
+
 page '/channels/:channel', (ctx) ->
   channel = "##{ctx.params.channel}"
   controller

@@ -13,41 +13,12 @@
   {{> login}}
   {{> channelPage}}
   {{> explore}}
+  {{> account}}
 
   {{> notFound}}
 
   <audio id="beep" src="/beep.wav"/>
 </body>
-
-<template name="temp">
-  {{> explore}}
-  {{> inbox}}
-  {{> account}}
-  {{> channel}}
-
-  {{#if pageIsHome}}
-    {{#if currentUser}}
-      {{> channel_main}}
-    {{else}}
-      {{> home_logged_out}}
-    {{/if}}
-  {{/if}}
-  {{#if pageIsLogin}}
-    {{> sign_in}}
-  {{/if}}
-  {{#if pageIsChannel}}
-      {{> channel_main}}
-  {{/if}}
-  {{#if pageIsMentions}}
-    {{> channel_mentions}}
-  {{/if}}
-  {{#if pageIsSettings}}
-    {{> channel_settings}}
-  {{/if}}
-  {{#if pageIsLoading}}
-    {{> channel_loading}}
-  {{/if}}
-</template>
 
 <template name="_page">
   {{> content}}

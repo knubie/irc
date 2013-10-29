@@ -2,6 +2,7 @@
 
 # beep :: Action(UI)
 beep = (message) ->
+  console.log 'beep'
   # Check if sounds are enabled in the user profile.
   if Meteor.user().profile.sounds \
   and notIgnored(message) \
@@ -45,8 +46,8 @@ sendNotification = (params) ->
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
 beepAndNotify = (id, message) ->
-  if handlers.messages[message.channel]?.ready() \
-  and handlers.mentions[message.channel]?.ready()
+  console.log 'beep and notify'
+  if handlers.messages[message.channel]?.ready()
     _.compose(dispatchNotification, beep) message
 
 ########## Beeps / Notifications ##########

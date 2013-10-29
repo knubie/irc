@@ -183,8 +183,8 @@ Template.message.helpers
       return 'bot'
   away: ->
     #TODO: make this change the user MODE in irc
-    Meteor.users.findOne({username: @nick}) \
-    and not Meteor.users.findOne(username: @from)?.profile.online
+    Meteor.users.findOne({username: @from}) \
+    and not Meteor.users.findOne(username: @from).profile.online
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
   isChannel: ->
