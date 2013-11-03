@@ -21,8 +21,8 @@ Deps.autorun ->
   for channel of Meteor.user()?.profile.channels
   #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
     handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
-  if Session.equals('page', 'mentions')
-    channel = Sesion.get('channel').name
+  if Session.equals('subPage', 'mentions')
+    channel = Session.get('channel').name
     handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
   if Meteor.user()
     handlers.joinedChannels = Meteor.subscribe 'joinedChannels'

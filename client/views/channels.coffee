@@ -1,5 +1,7 @@
 Template.channelPage.data = ->
+  console.log 'channelPage data'
   {channel: Session.get('channel'), subpage: Session.get('channelSubpage')}
+
 Template.channelPage.userList = ->
   Meteor.user().profile.channels[@channel.name].userList
 Template.channelPage.channelCol = ->
@@ -18,6 +20,16 @@ Template.channelHeader.helpers
       return no
   unread_mentions: ->
     Meteor.user().profile.channels[@channel.name]?.mentions?.length or ''
+  mentionsActive: ->
+    if Session.equals('subPage', 'mentions')
+      return 'active'
+    else
+      return ''
+  settingsActive: ->
+    if Session.equals('subPage', 'settings')
+      return 'active'
+    else
+      return ''
 
 Template.channelHeader.events
   'click .topic-edit > a': (e, t) ->
@@ -67,7 +79,6 @@ Template.channelHeader.events
       $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
       #scrollToPlace() # Keep scroll position when template rerenders
       
-
 ########## Channels ##########
 
 Template.channels.helpers
@@ -108,7 +119,7 @@ Template.channels.events
           $('#say-input').focus()
 
 ########## Channel ##########
-#
+
 Template.channel.events
   'click a': (e,t) ->
     $('#say-input').focus() unless Modernizr.touch
@@ -175,7 +186,7 @@ Template.pm.events
 Template.users.helpers
   users: ->
     if @channel?
-      ({nick, flag} for nick, flag of @channel.nicks).sort()
+      ({nick, realName: Meteor.users.findOne(username:nick)?.profile.realName or 'Real Name', flag} for nick, flag of @channel.nicks).sort()
     #query = {}
     #query["profile.channels.#{@name}"] = {$exists: true}
     #Meteor.users.find(query)

@@ -14,6 +14,7 @@
   {{> channelPage}}
   {{> explore}}
   {{> account}}
+  {{> user_profile}}
 
   {{> notFound}}
 
@@ -224,42 +225,44 @@
 </template>
 
 <template name="user_profile">
-  <div class="user-profile">
-    {{#with user}}
-      <div class="container">
-        <div class="first vcard col-sm-3">
-          <a href="#" class="thumbnail">
-            <img src="http://placehold.it/200/ECF0F1" alt="Gravatar">
-          </a>
-          <div class="name">
-            {{username}}
+  {{#page "userProfile"}}
+    <div class="user-profile">
+      {{#with user}}
+        <div class="container">
+          <div class="first vcard col-sm-3">
+            <a href="#" class="thumbnail">
+              <img src="http://placehold.it/200/ECF0F1" alt="Gravatar">
+            </a>
+            <div class="name">
+              {{username}}
+            </div>
+            <div class="stats">
+              <span class="joined-on">Joined on</span> {{joined}}
+            </div>
+            <a href="/messages/{{username}}" class="send-pm btn btn-default btn-primary-outline">
+              send private message
+            </a>
+            <span class="send-pm btn btn-default btn-primary-outline">
+              follow
+            </span>
           </div>
-          <div class="stats">
-            <span class="joined-on">Joined on</span> {{joined}}
-          </div>
-          <a href="/messages/{{username}}" class="send-pm btn btn-default btn-primary-outline">
-            send private message
-          </a>
-          <span class="send-pm btn btn-default btn-primary-outline">
-            follow
-          </span>
+          <div class="last col-sm-3">
+            <ul class="user-channels">
+              {{#each channels}}
+                <li>
+                  <div class="name">
+                    <a href="/channels/{{channel_url}}">
+                      {{.}}
+                    </a>
+                  </div>
+                  <div class="topic">
+                    {{topic}}
+                  </div>
+                </li>
+              {{/each}}
+            </ul>
         </div>
-        <div class="last col-sm-3">
-          <ul class="user-channels">
-            {{#each channels}}
-              <li>
-                <div class="name">
-                  <a href="/channels/{{channel_url}}">
-                    {{.}}
-                  </a>
-                </div>
-                <div class="topic">
-                  {{topic}}
-                </div>
-              </li>
-            {{/each}}
-          </ul>
-      </div>
-    {{/with}}
-  </div>
+      {{/with}}
+    </div>
+  {{/page}}
 </template>

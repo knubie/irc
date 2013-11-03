@@ -18,12 +18,23 @@ if Meteor.isServer
       channels: {}
       pms: {}
       awaySince: 0
+      realName: ''
 
-    # Augment/override with clien-side options
+    # Augment/override with client-side options
     _.extend profile, options.profile
 
     user.profile = profile
     return user
+
+  Meteor.users.allow
+    insert: -> false
+    update: (userId, doc, fields, modifier) ->
+      console.log 'user update'
+      console.log fields
+      if userId is doc._id and fields.every((f) -> f is 'sounds' or f is 'notifications' or f is 'realName')
+        true
+    remove: -> false
+
     
   Accounts.validateNewUser (user) ->
     check user.username, String

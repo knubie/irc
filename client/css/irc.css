@@ -304,7 +304,8 @@ label.checkbox {
         top: 4px; }
         @media only screen and (min-width: 768px) {
           .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
-            left: 7px; } }
+            left: 7px;
+            top: -1px; } }
     .channel-container .channel-header .channel-settings {
       right: 15px; }
       @media only screen and (min-width: 768px) {
@@ -315,10 +316,10 @@ label.checkbox {
       @media only screen and (min-width: 768px) {
         .channel-container .channel-header .channel-notifications {
           right: 240px; } }
-    .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover {
+    .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover, .channel-container .channel-header .channel-settings.active, .channel-container .channel-header .channel-notifications.active {
       color: #3498db;
       text-decoration: none; }
-      .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon {
+      .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon, .channel-container .channel-header .channel-settings.active .batch-icon, .channel-container .channel-header .channel-settings.active .glyphicon, .channel-container .channel-header .channel-notifications.active .batch-icon, .channel-container .channel-header .channel-notifications.active .glyphicon {
         color: rgba(52, 152, 219, 0.5); }
     .channel-container .channel-header .channel-invite {
       position: absolute;
@@ -350,7 +351,8 @@ label.checkbox {
 .channels {
   color: #777777;
   list-style: none;
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 24px;
   padding: 0;
   margin: 0;
   margin-top: 25px;
@@ -380,11 +382,14 @@ label.checkbox {
   .channels li a, .channels li form > input {
     color: #777777;
     transition: 0.15s background-color, 0.15s color;
-    padding: 4px;
+    padding: 0 4px;
     display: inline-block; }
   .channels li a:hover {
     color: #3498db;
     text-decoration: none; }
+  .channels li a > .badge {
+    position: relative;
+    top: -1px; }
   .channels li.channel:hover button {
     display: inline-block; }
   .channels li.channel:hover .glyphicon, .channels li.channel:hover .batch-icon {
@@ -394,8 +399,7 @@ label.checkbox {
   .channels .selected > a,
   .channels .selected:hover > a {
     color: #3498db;
-    transition: 0.15s background-color, 0.15s color;
-    font-weight: 600; }
+    transition: 0.15s background-color, 0.15s color; }
   .channels .new-channel-li {
     margin-top: 10px;
     position: relative; }

@@ -2,23 +2,37 @@
   {{#page "account"}}
     <div class="container">
       <div class="row">
-        <div class="col-sm-6">
-          <form role="account-settings">
-            <div class="form-group">
-              <label for="realNameForm">Real name</label>
-              <input class="form-control" id="realNameForm" placeholder="Real Name">
-            </div>
-            <div class="form-group">
+        <div class="col-sm-6 col-sm-offset-3">
+          <h3>Account Settings</h3>
+          <form id="real-name-settings">
+            <fieldset>
+              <label for="realNameForm">
+                Real Name
+              </label>
+              <input type="text" class="form-control" id="realNameForm" placeholder="Real Name" autocomplete="off" value="{{realNameValue}}">
+            </fieldset>
+          </form>
+          <form id="incomming-messages-settings">
+            <fieldset>
+              <br/>
+              <br/>
+              On incoming messages...
               <label class="checkbox {{soundsChecked}}" for="playSounds">
                 <input type="checkbox" value="" {{soundsChecked}} id="playSounds" data-toggle="checkbox">
                 Play sounds
+                <p>
+                  Beeps upon incomming messages.
+                </p>
               </label>
               <label class="checkbox {{notificationsChecked}}" for="sendNotifications">
                 <input type="checkbox" value="" {{notificationsChecked}} id="sendNotifications" data-toggle="checkbox">
                 Send notifications
+                <p>
+                  Displays a browser notification when you're mentioned or sent a private message.
+                </p>
               </label>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-default">Submit</button>
+            </fieldset>
           </form>
         </div>
       </div>

@@ -1,6 +1,8 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
+  $('body').tooltip
+    selector: '[data-toggle=tooltip]'
   # Set up listeners for scroll position
   if Modernizr.touch
     $(window).off 'touchmove'
@@ -26,9 +28,9 @@ Template.messages.helpers
     that = this
     selector = if @channel? then {channel: @channel.name} else {}
     #FIXME: this breaks the template engine.
-    #if Meteor.user()? and @channel?
-      #selector.from =
-        #$nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
+    if Meteor.user()? and @channel?
+      selector.from =
+        $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
 
     Messages.find selector,
       sort:
@@ -65,9 +67,6 @@ Template.messages.events
 ########## Message ##########
 
 Template.message.rendered = ->
-  $('.glyphicon-time').tooltip()
-  $('.glyphicon-phone').tooltip()
-
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
@@ -103,9 +102,9 @@ Template.message.rendered = ->
 
 Template.message.events
   'click .reply-action': ->
-    $('#say-input').val("@#{@from}")
+    #FIXME: Chrome trims the trailing whitespace from the text input.
+    $('#say-input').val("@#{@from} ")
     $('#say-input').focus()
-    $('#say-input').trigger($.Event('keypress', {which: 13}))
 
   'click .ignore-action': ->
     if confirm("Are you sure you want to ignore #{@from}? (You can un-ignore them later in your channel settings.)")
@@ -191,3 +190,5 @@ Template.message.helpers
     @channel?.isChannel()
   isAll: ->
     Session.equals('channel', null)
+  realName: ->
+    Meteor.users.findOne(username:@from)?.profile.realName or ''

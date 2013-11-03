@@ -69,15 +69,25 @@ page '/channels/:channel/settings', (ctx) ->
 
 page '/channels/:channel/mentions', (ctx) ->
   channel = "##{ctx.params.channel}"
+  console.log 'mentions route.'
+  limit = (PERPAGE * Session.get('messages.page'))
+  handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
   controller
     handler: handlers.mentions[channel]
     after: ->
       Session.set 'channel', Channels.findOne({name: channel})
       Session.set 'subPage', 'mentions'
+      console.log 'after'
     page: ->
       if channelDoc = Channels.findOne({name: channel})
         'channel'
       else
         'notFound'
+
+page '/users/:user', (ctx) ->
+  controller
+    after: -> Session.set('user_profile', Meteor.users.findOne(username:ctx.user))
+    handler: handlers.publicChannels
+    page: -> 'userProfile'
 
 do page

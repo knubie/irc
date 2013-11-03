@@ -77,6 +77,10 @@ Template.login.events
         else
           page '/'
 
+Template.login.rendered = ->
+  #FIXME: this doesn't work.
+  $(@find('#signin-username')).focus()
+
 ########## Notification Request ##########
 #
 Template.notification_request.rendered = ->
@@ -101,6 +105,8 @@ Template.user_profile.helpers
   channels: ->
     (channel for channel of @profile.channels)
   topic: ->
+    console.log @
+    console.log "#{@}"
     Channels.findOne({name: "#{@}"}).topic
   channel_url: ->
     @match(/^(.)(.*)$/)[2]

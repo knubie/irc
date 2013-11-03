@@ -21,13 +21,17 @@ Template.mentions.helpers
       #convo: Meteor.user().username
     #}).fetch().length
 
-########## Mention ##########
-
 #Template.mention.rendered = ->
   #Messages.update @data._id, $set: {'read': true}
 
 Template.mentions.rendered = ->
   scrollToPlace() # Keep scroll position when template rerenders
+
+Template.mentions.events
+  'click .load-more': (e,t) ->
+    Session.set 'messages.page', Session.get('messages.page') + 1
+
+########## Mention ##########
 
 Template.mention.rendered = ->
   update Meteor.users, Meteor.userId()
@@ -35,12 +39,6 @@ Template.mention.rendered = ->
   , (mentions) =>
     _.reject mentions, (id) =>
       id is @data._id
-  
-  Meteor.setTimeout =>
-    if isElementInViewport @find('.message')
-      $(@find('.message')).removeClass('mention')
-  , 10
-
   #update Meteor.users, Meteor.userId()
   #, "profile.channels.#{Session.get('channel.name')}.ignore"
   #, (ignore) => _.reject ignore, (nick) => nick is "#{@}"
@@ -49,17 +47,11 @@ Template.mention.events
   'click': ->
     Messages.update @_id, $set: {'read': true}
 
-Template.mentions.events
-  'click .load-more': (e,t) ->
-    console.log 'load more'
-    Session.set 'messages.page', Session.get('messages.page') + 1
-
 Template.mention.helpers
   timeAgo: ->
     moment(@createdAt).fromNow()
   readClass: ->
-    #if @_id in Meteor.user().profile.channels[@channel].mentions
-      #return 'mention'
-    #else
-      #return ''
-    'mention'
+    if @_id in Meteor.user().profile.channels[@channel].mentions
+      return 'mention'
+    else
+      return ''

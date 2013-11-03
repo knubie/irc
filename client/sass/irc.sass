@@ -303,6 +303,7 @@ label.checkbox
         top: 4px
         +tablet-portrait-and-above
           left: 7px
+          top: -1px
     .channel-settings
       right: 15px
       +tablet-portrait-and-above
@@ -311,7 +312,7 @@ label.checkbox
       right: 40px
       +tablet-portrait-and-above
         right: 240px
-    .channel-settings:hover, .channel-notifications:hover
+    .channel-settings:hover, .channel-notifications:hover, .channel-settings.active, .channel-notifications.active
       color: $peter-river
       text-decoration: none
       .batch-icon, .glyphicon
@@ -351,7 +352,8 @@ label.checkbox
     width: 263px
   color: $foreground
   list-style: none
-  font-size: 18px
+  font-size: 16px
+  line-height: 24px
   padding: 0
   margin: 0
   margin-top: 25px
@@ -375,11 +377,14 @@ label.checkbox
     a, form > input 
       color: $foreground
       transition: .15s background-color, .15s color
-      padding: 4px
+      padding: 0 4px
       display: inline-block
     a:hover
       color: $peter-river
       text-decoration: none
+    a > .badge
+      position: relative
+      top: -1px
   li.channel:hover
     button 
       display: inline-block
@@ -392,7 +397,6 @@ label.checkbox
   .selected:hover > a
     color: $peter-river
     transition: .15s background-color, .15s color
-    font-weight: 600
   .new-channel-li
     margin-top: 10px
     position: relative

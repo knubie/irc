@@ -50,12 +50,12 @@
           <a href="#" class="cancel">cancel</a>
         </form>
         {{#if currentUser}}
-          <a href="/channels/{{channelURL}}/mentions" class="channel-notifications">
+          <a href="/channels/{{channelURL}}/mentions" class="channel-notifications {{mentionsActive}}">
             <span class="batch-icon">&#xf132;</span>
             <span class="badge">{{unread_mentions}}</span>
             <span class="hidden-xs">Mentions</span>
           </a>
-          <a href="/channels/{{channelURL}}/settings" class="channel-settings">
+          <a href="/channels/{{channelURL}}/settings" class="channel-settings {{settingsActive}}">
             <span class="glyphicon glyphicon-cog"></span>
             <span class="hidden-xs">Settings</span>
           </a>
@@ -85,7 +85,7 @@
             <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
           {{/if}}
         </h3>
-        Real Name
+        {{realName}}
         </li>
       {{/each}}
     </ul>
