@@ -6,7 +6,7 @@
 $foreground: #777
 body
   background-color: $clouds
-  padding-top: 50px
+  padding-top: 66px
   -webkit-font-smoothing: antialiased
   font-family: Helvetica, sans-serif
   //font-family: 'Open Sans', Helvetica, sans-serif
@@ -26,6 +26,9 @@ body
 
 .fixed-width
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace
+
+.reverse
+  -webkit-transform: scale(-1, 1)
 
 .underline
   text-decoration: underline
@@ -91,10 +94,10 @@ label.checkbox
 
 
 // Nav
-.idletron-nav
-  background-color: $wet-asphalt
+#relay-nav
+  background-color: $clouds
   text-shadow: 0 -1px 0 rgba(0,0,0,.15)
-  border-color: $midnight-blue
+  border-color: $silver
   box-shadow: 0 1px 0 rgba(255,255,255,.1)
   .navbar-brand
     color: #FFF
@@ -102,8 +105,29 @@ label.checkbox
     border-color: $wet-asphalt
   .navbar-toggle:hover
     border-color: $midnight-blue
+  .navbar-nav
+    li.open
+      background: none
+  .navbar-nav > li > a:hover
+    color: #333
+    .caret
+      border-top-color: #333
+      border-bottom-color: #333
+  .navbar-nav > li.open > a
+    background-color: $clouds
+    color: #333
   .navbar-nav > li > a
-    color: #798795
+    color: #777
+    padding: 23px 15px
+    text-shadow: none
+    .caret
+      border-top-color: #777
+      border-bottom-color: #777
+    .line
+      display: inline-block
+      border-right: 1px solid $silver
+      height: 18px
+      margin: -3px 7px
   .navbar-btn
     background-color: $peter-river
     color: #FFF
@@ -237,7 +261,7 @@ label.checkbox
     width: 100%
     overflow-y: hidden
     position: fixed
-    top: 50px
+    top: 66px
     z-index: 98
     background-color: $clouds
     padding: 15px
@@ -359,6 +383,7 @@ label.checkbox
   li
     .close 
       display: none
+      font-size: 18px
     .glyphicon-lock
       font-size: 12px
       top: -1px
@@ -610,10 +635,6 @@ label.checkbox
 
 .explore-nav
   margin-top: 25px
-
-.dropdown-menu
-  top: auto!important
-  bottom: 60px!important
 
 .twitter-typeahead
   width: 100%

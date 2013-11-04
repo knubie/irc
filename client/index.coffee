@@ -96,6 +96,10 @@ Template.header.events
     #Meteor.call 'disconnect', Meteor.user().username
     Meteor.logout -> Router.go 'home'
 
+Template.header.helpers
+  username: ->
+    Meteor.user().username
+
 ########## User Profile ##########
 
 Template.user_profile.helpers

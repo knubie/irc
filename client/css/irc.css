@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,900,700italic,900italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800);
 body {
   background-color: #ecf0f1;
-  padding-top: 50px;
+  padding-top: 66px;
   -webkit-font-smoothing: antialiased;
   font-family: Helvetica, sans-serif; }
 
@@ -21,6 +21,9 @@ body {
 
 .fixed-width {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
+
+.reverse {
+  -webkit-transform: scale(-1, 1); }
 
 .underline {
   text-decoration: underline; }
@@ -88,20 +91,40 @@ label.checkbox {
   background-color: #3498db;
   border: 1px solid #3498db; }
 
-.idletron-nav {
-  background-color: #34495e;
+#relay-nav {
+  background-color: #ecf0f1;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
-  border-color: #2c3e50;
+  border-color: #bdc3c7;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1); }
-  .idletron-nav .navbar-brand {
+  #relay-nav .navbar-brand {
     color: white; }
-  .idletron-nav .navbar-toggle {
+  #relay-nav .navbar-toggle {
     border-color: #34495e; }
-  .idletron-nav .navbar-toggle:hover {
+  #relay-nav .navbar-toggle:hover {
     border-color: #2c3e50; }
-  .idletron-nav .navbar-nav > li > a {
-    color: #798795; }
-  .idletron-nav .navbar-btn {
+  #relay-nav .navbar-nav li.open {
+    background: none; }
+  #relay-nav .navbar-nav > li > a:hover {
+    color: #333333; }
+    #relay-nav .navbar-nav > li > a:hover .caret {
+      border-top-color: #333333;
+      border-bottom-color: #333333; }
+  #relay-nav .navbar-nav > li.open > a {
+    background-color: #ecf0f1;
+    color: #333333; }
+  #relay-nav .navbar-nav > li > a {
+    color: #777777;
+    padding: 23px 15px;
+    text-shadow: none; }
+    #relay-nav .navbar-nav > li > a .caret {
+      border-top-color: #777777;
+      border-bottom-color: #777777; }
+    #relay-nav .navbar-nav > li > a .line {
+      display: inline-block;
+      border-right: 1px solid #bdc3c7;
+      height: 18px;
+      margin: -3px 7px; }
+  #relay-nav .navbar-btn {
     background-color: #3498db;
     color: white;
     border-color: #3498db; }
@@ -225,7 +248,7 @@ label.checkbox {
     width: 100%;
     overflow-y: hidden;
     position: fixed;
-    top: 50px;
+    top: 66px;
     z-index: 98;
     background-color: #ecf0f1;
     padding: 15px;
@@ -363,7 +386,8 @@ label.checkbox {
       position: relative;
       display: none; } }
   .channels li .close {
-    display: none; }
+    display: none;
+    font-size: 18px; }
   .channels li .glyphicon-lock {
     font-size: 12px;
     top: -1px;
@@ -599,10 +623,6 @@ label.checkbox {
 
 .explore-nav {
   margin-top: 25px; }
-
-.dropdown-menu {
-  top: auto !important;
-  bottom: 60px !important; }
 
 .twitter-typeahead {
   width: 100%; }

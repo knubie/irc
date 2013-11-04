@@ -29,7 +29,7 @@ Template.messages.helpers
     if @channel?
       selector = {channel: @channel.name}
     else if @pm?
-      selector = {user: {$in: [@pm, Meteor.user().username]}}
+      selector = {user: {$in: [@pm, Meteor.user().username]}, from: {$in: [@pm, Meteor.user().username]}}
     else
       selector = {}
     #FIXME: this breaks the template engine.
@@ -151,11 +151,15 @@ Template.message.events
 
 Template.message.helpers
   joinToPrev: ->
-    @prev? \
-    and @prev.channel is @channel \
-    and @prev.from is @from \
-    and not @mentions(Meteor.user()?.username) \
-    and not @prev.mentions(Meteor.user()?.username)
+    sameChannel = true
+    mentioned = true
+    prevMentioned = true
+    if @prev?.channel?
+      sameChannel = @prev.channel is @channel
+      mentioned = not @mentions(Meteor.user()?.username)
+      prevMentioned = not @prev.mentions(Meteor.user()?.username)
+    @prev? and @prev.from is @from \
+    and sameChannel and mentioned and prevMentioned
   isConvo: ->
     if @channel?
       mentions = []
@@ -172,10 +176,10 @@ Template.message.helpers
     and @from not of Channels.findOne({name: @channel})?.nicks
       return 'offline'
   mention: ->
-    if @mentions(Meteor.user()?.username)
+    if @channel? and @mentions(Meteor.user()?.username)
       return 'mention'
   isMentioned: ->
-    @mentions(Meteor.user().username)
+    @channel? and @mentions(Meteor.user()?.username)
   op_status: ->
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
@@ -200,3 +204,8 @@ Template.message.helpers
     Session.equals('channel', null)
   realName: ->
     Meteor.users.findOne(username:@from)?.profile.realName or ''
+  reverseArrow: ->
+    if @from is Meteor.user().username
+      return 'reverse'
+    else
+      return ''

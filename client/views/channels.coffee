@@ -15,8 +15,15 @@ Template.channelPage.channelCol = ->
   else
     '10'
 
+Template.channelHeader.data = ->
+  {
+    channel: Session.get('channel')
+    pm: Session.get('pm')
+    subpage: Session.get('channelSubpage')
+  }
 Template.channelHeader.helpers
   channelURL: ->
+    console.log @
     @channel.name.match(/^(#)?(.*)$/)[2]
   op_status: ->
     if @channel.name.isChannel() and Meteor.user()
@@ -99,7 +106,7 @@ Template.channels.helpers
     if @channel or @pm then '' else 'selected'
 
 Template.channels.events
-  'click .new-channel-li': (e, t) ->
+  'click .new-channel-link': (e, t) ->
     $('.new-channel-link').hide()
     $('.new-channel-form').show()
     $('.new-channel-input').focus()
@@ -161,7 +168,6 @@ Template.channel.helpers
 
 Template.pm.helpers
   selected: ->
-    console.log @
     #if Session.equals 'channel.name', "#{@}" then 'selected' else ''
     if @pm is @name then 'selected' else ''
   unread: ->
@@ -184,9 +190,9 @@ Template.pm.helpers
 Template.pm.events
   'click .close': ->
     {pms} = Meteor.user().profile
-    delete pms["#{@}"]
+    delete pms[@name]
     Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
-    if "#{@}" is Session.get('channel.name')
+    if @name is @pm
       page '/'
 
 ########## Users ##########

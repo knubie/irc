@@ -27,6 +27,7 @@ Template.say.events
           createdAt: new Date()
           from: Meteor.user().username
       else # Sending to user
+        console.log @
         Messages.insert
           user: @pm
           text: message

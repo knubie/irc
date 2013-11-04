@@ -94,9 +94,6 @@
 
 <template name="channels">
   <ul class="channels">
-    <li class="section">
-      channels
-    </li>
     {{#if currentUser}}
       <li class="all-channels {{all}}">
         <a href="/">
@@ -104,12 +101,15 @@
         </a>
       </li>
     {{/if}}
+    <li class="section">
+      channels
+    </li>
     {{#each channels}}
       {{> channel}}
     {{/each}}
     {{#if currentUser}}
       <li class="new-channel-li">
-        + Add channel
+        <span class="new-channel-link">+ Join channel</span>
         <form class="new-channel-form">
           <span class="pound">#</span>
           <input type="text" class="new-channel-input form-control" autocomplete="off" placeholder="channel_name">
