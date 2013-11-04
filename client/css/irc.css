@@ -434,19 +434,24 @@ label.checkbox {
     font-weight: 600; }
   .channels .new-channel-li {
     color: #bdc3c7;
-    font-size: 12px; }
+    font-size: 12px;
+    position: relative; }
+    .channels .new-channel-li .new-channel-link:hover {
+      cursor: pointer;
+      color: #3498db; }
     .channels .new-channel-li .glyphicon {
       font-size: 9px; }
     .channels .new-channel-li .new-channel-form {
       display: none; }
       .channels .new-channel-li .new-channel-form .pound {
         position: absolute;
-        top: 6px;
+        top: 5px;
         left: 7px;
-        font-size: 16px; }
+        font-size: 14px; }
       .channels .new-channel-li .new-channel-form .new-channel-input {
-        font-size: 16px;
-        padding-left: 14px; }
+        font-size: 14px;
+        padding-left: 14px;
+        height: 30px; }
 
 .messages .message {
   background-color: white;
