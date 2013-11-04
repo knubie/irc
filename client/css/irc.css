@@ -96,6 +96,24 @@ label.checkbox {
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
   border-color: #bdc3c7;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1); }
+  #relay-nav .search {
+    float: left;
+    position: relative;
+    margin-left: 50px; }
+    #relay-nav .search input {
+      border-radius: 13px;
+      height: 26px;
+      margin: 20px 0;
+      width: 230px;
+      border: none;
+      padding-left: 26px; }
+    #relay-nav .search .batch-icon {
+      position: absolute;
+      top: 27px;
+      left: 8px;
+      color: #bdc3c7;
+      font-size: 14px;
+      text-shadow: none; }
   #relay-nav .navbar-brand {
     color: white; }
   #relay-nav .navbar-toggle {
