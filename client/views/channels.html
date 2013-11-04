@@ -2,16 +2,16 @@
   {{#page "channel"}}
     <div class="container">
       <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-2">
           {{> channels data}}
         </div>
         <div class="channel-container col-sm-{{channelCol}}">
           {{#if data.channel}}
             {{> channelHeader data}}
+            {{> mentions data}}
+            {{> settings data}}
           {{/if}}
           {{> messages data}}
-          {{> mentions data}}
-          {{> settings data}}
         </div>
         {{#if data.channel}}
           {{#if userList}}
@@ -19,6 +19,9 @@
               {{> users}}
             </div>
           {{/if}}
+          {{> say}}
+        {{/if}}
+        {{#if data.pm}}
           {{> say}}
         {{/if}}
       </div>
@@ -30,10 +33,7 @@
   <div class="row">
     <div class="channel-header col-sm-7">
       <div class="channel-breadcrumb">
-        <h3>
-          <span class="batch-icon">&#xf003;</span>
-          <a href="/channels/{{channelURL}}" class="">{{channel.name}}</a>
-        </h3>
+        <h3>{{channel.name}}</h3>
         <span class="slash">&nbsp;/&nbsp;</span>
         <span class="glyphicon glyphicon-user"></span>
         <span class="user-count">
@@ -94,11 +94,13 @@
 
 <template name="channels">
   <ul class="channels">
+    <li class="section">
+      channels
+    </li>
     {{#if currentUser}}
       <li class="all-channels {{all}}">
-        <span class="batch-icon">&#xf009;</span>
         <a href="/">
-          All channels
+          All messages
         </a>
       </li>
     {{/if}}
@@ -106,21 +108,21 @@
       {{> channel}}
     {{/each}}
     {{#if currentUser}}
-      {{#each pms}}
-        {{> pm}}
-      {{/each}}
-    {{/if}}
-    {{#if currentUser}}
       <li class="new-channel-li">
-        <span class="new-channel-link btn btn-default btn-primary-outline">
-          <span class="glyphicon glyphicon-plus"></span>
-          add channel
-        </span>
+        + Add channel
         <form class="new-channel-form">
           <span class="pound">#</span>
           <input type="text" class="new-channel-input form-control" autocomplete="off" placeholder="channel_name">
         </form>
       </li>
+      {{#if pms}}
+        <li class="section">
+          private messages
+        </li>
+        {{#each pms}}
+          {{> pm}}
+        {{/each}}
+      {{/if}}
     {{/if}}
   </ul>
 </template>
@@ -130,11 +132,9 @@
     {{#if private}}
       <!--<span class="glyphicon glyphicon-lock"></i>-->
       <span class="batch-icon">&#xf0c2;</span>
-    {{else}}
-      <span class="batch-icon">&#xf006;</span>
     {{/if}}
     <a href="/channels/{{url}}">
-      {{name}}
+      <span class="hash">#</span>{{url}}
       <span class="badge badge-info">{{unread}}</span>
       <span class="badge badge-important">{{unread_mentions}}</span>
     </a>
@@ -145,8 +145,8 @@
 <template name="pm">
   <li class="channel {{selected}}">
     <span class="batch-icon">&#xf170;</span>
-    <a href="/messages/{{.}}">
-      {{.}}
+    <a href="/messages/{{name}}">
+      {{name}}
       <span class="badge badge-info">{{unread}}</span>
     </a>
     <button type="button" class="close">&times;</button>
@@ -255,7 +255,7 @@
 <template name="say">
   {{#subPage "messages"}}
     {{#if currentUser}}
-      <div class="input-container col-sm-9 col-sm-offset-3">
+      <div class="input-container col-sm-10 col-sm-offset-2">
         <form id="say">
           <input tabindex="1" autocapitalize="off" autocorrect="off" type="email" class="form-control" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
         </form>

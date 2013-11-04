@@ -188,7 +188,7 @@ label.checkbox {
     border-color: #3498db; }
 
 .channel-container {
-  padding-top: 123px; }
+  padding-top: 100px; }
   .channel-container .alert {
     text-align: center; }
   .channel-container .buttons {
@@ -233,23 +233,18 @@ label.checkbox {
     border-bottom: 1px solid #bdc3c7; }
     @media (min-width: 768px) {
       .channel-container .channel-header {
-        width: 562px; } }
+        width: 625px; } }
     @media (min-width: 992px) {
       .channel-container .channel-header {
-        width: 727px; } }
+        width: 808px; } }
     @media (min-width: 1200px) {
       .channel-container .channel-header {
-        width: 877px; } }
+        width: 975px; } }
     .channel-container .channel-header .channel-breadcrumb {
       color: #777777; }
       .channel-container .channel-header .channel-breadcrumb h3 {
         display: inline;
-        font-size: 18px; }
-        .channel-container .channel-header .channel-breadcrumb h3 .batch-icon {
-          font-size: 18px;
-          color: #bdc3c7;
-          position: relative;
-          bottom: -3px; }
+        font-size: 20px; }
       .channel-container .channel-header .channel-breadcrumb .channel-name {
         color: #777777;
         font-weight: bold; }
@@ -258,11 +253,9 @@ label.checkbox {
         color: silver; }
     .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
       display: none;
-      font-size: 16px;
+      font-size: 14px;
       color: #666666;
-      margin-top: 15px;
-      border-top: 1px solid #cccccc;
-      padding-top: 15px; }
+      margin-top: 5px; }
       @media only screen and (min-width: 768px) {
         .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
           display: block; } }
@@ -351,58 +344,75 @@ label.checkbox {
 .channels {
   color: #777777;
   list-style: none;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: Roboto;
   padding: 0;
   margin: 0;
   margin-top: 25px;
   position: fixed; }
   @media screen and (min-width: 992px) {
     .channels {
-      width: 213px; } }
+      width: 132px; } }
   @media screen and (min-width: 1200px) {
     .channels {
-      width: 263px; } }
+      width: 165px; } }
   @media only screen and (min-width: 320px) and (max-width: 567px) {
     .channels {
       width: 100%;
       position: relative;
       display: none; } }
-  .channels li button {
-    display: none;
-    line-height: normal; }
+  .channels li .close {
+    display: none; }
   .channels li .glyphicon-lock {
     font-size: 12px;
     top: -1px;
     margin-right: -6px; }
   .channels li .batch-icon {
-    margin-right: -4px;
-    font-size: 15px;
+    margin-right: -2px;
+    font-size: 12px;
     color: #bdc3c7; }
   .channels li a, .channels li form > input {
     color: #777777;
     transition: 0.15s background-color, 0.15s color;
-    padding: 0 4px;
     display: inline-block; }
   .channels li a:hover {
-    color: #3498db;
     text-decoration: none; }
   .channels li a > .badge {
     position: relative;
     top: -1px; }
-  .channels li.channel:hover button {
-    display: inline-block; }
-  .channels li.channel:hover .glyphicon, .channels li.channel:hover .batch-icon {
+  .channels li.section {
+    color: #bdc3c7;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 800;
+    margin-bottom: -2px;
+    margin-top: 22px; }
+  .channels li.channel {
+    padding: 1px 5px;
+    margin: -1px 0 -1px -5px;
+    border-radius: 5px; }
+    .channels li.channel .hash {
+      color: #bdc3c7; }
+  .channels li.channel:hover {
+    background-color: #e0e4e5; }
+    .channels li.channel:hover .close {
+      display: inline-block; }
+  .channels li.channel.selected .glyphicon, .channels li.channel.selected .batch-icon {
     color: #3498db; }
-  .channels .selected .glyphicon, .channels .selected .batch-icon {
+  .channels li.channel.selected .hash {
+    font-weight: 400;
     color: #3498db; }
   .channels .selected > a,
   .channels .selected:hover > a {
     color: #3498db;
-    transition: 0.15s background-color, 0.15s color; }
+    transition: 0.15s background-color, 0.15s color;
+    font-weight: 600; }
   .channels .new-channel-li {
-    margin-top: 10px;
-    position: relative; }
+    color: #bdc3c7;
+    font-size: 12px; }
+    .channels .new-channel-li .glyphicon {
+      font-size: 9px; }
     .channels .new-channel-li .new-channel-form {
       display: none; }
       .channels .new-channel-li .new-channel-form .pound {
@@ -699,15 +709,16 @@ form {
   list-style: none;
   padding: 0;
   position: fixed;
-  margin-top: 130px;
-  width: 15%; }
+  margin-top: 100px;
+  width: 15%;
+  max-height: calc(100% - 225px); }
   .user-list li {
-    margin-bottom: 10px;
+    margin-bottom: 9px;
     color: #bdc3c7;
     position: relative;
     font-size: 11px; }
     .user-list li h3 {
-      font-size: 15px;
+      font-size: 14px;
       margin: 0; }
       .user-list li h3 a {
         color: #777777; }

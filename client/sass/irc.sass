@@ -194,7 +194,7 @@ label.checkbox
   
 // Channels
 .channel-container
-  padding-top: 123px
+  padding-top: 100px
   .alert
     text-align: center
   .buttons
@@ -229,11 +229,11 @@ label.checkbox
     margin: 0 auto 15px
   .channel-header
     @media (min-width: 768px)
-      width: 562px
+      width: 625px
     @media (min-width: 992px)
-      width: 727px
+      width: 808px
     @media (min-width: 1200px)
-      width: 877px
+      width: 975px
     width: 100%
     overflow-y: hidden
     position: fixed
@@ -247,12 +247,7 @@ label.checkbox
       color: $foreground
       h3
         display: inline
-        font-size: 18px
-        .batch-icon
-          font-size: 18px
-          color: $silver
-          position: relative
-          bottom: -3px
+        font-size: 20px
       .channel-name
         color: $foreground
         font-weight: bold
@@ -261,11 +256,9 @@ label.checkbox
         color: silver
     .topic, #topic-form
       display: none
-      font-size: 16px
+      font-size: 14px
       color: #666
-      margin-top: 15px
-      border-top: 1px solid #ccc
-      padding-top: 15px
+      margin-top: 5px
       +tablet-portrait-and-above
         display: block
       .topic-edit, .topic-edit > a
@@ -347,13 +340,14 @@ label.checkbox
 
 .channels
   @media screen and (min-width: 992px)
-    width: 213px
+    width: 132px
   @media screen and (min-width: 1200px)
-    width: 263px
+    width: 165px
   color: $foreground
   list-style: none
-  font-size: 16px
-  line-height: 24px
+  font-size: 14px
+  line-height: 20px
+  font-family: Roboto
   padding: 0
   margin: 0
   margin-top: 25px
@@ -363,48 +357,58 @@ label.checkbox
     position: relative
     display: none
   li
-    button 
+    .close 
       display: none
-      line-height: normal
     .glyphicon-lock
       font-size: 12px
       top: -1px
       margin-right: -6px
     .batch-icon
-      margin-right: -4px
-      font-size: 15px
+      margin-right: -2px
+      font-size: 12px
       color: #BDC3C7
     a, form > input 
       color: $foreground
       transition: .15s background-color, .15s color
-      padding: 0 4px
       display: inline-block
     a:hover
-      color: $peter-river
       text-decoration: none
     a > .badge
       position: relative
       top: -1px
+  li.section
+    color: $silver
+    text-transform: uppercase
+    font-size: 10px
+    font-weight: 800
+    margin-bottom: -2px
+    margin-top: 22px
+  li.channel
+    padding: 1px 5px
+    margin: -1px 0 -1px -5px
+    border-radius: 5px
+    .hash
+      color: $silver
   li.channel:hover
-    button 
+    background-color: #e0e4e5
+    .close 
       display: inline-block
+  li.channel.selected
     .glyphicon, .batch-icon
       color: $peter-river
-  .selected
-    .glyphicon, .batch-icon
+    .hash
+      font-weight: 400
       color: $peter-river
   .selected > a,
   .selected:hover > a
     color: $peter-river
     transition: .15s background-color, .15s color
+    font-weight: 600
   .new-channel-li
-    margin-top: 10px
-    position: relative
-    //.new-channel-link
-      //color: $silver
-    //.new-channel-link:hover
-      //cursor: pointer
-      //color: $foreground
+    color: #bdc3c7
+    font-size: 12px
+    .glyphicon
+      font-size: 9px
     .new-channel-form
       display: none
       .pound
@@ -716,15 +720,16 @@ form
   list-style: none
   padding: 0
   position: fixed
-  margin-top: 130px
+  margin-top: 100px
   width: 15%
+  max-height: calc(100% - 225px)
   li
-    margin-bottom: 10px
+    margin-bottom: 9px
     color: $silver
     position: relative
     font-size: 11px
     h3
-      font-size: 15px
+      font-size: 14px
       margin: 0
       a
         color: #777

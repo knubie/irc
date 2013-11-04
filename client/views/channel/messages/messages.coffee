@@ -26,7 +26,12 @@ Template.messages.helpers
   messages: ->
     prev = null
     that = this
-    selector = if @channel? then {channel: @channel.name} else {}
+    if @channel?
+      selector = {channel: @channel.name}
+    else if @pm?
+      selector = {user: {$in: [@pm, Meteor.user().username]}}
+    else
+      selector = {}
     #FIXME: this breaks the template engine.
     if Meteor.user()? and @channel?
       selector.from =
@@ -152,11 +157,14 @@ Template.message.helpers
     and not @mentions(Meteor.user()?.username) \
     and not @prev.mentions(Meteor.user()?.username)
   isConvo: ->
-    mentions = []
-    for nick of Channels.findOne(name:@channel).nicks
-      if @mentions nick
-        mentions.push nick
-    mentions.length is 1
+    if @channel?
+      mentions = []
+      for nick of Channels.findOne(name:@channel).nicks
+        if @mentions nick
+          mentions.push nick
+      mentions.length is 1
+    else
+      false
   timeAgo: ->
     moment(@createdAt).fromNow()
   offline: ->

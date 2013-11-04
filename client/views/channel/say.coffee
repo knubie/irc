@@ -19,12 +19,21 @@ Template.say.events
       $('#say-input').val('')
 
       # Server sends message to IRC before insert.
-      Messages.insert
-        channel: @channel.name
-        text: message
-        mobile: Modernizr.touch
-        createdAt: new Date()
-        from: Meteor.user().username
+      if @channel? # Sending to channel
+        Messages.insert
+          channel: @channel.name
+          text: message
+          mobile: Modernizr.touch
+          createdAt: new Date()
+          from: Meteor.user().username
+      else # Sending to user
+        Messages.insert
+          user: @pm
+          text: message
+          mobile: Modernizr.touch
+          createdAt: new Date()
+          from: Meteor.user().username
+          owner: Meteor.userId()
 
 Template.say.rendered = ->
   # Auto-focus 'say' input.

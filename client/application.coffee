@@ -6,6 +6,9 @@ Session.setDefault 'scroll', 0 # Scroll position
 Session.setDefault 'messages.page', 1 # Messages handler pagination
 Session.setDefault 'messages.rendered', false
 Session.setDefault 'joinAfterLogin', null # Which channel to join after signing up or logging in.
+Session.setDefault 'channel', null
+Session.setDefault 'pm', null
+
 
 ########## Subscriptions ##########
 
@@ -21,6 +24,9 @@ Deps.autorun ->
   for channel of Meteor.user()?.profile.channels
   #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
     handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
+  for pm of Meteor.user()?.profile.pms
+    handlers.messages[pm] = Meteor.subscribe 'pms', pm, limit
+  handlers.messages['pmsFromServer'] = Meteor.subscribe 'pmsFromServer', limit
   if Session.equals('subPage', 'mentions')
     channel = Session.get('channel').name
     handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit

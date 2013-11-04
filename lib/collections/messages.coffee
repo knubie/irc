@@ -34,24 +34,25 @@ Messages.before.insert (userId, doc) ->
   if Meteor.isServer
     if doc.owner isnt 'server'
       doc.createdAt = new Date()
-    doc.convos = []
-    for nick of Channels.findOne(name:doc.channel).nicks
-      if regex.nick(nick).test(doc.text) \
-      and user = Meteor.users.findOne(username:nick)
-        if doc.from not in user.profile.channels[doc.channel].ignore
+    if doc.channel?
+      doc.convos = []
+      for nick of Channels.findOne(name:doc.channel).nicks
+        if regex.nick(nick).test(doc.text) \
+        and user = Meteor.users.findOne(username:nick)
+          if doc.from not in user.profile.channels[doc.channel].ignore
 
-          # Push the nick to the Message's convo array.
-          doc.convos.push nick
+            # Push the nick to the Message's convo array.
+            doc.convos.push nick
 
-          # Update the mentioned user's profile with a new Message.
-          update Meteor.users, user._id
-          , "profile.channels.#{doc.channel}.mentions"
-          , (mentions) ->
-            unless Object::toString.call(mentions) is '[object Array]'
-              mentions = []
-            mentions.push doc._id unless doc._id in mentions
-            return mentions
+            # Update the mentioned user's profile with a new Message.
+            update Meteor.users, user._id
+            , "profile.channels.#{doc.channel}.mentions"
+            , (mentions) ->
+              unless Object::toString.call(mentions) is '[object Array]'
+                mentions = []
+              mentions.push doc._id unless doc._id in mentions
+              return mentions
 
 Messages.after.insert (userId, doc) ->
   if Meteor.isServer and doc.owner isnt 'server'
-    client[Meteor.users.findOne(userId).username].say doc.channel, doc.text
+    client[Meteor.users.findOne(userId).username].say doc.channel or doc.user, doc.text

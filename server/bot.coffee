@@ -220,6 +220,21 @@ class @Bot extends Client
           #from: 'system'
           #convo: ''
           #read: false
+
+    # Listen for incoming messages.
+    @on 'message', async (from, to, text, message) =>
+
+      console.log 'got message.'
+      unless to.isChannel()
+        console.log 'is not to a channel'
+        # Server sends message to IRC before insert.
+        Messages.insert
+          user: to
+          text: text
+          mobile: false
+          createdAt: new Date()
+          from: from
+          owner: 'server'
         
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick']
@@ -271,11 +286,11 @@ class @Bot extends Client
         #owner: @_id
       #, {$set: {nicks}}
 
-  say: (channel, text) ->
+  say: (target, text) ->
+    console.log "Target is: #{target}"
     #check channel, validChannelName
     check text, validMessageText
-    # Sends text to the specified channel and inserts a new Message doc.
-    super channel, text
+    super target, text
 
   part: (channel) ->
     check channel, validChannelName

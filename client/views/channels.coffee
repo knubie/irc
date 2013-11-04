@@ -1,14 +1,19 @@
 Template.channelPage.data = ->
   console.log 'channelPage data'
-  {channel: Session.get('channel'), subpage: Session.get('channelSubpage')}
+  {
+    channel: Session.get('channel')
+    pm: Session.get('pm')
+    subpage: Session.get('channelSubpage')
+  }
 
 Template.channelPage.userList = ->
   Meteor.user().profile.channels[@channel.name].userList
+
 Template.channelPage.channelCol = ->
-  if @channel? and Meteor.user().profile.channels[@channel.name].userList
-    '7'
+  if @channel? and Meteor.user()?.profile.channels[@channel.name].userList
+    '8'
   else
-    '9'
+    '10'
 
 Template.channelHeader.helpers
   channelURL: ->
@@ -45,7 +50,7 @@ Template.channelHeader.events
   'submit #topic-form': (e,t) ->
     e.preventDefault()
     topic = t.find('#topic-name').value
-    Meteor.call 'topic', Meteor.user(), @_id, topic
+    Meteor.call 'topic', Meteor.user(), @channel._id, topic
     $('.topic').show()
     $('#topic-form').hide()
 
@@ -88,12 +93,13 @@ Template.channels.helpers
     else
       @channel.name
   pms: ->
-    (pm for pm of Meteor.user().profile.pms)
+    #(pm for pm of Meteor.user().profile.pms)
+    ({name: user, pm: @pm} for user of Meteor.user().profile.pms)
   all: ->
-    if @channel then '' else 'selected'
+    if @channel or @pm then '' else 'selected'
 
 Template.channels.events
-  'click .new-channel-link': (e, t) ->
+  'click .new-channel-li': (e, t) ->
     $('.new-channel-link').hide()
     $('.new-channel-form').show()
     $('.new-channel-input').focus()
@@ -155,7 +161,9 @@ Template.channel.helpers
 
 Template.pm.helpers
   selected: ->
-    if Session.equals 'channel.name', "#{@}" then 'selected' else ''
+    console.log @
+    #if Session.equals 'channel.name', "#{@}" then 'selected' else ''
+    if @pm is @name then 'selected' else ''
   unread: ->
     Messages.find
       channel: "#{@}"

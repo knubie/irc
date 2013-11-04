@@ -17,6 +17,16 @@ Meteor.publish 'messages', (channel, limit) ->
       added: (id, fields) =>
         @added 'messages', id, fields 
         @ready()
+Meteor.publish 'pms', (user, limit) ->
+  Messages.find({user, owner: @userId}, {limit, sort:{createdAt: -1}}).observeChanges
+    added: (id, fields) =>
+      @added 'pms', id, fields 
+      @ready()
+Meteor.publish 'pmsFromServer', (limit) ->
+  Messages.find({user: Meteor.users.findOne(@userId).username, owner: 'server'}, {limit, sort:{createdAt: -1}}).observeChanges
+    added: (id, fields) =>
+      @added 'pms', id, fields 
+      @ready()
 
 Meteor.publish 'mentions', (channel, limit) ->
   user = Meteor.users.findOne(@userId)

@@ -44,6 +44,7 @@ page '/channels/:channel', (ctx) ->
         Meteor.call 'join', Meteor.user().username, channel
       Session.set 'channel', Channels.findOne({name: channel})
       Session.set 'subPage', 'messages'
+      Session.set 'pm', null
     page: ->
       if Meteor.user()?
         'channel'
@@ -86,8 +87,24 @@ page '/channels/:channel/mentions', (ctx) ->
 
 page '/users/:user', (ctx) ->
   controller
-    after: -> Session.set('user_profile', Meteor.users.findOne(username:ctx.user))
+    after: -> Session.set('user_profile', Meteor.users.findOne(username:ctx.params.user))
     handler: handlers.publicChannels
     page: -> 'userProfile'
 
+page '/messages/:user', (ctx) ->
+  controller
+    after: ->
+      if Meteor.user()
+        if Meteor.user().profile.pms?
+          {pms} = Meteor.user().profile
+        else
+          pms = {}
+        pms[ctx.params.user] = {unread: 0} unless ctx.params.user of pms
+        # Update the User with the new PMs object.
+        Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
+        Session.set 'messages.page', 1
+        Session.set 'subPage', 'messages'
+        Session.set 'channel', null
+        Session.set 'pm', ctx.params.user
+    page: -> 'channel'
 do page
