@@ -42,7 +42,7 @@ page '/channels/:channel', (ctx) ->
       Session.set 'messages.page', 1
       if Meteor.user()? and not Meteor.user()?.profile.channels[channel]?
         Meteor.call 'join', Meteor.user().username, channel
-      Session.set 'channel', Channels.findOne({name: channel})
+      Session.set 'channel', Channels.findOne({name: channel})._id
       Session.set 'subPage', 'messages'
       Session.set 'pm', null
     page: ->
@@ -60,7 +60,7 @@ page '/channels/:channel/settings', (ctx) ->
     handler: do ->
       if Meteor.user()? then handlers.joinedChannels else handlers.publicChannels
     after: ->
-      Session.set 'channel', Channels.findOne({name: channel})
+      Session.set 'channel', Channels.findOne({name: channel})._id
       Session.set 'subPage', 'settings'
     page: ->
       if channelDoc = Channels.findOne({name: channel})
@@ -76,7 +76,7 @@ page '/channels/:channel/mentions', (ctx) ->
   controller
     handler: handlers.mentions[channel]
     after: ->
-      Session.set 'channel', Channels.findOne({name: channel})
+      Session.set 'channel', Channels.findOne({name: channel})._id
       Session.set 'subPage', 'mentions'
       console.log 'after'
     page: ->

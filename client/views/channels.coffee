@@ -1,7 +1,7 @@
 Template.channelPage.data = ->
   console.log 'channelPage data'
   {
-    channel: Session.get('channel')
+    channel: Channels.findOne(Session.get('channel'))
     pm: Session.get('pm')
     subpage: Session.get('channelSubpage')
   }
@@ -15,15 +15,8 @@ Template.channelPage.channelCol = ->
   else
     '10'
 
-Template.channelHeader.data = ->
-  {
-    channel: Session.get('channel')
-    pm: Session.get('pm')
-    subpage: Session.get('channelSubpage')
-  }
 Template.channelHeader.helpers
   channelURL: ->
-    console.log @
     @channel.name.match(/^(#)?(.*)$/)[2]
   op_status: ->
     if @channel.name.isChannel() and Meteor.user()
