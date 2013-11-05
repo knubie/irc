@@ -20,13 +20,11 @@ Session.setDefault 'pm', null
 
 Deps.autorun ->
   limit = (PERPAGE * Session.get('messages.page'))
-  handlers.messages.all = Meteor.subscribe 'messages', 'all', limit
-  for channel of Meteor.user()?.profile.channels
-  #_.map Meteor.user()?.profile.channels, (value, channel, list) ->
-    handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
-  for pm of Meteor.user()?.profile.pms
-    handlers.messages[pm] = Meteor.subscribe 'pms', pm, limit
-  handlers.messages['pmsFromServer'] = Meteor.subscribe 'pmsFromServer', limit
+  if Meteor.user()?
+    channels = (channel for channel of Meteor.user().profile.channels)
+    handlers.messages.all = Meteor.subscribe 'messages', channels, limit
+  for user of Meteor.user()?.profile.pms
+    handlers.messages[user] = Meteor.subscribe 'privateMessages', user, limit
   if Session.equals('subPage', 'mentions')
     channel = Session.get('channel').name
     handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit

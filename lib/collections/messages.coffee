@@ -40,7 +40,6 @@ Messages.before.insert (userId, doc) ->
         if regex.nick(nick).test(doc.text) \
         and user = Meteor.users.findOne(username:nick)
           if doc.from not in user.profile.channels[doc.channel].ignore
-
             # Push the nick to the Message's convo array.
             doc.convos.push nick
 
@@ -55,4 +54,4 @@ Messages.before.insert (userId, doc) ->
 
 Messages.after.insert (userId, doc) ->
   if Meteor.isServer and doc.owner isnt 'server'
-    client[Meteor.users.findOne(userId).username].say doc.channel or doc.user, doc.text
+    client[Meteor.users.findOne(userId).username].say doc.channel or doc.to, doc.text

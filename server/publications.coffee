@@ -10,22 +10,28 @@ Meteor.publish 'joinedChannels', ->
   Channels.find query
 
 Meteor.publish 'messages', (channel, limit) ->
-  if channel is 'all'
-    Messages.find {}, {limit, sort:{createdAt: -1}}
-  else
-    Messages.find({channel}, {limit, sort:{createdAt: -1}}).observeChanges
-      added: (id, fields) =>
-        @added 'messages', id, fields 
-        @ready()
-Meteor.publish 'pms', (user, limit) ->
-  Messages.find({user, owner: @userId}, {limit, sort:{createdAt: -1}}).observeChanges
+  # If subscribing to all channels, the channel argument will be an
+  # array of channels.
+  if Object::toString.call(channel) is '[object Array]'
+    selector = {$in: channel}
+  else # Otherwise just subscribe to a single channel.
+    selector = channel
+  Messages.find({channel: selector}, {limit, sort:{createdAt: -1}}).observeChanges
     added: (id, fields) =>
-      @added 'pms', id, fields 
+      @added 'messages', id, fields 
       @ready()
-Meteor.publish 'pmsFromServer', (limit) ->
-  Messages.find({user: Meteor.users.findOne(@userId).username, owner: 'server'}, {limit, sort:{createdAt: -1}}).observeChanges
+
+Meteor.publish 'privateMessages', (from, limit) ->
+  {username} = Meteor.users.findOne(@userId)
+  selector = {
+    $or: [
+      {to:username, from},
+      {from:username, to:from}
+    ]
+  }
+  Messages.find(selector, {limit, sort:{createdAt: -1}}).observeChanges
     added: (id, fields) =>
-      @added 'pms', id, fields 
+      @added 'messages', id, fields 
       @ready()
 
 Meteor.publish 'mentions', (channel, limit) ->

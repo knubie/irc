@@ -29,7 +29,7 @@ Template.messages.helpers
     if @channel?
       selector = {channel: @channel.name}
     else if @pm?
-      selector = {user: {$in: [@pm, Meteor.user().username]}, from: {$in: [@pm, Meteor.user().username]}}
+      selector = {$or: [{to:@pm, from:Meteor.user().username}, {from:@pm, to:Meteor.user().username}]}
     else
       selector = {}
     #FIXME: this breaks the template engine.

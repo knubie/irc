@@ -224,14 +224,13 @@ class @Bot extends Client
     # Listen for incoming messages.
     @on 'message', async (from, to, text, message) =>
       if not to.isChannel() and from isnt @username
-        console.log "got message: #{text}"
         # Server sends message to IRC before insert.
         Messages.insert
-          user: to
+          to: to
+          from: from
           text: text
           mobile: false
           createdAt: new Date()
-          from: from
           owner: 'server'
 
         # Add sender to user's PMs list unless it's already there.

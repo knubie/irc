@@ -38,13 +38,14 @@ shouldSendNotification = (message) ->
 # createNotification :: NotificationParams -> Notification
 sendNotification = (params) ->
   if params
-    window.webkitNotifications.createNotification(params.image, params.title, params.text)
-    .show()
+    window.webkitNotifications.createNotification(params.image, params.title, params.text).show()
 
 # dispatchNotification :: Message -> Action(UI)
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
 beepAndNotify = (id, message) ->
+  console.log 'got new message'
+  console.log message
   if handlers.messages[message.channel]?.ready()
     _.compose(dispatchNotification, beep) message
 

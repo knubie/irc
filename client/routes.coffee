@@ -13,8 +13,9 @@ page '/', ->
       else
         'home'
     after: ->
-        Session.set 'subPage', 'messages'
-        Session.set 'channel', null
+      Session.set 'subPage', 'messages'
+      Session.set 'channel', null
+      Session.set 'pm', null
 
 page '/login', ->
   controller

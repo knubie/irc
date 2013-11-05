@@ -422,7 +422,9 @@ label.checkbox {
     text-decoration: none; }
   .channels li a > .badge {
     position: relative;
-    top: -1px; }
+    top: -2px;
+    padding: 2px 6px;
+    font-size: 10px; }
   .channels li.section {
     color: #bdc3c7;
     text-transform: uppercase;
