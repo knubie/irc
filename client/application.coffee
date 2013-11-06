@@ -20,14 +20,21 @@ Session.setDefault 'pm', null
 
 Deps.autorun ->
   limit = (PERPAGE * Session.get('messages.page'))
+  # Subscribe to all messages feed.
   if Meteor.user()?
     channels = (channel for channel of Meteor.user().profile.channels)
     handlers.messages.all = Meteor.subscribe 'messages', channels, limit
+  # Subscribe to messages from each joined channel.
+  for channel of Meteor.user()?.profile.channels
+    handlers.messages[channel] = Meteor.subscribe 'messages', channel, limit
+  # Subscribe to private messages
   for user of Meteor.user()?.profile.pms
     handlers.messages[user] = Meteor.subscribe 'privateMessages', user, limit
+  # Subscribe to mentions
   if Session.equals('subPage', 'mentions')
     channel = Session.get('channel').name
     handlers.mentions[channel] = Meteor.subscribe 'mentions', channel, limit
+  # Subscribed to joined channels (including private channels)
   if Meteor.user()
     handlers.joinedChannels = Meteor.subscribe 'joinedChannels'
 

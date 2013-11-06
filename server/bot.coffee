@@ -90,14 +90,14 @@ class @Idletron extends Client
       #, {$set: {nicks, users}}
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
+      text = "#{nick} was kicked by #{kicker}."
+      text = text + " \"#{reason}\"" if reason
       Messages.insert
-        owner: 'idletron'
+        owner: 'server'
         channel: channel
-        text: "#{nick} was kicked by #{kicker}! \"#{reason}\""
+        text: text
         createdAt: new Date()
         from: 'system'
-        convo: ''
-        read: false
 
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick']
@@ -177,36 +177,13 @@ class @Bot extends Client
       Channels.update channel, $set: {users, topic}
 
     # Listen for 'names' requests.
-    @on 'names', async (channel, nicks_in) =>
-      #TODO: Either add rpl_isupport to hector, or remove from node-irc
-      nicks = {}
-      for nick, status of nicks_in
-        match = nick.match(/^(.)(.*)$/)
-        if match
-          if match[1] is '@'
-            nicks[match[2]] = match[1]
-          else
-            nicks[nick] = ''
+    @on 'names', async (channel, nicks) =>
       # Count the number of nicks in the nicks_in object
       users = (user for user of nicks).length
       # Update Channel.nicks with the nicks object sent from the network.
       Channels.update
         name: channel
       , {$set: {nicks, users}}
-
-    @on 'kick', async (channel, nick, kicker, reason, message) =>
-      text = "#{nick} was kicked by #{kicker}."
-      text = text + " \"#{reason}\"" if reason
-      Messages.insert
-        owner: @_id
-        channel: channel
-        text: text
-        createdAt: new Date()
-        from: 'system'
-        convo: ''
-        read: false
-      #if nick is @username
-        #Channels.find({name}).part @username
 
     #@on 'join', async (channel, nick, message) =>
       #unless Channels.findOne({name: channel}).nicks[nick]? \
@@ -272,8 +249,8 @@ class @Bot extends Client
       # Set connecting status to on.
       Meteor.users.update @_id, $set: {'profile.connection': on}
       # Join subscribed channels.
-      if {channels} = @user()?.profile
-        @join channel for channel of channels
+      #if {channels} = @user()?.profile
+        #@join channel for channel of channels
 
   disconnect: ->
     super async =>

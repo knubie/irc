@@ -3,7 +3,9 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-2">
-          {{> channels data}}
+          {{#if currentUser}}
+            {{> channels data}}
+          {{/if}}
         </div>
         <div class="channel-container col-sm-{{channelCol}}">
           {{#if data.channel}}
@@ -13,16 +15,18 @@
           {{/if}}
           {{> messages data}}
         </div>
-        {{#if data.channel}}
-          {{#if userList}}
-            <div class="user-list-container col-sm-2">
-              {{> users}}
-            </div>
+        {{#if currentUser}}
+          {{#if data.channel}}
+            {{#if userList}}
+              <div class="user-list-container col-sm-2">
+                {{> users}}
+              </div>
+            {{/if}}
+            {{> say}}
           {{/if}}
-          {{> say}}
-        {{/if}}
-        {{#if data.pm}}
-          {{> say}}
+          {{#if data.pm}}
+            {{> say}}
+          {{/if}}
         {{/if}}
       </div>
     </div>

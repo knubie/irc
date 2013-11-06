@@ -19,9 +19,37 @@ Meteor.startup ->
   client.idletron = new Idletron
   # Connect the bot to the server.
   client.idletron.connect async ->
-    # Join all channels in the database.
+    console.log 'Bot connected.'
+    # For every channel.
     for channel in Channels.find().fetch()
+      console.log "For #{channel.name}"
+      console.log channel.nicks
+      # Bot joins the channel first.
       client.idletron.join channel.name
+      console.log 'Bot joined.'
+      for nick, mode of channel.nicks
+        console.log "For #{nick}"
+        unless nick is client.idletron.nick
+          Deps.autorun (c) ->
+            if Meteor.users.findOne(client[nick]._id).profile.connection
+              console.log "#{nick}'s connection is on. Join #{channel.name}."
+              # Then users join.
+              client[nick].join channel.name
+              # bot ops user if he/she is an op
+              if mode is '@'
+                console.log "#{nick} is @"
+                console.log nick
+                client.idletron.send 'MODE', channel.name, '+o', nick
+              c.stop()
+
+  # Create a new Idletron bot, which automatically gets added to all channels.
+  # The purpose of this bot is to record messages, etc to the database.
+  #client.idletron = new Idletron
+  ## Connect the bot to the server.
+  #client.idletron.connect async ->
+    ## Join all channels in the database.
+    #for channel in Channels.find().fetch()
+      #client.idletron.join channel.name
 
 # When user loses session (closes window, etc)
 UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->

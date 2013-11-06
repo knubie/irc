@@ -1,9 +1,10 @@
 controller = (opts) ->
   Deps.autorun (c) ->
     if not opts.handler? or opts.handler.ready()
-      opts.after?()
-      Session.set 'page', opts.page()
-      c.stop()
+      if not opts.msgHandler? or opts.msgHandler.ready()
+        opts.after?()
+        Session.set 'page', opts.page()
+        c.stop()
 
 page '/', ->
   controller
@@ -34,6 +35,8 @@ page '/account', ->
 page '/channels/:channel', (ctx) ->
   channel = "##{ctx.params.channel}"
   controller
+    #msgHandler: do ->
+      #handlers.messages[channel] ? Meteor.subscribe 'messages', channel, PERPAGE
     handler: do ->
       if Meteor.user()?
         handlers.joinedChannels

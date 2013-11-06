@@ -6,6 +6,7 @@ beep = (message) ->
   if Meteor.user().profile.sounds \
   and notIgnored(message) \
   and message.from isnt Meteor.user().username
+    console.log 'ok play it'
     $('#beep')[0].play() # Play beep sound
   return message
 
@@ -44,8 +45,6 @@ sendNotification = (params) ->
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
 beepAndNotify = (id, message) ->
-  console.log 'got new message'
-  console.log message
   if handlers.messages[message.channel]?.ready()
     _.compose(dispatchNotification, beep) message
 
