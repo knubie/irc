@@ -29,8 +29,8 @@ Meteor.startup ->
       console.log 'Bot joined.'
       for nick, mode of channel.nicks
         console.log "For #{nick}"
-        unless nick is client.idletron.nick
-          Deps.autorun (c) ->
+        if client[nick]? and nick isnt client.idletron.nick
+          Deps.autorun (c) -> #TODO: is this necessary? Probably not.
             if Meteor.users.findOne(client[nick]._id).profile.connection
               console.log "#{nick}'s connection is on. Join #{channel.name}."
               # Then users join.

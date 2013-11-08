@@ -44,6 +44,7 @@ class @Idletron extends Client
     # Listen for incoming messages.
     @on 'message#', async (from, to, text, message) =>
 
+      #FIXME: this won't work.
       unless Meteor.users.findOne({username: from})
         # Server sends message to IRC before insert.
         Messages.insert

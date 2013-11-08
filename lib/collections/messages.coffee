@@ -30,10 +30,15 @@ if Meteor.isServer
     update: -> false
     remove: -> false
 
-Messages.before.insert (userId, doc) ->
+Messages.after.insert (userId, doc) ->
   if Meteor.isServer
     if doc.owner isnt 'server'
+      # Set timestamp from the server.
       doc.createdAt = new Date()
+      # Send message to the IRC server.
+      client[Meteor.users.findOne(userId).username].say doc.channel or doc.to, doc.text
+
+    # Manage mentions.
     if doc.channel?
       doc.convos = []
       for nick of Channels.findOne(name:doc.channel).nicks
@@ -52,6 +57,3 @@ Messages.before.insert (userId, doc) ->
               mentions.push doc._id unless doc._id in mentions
               return mentions
 
-Messages.after.insert (userId, doc) ->
-  if Meteor.isServer and doc.owner isnt 'server'
-    client[Meteor.users.findOne(userId).username].say doc.channel or doc.to, doc.text

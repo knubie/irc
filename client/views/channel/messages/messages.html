@@ -62,7 +62,9 @@
           {{#unless channel}}
             <span class="pm-icon batch-icon {{reverseArrow}}">&#xf158;</span>
           {{/unless}}
-          <a href="/users/{{from}}"><strong>{{from}}</strong></a>
+          <a href="/users/{{from}}" class="{{operator}}">
+            <strong>{{from}}</strong>
+          </a>
           {{#if away}}
             <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
           {{/if}}

@@ -185,6 +185,12 @@ Template.message.helpers
   op_status: ->
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
+  operator: ->
+    if @channel?.isChannel()
+      if Channels.findOne(name: @channel).nicks[@from] is '@'
+        return 'operator'
+      else
+        return ''
   self: ->
     #@type() is 'self'
     @from is 'system' or @from is Meteor.user()?.username

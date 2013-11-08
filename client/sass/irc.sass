@@ -272,6 +272,7 @@ label.checkbox
   .channel-header
     @media (min-width: 768px)
       width: 625px
+      top: 66px
     @media (min-width: 992px)
       width: 808px
     @media (min-width: 1200px)
@@ -279,7 +280,7 @@ label.checkbox
     width: 100%
     overflow-y: hidden
     position: fixed
-    top: 66px
+    top: 0
     z-index: 98
     background-color: $clouds
     padding: 15px
@@ -512,6 +513,11 @@ label.checkbox
         color: $foreground
       a:hover
         color: $peter-river
+      a.operator
+        color: white
+        background-color: $peter-river
+        border-radius: 2px
+        padding: 0 2px
       .glyphicon-time
         top: 0
         color: #BDC3C7

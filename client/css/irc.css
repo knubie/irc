@@ -266,7 +266,7 @@ label.checkbox {
     width: 100%;
     overflow-y: hidden;
     position: fixed;
-    top: 66px;
+    top: 0;
     z-index: 98;
     background-color: #ecf0f1;
     padding: 15px;
@@ -274,7 +274,8 @@ label.checkbox {
     border-bottom: 1px solid #bdc3c7; }
     @media (min-width: 768px) {
       .channel-container .channel-header {
-        width: 625px; } }
+        width: 625px;
+        top: 66px; } }
     @media (min-width: 992px) {
       .channel-container .channel-header {
         width: 808px; } }
@@ -512,6 +513,11 @@ label.checkbox {
       color: #777777; }
     .messages .message .reply a:hover {
       color: #3498db; }
+    .messages .message .reply a.operator {
+      color: white;
+      background-color: #3498db;
+      border-radius: 2px;
+      padding: 0 2px; }
     .messages .message .reply .glyphicon-time {
       top: 0;
       color: #bdc3c7;

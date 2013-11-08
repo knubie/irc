@@ -1,20 +1,18 @@
+nickPartialMatch = null
+nickCurrentMatch = null
 Template.say.events
-  'keydown #say': (e, t) ->
-    #TODO: figure out a way to not have to disable autocomplete
+  'keyup #say': (e, t) ->
     keyCode = e.keyCode or e.which
+
     message = t.find('#say-input').value
-    if keyCode is 9 # Tab
+    unless keyCode is 9
       nickregex = /^(.*\s)*(\S*)$/
-      if matches = message.match nickregex
-        nicks = (nick for nick of @channel.nicks)
-        nickstart = new RegExp matches[2], 'i'
-        for nick in nicks
-          if nick.match nickstart
-            e.preventDefault()
-            $('#say-input').val("#{matches[1] or ''}#{nick}")
+      nickPartialMatch = message.match nickregex
+      nickCurrentMatch = null
 
     if keyCode is 13 # Enter
       e.preventDefault()
+      nickPartialMatch = null
 
       $('#say-input').val('')
 
@@ -33,6 +31,28 @@ Template.say.events
           createdAt: new Date()
           from: Meteor.user().username
           to: @pm
+
+
+  'keydown #say': (e, t) ->
+    #TODO: figure out a way to not have to disable autocomplete
+    keyCode = e.keyCode or e.which
+    message = t.find('#say-input').value
+    if keyCode is 13 # Enter
+      e.preventDefault()
+    if keyCode is 9 # Tab
+      e.preventDefault()
+      if nickPartialMatch?
+        nicks = (nick for nick of @channel.nicks)
+        nickstart = new RegExp nickPartialMatch[2], 'i'
+        for nick in nicks
+          console.log "nick in loop is #{nick}"
+          console.log "nickCurrentMatch is #{nickCurrentMatch}"
+          if nick isnt nickCurrentMatch and nick.match nickstart 
+            console.log "nick(#{nick}) matches and isn't current(#{nickCurrentMatch})"
+            e.preventDefault()
+            $('#say-input').val("#{nickPartialMatch[1] or ''}#{nick} ")
+            console.log "nickCurrentMatch = #{nick}"
+            nickCurrentMatch = nick
 
 Template.say.rendered = ->
   # Auto-focus 'say' input.
