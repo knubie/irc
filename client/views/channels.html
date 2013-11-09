@@ -1,36 +1,34 @@
 <template name="channelPage">
-  {{#page "channel"}}
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-2">
-          {{#if currentUser}}
-            {{> channels data}}
-          {{/if}}
-        </div>
-        <div class="channel-container col-sm-{{channelCol}}">
-          {{#if data.channel}}
-            {{> channelHeader data}}
-            {{> mentions data}}
-            {{> settings data}}
-          {{/if}}
-          {{> messages data}}
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-2">
         {{#if currentUser}}
-          {{#if data.channel}}
-            {{#if userList}}
-              <div class="user-list-container col-sm-2">
-                {{> users}}
-              </div>
-            {{/if}}
-            {{> say}}
-          {{/if}}
-          {{#if data.pm}}
-            {{> say}}
-          {{/if}}
+          {{> channels data}}
         {{/if}}
       </div>
+      <div class="channel-container col-sm-{{channelCol}}">
+        {{#if data.channel}}
+          {{> channelHeader data}}
+          {{> mentions data}}
+          {{> settings data}}
+        {{/if}}
+        {{> messages data}}
+      </div>
+      {{#if currentUser}}
+        {{#if data.channel}}
+          {{#if userList}}
+            <div class="user-list-container col-sm-2">
+              {{> users}}
+            </div>
+          {{/if}}
+          {{> say}}
+        {{/if}}
+        {{#if data.pm}}
+          {{> say}}
+        {{/if}}
+      {{/if}}
     </div>
-  {{/page}}
+  </div>
 </template>
 
 <template name="channelHeader">
@@ -159,6 +157,9 @@
 
 <template name="settings">
   {{#subPage "settings"}}
+    <a href="/channels/{{channelURL}}">Go back</a>
+    <br/>
+    <br/>
     {{#if op_status}}
       <div class="panel panel-default settings-panel">
         <div class="panel-heading">

@@ -1,6 +1,10 @@
 {
   "packages": {
     "user-status": {},
-    "collection-hooks": {}
+    "collection-hooks": {},
+    "iron-router": {
+      "git": "https://github.com/gadicohen/iron-router",
+      "branch": "dev"
+    }
   }
 }

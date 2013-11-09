@@ -24,6 +24,7 @@ Template.messages.rendered = ->
 
 Template.messages.helpers
   messages: ->
+    limit = (PERPAGE * Session.get('messages.page'))
     prev = null
     that = this
     if @channel?
@@ -37,27 +38,37 @@ Template.messages.helpers
       selector.from =
         $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
 
+
     Messages.find selector,
       sort:
         createdAt: 1
+      limit: limit
+      # Subscription is sorted as `createdAt: -1`
+      # since the Subscription is one PERPAGE longer than this cursor,
+      # we must skip the messages that are in the next page.
+      skip: do ->
+        if (skip = Messages.find(selector).fetch().length - limit) > 0
+          return skip
+        else
+          return 0
       transform: (doc) ->
         # Sometimes transform gets called multiple times
         # when a new doc gets added. In that case, 'prev' and 'doc'
         # are the same object. We need to prevent docs
         # from assigning previous to themselves.
-        if prev?._id is doc._id
-          doc.prev = prev.prev
+        if prev?._id is doc._id # Same doc.
+          doc.prev = prev.prev # Re-assign `prev`
         else
           doc.prev = prev
           prev = new Message doc
 
         new Message doc
   loadMore: ->
-    #true
-    if @channel?
-      Messages.find({channel: @channel.name}).length >= PERPAGE
-    else
-      Messages.find().length >= PERPAGE
+    limit = (PERPAGE * Session.get('messages.page'))
+    selector = if @channel? then {channel: @channel.name} else {}
+    console.log Messages.find(selector).fetch().length
+    console.log limit
+    Messages.find(selector).fetch().length > limit 
   url_channel: ->
     @channel.name.match(/^(#)?(.*)$/)[2]
 
@@ -208,8 +219,6 @@ Template.message.helpers
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
   isChannel: ->
     @channel?.isChannel()
-  isAll: ->
-    Session.equals('channel', null)
   realName: ->
     Meteor.users.findOne(username:@from)?.profile.realName or ''
   reverseArrow: ->

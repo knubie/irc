@@ -1,23 +1,21 @@
 <template name="explore">
-  {{#page "explore"}}
-    <div class="container">
-      <ul class="channel-list">
-        {{#each channels}}
-          <li>
-            <span class="batch-icon">&#xf003;</span>
-            <h3>
-              <a href="/channels/{{url}}">{{name}}</a>
-            </h3>
-            <a href="/channels/{{url}}/users" class="user-count">
-              <span class="glyphicon glyphicon-user"></span>
-              <strong>{{users}}</strong> users
-            </a>
-            <div class="body">
-              {{topic}}
-            </div>
-          </li>
-        {{/each}}
-      </ul>
-    </div>
-  {{/page}}
+  <div class="container">
+    <ul class="channel-list">
+      {{#each channels}}
+        <li>
+          <span class="batch-icon">&#xf003;</span>
+          <h3>
+            <a href="/channels/{{url}}">{{name}}</a>
+          </h3>
+          <a href="/channels/{{url}}/users" class="user-count">
+            <span class="glyphicon glyphicon-user"></span>
+            <strong>{{users}}</strong> users
+          </a>
+          <div class="body">
+            {{topic}}
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
 </template>

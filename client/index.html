@@ -8,6 +8,12 @@
 
 <body>
   {{> header}}
+  {{> main_layout}}
+  <audio id="beep" src="/beep.wav"/>
+</body>
+
+<template name="old">
+  {{> header}}
 
   {{> home}}
   {{> login}}
@@ -19,7 +25,11 @@
   {{> notFound}}
 
   <audio id="beep" src="/beep.wav"/>
-</body>
+</template>
+
+<template name="main_layout">
+  {{> yield}}
+</template>
 
 <template name="_page">
   {{> content}}
@@ -86,101 +96,97 @@
 </template>
 
 <template name="home">
-  {{#page "home"}}
-    <div class="marketing-section-signup">
-      <div class="container">
-        <div class="col-sm-8">
-          <h1>Join the conversation.</h1>
-          <p>
-            Idletron is an intuitive, mobile-friendly group messaging app with a traditional IRC backend. Connect to the server using your preferred IRC client, or use the web client for a zero-configuration, always-on connection.
-            <br/>
-            <a href="/plans">Upgraded plans start at $5/mo.</a>
-          </p>
-        </div>
-        <div class="col-sm-4">
-          <form id="signup" role="signup">
-            <input class="form-control" type="text" autocapitalize="off" autocorrect="off" id="auth-nick" placeholder="Pick a username" tabindex="1">
-            <input class="form-control" type="email" id="auth-email" placeholder="Your email" tabindex="2">
-            <input class="form-control" type="password" id="auth-pw" placeholder="Create a passphrase" tabindex="3">
-            <button type="submit" class="btn btn-primary" tabindex="4">Sign up</button>
-          </form>
-          <a href="#" id="signup-with-github">Sign up with github</a>
-        </div>
-      </div>
-    </div>
+  <div class="marketing-section-signup">
     <div class="container">
-      <div class="feature-row row">
-        <div class="col-sm-4">
-          <h3>
-            <span class="glyphicon glyphicon-phone"></span>
-            Responsive Design
-          </h3>
-          Idletron was designed from the ground up to be usable accross all device types and sizes.
-        </div>
-        <div class="col-sm-4">
-          <h3>
-            <span class="batch-icon">&#xf0b0;</span>
-            Always connected
-          </h3>
-          Never miss a message. No need to set up a BNC or a client on a remote server. Persistent connections come standard with Idletron out of the box, no server necessary.
-        </div>
-        <div class="col-sm-4">
-          <h3>
-            <span class="batch-icon">&#xf0d4;</span>
-            Message feeds
-          </h3>
-          View messages from all your subscribed channels in one feed, or group them into related feeds.
-        </div>
+      <div class="col-sm-8">
+        <h1>Join the conversation.</h1>
+        <p>
+          Idletron is an intuitive, mobile-friendly group messaging app with a traditional IRC backend. Connect to the server using your preferred IRC client, or use the web client for a zero-configuration, always-on connection.
+          <br/>
+          <a href="/plans">Upgraded plans start at $5/mo.</a>
+        </p>
       </div>
-      <div class="feature-row row">
-        <div class="col-sm-4">
-          <h3>
-            <span class="batch-icon">&#xf009;</span>
-            View conversation
-          </h3>
-          Isolate conversations between two people in busy channels.
-        </div>
-        <div class="col-sm-4">
-          <h3>
-            <span class="batch-icon">&#xf060;</span>
-            Universal access
-          </h3>
-          Idletron is just IRC, so you can access it from any IRC client with your username and password.
-        </div>
-        <div class="col-sm-4">
-          <h3>
-            <span class="batch-icon">&#xf139;</span>
-            Limited markdown
-          </h3>
-          Supports basic markdown like <span class="underline">_underline_</span>, <strong>*bold*</strong>, <i>**italic**</i>, and <code>`code`</code>.
-        </div>
+      <div class="col-sm-4">
+        <form id="signup" role="signup">
+          <input class="form-control" type="text" autocapitalize="off" autocorrect="off" id="auth-nick" placeholder="Pick a username" tabindex="1">
+          <input class="form-control" type="email" id="auth-email" placeholder="Your email" tabindex="2">
+          <input class="form-control" type="password" id="auth-pw" placeholder="Create a passphrase" tabindex="3">
+          <button type="submit" class="btn btn-primary" tabindex="4">Sign up</button>
+        </form>
+        <a href="#" id="signup-with-github">Sign up with github</a>
       </div>
     </div>
-  {{/page}}
+  </div>
+  <div class="container">
+    <div class="feature-row row">
+      <div class="col-sm-4">
+        <h3>
+          <span class="glyphicon glyphicon-phone"></span>
+          Responsive Design
+        </h3>
+        Idletron was designed from the ground up to be usable accross all device types and sizes.
+      </div>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf0b0;</span>
+          Always connected
+        </h3>
+        Never miss a message. No need to set up a BNC or a client on a remote server. Persistent connections come standard with Idletron out of the box, no server necessary.
+      </div>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf0d4;</span>
+          Message feeds
+        </h3>
+        View messages from all your subscribed channels in one feed, or group them into related feeds.
+      </div>
+    </div>
+    <div class="feature-row row">
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf009;</span>
+          View conversation
+        </h3>
+        Isolate conversations between two people in busy channels.
+      </div>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf060;</span>
+          Universal access
+        </h3>
+        Idletron is just IRC, so you can access it from any IRC client with your username and password.
+      </div>
+      <div class="col-sm-4">
+        <h3>
+          <span class="batch-icon">&#xf139;</span>
+          Limited markdown
+        </h3>
+        Supports basic markdown like <span class="underline">_underline_</span>, <strong>*bold*</strong>, <i>**italic**</i>, and <code>`code`</code>.
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name="login">
-  {{#page "login"}}
-    <div class="container signin-container">
-      <div class="col-xs-12 col-sm-5">
-        <form id="signin" role="signin">
-          <div class="form-group">
-            <label for="signin-username">Username or email</label>
-            <input class="form-control" autocapitalize="off" autocorrect="off" type="text" id="signin-username" tabindex="1">
-          </div>
-          <div class="form-group">
-            <label for="signin-password">Password</label>
-            <input class="form-control" type="password" id="signin-password" tabindex="2">
-          </div>
-          <button class="form-control btn btn-primary" type="submit" tabindex="3">
-            <strong>
-              Sign in
-            </strong>
-          </button>
-        </form>
-      </div>
+  <div class="container signin-container">
+    <div class="col-xs-12 col-sm-5">
+      <form id="signin" role="signin">
+        <div class="form-group">
+          <label for="signin-username">Username or email</label>
+          <input class="form-control" autocapitalize="off" autocorrect="off" type="text" id="signin-username" tabindex="1">
+        </div>
+        <div class="form-group">
+          <label for="signin-password">Password</label>
+          <input class="form-control" type="password" id="signin-password" tabindex="2">
+        </div>
+        <button class="form-control btn btn-primary" type="submit" tabindex="3">
+          <strong>
+            Sign in
+          </strong>
+        </button>
+      </form>
     </div>
-  {{/page}}
+  </div>
 </template>
 
 <template name="notFound">
@@ -238,44 +244,40 @@
 </template>
 
 <template name="user_profile">
-  {{#page "userProfile"}}
-    <div class="user-profile">
-      {{#with user}}
-        <div class="container">
-          <div class="first vcard col-sm-3">
-            <a href="#" class="thumbnail">
-              <img src="http://placehold.it/200/ECF0F1" alt="Gravatar">
-            </a>
-            <div class="name">
-              {{username}}
-            </div>
-            <div class="stats">
-              <span class="joined-on">Joined on</span> {{joined}}
-            </div>
-            <a href="/messages/{{username}}" class="send-pm btn btn-default btn-primary-outline">
-              send private message
-            </a>
-            <span class="send-pm btn btn-default btn-primary-outline">
-              follow
-            </span>
-          </div>
-          <div class="last col-sm-3">
-            <ul class="user-channels">
-              {{#each channels}}
-                <li>
-                  <div class="name">
-                    <a href="/channels/{{channel_url}}">
-                      {{.}}
-                    </a>
-                  </div>
-                  <div class="topic">
-                    {{topic}}
-                  </div>
-                </li>
-              {{/each}}
-            </ul>
+  <div class="user-profile">
+    <div class="container">
+      <div class="first vcard col-sm-3">
+        <a href="#" class="thumbnail">
+          <img src="http://placehold.it/200/ECF0F1" alt="Gravatar">
+        </a>
+        <div class="name">
+          {{username}}
         </div>
-      {{/with}}
+        <div class="stats">
+          <span class="joined-on">Joined on</span> {{joined}}
+        </div>
+        <a href="/messages/{{username}}" class="send-pm btn btn-default btn-primary-outline">
+          send private message
+        </a>
+        <span class="send-pm btn btn-default btn-primary-outline">
+          follow
+        </span>
+      </div>
+      <div class="last col-sm-3">
+        <ul class="user-channels">
+          {{#each channels}}
+            <li>
+              <div class="name">
+                <a href="/channels/{{channel_url}}">
+                  {{.}}
+                </a>
+              </div>
+              <div class="topic">
+                {{topic}}
+              </div>
+            </li>
+          {{/each}}
+        </ul>
     </div>
-  {{/page}}
+  </div>
 </template>

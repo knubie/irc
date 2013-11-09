@@ -1,10 +1,10 @@
-Template.channelPage.data = ->
-  console.log 'channelPage data'
-  {
-    channel: Channels.findOne(Session.get('channel'))
-    pm: Session.get('pm')
-    subpage: Session.get('channelSubpage')
-  }
+#Template.channelPage.data = ->
+  #console.log 'channelPage data'
+  #{
+    #channel: Channels.findOne(Session.get('channel'))
+    #pm: Session.get('pm')
+    #subpage: Session.get('channelSubpage')
+  #}
 
 Template.channelPage.userList = ->
   Meteor.user().profile.channels[@channel.name].userList
@@ -209,3 +209,7 @@ Template.users.helpers
       return ''
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.profile.awaySince).humanize()
+
+Template.settings.helpers
+  channelURL: ->
+    @channel.name.match(/^(#)?(.*)$/)[2]

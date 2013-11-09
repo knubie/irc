@@ -103,14 +103,11 @@ Template.header.helpers
 ########## User Profile ##########
 
 Template.user_profile.helpers
-  user: -> Meteor.users.findOne(Session.get('user_profile'))
   joined: ->
     moment(@createdAt).format('MMMM Do YYYY')
   channels: ->
     (channel for channel of @profile.channels)
   topic: ->
-    console.log @
-    console.log "#{@}"
     Channels.findOne({name: "#{@}"}).topic
   channel_url: ->
     @match(/^(.)(.*)$/)[2]

@@ -12,7 +12,7 @@ Meteor.publish 'joinedChannels', ->
 Meteor.publish 'messages', (channel, limit) ->
   # If subscribing to all channels, the channel argument will be an
   # array of channels.
-  if Object::toString.call(channel) is '[object Array]'
+  if isArray channel
     selector = {$in: channel}
   else # Otherwise just subscribe to a single channel.
     selector = channel
