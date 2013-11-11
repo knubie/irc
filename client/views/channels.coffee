@@ -119,10 +119,8 @@ Template.channels.events
     name = "#" + t.find('.new-channel-input').value
     t.find('.new-channel-input').value = ''
     if name
-      Meteor.call 'join', Meteor.user().username, name, (err, channelId) ->
-        if channelId
-          page "/channels/#{name.match(/^(.)(.*)$/)[2]}"
-          $('#say-input').focus()
+      Router.go 'channelPage', {channel: name.match(/^(.)(.*)$/)[2]}
+      $('#say-input').focus()
 
 ########## Channel ##########
 
@@ -138,7 +136,7 @@ Template.channel.events
       delete channels[@name]
       return channels
     if @name is @channel.name
-      page '/'
+      Router.go 'home'
 
 Template.channel.helpers
   selected: ->
@@ -186,7 +184,7 @@ Template.pm.events
     delete pms[@name]
     Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
     if @name is @pm
-      page '/'
+      Router.go 'home'
 
 ########## Users ##########
 

@@ -581,7 +581,8 @@ label.checkbox {
 .messages .info {
   background-color: rgba(0, 0, 0, 0);
   box-shadow: none;
-  padding-top: 0px; }
+  padding-top: 0px;
+  padding-bottom: 0px; }
   .messages .info .reply, .messages .info .actions {
     display: none; }
   .messages .info p {

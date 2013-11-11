@@ -57,9 +57,10 @@ Template.home.events
         # Add account to hector
         Meteor.call 'remember', username, password, Meteor.userId()
         if Session.get('joinAfterLogin')
-          page "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
+          channel = Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]
         else
-          page '/'
+          channel = 'welcome'
+        Router.go 'channelPage', {channel}
 
 Template.login.events
   'submit #signin': (e,t) ->
@@ -73,9 +74,10 @@ Template.login.events
         if Meteor.user().profile.connection is off
           Meteor.call 'connect', username, Meteor.userId()
         if Session.get('joinAfterLogin')
-          page "/channels/#{Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]}"
+          channel = Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]
+          Router.go 'channelPage', {channel}
         else
-          page '/'
+          Router.go 'home'
 
 Template.login.rendered = ->
   #FIXME: this doesn't work.
@@ -86,7 +88,7 @@ Template.login.rendered = ->
 Template.notification_request.rendered = ->
   document.querySelector('.allow-notifications').addEventListener 'click', ->
     webkitNotifications.requestPermission()
-    page '/'
+    Router.go 'home'
 
 ########## Header ##########
 

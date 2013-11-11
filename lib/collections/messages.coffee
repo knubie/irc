@@ -38,22 +38,22 @@ Messages.after.insert (userId, doc) ->
       # Send message to the IRC server.
       client[Meteor.users.findOne(userId).username].say doc.channel or doc.to, doc.text
 
-    # Manage mentions.
-    if doc.channel?
-      doc.convos = []
-      for nick of Channels.findOne(name:doc.channel).nicks
-        if regex.nick(nick).test(doc.text) \
-        and user = Meteor.users.findOne(username:nick)
-          if doc.from not in user.profile.channels[doc.channel].ignore
-            # Push the nick to the Message's convo array.
-            doc.convos.push nick
+      # Manage mentions.
+      if doc.channel?
+        doc.convos = []
+        for nick of Channels.findOne(name:doc.channel).nicks
+          if regex.nick(nick).test(doc.text) \
+          and user = Meteor.users.findOne(username:nick)
+            if doc.from not in user.profile.channels[doc.channel].ignore
+              # Push the nick to the Message's convo array.
+              doc.convos.push nick
 
-            # Update the mentioned user's profile with a new Message.
-            update Meteor.users, user._id
-            , "profile.channels.#{doc.channel}.mentions"
-            , (mentions) ->
-              unless Object::toString.call(mentions) is '[object Array]'
-                mentions = []
-              mentions.push doc._id unless doc._id in mentions
-              return mentions
+              # Update the mentioned user's profile with a new Message.
+              update Meteor.users, user._id
+              , "profile.channels.#{doc.channel}.mentions"
+              , (mentions) ->
+                unless Object::toString.call(mentions) is '[object Array]'
+                  mentions = []
+                mentions.push doc._id unless doc._id in mentions
+                return mentions
 

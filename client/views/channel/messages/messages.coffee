@@ -66,8 +66,6 @@ Template.messages.helpers
   loadMore: ->
     limit = (PERPAGE * Session.get('messages.page'))
     selector = if @channel? then {channel: @channel.name} else {}
-    console.log Messages.find(selector).fetch().length
-    console.log limit
     Messages.find(selector).fetch().length > limit 
   url_channel: ->
     @channel.name.match(/^(#)?(.*)$/)[2]
@@ -141,14 +139,17 @@ Template.message.events
       if $messagesFromOtherChannels.length > 0 and not Modernizr.touch
         $messagesFromOtherChannels.slideToggle 400, =>
           if @channel.isChannel()
-            page "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+            channel = @channel.match(/^(#)?(.*)$/)[2]
+            Router.go 'channelPage', {channel}
           else
-            page "/messages/#{@channel}"
+            Router.go "/messages/#{@from}"
       else # No messages to slideToggle
         if @channel.isChannel()
-          page "/channels/#{@channel.match(/^(#)?(.*)$/)[2]}"
+          channel = @channel.match(/^(#)?(.*)$/)[2]
+          Router.go 'channelPage', {channel}
         else
           page "/messages/#{@channel}"
+          Router.go "/messages/#{@from}"
 
   'click .convo': (e, t) ->
     $('.message')

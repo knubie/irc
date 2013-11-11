@@ -18,6 +18,11 @@ Router.map ->
         pm: null
         subpage: 'messages'
       }
+    action: ->
+      if Meteor.user()
+        @render 'channelPage'
+      else
+        @render 'home'
 
   @route 'login',
     layoutTemplate: 'main_layout'
@@ -43,9 +48,12 @@ Router.map ->
     path: '/channels/:channel'
     layoutTemplate: 'main_layout'
     before: ->
+      channel = "##{@params.channel}"
       Session.set 'subPage', 'messages'
+      if Meteor.user() and not Meteor.user().profile.channels[channel]?
+        Meteor.call 'join', Meteor.user().username, channel
     waitOn: ->
-      limit = (PERPAGE * Session.get('messages.page'))
+      limit = (PERPAGE * Session.get('messages.page')) + PERPAGE
       Meteor.subscribe 'messages', "##{@params.channel}", limit
     data: ->
       {

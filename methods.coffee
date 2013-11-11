@@ -34,8 +34,9 @@ Meteor.methods
     newChannel = Channels.find_or_create(channel)
     # Join the channel in IRC.
     if Meteor.isServer
-      client[username]?.join channel
-      client.idletron.join channel
+      unless 's' in channel.modes or 'i' in channel.modes
+        client[username]?.join channel
+        client.idletron.join channel
     # Update user's channels object
     {channels} = Meteor.user().profile
     # Add the new channel if it's not there already.
