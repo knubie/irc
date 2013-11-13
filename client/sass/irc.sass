@@ -42,6 +42,23 @@ code
 .btn-primary
   background-color: $peter-river
 
+.rdio-button
+  color: $foreground
+  border: 1px solid #b8c3c9
+  line-height: 26px
+  display: inline-block
+  padding: 0 10px
+  cursor: pointer
+  border-radius: 4px
+  background-clip: padding-box
+  box-shadow: 0px 1px 0 0px rgba(0, 0, 0, 0.07)
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
+  -webkit-user-select: none
+  background-image: -webkit-linear-gradient(#ffffff 60%, #f5f7fa 100%)
+
+button:focus
+  outline: none
+
 a
   color: $peter-river
 
@@ -343,17 +360,18 @@ label.checkbox
     .channel-settings
       right: 15px
       +tablet-portrait-and-above
-        right: 150px
+        right: 15px
     .channel-notifications
       right: 40px
       +tablet-portrait-and-above
-        right: 240px
+        right: 105px
     .channel-settings:hover, .channel-notifications:hover, .channel-settings.active, .channel-notifications.active
       color: $peter-river
       text-decoration: none
       .batch-icon, .glyphicon
         color: rgba(52,152,219,0.5)
     .channel-invite
+      display: none
       position: absolute
       top: 14px
       right: 15px
@@ -454,6 +472,7 @@ label.checkbox
     color: #bdc3c7
     font-size: 12px
     position: relative
+    margin-top: 7px
     .new-channel-link:hover
       cursor: pointer
       color: $peter-river

@@ -148,6 +148,12 @@ Template.channel.helpers
       's' in ch.modes or 'i' in ch.modes
     else
       no
+  readonly: ->
+    ch = Channels.findOne(name: @name)
+    if ch?
+      'm' in ch.modes
+    else
+      no
   url: ->
     @name.match(/^(.)(.*)$/)[2]
   unread: ->

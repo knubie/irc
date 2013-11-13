@@ -14,7 +14,18 @@ class ChannelsCollection extends Meteor.Collection
     else
       @findOne({name})
 
-@Channels = new ChannelsCollection 'channels'
+class Channel
+  constructor: (doc) ->
+    @[k] = doc[k] for k of doc
+  hasUser: (user) ->
+    user of @nicks
+  isModerated: ->
+    'm' in @modes
+  isPrivate: ->
+    's' in @modes or 'i' in @modes
+
+@Channels = new ChannelsCollection 'channels',
+  transform: (doc) -> new Channel doc
 
 Channels.allow
   insert: (userId, channel) ->

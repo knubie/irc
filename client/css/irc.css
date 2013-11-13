@@ -37,6 +37,23 @@ code {
 .btn-primary {
   background-color: #3498db; }
 
+.rdio-button {
+  color: #777777;
+  border: 1px solid #b8c3c9;
+  line-height: 26px;
+  display: inline-block;
+  padding: 0 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  background-clip: padding-box;
+  box-shadow: 0px 1px 0 0px rgba(0, 0, 0, 0.07);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  -webkit-user-select: none;
+  background-image: -webkit-linear-gradient(white 60%, #f5f7fa 100%); }
+
+button:focus {
+  outline: none; }
+
 a {
   color: #3498db; }
 
@@ -345,18 +362,19 @@ label.checkbox {
       right: 15px; }
       @media only screen and (min-width: 768px) {
         .channel-container .channel-header .channel-settings {
-          right: 150px; } }
+          right: 15px; } }
     .channel-container .channel-header .channel-notifications {
       right: 40px; }
       @media only screen and (min-width: 768px) {
         .channel-container .channel-header .channel-notifications {
-          right: 240px; } }
+          right: 105px; } }
     .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover, .channel-container .channel-header .channel-settings.active, .channel-container .channel-header .channel-notifications.active {
       color: #3498db;
       text-decoration: none; }
       .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon, .channel-container .channel-header .channel-settings.active .batch-icon, .channel-container .channel-header .channel-settings.active .glyphicon, .channel-container .channel-header .channel-notifications.active .batch-icon, .channel-container .channel-header .channel-notifications.active .glyphicon {
         color: rgba(52, 152, 219, 0.5); }
     .channel-container .channel-header .channel-invite {
+      display: none;
       position: absolute;
       top: 14px;
       right: 15px;
@@ -456,7 +474,8 @@ label.checkbox {
   .channels .new-channel-li {
     color: #bdc3c7;
     font-size: 12px;
-    position: relative; }
+    position: relative;
+    margin-top: 7px; }
     .channels .new-channel-li .new-channel-link:hover {
       cursor: pointer;
       color: #3498db; }

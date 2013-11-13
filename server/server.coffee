@@ -16,25 +16,27 @@ Meteor.startup ->
 
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.
-  client.idletron = new Idletron
+  client.idletron = new Idletron 'Idletron'
   # Connect the bot to the server.
   client.idletron.connect async ->
     # For every channel.
     for channel in Channels.find().fetch()
-      # Bot joins the channel first.
-      client.idletron.join channel.name
-      for nick, mode of channel.nicks
-        if client[nick]? and nick isnt client.idletron.nick
-          Deps.autorun (c) -> #TODO: is this necessary? Probably not.
-            if Meteor.users.findOne(client[nick]._id).profile.connection
-              # Then users join.
-              client[nick].join channel.name
-              # bot ops user if he/she is an op
-              if mode is '@'
-                client.idletron.send 'MODE', channel.name, '+o', nick
-              c.stop()
-      if channel.modes.length > 0
-        client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
+      do (channel) ->
+        console.log "#{channel.name}"
+        # Bot joins the channel first.
+        client.idletron.join channel.name, async ->
+          for nick, mode of channel.nicks
+            do (nick, mode) ->
+              console.log "#{channel.name} - #{mode}#{nick}"
+              if client[nick]? and nick isnt client.idletron.nick
+                # Then users join.
+                client[nick].join channel.name, async ->
+                  console.log "callback: #{channel.name} - #{mode}#{nick}"
+                  # bot ops user if he/she is an op
+                  if mode is '@'
+                    client.idletron.send 'MODE', channel.name, '+o', nick
+          if channel.modes.length > 0
+            client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
 
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.

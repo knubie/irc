@@ -5,6 +5,8 @@ Template.settings.helpers
     Meteor.user().profile.channels[@channel.name]?.ignore
   private_checked: ->
     if 's' in @channel.modes or 'i' in @channel.modes then 'checked' else ''
+  readonly_checked: ->
+    if 'm' in @channel.modes then 'checked' else ''
 
 Template.settings.events
   'submit #ignore-form-settings': (e,t) ->
@@ -31,7 +33,7 @@ Template.settings.events
     else
       Meteor.call 'mode', Meteor.user(), @channel.name, '+si'
 
-  'click label.checkbox[for="showHideJoins"]': (e,t) ->
+  'click label.checkbox[for="readonlyCheckbox"]': (e,t) ->
     if 'm' in @channel.modes
       Meteor.call 'mode', Meteor.user(), @channel.name, '-m'
     else

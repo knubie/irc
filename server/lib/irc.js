@@ -226,15 +226,17 @@ Client = function (server, nick, opt) {
                     if ( mode in self.prefixForMode ) {
                         // channel user modes
                         var user = modeArgs.shift();
-                        if ( adding ) {
+                        if ( adding && channel.users[user] != null) {
                             if ( channel.users[user].indexOf(self.prefixForMode[mode]) === -1 )
                                 channel.users[user] += self.prefixForMode[mode];
 
                             self.emit('+mode', message.args[0], message.nick, mode, user, message);
                         }
                         else {
-                            channel.users[user] = channel.users[user].replace(self.prefixForMode[mode], '');
-                            self.emit('-mode', message.args[0], message.nick, mode, user, message);
+                            if ( channel.users[user] != null) {
+                              channel.users[user] = channel.users[user].replace(self.prefixForMode[mode], '');
+                              self.emit('-mode', message.args[0], message.nick, mode, user, message);
+                            }
                         }
                     }
                     else {

@@ -61,7 +61,7 @@
             <span class="glyphicon glyphicon-cog"></span>
             <span class="hidden-xs">Settings</span>
           </a>
-          <span class="hidden-xs btn btn-default channel-invite" data-toggle="dropdown">
+          <span class="btn btn-default channel-invite" data-toggle="dropdown">
             Invite a friend
           </span>
           <div class="dropdown-menu invite-dropdown" role="invite">
@@ -111,10 +111,10 @@
     {{/each}}
     {{#if currentUser}}
       <li class="new-channel-li">
-        <span class="new-channel-link">+ Join channel</span>
+        <span class="new-channel-link rdio-button">Join channel</span>
         <form class="new-channel-form">
           <span class="pound">#</span>
-          <input type="text" class="new-channel-input form-control" autocomplete="off" placeholder="channel_name">
+          <input type="text" class="new-channel-input form-control" autocomplete="off" placeholder="channelName">
         </form>
       </li>
       {{#if pms}}
@@ -134,6 +134,10 @@
     {{#if private}}
       <!--<span class="glyphicon glyphicon-lock"></i>-->
       <span class="batch-icon">&#xf0c2;</span>
+    {{/if}}
+    {{#if readonly}}
+      <!--<span class="glyphicon glyphicon-lock"></i>-->
+      <span class="batch-icon">&#xf178;</span>
     {{/if}}
     <a href="/channels/{{url}}">
       <span class="hash">#</span>{{url}}
@@ -180,7 +184,7 @@
           </form>
           <form id="channel-modes">
             <fieldset>
-              <label class="checkbox {{private_checked}}" for="privateCheckbox">
+              <label class="checkbox" for="privateCheckbox">
                 <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
                 Private
                 <p>
@@ -188,7 +192,7 @@
                 </p>
               </label>
               <label class="checkbox" for="readonlyCheckbox">
-                <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+                <input type="checkbox" value="" {{readonly_checked}} id="readonlyCheckbox" data-toggle="checkbox">
                 Read-only
                 <p>
                   Only channel operators can send messages, but anyone can subscribe. Useful for blogs, news-feeds, etc.
@@ -259,7 +263,7 @@
 
 <template name="say">
   {{#subPage "messages"}}
-    {{#if currentUser}}
+    {{#if speakable}}
       <div class="input-container col-sm-10 col-sm-offset-2">
         <form id="say">
           <input tabindex="1" autocapitalize="off" class="form-control" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">

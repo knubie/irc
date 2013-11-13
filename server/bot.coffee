@@ -10,11 +10,11 @@ class Tron extends Client
             @say to, "I don't know."
 
 class @Idletron extends Client
-  constructor: ->
+  constructor: (@nick) ->
     @channels = {}
-    super 'localhost', 'Idletron',
+    super 'localhost', @nick,
       port: 6667
-      userName: 'Idletron'
+      userName: @nick
       password: process.env.HECTOR_KEY
       realName: 'N/A'
       autoConnect: no
@@ -144,6 +144,19 @@ class @Idletron extends Client
           name: channel
         , {$set: {nicks, users}}
 
+    @on '+mode', async (channel, from, mode, argument, message) =>
+      if mode is 'o'
+        update Channels, {name: channel}
+        , "nicks.#{argument}"
+        , (user) -> '@'
+
+    @on '-mode', async (channel, from, mode, argument, message) =>
+      if mode is 'o'
+        update Channels, {name: channel}
+        , "nicks.#{argument}"
+        , (user) -> ''
+
+
 class @Bot extends Client
   constructor: ({@_id, @username}) ->
     super 'localhost', @username,
@@ -222,10 +235,17 @@ class @Bot extends Client
             pms[from] = {unread: 0}
             return pms
 
-        
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick']
       @on event, async (channel) => @send 'NAMES', channel
+
+    @on 'kick', async (channel, nick, kicker, reason, message) =>
+      if nick is @username
+        # Remove channel from user's channel list
+        update Meteor.users, @_id, "profile.channels"
+        , (channels) ->
+          delete channels[channel]
+          return channels
 
     @on 'raw', async (msg) =>
       if msg.command is 'MODE'
@@ -257,21 +277,16 @@ class @Bot extends Client
     super async =>
       Meteor.users.update @_id, $set: {'profile.connection': off}
 
-  join: (channel) ->
+  join: (channel, cb) ->
     check channel, validChannelName
     # Join the channel.
-    super channel #TODO: double check that join was successful
+    if cb?
+      super channel, async(cb) #TODO: double check that join was successful
+    else
+      super channel
 
     # Request channel modes
     @send 'MODE', channel
-
-    #else # channel is actually a nick
-      #nicks[name] = '' # Add nick to nicks object.
-      ## Update channel with new nicks.
-      #Channels.update
-        #name: name
-        #owner: @_id
-      #, {$set: {nicks}}
 
   say: (target, text) ->
     console.log "Target is: #{target}"

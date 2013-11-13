@@ -65,3 +65,10 @@ Template.say.rendered = ->
     sensitive: true
     queryBy: ['username']
     users: nicks
+
+Template.say.helpers
+  speakable: ->
+    user = Meteor.user()
+    @channel.hasUser(user.username) \
+    and not @channel.isModerated() or (@channel.isModerated() and @channel.nicks[user.username] is '@')
+

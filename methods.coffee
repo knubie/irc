@@ -34,7 +34,7 @@ Meteor.methods
     newChannel = Channels.find_or_create(channel)
     # Join the channel in IRC.
     if Meteor.isServer
-      unless 's' in channel.modes or 'i' in channel.modes
+      unless 's' in newChannel.modes or 'i' in newChannel.modes
         client[username]?.join channel
         client.idletron.join channel
     # Update user's channels object
@@ -53,8 +53,6 @@ Meteor.methods
     return newChannel._id or null
 
   part: (username, channel) ->
-    console.log channel
-    console.log username
     check username, validUsername
     check channel, validChannelName
 
@@ -93,6 +91,7 @@ Meteor.methods
     check username, validUsername
     #check channel, validChannelName
     #TODO: maybe check if valid username/channelname
+    #TODO: Do I need this method? Does this many any client that calls this method can send a 'say' from any client?
     check message, validMessageText
     if Meteor.isServer
       client[username].say channel, message
