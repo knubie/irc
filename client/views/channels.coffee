@@ -6,14 +6,18 @@
     #subpage: Session.get('channelSubpage')
   #}
 
-Template.channelPage.userList = ->
-  Meteor.user().profile.channels[@channel.name].userList
+userListDep = new Deps.Dependency
 
-Template.channelPage.channelCol = ->
-  if @channel? and Meteor.user()?.profile.channels[@channel.name].userList
-    '8'
-  else
-    '10'
+Template.channelPage.helpers
+  userList: ->
+    userListDep.depend()
+    localStorage.getItem("#{@channel.name}.userList") is 'true'
+  channelCol: ->
+    userListDep.depend()
+    if @channel? and localStorage.getItem("#{@channel.name}.userList") is 'true'
+      '8'
+    else
+      '10'
 
 Template.channelHeader.helpers
   channelURL: ->
@@ -69,15 +73,13 @@ Template.channelHeader.events
   'click .user-count': (e,t) ->
     #TODO: move this to local storage.
     if $('.user-list-container').is(':visible')
-      $set = {}
-      $set["profile.channels.#{@channel.name}.userList"] = false
-      Meteor.users.update(Meteor.userId(), {$set})
+      localStorage.setItem "#{@channel.name}.userList", false
+      userListDep.changed()
 
       #scrollToPlace() # Keep scroll position when template rerenders
     else
-      $set = {}
-      $set["profile.channels.#{@channel.name}.userList"] = true
-      Meteor.users.update(Meteor.userId(), {$set})
+      localStorage.setItem "#{@channel.name}.userList", true
+      userListDep.changed()
 
       #scrollToPlace() # Keep scroll position when template rerenders
       
