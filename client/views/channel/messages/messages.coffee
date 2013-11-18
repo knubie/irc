@@ -41,7 +41,6 @@ Template.messages.helpers
       sort:
         createdAt: 1
       transform: (doc) ->
-        console.log "transform #{doc.text}"
         # Sometimes transform gets called multiple times
         # when a new doc gets added. In that case, 'prev' and 'doc'
         # are the same object. We need to prevent docs
@@ -164,7 +163,6 @@ Template.message.events
 
 Template.message.helpers
   joinToPrev: ->
-    console.log @
     sameChannel = true
     mentioned = true
     prevMentioned = true
@@ -194,7 +192,7 @@ Template.message.helpers
   banned: ->
     @channel? and @from in Channels.findOne({name: @channel})?.bans
   mention: ->
-    if @channel? and @mentions(Meteor.user()?.username)
+    if @mentions(Meteor.user()?.username)
       return 'mention'
   isMentioned: ->
     @channel? and @mentions(Meteor.user()?.username) and @from isnt 'system'

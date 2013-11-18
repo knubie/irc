@@ -11,7 +11,7 @@ class @Message
   constructor: (doc) ->
     @[k] = doc[k] for k of doc
   mentions: (user) ->
-    @chanel? and @from isnt 'system' and regex.nick(user).test(@text) 
+    @channel? and @from isnt 'system' and regex.nick(user).test(@text) 
   mentioned: ->
     mentions = []
     for nick of Channels.findOne(name:@channel).nicks
