@@ -26,7 +26,6 @@ Template.messages.helpers
   messages: ->
     limit = (PERPAGE * Session.get('messages.page'))
     prev = null
-    that = this
     if @channel?
       selector = {channel: @channel.name}
     else if @pm?
@@ -38,20 +37,11 @@ Template.messages.helpers
       selector.from =
         $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
 
-
     Messages.find selector,
       sort:
         createdAt: 1
-      limit: limit
-      # Subscription is sorted as `createdAt: -1`
-      # since the Subscription is one PERPAGE longer than this cursor,
-      # we must skip the messages that are in the next page.
-      skip: do ->
-        if (skip = Messages.find(selector).fetch().length - limit) > 0
-          return skip
-        else
-          return 0
       transform: (doc) ->
+        console.log "transform #{doc.text}"
         # Sometimes transform gets called multiple times
         # when a new doc gets added. In that case, 'prev' and 'doc'
         # are the same object. We need to prevent docs
@@ -63,10 +53,12 @@ Template.messages.helpers
           prev = new Message doc
 
         new Message doc
+
   loadMore: ->
-    limit = (PERPAGE * Session.get('messages.page'))
-    selector = if @channel? then {channel: @channel.name} else {}
-    Messages.find(selector).fetch().length > limit 
+    false
+    #limit = (PERPAGE * Session.get('messages.page'))
+    #selector = if @channel? then {channel: @channel.name} else {}
+    #Messages.find(selector).fetch().length > limit 
   url_channel: ->
     @channel.name.match(/^(#)?(.*)$/)[2]
 
@@ -122,11 +114,11 @@ Template.message.events
 
   'click .ignore-action': ->
     if confirm("Are you sure you want to ignore #{@from}? (You can un-ignore them later in your channel settings.)")
-      {channels} = Meteor.user().profile
-      channels[@channel].ignore.push @from
-      channels[@channel].ignore = _.uniq channels[@channel].ignore
-      Meteor.users.update Meteor.userId()
-      , $set: {'profile.channels': channels}
+      update Meteor.users, Meteor.userId()
+      , "profile.channels.#{@channel}.ignore"
+      , (ignore) =>
+        ignore.push @from
+        _.uniq ignore
 
   'click': (e, t) ->
     if Session.equals('channel.name', 'all') and not $(e.target).is('strong')
@@ -161,8 +153,18 @@ Template.message.events
   'click .kick': (e, t) ->
     Meteor.call 'kick', Meteor.user(), @channel, @from
 
+  'click .ban': (e, t) ->
+    if confirm("Are you sure you want to ban #{@from} from the channel? (You can un-ban them later in the channel settings.)")
+      Meteor.call 'mode', Meteor.user(), @channel, '+b', @from
+      update Channels, Channels.findOne({name: @channel})._id
+      , "bans"
+      , (bans) =>
+        bans.push @from
+        _.uniq bans
+
 Template.message.helpers
   joinToPrev: ->
+    console.log @
     sameChannel = true
     mentioned = true
     prevMentioned = true
@@ -177,7 +179,7 @@ Template.message.helpers
     if @channel?
       mentions = []
       for nick of Channels.findOne(name:@channel).nicks
-        if @mentions nick
+        if @mentions(nick)
           mentions.push nick
       mentions.length is 1 and @from isnt 'system'
     else
@@ -185,12 +187,14 @@ Template.message.helpers
   timeAgo: ->
     moment(@createdAt).fromNow()
   offline: ->
-    if @channel?.isChannel() \
+    if @channel? \
     and @from not of Channels.findOne({name: @channel})?.nicks \
     and @from isnt 'system'
       return 'offline'
+  banned: ->
+    @channel? and @from in Channels.findOne({name: @channel})?.bans
   mention: ->
-    if @channel? and @mentions(Meteor.user()?.username) and @from isnt 'system'
+    if @channel? and @mentions(Meteor.user()?.username)
       return 'mention'
   isMentioned: ->
     @channel? and @mentions(Meteor.user()?.username) and @from isnt 'system'

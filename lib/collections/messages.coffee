@@ -11,7 +11,7 @@ class @Message
   constructor: (doc) ->
     @[k] = doc[k] for k of doc
   mentions: (user) ->
-    regex.nick(user).test(@text)
+    @chanel? and @from isnt 'system' and regex.nick(user).test(@text) 
   mentioned: ->
     mentions = []
     for nick of Channels.findOne(name:@channel).nicks
@@ -28,9 +28,6 @@ if Meteor.isServer
       check message.text, validMessageText
       user = Meteor.users.findOne(userId)
       channel = Channels.findOne({name: message.channel})
-      console.log channel.hasUser user.username
-      console.log not channel.isModerated()
-      console.log channel.isModerated() and channel.nicks[user.username] is '@'
       channel.hasUser(user.username) \
       and not channel.isModerated() or (channel.isModerated() and channel.nicks[user.username] is '@')
     update: -> false

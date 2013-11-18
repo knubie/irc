@@ -9,8 +9,9 @@ class ChannelsCollection extends Meteor.Collection
     topic ?= 'No topic set.'
     modes ?= []
     nicks = {}
+    bans = []
     if not @findOne {name}
-      @findOne(@insert {name, users, topic, nicks, modes})
+      @findOne(@insert {name, users, topic, nicks, modes, bans})
     else
       @findOne({name})
 
@@ -29,15 +30,15 @@ class Channel
 
 Channels.allow
   insert: (userId, channel) ->
-    check doc.name, validChannelName
-    check doc.nicks, Object
-    check doc.topic, String
-    check doc.modes, Array
+    check channel.name, validChannelName
+    check channel.nicks, Object
+    check channel.topic, String
+    check channel.modes, Array
   update: (userId, channel) ->
     channel.nicks[Meteor.users.findOne(userId).username] is '@'
-    check doc.name, validChannelName
-    check doc.nicks, Object
-    check doc.topic, String
-    check doc.modes, Array
+    #check channel.name, validChannelName
+    #check channel.nicks, Object
+    #check channel.topic, String
+    #check channel.modes, Array
   remove: (userId, channel) ->
     _.isEmpty channel.nicks

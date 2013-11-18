@@ -67,21 +67,18 @@ Template.channelHeader.events
   'click .dropdown-menu input': (e,t) -> e.stopPropagation()
 
   'click .user-count': (e,t) ->
+    #TODO: move this to local storage.
     if $('.user-list-container').is(':visible')
       $set = {}
       $set["profile.channels.#{@channel.name}.userList"] = false
       Meteor.users.update(Meteor.userId(), {$set})
 
-      $('.user-list-container').hide()
-      $('.channel-container').removeClass('col-sm-7').addClass('col-sm-9')
       #scrollToPlace() # Keep scroll position when template rerenders
     else
       $set = {}
       $set["profile.channels.#{@channel.name}.userList"] = true
       Meteor.users.update(Meteor.userId(), {$set})
 
-      $('.user-list-container').show()
-      $('.channel-container').removeClass('col-sm-9').addClass('col-sm-7')
       #scrollToPlace() # Keep scroll position when template rerenders
       
 ########## Channels ##########
@@ -213,6 +210,8 @@ Template.users.helpers
       return ''
   awaySince: ->
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.profile.awaySince).humanize()
+  mod: ->
+    @flag is '@'
 
 Template.settings.helpers
   channelURL: ->

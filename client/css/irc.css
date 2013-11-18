@@ -575,6 +575,11 @@ label.checkbox {
     position: relative;
     bottom: -1px;
     font-size: 14px; }
+  .messages .message .banned {
+    color: #e74c3c;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 10px; }
 .messages .message:hover .actions {
   display: inline; }
 .messages .touch:hover .actions {
@@ -802,6 +807,17 @@ form {
       .user-list li h3 .glyphicon {
         font-size: 12px;
         top: 0; }
+      .user-list li h3 .mod {
+        color: #ecf0f1;
+        background-color: #bdc3c7;
+        font-weight: bold;
+        font-size: 10px;
+        padding: 0 2px 1px;
+        border-radius: 3px;
+        position: relative;
+        bottom: 1px; }
+      .user-list li h3 .mod:hover {
+        cursor: default; }
 
 .notification-request-container {
   text-align: center;

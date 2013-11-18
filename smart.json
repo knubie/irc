@@ -3,8 +3,8 @@
     "user-status": {},
     "collection-hooks": {},
     "iron-router": {
-      "git": "https://github.com/gadicohen/iron-router",
-      "branch": "dev"
+      "git": "https://github.com/EventedMind/iron-router",
+      "branch": "shark"
     }
   }
 }

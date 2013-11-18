@@ -5,9 +5,7 @@ Meteor.methods
   remember: (username, password, _id) ->
     if Meteor.isServer
       if _id?
-        #FIXME: This is very insecure. Let IRC server read from mongo directly.
-        # What if username == "; rm -rf /"
-        exec "cd $HECTOR_PATH; hector identity remember #{username} #{password}", async ->
+        exec "cd $HECTOR_PATH; hector identity remember #{username} '#{password.replace(/'/gi, "\\$&")}'", async ->
           Meteor.call 'connect', username, _id
       return null
 
@@ -38,17 +36,16 @@ Meteor.methods
         client[username]?.join channel
         client.idletron.join channel
     # Update user's channels object
-    {channels} = Meteor.user().profile
-    # Add the new channel if it's not there already.
-    unless channel of channels
-      channels[channel] =
+    update Meteor.users, Meteor.userId()
+    , "profile.channels.#{channel}"
+    , (channel) ->
+      channel ?= 
         ignore: []
         verbose: false
         unread: []
         mentions: []
         userList: false
-      # Update the User with the new channels object.
-      Meteor.users.update Meteor.userId(), $set: {'profile.channels': channels}
+
 
     return newChannel._id or null
 
@@ -107,13 +104,17 @@ Meteor.methods
       client[user.username].invite username, channel
     return null
 
-  mode: (user, channel, mode) ->
+  mode: (user, channel, mode, arg) ->
     if Meteor.isServer
-      client[user.username].send 'MODE', channel, mode
-      if mode is '-si'
-        Channels.update {name: channel}, $set: {private: false}
-      if mode is '+si'
-        Channels.update {name: channel}, $set: {private: true}
+      if arg?
+        client[user.username].send 'MODE', channel, mode, arg
+      else
+        client[user.username].send 'MODE', channel, mode
+      #TODO: move this responsibility to the bot
+    if mode is '-si'
+      Channels.update {name: channel}, $set: {private: false}
+    if mode is '+si'
+      Channels.update {name: channel}, $set: {private: true}
 
   topic: (user, channelId, topic) ->
     channel = Channels.findOne(channelId)

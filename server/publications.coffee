@@ -16,10 +16,13 @@ Meteor.publish 'messages', (channel, limit) ->
     selector = {$in: channel}
   else # Otherwise just subscribe to a single channel.
     selector = channel
-  Messages.find({channel: selector}, {limit, sort:{createdAt: -1}}).observeChanges
+  handle = Messages.find({channel: selector}, {limit: 1, sort: createdAt: -1})
+  .observeChanges
     added: (id, fields) =>
       @added 'messages', id, fields 
       @ready()
+
+  @onStop -> handle.stop()
 
 Meteor.publish 'privateMessages', (from, limit) ->
   {username} = Meteor.users.findOne(@userId)
@@ -29,10 +32,13 @@ Meteor.publish 'privateMessages', (from, limit) ->
       {from:username, to:from}
     ]
   }
-  Messages.find(selector, {limit, sort:{createdAt: -1}}).observeChanges
+  handle = Messages.find(selector, {limit, sort: createdAt: -1})
+  .observeChanges
     added: (id, fields) =>
       @added 'messages', id, fields 
       @ready()
+
+  @onStop -> handle.stop()
 
 Meteor.publish 'mentions', (channel, limit) ->
   user = Meteor.users.findOne(@userId)

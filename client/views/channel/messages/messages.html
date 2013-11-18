@@ -74,6 +74,9 @@
           {{#if isAll}}
             <span class="muted">{{channel}}</span>
           {{/if}}
+          {{#if banned}}
+            <span class="banned">banned</span>
+          {{/if}}
         </span>
         {{#unless self}}
           {{#if currentUser}}
@@ -95,7 +98,7 @@
                   Kick
                 </div>
                 &nbsp;
-                <div class="action">
+                <div class="action ban">
                   <span class="glyphicon glyphicon-ban-circle"></span>
                   Ban
                 </div>

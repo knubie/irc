@@ -5,8 +5,8 @@
       "user-status": {},
       "collection-hooks": {},
       "iron-router": {
-        "git": "https://github.com/gadicohen/iron-router",
-        "branch": "dev"
+        "git": "https://github.com/EventedMind/iron-router",
+        "branch": "shark"
       }
     },
     "packages": {
@@ -21,9 +21,9 @@
         "commit": "7f286358af49ffc1a63e97354f2f306a911bacc0"
       },
       "iron-router": {
-        "git": "https://github.com/gadicohen/iron-router",
-        "branch": "dev",
-        "commit": "1feb2760eb6f1e45d8fc3c29d2a9d51108a90dc3"
+        "git": "https://github.com/EventedMind/iron-router",
+        "branch": "shark",
+        "commit": "5a18f6f201da3d9aa1a95289cef790b1f7b2c44f"
       }
     }
   }

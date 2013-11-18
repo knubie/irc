@@ -82,7 +82,10 @@
       {{#each users}}
         <li>
         <h3>
-          <a href="/users/{{nick}}" class="{{awayClass}}">{{flag}}{{nick}}</a>
+          <a href="/users/{{nick}}" class="{{awayClass}}">{{nick}}</a>
+          {{#if mod}}
+            <span class="mod">Operator</span>
+          {{/if}}
           {{#if away}}
             <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
           {{/if}}

@@ -101,7 +101,7 @@ class @Idletron extends Client
         from: 'system'
 
     # Send a NAMES request when users joins, parts, or changes nick.
-    for event in ['join', 'part', 'nick', 'kick']
+    for event in ['join', 'part', 'nick', 'kick', 'quit']
       @on event, async (channel) => @send 'NAMES', channel
 
     @on 'part', async (channel, nick, reason, message) =>
@@ -115,6 +115,19 @@ class @Idletron extends Client
           if (nick for nick of ch.nicks).length is 1
             @part channel
             Channels.remove ch._id
+
+    @on 'quit', async (nick, reason, channels, message) =>
+      for channel in channels
+        ch = Channels.findOne({name: channel})
+        if ch?
+          if nick of ch.nicks
+            if (nick for nick of ch.nicks).length is 2
+              @part channel
+              Channels.remove ch._id
+          else
+            if (nick for nick of ch.nicks).length is 1
+              @part channel
+              Channels.remove ch._id
 
     @on 'raw', async (msg) =>
       if msg.command is 'MODE'
@@ -155,7 +168,6 @@ class @Idletron extends Client
         update Channels, {name: channel}
         , "nicks.#{argument}"
         , (user) -> ''
-
 
 class @Bot extends Client
   constructor: ({@_id, @username}) ->

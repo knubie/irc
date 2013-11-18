@@ -9,6 +9,11 @@ Template.settings.helpers
     if 'm' in @channel.modes then 'checked' else ''
 
 Template.settings.events
+  'submit #topic-form-settings': (e,t) ->
+    e.preventDefault()
+    topic = t.find('#topic-name-settings').value
+    Meteor.call 'topic', Meteor.user(), @channel._id, topic
+
   'submit #ignore-form-settings': (e,t) ->
     e.preventDefault()
 
@@ -25,7 +30,6 @@ Template.settings.events
     update Meteor.users, Meteor.userId()
     , "profile.channels.#{Session.get('channel').name}.ignore"
     , (ignore) => _.reject ignore, (nick) => nick is "#{@}"
-
 
   'click label.checkbox[for="privateCheckbox"]': (e,t) ->
     if 's' in @channel.modes or 'i' in @channel.modes
