@@ -41,7 +41,6 @@ Template.messages.helpers
       sort:
         createdAt: 1
       transform: (doc) ->
-        console.log "transform: #{doc.text}"
         # Sometimes transform gets called multiple times
         # when a new doc gets added. In that case, 'prev' and 'doc'
         # are the same object. We need to prevent docs

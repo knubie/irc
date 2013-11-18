@@ -1,11 +1,13 @@
 nickPartialMatch = null
 nickCurrentMatch = null
 Template.say.events
+  # Keydown triggers before the new character gets
+  # inserted into the input field.
   'keyup #say': (e, t) ->
     keyCode = e.keyCode or e.which
 
     message = t.find('#say-input').value
-    unless keyCode is 9
+    unless keyCode is 9 # Tab
       nickregex = /^(.*\s)*(\S*)$/
       nickPartialMatch = message.match nickregex
       nickCurrentMatch = null
@@ -34,25 +36,25 @@ Template.say.events
 
 
   'keydown #say': (e, t) ->
-    #TODO: figure out a way to not have to disable autocomplete
     keyCode = e.keyCode or e.which
     message = t.find('#say-input').value
     if keyCode is 13 # Enter
       e.preventDefault()
     if keyCode is 9 # Tab
       e.preventDefault()
-      if nickPartialMatch?
+      nickregex = /^(.*\s)?(\S+)\s?$/
+      if matches = message.match nickregex
         nicks = (nick for nick of @channel.nicks)
-        nickstart = new RegExp nickPartialMatch[2], 'i'
+        if Session.equals('nickstart', null) # No previous nickstart
+          Session.set 'nickstart', matches[2]
+        #nickstart = new RegExp "^#{matches[2]}", 'i'
         for nick in nicks
-          console.log "nick in loop is #{nick}"
-          console.log "nickCurrentMatch is #{nickCurrentMatch}"
-          if nick isnt nickCurrentMatch and nick.match nickstart 
-            console.log "nick(#{nick}) matches and isn't current(#{nickCurrentMatch})"
-            e.preventDefault()
-            $('#say-input').val("#{nickPartialMatch[1] or ''}#{nick} ")
-            console.log "nickCurrentMatch = #{nick}"
-            nickCurrentMatch = nick
+          console.log nick
+          console.log matches[2]
+          if nick isnt matches[2] and nick.match(new RegExp("^#{Session.get('nickstart')}", 'i'))
+            $('#say-input').val("#{matches[1] or ''}#{nick} ")
+    else # Any other key
+      Session.set 'nickstart', null
 
 Template.say.rendered = ->
   # Auto-focus 'say' input.

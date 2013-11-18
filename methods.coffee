@@ -44,7 +44,6 @@ Meteor.methods
         verbose: false
         unread: []
         mentions: []
-        userList: false
 
 
     return newChannel._id or null

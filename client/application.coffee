@@ -8,6 +8,7 @@ Session.setDefault 'messages.rendered', false
 Session.setDefault 'joinAfterLogin', null # Which channel to join after signing up or logging in.
 Session.setDefault 'channel', null
 Session.setDefault 'pm', null
+Session.setDefault 'nickstart', null
 
 
 ########## Subscriptions ##########
