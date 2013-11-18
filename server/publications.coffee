@@ -16,7 +16,7 @@ Meteor.publish 'messages', (channel, limit) ->
     selector = {$in: channel}
   else # Otherwise just subscribe to a single channel.
     selector = channel
-  handle = Messages.find({channel: selector}, {limit: 1, sort: createdAt: -1})
+  handle = Messages.find({channel: selector}, {limit: limit, sort: createdAt: -1})
   .observeChanges
     added: (id, fields) =>
       @added 'messages', id, fields 
