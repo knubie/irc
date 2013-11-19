@@ -27,9 +27,12 @@ if Meteor.isServer
     insert: (userId, message) ->
       check message.text, validMessageText
       user = Meteor.users.findOne(userId)
-      channel = Channels.findOne({name: message.channel})
-      channel.hasUser(user.username) \
-      and not channel.isModerated() or (channel.isModerated() and channel.nicks[user.username] is '@')
+      if message.channel?
+        channel = Channels.findOne({name: message.channel})
+        channel.hasUser(user.username) \
+        and not channel.isModerated() or (channel.isModerated() and channel.nicks[user.username] is '@')
+      else
+        true
     update: -> false
     remove: -> false
 
@@ -39,6 +42,7 @@ Messages.before.insert (userId, doc) ->
       # Set timestamp from the server.
       doc.createdAt = new Date()
       # Send message to the IRC server.
+      console.log 'send message to irc.'
       client[Meteor.users.findOne(userId).username].say doc.channel or doc.to, doc.text
 
     # Manage mentions.
@@ -59,6 +63,7 @@ Messages.after.insert (userId, doc) ->
         and user = Meteor.users.findOne(username:nick)
           if doc.from not in user.profile.channels[doc.channel].ignore
             # Update the mentioned user's profile with a new Message.
+            console.log 'update mentios array.'
             update Meteor.users, user._id
             , "profile.channels.#{doc.channel}.mentions"
             , (mentions) ->

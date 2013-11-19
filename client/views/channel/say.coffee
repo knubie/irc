@@ -27,6 +27,7 @@ Template.say.events
           createdAt: new Date()
           from: Meteor.user().username
       else # Sending to user
+        console.log @pm
         Messages.insert
           text: message
           mobile: Modernizr.touch
@@ -49,8 +50,6 @@ Template.say.events
           Session.set 'nickstart', matches[2]
         #nickstart = new RegExp "^#{matches[2]}", 'i'
         for nick in nicks
-          console.log nick
-          console.log matches[2]
           if nick isnt matches[2] and nick.match(new RegExp("^#{Session.get('nickstart')}", 'i'))
             $('#say-input').val("#{matches[1] or ''}#{nick} ")
     else # Any other key
@@ -71,6 +70,12 @@ Template.say.rendered = ->
 Template.say.helpers
   speakable: ->
     user = Meteor.user()
-    @channel.hasUser(user.username) \
-    and not @channel.isModerated() or (@channel.isModerated() and @channel.nicks[user.username] is '@')
+    if @pm?
+      true
+    else if @channel?
+      @channel.hasUser(user.username) \
+      and not @channel.isModerated() \
+      or (@channel.isModerated() and @channel.nicks[user.username] is '@')
+    else
+      false
 

@@ -19,29 +19,33 @@ Meteor.publish 'messages', (channel, limit) ->
   handle = Messages.find({channel: selector}, {limit: limit, sort: createdAt: -1})
   .observeChanges
     added: (id, fields) =>
-      @added 'messages', id, fields 
-      @ready()
+      @added 'messages', id, fields
 
+  @ready()
   @onStop -> handle.stop()
 
 Meteor.publish 'privateMessages', (from, limit) ->
   {username} = Meteor.users.findOne(@userId)
-  selector = {
+  selector =
     $or: [
       {to:username, from},
       {from:username, to:from}
     ]
-  }
   handle = Messages.find(selector, {limit, sort: createdAt: -1})
   .observeChanges
     added: (id, fields) =>
       @added 'messages', id, fields 
-      @ready()
 
+  @ready()
   @onStop -> handle.stop()
 
 Meteor.publish 'mentions', (channel, limit) ->
   user = Meteor.users.findOne(@userId)
-  Messages.find
-    convos: $in: [user.username]
-  , {limit, sort:{createdAt: -1}}
+  handle = Messages.find({chanell, convos: $in: [user.username]}
+  , {limit, sort:{createdAt: -1}})
+  .observeChanges
+    added: (id, fields) =>
+      @added 'messages', id, fields 
+
+  @ready()
+  @onStop -> handle.stop()

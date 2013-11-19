@@ -6,14 +6,15 @@ Meteor.methods
     if Meteor.isServer
       if _id?
         exec "cd $HECTOR_PATH; hector identity remember #{username} '#{password.replace(/'/gi, "\\$&")}'", async ->
-          Meteor.call 'connect', username, _id
+
+          Meteor.call 'connect', username, _id, ['#welcome', '#changelog', '#issues']
       return null
 
-  connect: (username, _id) ->
+  connect: (username, _id, channels) ->
     if Meteor.isServer
       client[username] ?= new Bot {_id, username}
-      if Meteor.users.findOne(_id)?.profile.connection is off
-        client[username].connect()
+      client[username].connect channels
+      return null
 
   disconnect: (username) ->
     if Meteor.isServer
@@ -32,7 +33,9 @@ Meteor.methods
     newChannel = Channels.find_or_create(channel)
     # Join the channel in IRC.
     if Meteor.isServer
+      console.log 'join channel'
       unless 's' in newChannel.modes or 'i' in newChannel.modes
+        console.log 'joining irc channel.'
         client[username]?.join channel
         client.idletron.join channel
     # Update user's channels object

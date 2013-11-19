@@ -163,6 +163,7 @@ Template.channel.helpers
       Meteor.user().profile.channels[@name].mentions?.length or ''
 
 Template.pm.helpers
+  name: -> @name
   selected: ->
     #if Session.equals 'channel.name', "#{@}" then 'selected' else ''
     if @pm is @name then 'selected' else ''

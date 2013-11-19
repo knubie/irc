@@ -1,6 +1,5 @@
 # Users
 # profile:
-#   connection: Boolean
 #   account: free/personal/business
 #   channels: 
 #     '#channelname':
@@ -11,7 +10,6 @@ if Meteor.isServer
   Accounts.onCreateUser (options, user) ->
     # Create defaults
     profile =
-      connection: off
       notifications: on
       sounds: on
       account: 'free'

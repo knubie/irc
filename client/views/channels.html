@@ -106,6 +106,14 @@
         </a>
       </li>
     {{/if}}
+    {{#if pms}}
+      <li class="section">
+        private messages
+      </li>
+      {{#each pms}}
+        {{> pm}}
+      {{/each}}
+    {{/if}}
     <li class="section">
       channels
     </li>
@@ -120,14 +128,6 @@
           <input type="text" class="new-channel-input form-control" autocomplete="off" placeholder="channelName">
         </form>
       </li>
-      {{#if pms}}
-        <li class="section">
-          private messages
-        </li>
-        {{#each pms}}
-          {{> pm}}
-        {{/each}}
-      {{/if}}
     {{/if}}
   </ul>
 </template>

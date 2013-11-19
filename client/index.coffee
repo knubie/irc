@@ -58,9 +58,9 @@ Template.home.events
         Meteor.call 'remember', username, password, Meteor.userId()
         if Session.get('joinAfterLogin')
           channel = Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]
+          Router.go 'channelPage', {channel}
         else
-          channel = 'welcome'
-        Router.go 'channelPage', {channel}
+          Router.go 'home'
 
 Template.login.events
   'submit #signin': (e,t) ->
@@ -71,8 +71,6 @@ Template.login.events
       if error
         alert error.reason
       else
-        if Meteor.user().profile.connection is off
-          Meteor.call 'connect', username, Meteor.userId()
         if Session.get('joinAfterLogin')
           channel = Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]
           Router.go 'channelPage', {channel}

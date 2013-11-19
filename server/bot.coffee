@@ -227,14 +227,16 @@ class @Bot extends Client
     # Listen for incoming messages.
     @on 'message', async (from, to, text, message) =>
       if not to.isChannel() and from isnt @username
-        # Server sends message to IRC before insert.
-        Messages.insert
-          to: to
-          from: from
-          text: text
-          mobile: false
-          createdAt: new Date()
-          owner: 'server'
+        #FIXME: this won't work.
+        unless Meteor.users.findOne({username: from})
+          # Server sends message to IRC before insert.
+          Messages.insert
+            to: to
+            from: from
+            text: text
+            mobile: false
+            createdAt: new Date()
+            owner: 'server'
 
         # Add sender to user's PMs list unless it's already there.
         user = Meteor.users.findOne(@_id)
@@ -275,12 +277,14 @@ class @Bot extends Client
     # Listen for incoming messages.
     #@on 'message#', async (from, to, text, message) =>
 
-  connect: ->
+  connect: (channels) ->
     # Connect to the IRC network.
     super async =>
       console.log "connected #{@username}"
       # Set connecting status to on.
-      Meteor.users.update @_id, $set: {'profile.connection': on}
+      if channels?
+        for channel in channels
+          Meteor.call 'join', @username, channel
       # Join subscribed channels.
       #if {channels} = @user()?.profile
         #@join channel for channel of channels

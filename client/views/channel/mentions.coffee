@@ -2,13 +2,19 @@
 
 Template.mentions.helpers
   mentions: ->
-    limit = PERPAGE * Session.get('messages.page')
-    Messages.find({
-      channel: @channel.name
-      convos: $in: [Meteor.user().username]
-    }, {limit, sort: {createdAt: -1}}).fetch().reverse()
+    Messages.find {},
+      sort:
+        createdAt: 1
+      transform: (doc) ->
+        if prev?._id is doc._id # Same doc.
+          doc.prev = prev.prev # Re-assign `prev`
+        else
+          doc.prev = prev
+          prev = new Message doc
+
+        new Message doc
   loadMore: ->
-    true
+    false
     #limit = PERPAGE * Session.get('messages.page')
     #messages = Messages.find({
       #channel: @name
@@ -34,18 +40,15 @@ Template.mentions.events
 ########## Mention ##########
 
 Template.mention.rendered = ->
-  update Meteor.users, Meteor.userId()
-  , "profile.channels.#{@data.channel}.mentions"
-  , (mentions) =>
-    _.reject mentions, (id) =>
-      id is @data._id
+  console.log 'mention rendered.'
   #update Meteor.users, Meteor.userId()
-  #, "profile.channels.#{Session.get('channel.name')}.ignore"
-  #, (ignore) => _.reject ignore, (nick) => nick is "#{@}"
+  #, "profile.channels.#{@data.channel}.mentions"
+  #, (mentions) =>
+    #console.log 'remove mention'
+    #_.reject mentions, (id) =>
+      #id is @data._id
 
-Template.mention.events
-  'click': ->
-    Messages.update @_id, $set: {'read': true}
+#Template.mention.events
 
 Template.mention.helpers
   timeAgo: ->

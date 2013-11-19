@@ -5,11 +5,15 @@
         load earlier messages
       </span>
     {{/if}}
-    <ul class="messages nav nav-stacked">
-      {{#each messages}}
-        {{> message}}
-      {{/each}}
-    </ul>
+    {{#if messages}}
+      <ul class="messages nav nav-stacked">
+        {{#each messages}}
+          {{> message}}
+        {{/each}}
+      </ul>
+    {{else}}
+      No messages yet.
+    {{/if}}
     {{#unless currentUser}}
       <div class="alert alert-info visible-xs">
         <strong>
