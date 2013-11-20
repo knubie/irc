@@ -16,7 +16,6 @@ Session.setDefault 'nickstart', null
 @handlers =
   user: Meteor.subscribe 'users'
   publicChannels: Meteor.subscribe 'publicChannels'
-  messages: {}
 
 Deps.autorun ->
   # Subscribe to all messages feed.

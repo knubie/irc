@@ -45,9 +45,7 @@ sendNotification = (params) ->
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
 beepAndNotify = (id, message) ->
-  console.log handlers.messages
   if handlers.messages?.ready()
-    console.log 'handler ready.'
     _.compose(dispatchNotification, beep) message
 
 ########## Beeps / Notifications ##########

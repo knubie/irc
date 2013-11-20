@@ -21,7 +21,10 @@ Router.map ->
       }
 
   @route 'login',
-    layoutTemplate: 'main_layout'
+    layoutTemplate: 'account_layout'
+
+  @route 'signup',
+    layoutTemplate: 'account_layout'
 
   @route 'account',
     layoutTemplate: 'main_layout'

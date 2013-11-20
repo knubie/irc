@@ -34,18 +34,18 @@ Meteor.publish 'privateMessages', (from, limit) ->
   handle = Messages.find(selector, {limit, sort: createdAt: -1})
   .observeChanges
     added: (id, fields) =>
-      @added 'messages', id, fields 
+      @added 'messages', id, fields
 
   @ready()
   @onStop -> handle.stop()
 
 Meteor.publish 'mentions', (channel, limit) ->
   user = Meteor.users.findOne(@userId)
-  handle = Messages.find({chanell, convos: $in: [user.username]}
+  handle = Messages.find({channel, convos: $in: [user.username]}
   , {limit, sort:{createdAt: -1}})
   .observeChanges
     added: (id, fields) =>
-      @added 'messages', id, fields 
+      @added 'messages', id, fields
 
   @ready()
   @onStop -> handle.stop()

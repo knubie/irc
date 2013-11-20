@@ -7,27 +7,15 @@
 </head>
 
 <body>
-  {{> header}}
-  {{> main_layout}}
   <audio id="beep" src="/beep.wav"/>
 </body>
 
-<template name="old">
+<template name="main_layout">
   {{> header}}
-
-  {{> home}}
-  {{> login}}
-  {{> channelPage}}
-  {{> explore}}
-  {{> account}}
-  {{> user_profile}}
-
-  {{> notFound}}
-
-  <audio id="beep" src="/beep.wav"/>
+  {{> yield}}
 </template>
 
-<template name="main_layout">
+<template name="account_layout">
   {{> yield}}
 </template>
 
@@ -36,7 +24,7 @@
 </template>
 
 <template name="header">
-  <nav class="navbar navbar-inverse navbar-fixed-top hidden-xs" id="relay-nav">
+  <nav class="navbar navbar-inverse navbar-fixed-top hidden-xs {{home}}" id="relay-nav">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".idletron-navbar-collapse">
@@ -73,13 +61,13 @@
               </ul>
             </li>
           {{else}}
-            <li class="{{active}}"><a href="/features">Features</a></li>
-            <li class="{{active}}">
-              <!--<button type="button" class="btn btn-default navbar-btn">-->
-              <a href="/login">
-                Sign in
+            <li class="{{active}} signup">
+              <a href="/signup">
+                Sign up
               </a>
-              <!--</button>-->
+            </li>
+            <li class="{{active}}">
+              <a href="/login">Sign in</a>
             </li>
           {{/if}}
         </ul>
@@ -98,14 +86,12 @@
 <template name="home">
   <div class="marketing-section-signup">
     <div class="container">
-      <div class="col-sm-8">
-        <h1>Join the conversation.</h1>
-        <p>
-          Idletron is an intuitive, mobile-friendly group messaging app with a traditional IRC backend. Connect to the server using your preferred IRC client, or use the web client for a zero-configuration, always-on connection.
-          <br/>
-          <a href="/plans">Upgraded plans start at $5/mo.</a>
-        </p>
-      </div>
+      <h1>jupe</h1>
+      <h4>Persistent IRC for the web.</h4>
+
+      <img src="/img/irssi.png" class="irssi" alt=""/>
+      <img src="/img/browser-demo.png" alt=""/>
+
       <div class="col-sm-4">
         <form id="signup" role="signup">
           <input class="form-control" type="text" autocapitalize="off" autocorrect="off" id="auth-nick" placeholder="Pick a username" tabindex="1">
@@ -113,55 +99,6 @@
           <input class="form-control" type="password" id="auth-pw" placeholder="Create a passphrase" tabindex="3">
           <button type="submit" class="btn btn-primary" tabindex="4">Sign up</button>
         </form>
-        <a href="#" id="signup-with-github">Sign up with github</a>
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="feature-row row">
-      <div class="col-sm-4">
-        <h3>
-          <span class="glyphicon glyphicon-phone"></span>
-          Responsive Design
-        </h3>
-        Idletron was designed from the ground up to be usable accross all device types and sizes.
-      </div>
-      <div class="col-sm-4">
-        <h3>
-          <span class="batch-icon">&#xf0b0;</span>
-          Always connected
-        </h3>
-        Never miss a message. No need to set up a BNC or a client on a remote server. Persistent connections come standard with Idletron out of the box, no server necessary.
-      </div>
-      <div class="col-sm-4">
-        <h3>
-          <span class="batch-icon">&#xf0d4;</span>
-          Message feeds
-        </h3>
-        View messages from all your subscribed channels in one feed, or group them into related feeds.
-      </div>
-    </div>
-    <div class="feature-row row">
-      <div class="col-sm-4">
-        <h3>
-          <span class="batch-icon">&#xf009;</span>
-          View conversation
-        </h3>
-        Isolate conversations between two people in busy channels.
-      </div>
-      <div class="col-sm-4">
-        <h3>
-          <span class="batch-icon">&#xf060;</span>
-          Universal access
-        </h3>
-        Idletron is just IRC, so you can access it from any IRC client with your username and password.
-      </div>
-      <div class="col-sm-4">
-        <h3>
-          <span class="batch-icon">&#xf139;</span>
-          Limited markdown
-        </h3>
-        Supports basic markdown like <span class="underline">_underline_</span>, <strong>*bold*</strong>, <i>**italic**</i>, and <code>`code`</code>.
       </div>
     </div>
   </div>
@@ -169,7 +106,8 @@
 
 <template name="login">
   <div class="container signin-container">
-    <div class="col-xs-12 col-sm-5">
+    <h2>jupe</h2>
+    <div class="centerer">
       <form id="signin" role="signin">
         <div class="form-group">
           <label for="signin-username">Username or email</label>
@@ -183,9 +121,38 @@
           <strong>
             Sign in
           </strong>
-        </button>
+        </button><a href="#" class="forgot">Forgot passowrd?</a>
       </form>
     </div>
+  <footer>©2001-2013 All Rights Reserved. <a href="#">Privacy and Terms</a></footer>
+  </div>
+</template>
+
+<template name="signup">
+  <div class="container signup-container">
+    <h2>jupe</h2>
+    <div class="centerer">
+      <form id="signup" role="signup">
+        <div class="form-group">
+          <label for="signup-username">Email</label>
+          <input class="form-control" autocapitalize="off" autocorrect="off" type="text" id="signup-email" tabindex="1">
+        </div>
+        <div class="form-group">
+          <label for="signup-username">Username</label>
+          <input class="form-control" autocapitalize="off" autocorrect="off" type="text" id="signup-username" tabindex="1">
+        </div>
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input class="form-control" type="password" id="signup-password" tabindex="2">
+        </div>
+        <button class="form-control btn btn-primary" type="submit" tabindex="3">
+          <strong>
+            Create your account
+          </strong>
+        </button><span class="github">or <a href="#" id="signup-with-github">Sign up with Github</a></span>
+      </form>
+    </div>
+  <footer>©2001-2013 All Rights Reserved. <a href="#">Privacy and Terms</a></footer>
   </div>
 </template>
 

@@ -99,6 +99,11 @@ Template.header.events
 Template.header.helpers
   username: ->
     Meteor.user().username
+  home: ->
+    if Meteor.user()?
+      return ''
+    else
+      return 'home'
 
 ########## User Profile ##########
 
