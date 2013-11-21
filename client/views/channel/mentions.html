@@ -1,20 +1,18 @@
 <template name="mentions">
-  {{#subPage "mentions"}}
-    {{#if loadMore}}
-      <span class="load-more btn btn-default btn-primary-outline">
-        load earlier messages
-      </span>
-    {{/if}}
-    {{#if mentions}}
-      <ul class="messages nav nav-stacked">
-        {{#each mentions}}
-          {{> mention}}
-        {{/each}}
-      </ul>
-    {{else}}
-      You have no mentions.
-    {{/if}}
-  {{/subPage}}
+  {{#if loadMore}}
+    <span class="load-more btn btn-default btn-primary-outline">
+      load earlier messages
+    </span>
+  {{/if}}
+  {{#if mentions}}
+    <ul class="messages nav nav-stacked">
+      {{#each mentions}}
+        {{> mention}}
+      {{/each}}
+    </ul>
+  {{else}}
+    You have no mentions.
+  {{/if}}
 </template>
 
 <template name="mention">

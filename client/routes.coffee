@@ -3,14 +3,12 @@ Router.map ->
     path: '/'
     layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
-    template: 'home'
     before: ->
       Session.set 'subPage', 'messages'
     waitOn: ->
       if Meteor.user()
-        limit = (PERPAGE * Session.get('messages.page'))
         channels = (channel for channel of Meteor.user().profile.channels)
-        Meteor.subscribe 'messages', channels, limit
+        Meteor.subscribe 'messages', channels, PERPAGE
       else
         return {ready: -> true}
     data: ->
@@ -19,6 +17,11 @@ Router.map ->
         pm: null
         subpage: 'messages'
       }
+    action: ->
+      if Meteor.user()
+        @render('channelPage', {to: 'custom'})
+      else
+        @render()
 
   @route 'login',
     layoutTemplate: 'account_layout'
@@ -45,13 +48,20 @@ Router.map ->
     data: ->
       Meteor.users.findOne(username: @params.user)
 
-  @route 'channelPage',
+  @route 'channel',
     path: '/channels/:channel'
-    layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
+    layoutTemplate: 'channel_layout'
+    template: 'messages'
+    yieldTemplates:
+      'channels': {to: 'channels'}
+      'channelHeader': {to: 'header'}
+      'say': {to: 'say'}
+      'users': {to: 'users'}
     before: ->
       channel = "##{@params.channel}"
-      Session.set 'subPage', 'messages'
+      Session.set 'channel', channel
+      Session.set 'subPage', null
       if Meteor.user() and not Meteor.user().profile.channels[channel]?
         Meteor.call 'join', Meteor.user().username, channel
     waitOn: ->
@@ -61,16 +71,20 @@ Router.map ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"})
         pm: null
-        subpage: 'messages'
       }
 
   @route 'mentions',
     path: '/channels/:channel/mentions'
-    template: 'channelPage'
-    layoutTemplate: 'main_layout'
+    template: 'messages'
+    layoutTemplate: 'channel_layout'
     loadingTemplate: 'loading'
+    yieldTemplates:
+      'channels': {to: 'channels'}
+      'channelHeader': {to: 'header'}
     before: ->
+      channel = "##{@params.channel}"
       Session.set 'subPage', 'mentions'
+      Session.set 'channel', channel
     waitOn: ->
       handlers.messages = \
       Meteor.subscribe 'mentions', "##{@params.channel}", PERPAGE
@@ -78,16 +92,19 @@ Router.map ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"})
         pm: null
-        subpage: 'mentions'
       }
 
-  @route 'channelSettings',
+  @route 'settings',
     path: '/channels/:channel/settings'
-    template: 'channelPage'
-    layoutTemplate: 'main_layout'
+    layoutTemplate: 'channel_layout'
     loadingTemplate: 'loading'
+    yieldTemplates:
+      'channels': {to: 'channels'}
+      'channelHeader': {to: 'header'}
     before: ->
+      channel = "##{@params.channel}"
       Session.set 'subPage', 'settings'
+      Session.set 'channel', channel
     data: ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"})

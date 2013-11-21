@@ -40,7 +40,6 @@ Template.mentions.events
 ########## Mention ##########
 
 Template.mention.rendered = ->
-  console.log 'mention rendered.'
   #update Meteor.users, Meteor.userId()
   #, "profile.channels.#{@data.channel}.mentions"
   #, (mentions) =>

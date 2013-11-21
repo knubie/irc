@@ -42,7 +42,6 @@ Messages.before.insert (userId, doc) ->
       # Set timestamp from the server.
       doc.createdAt = new Date()
       # Send message to the IRC server.
-      console.log 'send message to irc.'
       client[Meteor.users.findOne(userId).username].say doc.channel or doc.to, doc.text
 
     # Manage mentions.

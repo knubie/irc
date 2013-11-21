@@ -11,24 +11,6 @@ Handlebars.registerHelper 'subPage', (page) ->
   if Session.equals 'subPage', page
     Template._page
 
-Handlebars.registerHelper 'pageIsHome', ->
-  Session.equals 'page', 'home'
-
-Handlebars.registerHelper 'pageIsLogin', ->
-  Session.equals 'page', 'login'
-
-Handlebars.registerHelper 'pageIsChannel', ->
-  Session.equals('page', 'channel')
-
-Handlebars.registerHelper 'pageIsMentions', ->
-  Session.equals('page', 'mentions')
-
-Handlebars.registerHelper 'pageIsLoading', ->
-  Session.equals 'page', 'loading'
-
-Handlebars.registerHelper 'pageIsSettings', ->
-  Session.equals 'page', 'settings'
-
 Handlebars.registerHelper 'isChannel', ->
   Session.get('channel.name').isChannel()
 
@@ -80,13 +62,6 @@ Template.login.events
 Template.login.rendered = ->
   #FIXME: this doesn't work.
   $(@find('#signin-username')).focus()
-
-########## Notification Request ##########
-#
-Template.notification_request.rendered = ->
-  document.querySelector('.allow-notifications').addEventListener 'click', ->
-    webkitNotifications.requestPermission()
-    Router.go 'home'
 
 ########## Header ##########
 

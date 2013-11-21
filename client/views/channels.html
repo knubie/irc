@@ -77,7 +77,7 @@
 </template>
 
 <template name="users">
-  {{#subPage "messages"}}
+  <div class="user-list-container col-sm-2">
     <ul class="user-list">
       {{#each users}}
         <li>
@@ -94,7 +94,7 @@
         </li>
       {{/each}}
     </ul>
-  {{/subPage}}
+  </div>
 </template>
 
 <template name="channels">
@@ -265,13 +265,11 @@
 </template>
 
 <template name="say">
-  {{#subPage "messages"}}
-    {{#if speakable}}
-      <div class="input-container col-sm-10 col-sm-offset-2">
-        <form id="say">
-          <input tabindex="1" autocapitalize="off" class="form-control" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
-        </form>
-      </div>
-    {{/if}}
-  {{/subPage}}
+  {{#if speakable}}
+    <div class="input-container col-sm-10 col-sm-offset-2">
+      <form id="say">
+        <input tabindex="1" autocapitalize="off" class="form-control" id="say-input" autocomplete="off" placeholder="Send a message or type ? for help.">
+      </form>
+    </div>
+  {{/if}}
 </template>

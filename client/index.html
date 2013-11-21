@@ -13,10 +13,36 @@
 <template name="main_layout">
   {{> header}}
   {{> yield}}
+  {{> yield 'custom'}}
 </template>
 
 <template name="account_layout">
   {{> yield}}
+</template>
+
+<template name="channel_layout">
+  {{> header}}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-2">
+        {{#if currentUser}}
+          {{> yield "channels"}}
+        {{/if}}
+      </div>
+      <div class="channel-container col-sm-{{channelCol}}">
+        {{#with data}}
+          {{> yield "header"}}
+        {{/with}}
+        {{> yield}}
+      </div>
+      {{#if userList}}
+        {{> yield "users"}}
+      {{/if}}
+      {{#if currentUser}}
+        {{> yield "say"}}
+      {{/if}}
+    </div>
+  </div>
 </template>
 
 <template name="_page">
@@ -160,40 +186,6 @@
   {{#page "notFound"}}
     404: not found
   {{/page}}
-</template>
-
-<template name="notification_request">
-  <div class="container notification-request-container">
-    <h3>
-      Would you like to receive notifications?
-    </h3>
-    <span class="parens">
-      (You can toggle this option in your account settings later)
-    </span>
-    <br/>
-    <input type="button" class="allow-notifications" value="yes">
-    <a href="/">no</a>
-  </div>
-</template>
-
-<template name="notification_modal">
-  <div class="modal fade" id="notification-modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Notifications</h4>
-        </div>
-        <div class="modal-body">
-          <p>Would you like to receive desktop notifications from @mentions and private messages? You can always change this later in your account settings.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
 </template>
 
 <template name="notification">

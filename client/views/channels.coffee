@@ -1,23 +1,15 @@
-#Template.channelPage.data = ->
-  #console.log 'channelPage data'
-  #{
-    #channel: Channels.findOne(Session.get('channel'))
-    #pm: Session.get('pm')
-    #subpage: Session.get('channelSubpage')
-  #}
-
 userListDep = new Deps.Dependency
 
-Template.channelPage.helpers
-  userList: ->
-    userListDep.depend()
-    localStorage.getItem("#{@channel.name}.userList") is 'true'
-  channelCol: ->
-    userListDep.depend()
-    if @channel? and localStorage.getItem("#{@channel.name}.userList") is 'true'
-      '8'
-    else
-      '10'
+Handlebars.registerHelper 'userList', ->
+  userListDep.depend()
+  localStorage.getItem("#{Session.get 'channel'}.userList") is 'true'
+
+Handlebars.registerHelper 'channelCol', ->
+  userListDep.depend()
+  if @channel? and localStorage.getItem("#{Session.get 'channel'}.userList") is 'true'
+    '8'
+  else
+    '10'
 
 Template.channelHeader.helpers
   channelURL: ->
@@ -118,7 +110,7 @@ Template.channels.events
     name = "#" + t.find('.new-channel-input').value
     t.find('.new-channel-input').value = ''
     if name
-      Router.go 'channelPage', {channel: name.match(/^(.)(.*)$/)[2]}
+      Router.go 'channel', {channel: name.match(/^(.)(.*)$/)[2]}
       $('#say-input').focus()
 
 ########## Channel ##########

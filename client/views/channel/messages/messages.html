@@ -1,45 +1,43 @@
 <template name="messages">
-  {{#subPage "messages"}}
-    {{#if loadMore}}
-      <span class="load-more btn btn-default btn-primary-outline">
-        load earlier messages
-      </span>
-    {{/if}}
-    {{#if messages}}
-      <ul class="messages nav nav-stacked">
-        {{#each messages}}
-          {{> message}}
-        {{/each}}
-      </ul>
-    {{else}}
-      No messages yet.
-    {{/if}}
-    {{#unless currentUser}}
-      <div class="alert alert-info visible-xs">
-        <strong>
-          <a href="/" class="btn btn-primary login-from-channel">
-            Sign up for free
-          </a>
-        </strong>
-        &nbsp;&nbsp;or&nbsp;&nbsp;
-        <a href="/login" class='login-from-channel'>
-          Sign in to chat
+  {{#if loadMore}}
+    <span class="load-more btn btn-default btn-primary-outline">
+      load earlier messages
+    </span>
+  {{/if}}
+  {{#if messages}}
+    <ul class="messages nav nav-stacked">
+      {{#each messages}}
+        {{> message}}
+      {{/each}}
+    </ul>
+  {{else}}
+    No messages yet.
+  {{/if}}
+  {{#unless currentUser}}
+    <div class="alert alert-info visible-xs">
+      <strong>
+        <a href="/" class="btn btn-primary login-from-channel">
+          Sign up for free
         </a>
-      </div>
-      <div class="alert alert-info hidden-xs">
-        <strong>
-          <a href="/" class="btn btn-primary login-from-channel">
-            Sign up for free
-          </a>
-          &nbsp;&nbsp;to join this discussion.
-        </strong>
-        Already have an account?
-        <a href="/login" class="login-from-channel">
-          Sign in to chat
+      </strong>
+      &nbsp;&nbsp;or&nbsp;&nbsp;
+      <a href="/login" class='login-from-channel'>
+        Sign in to chat
+      </a>
+    </div>
+    <div class="alert alert-info hidden-xs">
+      <strong>
+        <a href="/" class="btn btn-primary login-from-channel">
+          Sign up for free
         </a>
-      </div>
-    {{/unless}}
-  {{/subPage}}
+        &nbsp;&nbsp;to join this discussion.
+      </strong>
+      Already have an account?
+      <a href="/login" class="login-from-channel">
+        Sign in to chat
+      </a>
+    </div>
+  {{/unless}}
 </template>
 
 <template name="message">
