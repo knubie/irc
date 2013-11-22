@@ -85,6 +85,11 @@ Router.map ->
       channel = "##{@params.channel}"
       Session.set 'subPage', 'mentions'
       Session.set 'channel', channel
+    after: ->
+      channel = "##{@params.channel}"
+      update Meteor.users, Meteor.userId()
+      , "profile.channels.#{channel}.mentions"
+      , (mentions) -> return []
     waitOn: ->
       handlers.messages = \
       Meteor.subscribe 'mentions', "##{@params.channel}", PERPAGE

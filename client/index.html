@@ -87,13 +87,13 @@
               </ul>
             </li>
           {{else}}
+            <li class="{{active}}">
+              <a href="/login">Sign in</a>
+            </li>
             <li class="{{active}} signup">
               <a href="/signup">
                 Sign up
               </a>
-            </li>
-            <li class="{{active}}">
-              <a href="/login">Sign in</a>
             </li>
           {{/if}}
         </ul>
@@ -103,7 +103,16 @@
 </template>
 
 <template name="loading">
-  {{> header}}
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  loading....................fuck you
   <div class="pace">
     <div class="pace-activity"></div>
   </div>
