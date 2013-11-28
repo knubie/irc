@@ -34,6 +34,12 @@
 <template name="channelHeader">
   <div class="row">
     <div class="channel-header col-sm-7">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".channel-header-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <div class="channel-breadcrumb">
         <h3>{{channel.name}}</h3>
         <span class="slash">&nbsp;/&nbsp;</span>
@@ -71,6 +77,35 @@
             </form>
           </div>
         {{/if}}
+      </div>
+      <div class="collapse channel-header-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          {{#if currentUser}}
+            <li><a href="/account">Account Settings</a></li>
+            <li><a class="signout" href="#">Sign out</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header">This Channel</li>
+            <li>
+              <a href="/channels/{{channelURL}}/mentions">
+                Mentions
+              </a>
+            </li>
+            <li>
+              <a href="/channels/{{channelURL}}/settings">
+                Channel Settings
+              </a>
+            </li>
+          {{else}}
+            <li>
+              <a href="/login">Sign in</a>
+            </li>
+            <li>
+              <a href="/signup">
+                Sign up
+              </a>
+            </li>
+          {{/if}}
+        </ul>
       </div>
     </div>
   </div>
@@ -163,105 +198,103 @@
 </template>
 
 <template name="settings">
-  {{#subPage "settings"}}
-    <a href="/channels/{{channelURL}}">&larr; Back to messages</a>
-    <br/>
-    <br/>
-    {{#if op_status}}
-      <div class="panel panel-default settings-panel">
-        <div class="panel-heading">
-          <h3 class="panel-title">Channel Settings</h3>
-        </div>
-        <div class="panel-body">
-          <span class="disclaimer">These settings affect everyone in the channel, only <a href="#">operators</a> can change them.</span>
-          <br/>
-          <br/>
-          <form id="topic-form-settings">
-            <fieldset>
-              <label for="topic-name-settings">
-                Channel Topic
-              </label>
-              <input type="text" class="form-control" id="topic-name-settings" placeholder="Channel topic" autocomplete="off">
-              <button type="submit" class="btn btn-default">Update</button>
-            </fieldset>
-          </form>
-          <form id="channel-modes">
-            <fieldset>
-              <label class="checkbox" for="privateCheckbox">
-                <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
-                Private
-                <p>
-                  Hide this repository from the public. Only invited users can join.
-                </p>
-              </label>
-              <label class="checkbox" for="readonlyCheckbox">
-                <input type="checkbox" value="" {{readonly_checked}} id="readonlyCheckbox" data-toggle="checkbox">
-                Read-only
-                <p>
-                  Only channel operators can send messages, but anyone can subscribe. Useful for blogs, news-feeds, etc.
-                </p>
-              </label>
-            </fieldset>
-          </form>
-          <!--<input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">-->
-        </div>
-      </div>
-    {{/if}}
-
+  <a href="/channels/{{channelURL}}">&larr; Back to messages</a>
+  <br/>
+  <br/>
+  {{#if op_status}}
     <div class="panel panel-default settings-panel">
       <div class="panel-heading">
-        <h3 class="panel-title">Channel Preferences</h3>
+        <h3 class="panel-title">Channel Settings</h3>
       </div>
       <div class="panel-body">
-        <span class="disclaimer">These settings are local, they only affect you and are specific to this channel.</span>
+        <span class="disclaimer">These settings affect everyone in the channel, only <a href="#">operators</a> can change them.</span>
         <br/>
         <br/>
-        <form id="ignore-form-settings">
+        <form id="topic-form-settings">
           <fieldset>
-            <label for="ignore-list-settings">
-              Ignore List
+            <label for="topic-name-settings">
+              Channel Topic
             </label>
-            <ul class="ignore-list list-group">
-              {{#each ignore_list}}
-                <li class="list-group-item">
-                  {{.}}
-                  <button type="button" class="close">&times;</button>
-                </li>
-              {{/each}}
-            </ul>
-            <input type="text" class="form-control" id="ignore-username-settings" placeholder="Add a user to your ignore list" autocomplete="off">
-            <button type="submit" class="btn btn-default">Ignore</button>
+            <input type="text" class="form-control" id="topic-name-settings" placeholder="Channel topic" autocomplete="off">
+            <button type="submit" class="btn btn-default">Update</button>
           </fieldset>
         </form>
         <form id="channel-modes">
           <fieldset>
-            Show when users...
-            <label class="checkbox {{private_checked}}" for="privateCheckbox">
+            <label class="checkbox" for="privateCheckbox">
               <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
-              Join / Part
+              Private
               <p>
-                Displays a notice when users join or leave the channel.
+                Hide this repository from the public. Only invited users can join.
               </p>
             </label>
             <label class="checkbox" for="readonlyCheckbox">
-              <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
-              Go Away / Return
+              <input type="checkbox" value="" {{readonly_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+              Read-only
               <p>
-                Shows a notice when users go away, i.e. when they close the window or their computer.
-              </p>
-            </label>
-            <label class="checkbox" for="readonlyCheckbox">
-              <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
-              Inline images
-              <p>
-                Render and display images from image links.
+                Only channel operators can send messages, but anyone can subscribe. Useful for blogs, news-feeds, etc.
               </p>
             </label>
           </fieldset>
         </form>
+        <!--<input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">-->
       </div>
     </div>
-  {{/subPage}}
+  {{/if}}
+
+  <div class="panel panel-default settings-panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">Channel Preferences</h3>
+    </div>
+    <div class="panel-body">
+      <span class="disclaimer">These settings are local, they only affect you and are specific to this channel.</span>
+      <br/>
+      <br/>
+      <form id="ignore-form-settings">
+        <fieldset>
+          <label for="ignore-list-settings">
+            Ignore List
+          </label>
+          <ul class="ignore-list list-group">
+            {{#each ignore_list}}
+              <li class="list-group-item">
+                {{.}}
+                <button type="button" class="close">&times;</button>
+              </li>
+            {{/each}}
+          </ul>
+          <input type="text" class="form-control" id="ignore-username-settings" placeholder="Add a user to your ignore list" autocomplete="off">
+          <button type="submit" class="btn btn-default">Ignore</button>
+        </fieldset>
+      </form>
+      <form id="channel-modes">
+        <fieldset>
+          Show when users...
+          <label class="checkbox {{private_checked}}" for="privateCheckbox">
+            <input type="checkbox" value="" {{private_checked}} id="privateCheckbox" data-toggle="checkbox">
+            Join / Part
+            <p>
+              Displays a notice when users join or leave the channel.
+            </p>
+          </label>
+          <label class="checkbox" for="readonlyCheckbox">
+            <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+            Go Away / Return
+            <p>
+              Shows a notice when users go away, i.e. when they close the window or their computer.
+            </p>
+          </label>
+          <label class="checkbox" for="readonlyCheckbox">
+            <input type="checkbox" value="" {{private_checked}} id="readonlyCheckbox" data-toggle="checkbox">
+            Inline images
+            <p>
+              Render and display images from image links.
+            </p>
+          </label>
+        </fieldset>
+      </form>
+    </div>
+  </div>
 </template>
 
 <template name="say">

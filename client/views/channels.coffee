@@ -13,14 +13,11 @@ Handlebars.registerHelper 'channelCol', ->
 
 Template.channelHeader.helpers
   channelURL: ->
-    @channel.name.match(/^(#)?(.*)$/)[2]
+    @channel?.name.match(/^(#)?(.*)$/)[2]
   op_status: ->
-    if @channel.name.isChannel() and Meteor.user()
-      @channel.nicks[Meteor.user().username] is '@'
-    else
-      return no
+    @channel?.nicks?[Meteor.user()?.username] is '@'
   unread_mentions: ->
-    Meteor.user().profile.channels[@channel.name]?.mentions?.length or ''
+    Meteor.user().profile.channels[@channel?.name]?.mentions?.length or ''
   mentionsActive: ->
     if Session.equals('subPage', 'mentions')
       return 'active'

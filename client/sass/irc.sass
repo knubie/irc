@@ -139,10 +139,6 @@ label.checkbox
       text-shadow: none
   .navbar-brand
     color: #FFF
-  .navbar-toggle
-    border-color: $wet-asphalt
-  .navbar-toggle:hover
-    border-color: $midnight-blue
   .navbar-nav
     li.open
       background: none
@@ -155,7 +151,6 @@ label.checkbox
     li.signup > a:hover
       color: $peter-river
       background-color: white
-
   .navbar-nav > li > a:hover
     color: #333
     .caret
@@ -180,6 +175,14 @@ label.checkbox
     background-color: $peter-river
     color: #FFF
     border-color: $peter-river
+  .navbar-collapse
+    border-color: $silver
+  .navbar-toggle
+    border-color: $clouds
+    background-color: $clouds
+  .navbar-inverse-toggle, .navbar-toggle:hover
+    border-color: $silver
+    background-color: $silver
 
 #relay-nav.home
   background-color: $peter-river
@@ -190,6 +193,15 @@ label.checkbox
     display: none
   .navbar-nav > li > a
     color: white
+  .navbar-collapse
+    border-color: $belize-hole
+  .navbar-toggle
+    border-color: $peter-river
+    background-color: $peter-river
+  .navbar-inverse-toggle, .navbar-toggle:hover
+    border-color: $belize-hole
+    background-color: $belize-hole
+
 
 // Sign up
 .marketing-section-signup
@@ -203,12 +215,16 @@ label.checkbox
   .container
     text-align: center
     h1
-      font-size: 114px
+      +tablet-landscape-and-above
+        font-size: 114px
+      font-size: 64px
       color: white
       font-weight: bold
     h4
       color: rgba(255,255,255,0.6)
-      font-size: 19px
+      +tablet-landscape-and-above
+        font-size: 19px
+      font-size: 14px
       margin-bottom: 100px
     .irssi
       margin-right: 75px
@@ -242,7 +258,7 @@ label.checkbox
 .signin-container, .signup-container
   color: $foreground
   .centerer
-    width: 400px
+    max-width: 400px
     margin: 0 auto
   h2
     font-size: 60px
@@ -272,7 +288,7 @@ label.checkbox
       transition: background-color ease-in-out .15s
       margin-top: 15px
       padding: 10px
-      width: 200px
+      max-width: 200px
     .btn:focus
       background-color: $belize-hole
     .forgot, .github
@@ -296,7 +312,8 @@ label.checkbox
   
 // Channels
 .channel-container
-  padding-top: 100px
+  +tablet-portrait-and-above
+    padding-top: 100px
   .alert
     text-align: center
   .buttons
@@ -333,21 +350,31 @@ label.checkbox
     @media (min-width: 768px)
       width: 625px
       top: 66px
+      padding: 15px
     @media (min-width: 992px)
       width: 808px
+      padding: 15px
     @media (min-width: 1200px)
       width: 975px
+      padding: 15px
     width: 100%
+    padding: 5px 15px
     overflow-y: hidden
     position: fixed
     top: 0
     z-index: 98
     background-color: $clouds
-    padding: 15px
     box-shadow: 0px 4px 5px -3px rgba(0, 0, 0, 0.05)
     border-bottom: 1px solid $silver
+    .navbar-toggle
+      margin: 0
+      .icon-bar
+        background-color: $foreground
     .channel-breadcrumb
       color: $foreground
+      margin-top: 4px
+      +mobile-landscape-and-above
+        margin: 0
       h3
         display: inline
         font-size: 20px
@@ -375,9 +402,11 @@ label.checkbox
         top: 17px
       color: $foreground
       font-size: 21px
+      display: none
       +tablet-portrait-and-above
         right: 150px
         font-size: 14px
+        display: block
       .glyphicon
         position: relative
         top: 1px
@@ -402,8 +431,6 @@ label.checkbox
           top: -1px
     .channel-settings
       right: 15px
-      +tablet-portrait-and-above
-        right: 15px
     .channel-notifications
       right: 40px
       +tablet-portrait-and-above
@@ -438,9 +465,19 @@ label.checkbox
         margin-right: 5px
         display: inline-block
         width: 200px
-
     #topic-form
       display: none
+    .channel-header-collapse
+      .navbar-nav
+        .divider
+          height: 1px
+          background-color: $silver
+          margin: 8px 0
+        .dropdown-header
+          text-transform: uppercase
+          font-size: 10px
+        li > a:hover
+          background-color: $silver
 
 .channels
   @media screen and (min-width: 992px)

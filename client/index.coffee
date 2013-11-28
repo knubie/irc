@@ -3,20 +3,6 @@
 Handlebars.registerHelper 'session', (input) ->
   Session.get input
 
-Handlebars.registerHelper 'page', (page) ->
-  if Session.equals 'page', page
-    Template._page
-
-Handlebars.registerHelper 'subPage', (page) ->
-  if Session.equals 'subPage', page
-    Template._page
-
-Handlebars.registerHelper 'isChannel', ->
-  Session.get('channel.name').isChannel()
-
-Handlebars.registerHelper 'isAll', ->
-  Session.equals 'channel.name', 'all'
-
 ########## Home / Login ##########
 
 Template.signup.events
@@ -42,30 +28,8 @@ Template.signup.events
     Meteor.loginWithGithub (error) ->
       console.log error if error
 
-Template.home.events
-  'click #signup-with-github': (e,t) ->
-    console.log 'sign up with github'
-    Meteor.loginWithGithub (error) ->
-      console.log error if error
-
-  'submit #signup': (e,t) ->
-    e.preventDefault()
-    # Get credentials from the form
-    username = t.find('#auth-nick').value
-    email = t.find('#auth-email').value
-    password = t.find('#auth-pw').value
-    # Create a new user
-    _id = Accounts.createUser {username, email, password}, (error) ->
-      if error
-        alert error.reason
-      else
-        # Add account to hector
-        Meteor.call 'remember', username, password, Meteor.userId()
-        if Session.get('joinAfterLogin')
-          channel = Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]
-          Router.go 'channelPage', {channel}
-        else
-          Router.go 'home'
+Template.signup.rendered = ->
+  $(@find('#signup-email')).focus()
 
 Template.login.events
   'submit #signin': (e,t) ->
@@ -83,7 +47,6 @@ Template.login.events
           Router.go 'home'
 
 Template.login.rendered = ->
-  #FIXME: this doesn't work.
   $(@find('#signin-username')).focus()
 
 ########## Header ##########
