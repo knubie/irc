@@ -1,6 +1,3 @@
-Router.configure
-  loadingTemplate: 'loading'
-
 Router.map ->
   @route 'home',
     path: '/'
@@ -74,15 +71,10 @@ Router.map ->
       Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE
     data: ->
       console.log 'data'
-      if @ready()
-        {
-          channel: Channels.findOne({name: "##{@params.channel}"})
-          pm: null
-        }
-      else
-        {
-          channel: {name: 'null'}
-        }
+      {
+        channel: Channels.findOne({name: "##{@params.channel}"})
+        pm: null
+      }
 
   @route 'mentions',
     path: '/channels/:channel/mentions'

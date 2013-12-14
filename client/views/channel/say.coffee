@@ -73,8 +73,6 @@ Template.say.helpers
     if @pm?
       true
     else if @channel?
-      console.log 'is channel'
-      console.log @channel.hasUser(user.username)
       @channel.hasUser(user.username) \
       and not @channel.isModerated() \
       or (@channel.isModerated() and @channel.nicks[user.username] is '@')
