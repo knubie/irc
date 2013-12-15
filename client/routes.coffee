@@ -68,7 +68,7 @@ Router.map ->
     waitOn: ->
       console.log 'wait on channel'
       handlers.messages = \
-      Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE
+      Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE * Session.get('messages.page')
     data: ->
       console.log 'data'
       {
