@@ -95,6 +95,11 @@
                 Channel Settings
               </a>
             </li>
+            <li class="leave-channel">
+              <a href="#">
+                Leave Channel
+              </a>
+            </li>
           {{else}}
             <li>
               <a href="/login">Sign in</a>
@@ -301,7 +306,7 @@
   {{#if speakable}}
     <div class="input-container col-sm-10 col-sm-offset-2">
       <form id="say">
-        <input tabindex="1" autocapitalize="off" class="form-control-two" id="say-input" placeholder="Send a message.">
+        <input tabindex="1" autocapitalize="off" class="form-control" id="say-input" placeholder="Send a message.">
       </form>
     </div>
   {{/if}}

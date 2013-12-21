@@ -71,6 +71,16 @@ Template.channelHeader.events
       userListDep.changed()
 
       #scrollToPlace() # Keep scroll position when template rerenders
+
+  'click .leave-channel': ->
+    Meteor.call 'part', Meteor.user().username, @channel.name
+    update Meteor.users, Meteor.userId()
+    , "profile.channels"
+    , (channels) =>
+      delete channels[@channel.name]
+      return channels
+    Router.go 'home'
+
       
 ########## Channels ##########
 

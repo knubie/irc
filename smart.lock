@@ -12,18 +12,18 @@
     "packages": {
       "user-status": {
         "git": "https://github.com/mizzao/meteor-user-status.git",
-        "tag": "v0.1.5",
-        "commit": "0169a468e57155f1d61fc2b1cd76bc9ca51c7313"
+        "tag": "v0.1.7",
+        "commit": "b6aa32ef56ba7b55b5f41bcd63cc80b0558e090e"
       },
       "collection-hooks": {
         "git": "https://github.com/matb33/meteor-collection-hooks.git",
-        "tag": "v0.5.4",
-        "commit": "7f286358af49ffc1a63e97354f2f306a911bacc0"
+        "tag": "v0.6.0",
+        "commit": "b563164c78d5ab4ad2258ce06736af6d4f0f33ba"
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
         "branch": "shark",
-        "commit": "5a18f6f201da3d9aa1a95289cef790b1f7b2c44f"
+        "commit": "77bd242e7cdc88bd992bfa5ae174419b293a190d"
       }
     }
   }

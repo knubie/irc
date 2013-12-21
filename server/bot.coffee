@@ -1,14 +1,3 @@
-class Tron extends Client
-  constructor: (listeners) ->
-    @on 'message#', (from, to, text, message) =>
-      if /^[>](.+)$/.test text # Listen for Wolfram queries.
-        query = text.replace /^[>]\s*/g, '' # Extract query.
-        wolfram.request query, (answer) =>
-          if answer
-            @say to, answer
-          else
-            @say to, "I don't know."
-
 class @Idletron extends Client
   constructor: (@nick) ->
     @channels = {}
@@ -43,7 +32,6 @@ class @Idletron extends Client
 
     # Listen for incoming messages.
     @on 'message#', async (from, to, text, message) =>
-
       #FIXME: this won't work.
       unless Meteor.users.findOne({username: from})
         # Server sends message to IRC before insert.
@@ -56,12 +44,34 @@ class @Idletron extends Client
           owner: 'server'
 
       if /^[?](.*)$/.test text # Listen for Wolfram queries.
-        query = text.replace /^[?]\s*/g, '' # Extract query.
-        wolfram.request query, (answer) =>
-          if answer
-            @say to, answer
-          else
-            @say to, "I don't know."
+        @say to, "I don't work yet."
+        Messages.insert
+          channel: to
+          text: "I don't work yet."
+          mobile: false
+          createdAt: new Date()
+          from: 'Idletron'
+          owner: 'server'
+        #query = text.replace /^[?]\s*/g, '' # Extract query.
+        #wolfram.request query, (answer) =>
+          #if answer
+            #@say to, answer
+            #Messages.insert
+              #channel: to
+              #text: answer
+              #mobile: false
+              #createdAt: new Date()
+              #from: 'Idletron'
+              #owner: 'server'
+          #else
+            #@say to, "I don't know."
+            #Messages.insert
+              #channel: to
+              #text: "I don't know."
+              #mobile: false
+              #createdAt: new Date()
+              #from: 'Idletron'
+              #owner: 'server'
 
     # Listen for channel list response and populate
     # channel collection with the results.
