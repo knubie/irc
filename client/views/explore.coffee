@@ -3,6 +3,7 @@ Template.explore.helpers
     Channels.find {}, {sort : {users : -1}}
   url: ->
     @name.match(/^(.)(.*)$/)[2]
+  name: -> @name #FIXME: why is this neccessary?
 
 Template.explore.events
   'click ul>li>h3>a': (e,t) ->
