@@ -229,5 +229,3 @@ Template.message.helpers
       return 'reverse'
     else
       return ''
-  mobile: ->
-    Modernizr.touch and $(window).width < 768

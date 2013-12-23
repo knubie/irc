@@ -23,14 +23,13 @@ Template.say.events
         Messages.insert
           channel: @channel.name
           text: message
-          mobile: Modernizr.touch
+          mobile: Modernizr.touch and $(window).width() < 768
           createdAt: new Date()
           from: Meteor.user().username
       else # Sending to user
-        console.log @pm
         Messages.insert
           text: message
-          mobile: Modernizr.touch
+          mobile: Modernizr.touch and $(window).width() < 768
           createdAt: new Date()
           from: Meteor.user().username
           to: @pm
