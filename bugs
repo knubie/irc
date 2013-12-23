@@ -1,3 +1,6 @@
 - Changing the topic reloads the messages.
 - After the messages get reloaded, new messages are always joined to preivous.
+- http://imgur.com/a/ds8xH
 - no mobile icon when sending message from mobile.
+- loading earlier messages messes up the ui.
+- mention count should go away after viewing the message on the channel.
