@@ -323,181 +323,183 @@ label.checkbox {
   .input-container #say-input:focus {
     border-color: #3498db; }
 
-@media only screen and (min-width: 768px) {
-  .channel-container {
-    padding-top: 100px; } }
-.channel-container .alert {
-  text-align: center; }
-.channel-container .buttons {
-  position: absolute;
-  top: 19px;
-  right: 0; }
-  .channel-container .buttons a {
-    border: none;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: 3px;
-    display: inline-block;
-    font-size: 10px;
-    padding: 3px 12px; }
-  .channel-container .buttons a:hover {
-    text-decoration: none; }
-  .channel-container .buttons .add-bot {
-    background-color: #3498db;
-    box-shadow: 0 2px 0 #2980b9; }
-  .channel-container .buttons .settings {
-    background-color: silver;
-    box-shadow: 0 2px 0 #95a5a6; }
-.channel-container .user-count {
-  color: #777777; }
-.channel-container .user-count:hover {
-  cursor: pointer;
-  text-decoration: underline; }
-.channel-container .load-more {
-  display: block;
-  width: 200px;
-  margin: 0 auto 15px; }
-.channel-container .channel-header {
-  width: 100%;
-  padding: 5px 15px;
-  overflow-y: hidden;
-  position: fixed;
-  top: 0;
-  z-index: 98;
-  background-color: #ecf0f1;
-  box-shadow: 0px 4px 5px -3px rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid #bdc3c7; }
-  @media (min-width: 768px) {
-    .channel-container .channel-header {
-      width: 625px;
-      top: 66px;
-      padding: 15px; } }
-  @media (min-width: 992px) {
-    .channel-container .channel-header {
-      width: 808px;
-      padding: 15px; } }
-  @media (min-width: 1200px) {
-    .channel-container .channel-header {
-      width: 975px;
-      padding: 15px; } }
-  .channel-container .channel-header .navbar-toggle {
-    margin: 0; }
-    .channel-container .channel-header .navbar-toggle .icon-bar {
-      background-color: #777777; }
-  .channel-container .channel-header .channel-breadcrumb {
-    color: #777777;
-    margin-top: 4px; }
-    @media only screen and (min-width: 568px) {
-      .channel-container .channel-header .channel-breadcrumb {
-        margin: 0; } }
-    .channel-container .channel-header .channel-breadcrumb h3 {
-      display: inline;
-      font-size: 20px; }
-    .channel-container .channel-header .channel-breadcrumb .channel-name {
-      color: #777777;
-      font-weight: bold; }
-    .channel-container .channel-header .channel-breadcrumb .slash {
-      font-size: 18px;
-      color: silver; }
-  .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
-    display: none;
-    font-size: 14px;
-    color: #666666;
-    margin-top: 5px; }
-    @media only screen and (min-width: 768px) {
-      .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
-        display: block; } }
-    .channel-container .channel-header .topic .topic-edit, .channel-container .channel-header .topic .topic-edit > a, .channel-container .channel-header #topic-form .topic-edit, .channel-container .channel-header #topic-form .topic-edit > a {
-      color: #bdc3c7; }
-  .channel-container .channel-header .glyphicon {
-    color: #bdc3c7; }
-  .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+.channel-container {
+  overflow: hidden; }
+  @media only screen and (min-width: 768px) {
+    .channel-container {
+      padding-top: 100px; } }
+  .channel-container .alert {
+    text-align: center; }
+  .channel-container .buttons {
     position: absolute;
-    top: 15px;
-    color: #777777;
-    font-size: 21px;
-    display: none; }
-    @media only screen and (min-width: 768px) {
-      .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
-        top: 17px; } }
-    @media only screen and (min-width: 768px) {
-      .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
-        right: 150px;
-        font-size: 14px;
-        display: block; } }
-    .channel-container .channel-header .channel-settings .glyphicon, .channel-container .channel-header .channel-notifications .glyphicon {
-      position: relative;
-      top: 1px; }
-    @media only screen and (min-width: 768px) {
-      .channel-container .channel-header .channel-settings .hidden-xs, .channel-container .channel-header .channel-notifications .hidden-xs {
-        display: inline !important; } }
-    .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
-      color: #bdc3c7;
-      font-size: 19px;
-      margin-right: 6px; }
-      @media only screen and (min-width: 768px) {
-        .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
-          font-size: 14px; } }
-    .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
-      padding: 2px 4px 1px;
-      font-size: 9px;
-      background-color: #3498db;
-      position: absolute;
-      left: 9px;
-      top: 4px; }
-      @media only screen and (min-width: 768px) {
-        .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
-          left: 7px;
-          top: -1px; } }
-  .channel-container .channel-header .channel-settings {
-    right: 15px; }
-  .channel-container .channel-header .channel-notifications {
-    right: 40px; }
-    @media only screen and (min-width: 768px) {
-      .channel-container .channel-header .channel-notifications {
-        right: 105px; } }
-  .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover, .channel-container .channel-header .channel-settings.active, .channel-container .channel-header .channel-notifications.active {
-    color: #3498db;
-    text-decoration: none; }
-    .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon, .channel-container .channel-header .channel-settings.active .batch-icon, .channel-container .channel-header .channel-settings.active .glyphicon, .channel-container .channel-header .channel-notifications.active .batch-icon, .channel-container .channel-header .channel-notifications.active .glyphicon {
-      color: rgba(52, 152, 219, 0.5); }
-  .channel-container .channel-header .channel-invite {
-    display: none;
-    position: absolute;
-    top: 14px;
-    right: 15px;
-    color: #3498db;
-    border: 1px solid #3498db;
-    background-color: transparent;
-    font-size: 10px;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 1px; }
-  .channel-container .channel-header .channel-invite:hover {
-    color: white;
-    background-color: #3498db; }
-  .channel-container .channel-header .invite-dropdown {
-    padding: 10px;
-    right: 15px;
-    left: auto;
-    top: 42px !important;
-    bottom: auto !important; }
-    .channel-container .channel-header .invite-dropdown input {
-      margin-right: 5px;
+    top: 19px;
+    right: 0; }
+    .channel-container .buttons a {
+      border: none;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 3px;
       display: inline-block;
-      width: 200px; }
-  .channel-container .channel-header #topic-form {
-    display: none; }
-  .channel-container .channel-header .channel-header-collapse .navbar-nav .divider {
-    height: 1px;
-    background-color: #bdc3c7;
-    margin: 8px 0; }
-  .channel-container .channel-header .channel-header-collapse .navbar-nav .dropdown-header {
-    text-transform: uppercase;
-    font-size: 10px; }
-  .channel-container .channel-header .channel-header-collapse .navbar-nav li > a:hover {
-    background-color: #bdc3c7; }
+      font-size: 10px;
+      padding: 3px 12px; }
+    .channel-container .buttons a:hover {
+      text-decoration: none; }
+    .channel-container .buttons .add-bot {
+      background-color: #3498db;
+      box-shadow: 0 2px 0 #2980b9; }
+    .channel-container .buttons .settings {
+      background-color: silver;
+      box-shadow: 0 2px 0 #95a5a6; }
+  .channel-container .user-count {
+    color: #777777; }
+  .channel-container .user-count:hover {
+    cursor: pointer;
+    text-decoration: underline; }
+  .channel-container .load-more {
+    display: block;
+    width: 200px;
+    margin: 0 auto 15px; }
+  .channel-container .channel-header {
+    width: 100%;
+    padding: 5px 15px;
+    overflow-y: hidden;
+    position: fixed;
+    top: 0;
+    z-index: 98;
+    background-color: #ecf0f1;
+    box-shadow: 0px 4px 5px -3px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #bdc3c7; }
+    @media (min-width: 768px) {
+      .channel-container .channel-header {
+        width: 625px;
+        top: 66px;
+        padding: 15px; } }
+    @media (min-width: 992px) {
+      .channel-container .channel-header {
+        width: 808px;
+        padding: 15px; } }
+    @media (min-width: 1200px) {
+      .channel-container .channel-header {
+        width: 975px;
+        padding: 15px; } }
+    .channel-container .channel-header .navbar-toggle {
+      margin: 0; }
+      .channel-container .channel-header .navbar-toggle .icon-bar {
+        background-color: #777777; }
+    .channel-container .channel-header .channel-breadcrumb {
+      color: #777777;
+      margin-top: 4px; }
+      @media only screen and (min-width: 568px) {
+        .channel-container .channel-header .channel-breadcrumb {
+          margin: 0; } }
+      .channel-container .channel-header .channel-breadcrumb h3 {
+        display: inline;
+        font-size: 20px; }
+      .channel-container .channel-header .channel-breadcrumb .channel-name {
+        color: #777777;
+        font-weight: bold; }
+      .channel-container .channel-header .channel-breadcrumb .slash {
+        font-size: 18px;
+        color: silver; }
+    .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
+      display: none;
+      font-size: 14px;
+      color: #666666;
+      margin-top: 5px; }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .topic, .channel-container .channel-header #topic-form {
+          display: block; } }
+      .channel-container .channel-header .topic .topic-edit, .channel-container .channel-header .topic .topic-edit > a, .channel-container .channel-header #topic-form .topic-edit, .channel-container .channel-header #topic-form .topic-edit > a {
+        color: #bdc3c7; }
+    .channel-container .channel-header .glyphicon {
+      color: #bdc3c7; }
+    .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+      position: absolute;
+      top: 15px;
+      color: #777777;
+      font-size: 21px;
+      display: none; }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+          top: 17px; } }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+          right: 150px;
+          font-size: 14px;
+          display: block; } }
+      .channel-container .channel-header .channel-settings .glyphicon, .channel-container .channel-header .channel-notifications .glyphicon {
+        position: relative;
+        top: 1px; }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .channel-settings .hidden-xs, .channel-container .channel-header .channel-notifications .hidden-xs {
+          display: inline !important; } }
+      .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
+        color: #bdc3c7;
+        font-size: 19px;
+        margin-right: 6px; }
+        @media only screen and (min-width: 768px) {
+          .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
+            font-size: 14px; } }
+      .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
+        padding: 2px 4px 1px;
+        font-size: 9px;
+        background-color: #3498db;
+        position: absolute;
+        left: 9px;
+        top: 4px; }
+        @media only screen and (min-width: 768px) {
+          .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
+            left: 7px;
+            top: -1px; } }
+    .channel-container .channel-header .channel-settings {
+      right: 15px; }
+    .channel-container .channel-header .channel-notifications {
+      right: 40px; }
+      @media only screen and (min-width: 768px) {
+        .channel-container .channel-header .channel-notifications {
+          right: 105px; } }
+    .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover, .channel-container .channel-header .channel-settings.active, .channel-container .channel-header .channel-notifications.active {
+      color: #3498db;
+      text-decoration: none; }
+      .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon, .channel-container .channel-header .channel-settings.active .batch-icon, .channel-container .channel-header .channel-settings.active .glyphicon, .channel-container .channel-header .channel-notifications.active .batch-icon, .channel-container .channel-header .channel-notifications.active .glyphicon {
+        color: rgba(52, 152, 219, 0.5); }
+    .channel-container .channel-header .channel-invite {
+      display: none;
+      position: absolute;
+      top: 14px;
+      right: 15px;
+      color: #3498db;
+      border: 1px solid #3498db;
+      background-color: transparent;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px; }
+    .channel-container .channel-header .channel-invite:hover {
+      color: white;
+      background-color: #3498db; }
+    .channel-container .channel-header .invite-dropdown {
+      padding: 10px;
+      right: 15px;
+      left: auto;
+      top: 42px !important;
+      bottom: auto !important; }
+      .channel-container .channel-header .invite-dropdown input {
+        margin-right: 5px;
+        display: inline-block;
+        width: 200px; }
+    .channel-container .channel-header #topic-form {
+      display: none; }
+    .channel-container .channel-header .channel-header-collapse .navbar-nav .divider {
+      height: 1px;
+      background-color: #bdc3c7;
+      margin: 8px 0; }
+    .channel-container .channel-header .channel-header-collapse .navbar-nav .dropdown-header {
+      text-transform: uppercase;
+      font-size: 10px; }
+    .channel-container .channel-header .channel-header-collapse .navbar-nav li > a:hover {
+      background-color: #bdc3c7; }
 
 .channels {
   color: #777777;

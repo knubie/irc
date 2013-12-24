@@ -4,3 +4,5 @@
 - no mobile icon when sending message from mobile.
 - loading earlier messages messes up the ui.
 - mention count should go away after viewing the message on the channel.
+- kick doesn't work
+- change timestamp to twitter-style
