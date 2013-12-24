@@ -22,6 +22,12 @@ Template.messages.rendered = ->
         $('.message').removeClass 'faded'
     , '.message'
 
+  # Scroll to place
+  Messages.find().observeChanges
+    added: -> scrollToPlace()
+
+  scrollToPlace()
+
 Template.messages.helpers
   messages: ->
     limit = (PERPAGE * Session.get('messages.page'))
@@ -103,7 +109,6 @@ Template.message.rendered = ->
     ptext = ptext.replace regex.channel, ' <a href="/channels/$1">#$1</a>'
   p.html(ptext)
 
-  scrollToPlace() # Keep scroll position when template rerenders
 
 Template.message.events
   'click .reply-action': ->
