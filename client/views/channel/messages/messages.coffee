@@ -78,6 +78,7 @@ Template.messages.events
 ########## Message ##########
 
 Template.message.rendered = ->
+  scrollToPlace()
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()
@@ -108,7 +109,6 @@ Template.message.rendered = ->
   while regex.channel.test ptext
     ptext = ptext.replace regex.channel, ' <a href="/channels/$1">#$1</a>'
   p.html(ptext)
-
 
 Template.message.events
   'click .reply-action': ->
