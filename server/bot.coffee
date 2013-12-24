@@ -315,7 +315,6 @@ class @Bot extends Client
     @send 'MODE', channel
 
   say: (target, text) ->
-    console.log "Target is: #{target}"
     #check channel, validChannelName
     check text, validMessageText
     super target, text
