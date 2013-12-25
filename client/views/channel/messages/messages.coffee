@@ -22,11 +22,8 @@ Template.messages.rendered = ->
         $('.message').removeClass 'faded'
     , '.message'
 
-  # Scroll to place
-  Messages.find().observeChanges
-    added: -> scrollToPlace()
-
-  scrollToPlace()
+  $('.messages').bind 'DOMNodeInserted', ->
+    scrollToPlace()
 
 Template.messages.helpers
   messages: ->
@@ -78,7 +75,6 @@ Template.messages.events
 ########## Message ##########
 
 Template.message.rendered = ->
-  scrollToPlace()
   # Remove mentions that are rendered.
   if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
     update Meteor.users, Meteor.userId()
