@@ -79,6 +79,14 @@ Template.messages.events
 
 Template.message.rendered = ->
   scrollToPlace()
+  if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
+  #if @data._id in Meteor.user().profile.channels[@data.channel].mentions
+    update Meteor.users, Meteor.userId()
+    , "profile.channels.#{@data.channel}.mentions"
+    , (mentions) ->
+      mentions.splice i, 1
+      return mentions
+
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()

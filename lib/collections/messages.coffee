@@ -54,20 +54,9 @@ Messages.before.insert (userId, doc) ->
             # Push the nick to the Message's convo array.
             doc.convos.push nick
 
-Messages.after.insert (userId, doc) ->
-  if Meteor.isServer
-    if doc.channel? and doc.from isnt 'system'
-      for nick of Channels.findOne(name:doc.channel).nicks
-        if regex.nick(nick).test(doc.text) \
-        and user = Meteor.users.findOne(username:nick)
-          if doc.from not in user.profile.channels[doc.channel].ignore
             # Update the mentioned user's profile with a new Message.
-            console.log 'update mentios array.'
             update Meteor.users, user._id
             , "profile.channels.#{doc.channel}.mentions"
             , (mentions) ->
-              unless Object::toString.call(mentions) is '[object Array]'
-                mentions = []
               mentions.push doc._id unless doc._id in mentions
               return mentions
-
