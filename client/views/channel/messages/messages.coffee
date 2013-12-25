@@ -79,8 +79,8 @@ Template.messages.events
 
 Template.message.rendered = ->
   scrollToPlace()
+  # Remove mentions that are rendered.
   if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
-  #if @data._id in Meteor.user().profile.channels[@data.channel].mentions
     update Meteor.users, Meteor.userId()
     , "profile.channels.#{@data.channel}.mentions"
     , (mentions) ->
@@ -132,7 +132,7 @@ Template.message.events
         ignore.push @from
         _.uniq ignore
 
-  'click': (e, t) ->
+  'click .reimplementme': (e, t) -> #TODO: reimplement this
     if Session.equals('channel.name', 'all') and not $(e.target).is('strong')
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
@@ -163,6 +163,7 @@ Template.message.events
     #TODO: Hide messages mentioning other users.
 
   'click .kick': (e, t) ->
+    console.log @
     Meteor.call 'kick', Meteor.user(), @channel, @from
 
   'click .ban': (e, t) ->
