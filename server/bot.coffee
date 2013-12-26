@@ -260,7 +260,7 @@ class @Bot extends Client
             return pms
 
     # Send a NAMES request when users joins, parts, or changes nick.
-    for event in ['join', 'part', 'nick', 'kick']
+    for event in ['join', 'part', 'nick', 'kick', 'quit']
       @on event, async (channel) => @send 'NAMES', channel
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
