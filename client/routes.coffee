@@ -59,13 +59,11 @@ Router.map ->
       'say': {to: 'say'}
       'users': {to: 'users'}
     before: ->
-      console.log 'before channel'
       channel = "##{@params.channel}"
       Session.set 'channel', channel
       Session.set 'subPage', null
       if Meteor.user() and not Meteor.user().profile.channels[channel]?
         Meteor.call 'join', Meteor.user().username, channel
-    unload: ->
     waitOn: ->
       console.log 'wait on channel'
       handlers.messages = \

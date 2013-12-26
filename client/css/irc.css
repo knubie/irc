@@ -557,6 +557,8 @@ label.checkbox {
     border-radius: 5px; }
     .channels li.channel .hash {
       color: #bdc3c7; }
+    .channels li.channel .batch-icon {
+      margin-left: -13px; }
   .channels li.channel:hover {
     background-color: #e0e4e5; }
     .channels li.channel:hover .close {

@@ -57,7 +57,7 @@ Template.messages.helpers
         new Message doc
 
   loadMore: ->
-    true
+    false
     #limit = (PERPAGE * Session.get('messages.page'))
     #selector = if @channel? then {channel: @channel.name} else {}
     #Messages.find(selector).fetch().length > limit 
