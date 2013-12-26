@@ -164,6 +164,7 @@ Template.message.events
 
   'click .ban': (e, t) ->
     if confirm("Are you sure you want to ban #{@from} from the channel? (You can un-ban them later in the channel settings.)")
+      Meteor.call 'kick', Meteor.user(), @channel, @from, ''
       Meteor.call 'mode', Meteor.user(), @channel, '+b', @from
       update Channels, Channels.findOne({name: @channel})._id
       , "bans"
