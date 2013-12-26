@@ -80,6 +80,11 @@ Template.channelHeader.events
       delete channels[@channel.name]
       return channels
     Router.go 'home'
+  
+  'click .signout': ->
+    #TODO: create some kind of explicit disconnect.
+    #Meteor.call 'disconnect', Meteor.user().username
+    Meteor.logout -> Router.go 'home'
 
       
 ########## Channels ##########
