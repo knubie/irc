@@ -112,22 +112,73 @@
 </template>
 
 <template name="home">
-  <div class="marketing-section-signup">
+  <div class="home-top">
     <div class="container">
       <h1>jupe</h1>
       <h4>Persistent IRC for the web.</h4>
 
       <img src="/img/irssi.png" class="irssi" alt=""/>
       <img src="/img/browser-demo.png" alt=""/>
+    </div>
+  </div>
+  <div class="home-middle">
+    <div class="container">
+      <p>
+        Jupe is an IRC network for the web. It offers a standard IRC server that can be connected to from any IRC client, but also contains an always-on web client. Acess your channels from any browser or device and never miss a message. The web client bypasses the need for setting up tricky bouncers or clients on remote servers. The authentication system negates the need for registering with "service bots" while at the same time enabling greater networking capabilities like user profiles and friends lists.
+      </p>
 
-      <div class="col-sm-4">
-        <form id="signup" role="signup">
-          <input class="form-control" type="text" autocapitalize="off" autocorrect="off" id="auth-nick" placeholder="Pick a username" tabindex="1">
-          <input class="form-control" type="email" id="auth-email" placeholder="Your email" tabindex="2">
-          <input class="form-control" type="password" id="auth-pw" placeholder="Create a passphrase" tabindex="3">
-          <button type="submit" class="btn btn-primary" tabindex="4">Sign up</button>
-        </form>
+      <div class="feature-row row">
+        <div class="col-sm-4">
+          <h3>
+            <span class="glyphicon glyphicon-phone"></span>
+            Responsive
+          </h3>
+          Built to work on as many devices as possible.
+        </div>
+        <div class="col-sm-4">
+          <h3>
+            <span class="batch-icon">&#xf0b0;</span>
+            Always connected
+          </h3>
+          Never miss a message. No need for complicated BNC or remote client set-ups. Access your channels &amp; messages from any browser.
+        </div>
+        <div class="col-sm-4">
+          <h3>
+            <span class="batch-icon">&#xf0d4;</span>
+            Message feeds
+          </h3>
+          View messages from all your subscribed channels in one feed, or group them into related feeds.
+        </div>
       </div>
+      <div class="feature-row row">
+        <div class="col-sm-4">
+          <h3>
+            <span class="batch-icon">&#xf009;</span>
+            View conversation
+          </h3>
+          Isolate conversations between two people in busy channels.
+        </div>
+        <div class="col-sm-4">
+          <h3>
+            <span class="batch-icon">&#xf060;</span>
+            IRC backend
+          </h3>
+          Jupe has a standard IRC backend, so you can acces it from any IRC client with your username and password.
+        </div>
+        <div class="col-sm-4">
+          <h3>
+            <span class="batch-icon">&#xf139;</span>
+            Limited markdown
+          </h3>
+          Supports basic markdown like <span class="underline">_underline_</span>, <strong>*bold*</strong>, <i>**italic**</i>, and <code>`code`</code>.
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="footer">
+    <div class="container">
+      &copy; 2013 Jupe
     </div>
   </div>
 </template>
