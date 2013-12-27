@@ -138,3 +138,7 @@ Router.map ->
         pm: @params.user
         subpage: 'messages'
       }
+
+  @route 'tos',
+    path: '/tos'
+    layoutTemplate: 'tos'
