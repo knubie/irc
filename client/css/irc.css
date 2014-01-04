@@ -661,8 +661,8 @@ label.checkbox {
       margin-left: 2px;
       color: #bdc3c7;
       font-size: 12px; }
-  .messages .message .muted {
-    color: rgba(0, 0, 0, 0.2);
+  .messages .message .muted.time {
+    color: white;
     font-size: 12px; }
   .messages .message .divider {
     width: 100%;
@@ -698,6 +698,8 @@ label.checkbox {
     font-size: 10px; }
 .messages .message:hover .actions {
   display: inline; }
+.messages .message:hover .muted.time {
+  color: rgba(0, 0, 0, 0.2); }
 .messages .touch:hover .actions {
   display: none; }
 .messages .bot {

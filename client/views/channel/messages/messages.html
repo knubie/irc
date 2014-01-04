@@ -49,7 +49,7 @@
       class="message join {{offline}} {{mention}} {{bot}} {{info}}"
     >
       <div class="divider"></div>
-      <small class="muted pull-right">{{timeAgo}}</small>
+      <small class="muted pull-right time">{{timeAgo}}</small>
       <p>{{text}}</p>
     </li>
   {{else}}
@@ -109,7 +109,7 @@
           {{/if}}
         {{/unless}}
       {{/unless}}
-      <small class="muted pull-right">{{timeAgo}}</small>
+      <small class="muted pull-right time">{{timeAgo}}</small>
       <p>{{text}}</p>
       {{#if isConvo}}
         <div class="action convo">
