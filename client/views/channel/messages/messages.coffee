@@ -58,9 +58,10 @@ Template.messages.helpers
 
   loadMore: ->
     false
+    #TODO: loadMore loads the messages in reverse order as they are originally loaded.
     #limit = (PERPAGE * Session.get('messages.page'))
     #selector = if @channel? then {channel: @channel.name} else {}
-    #Messages.find(selector).fetch().length > limit 
+    #Messages.find(selector).fetch().length == limit
   url_channel: ->
     @channel.name.match(/^(#)?(.*)$/)[2]
 
@@ -174,6 +175,9 @@ Template.message.events
 
 Template.message.helpers
   joinToPrev: ->
+    console.log @text
+    console.log @prev?.from
+    console.log "-----"
     sameChannel = true
     mentioned = true
     prevMentioned = true

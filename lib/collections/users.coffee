@@ -17,6 +17,7 @@ if Meteor.isServer
       pms: {}
       awaySince: 0
       realName: ''
+      inlineMedia: true
 
     # Augment/override with client-side options
     _.extend profile, options.profile

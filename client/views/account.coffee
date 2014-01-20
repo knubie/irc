@@ -32,6 +32,10 @@ Template.account.events
     Meteor.users.update Meteor.userId(),
       $set: 'profile.sounds': not Meteor.user().profile.sounds
 
+  'click label.checkbox[for="displayMedia"]': (e,t) ->
+    Meteor.users.update Meteor.userId(),
+      $set: 'profile.inlineMedia': not Meteor.user().profile.inlineMedia
+
   'click label.checkbox[for="sendNotifications"]': (e,t) ->
     if window.webkitNotifications.checkPermission() is 1 and not Meteor.user().profile.notifications
       webkitNotifications.requestPermission()
