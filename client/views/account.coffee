@@ -13,6 +13,12 @@ Template.account.helpers
     else
       return ''
 
+  mediaChecked: ->
+    if @profile.inlineMedia
+      return 'checked'
+    else
+      return ''
+
   realNameValue: ->
     @profile.realName or ''
 
