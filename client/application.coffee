@@ -31,6 +31,9 @@ Meteor.startup ->
   # Set up FastClick for more responsive touch events.
   FastClick.attach(document.body)
 
+  # When window loses focus, incoming message causes title to change.
+  $(window).on 'focus', -> window.document.title = "Jupe"
+
 # Store scroll position in a session variable. This keeps the scroll
 # position in place when receiving new messages, unless the user is
 # scrolled to the bottom, then it forces the scroll position to the
@@ -65,4 +68,3 @@ Meteor.startup ->
 @isElementInViewport = (el) ->
   rect = el.getBoundingClientRect()
   rect.top >= 160 && rect.left >= 0 && rect.bottom <= $(window).height()
-

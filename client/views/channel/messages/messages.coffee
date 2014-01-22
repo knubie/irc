@@ -198,7 +198,7 @@ Template.message.helpers
     else
       false
   timeAgo: ->
-    moment(@createdAt).fromNow(true)
+    moment(@createdAt).fromNow()
   offline: ->
     if @channel? \
     and @from not of Channels.findOne({name: @channel})?.nicks \
