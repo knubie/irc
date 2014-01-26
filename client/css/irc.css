@@ -662,7 +662,7 @@ label.checkbox {
       color: #bdc3c7;
       font-size: 12px; }
   .messages .message .muted.time {
-    color: white;
+    color: rgba(0, 0, 0, 0);
     font-size: 12px; }
   .messages .message .divider {
     width: 100%;

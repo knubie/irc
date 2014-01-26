@@ -187,14 +187,15 @@ Template.message.helpers
       prevMentioned = not @prev.mentions(Meteor.user()?.username)
     @prev? and @prev.from is @from \
     and sameChannel and mentioned and prevMentioned \
-    and @from isnt 'system'
+    and @from isnt 'system' and @type isnt 'action' \
+    and @prev.type isnt 'action'
   isConvo: ->
     if @channel?
       mentions = []
       for nick of Channels.findOne(name:@channel).nicks
         if @mentions(nick)
           mentions.push nick
-      mentions.length is 1 and @from isnt 'system'
+      mentions.length is 1 and @from isnt 'system' and @type isnt 'action'
     else
       false
   timeAgo: ->
@@ -202,7 +203,7 @@ Template.message.helpers
   offline: ->
     if @channel? \
     and @from not of Channels.findOne({name: @channel})?.nicks \
-    and @from isnt 'system'
+    and @from isnt 'system' and @type isnt 'action'
       return 'offline'
   banned: ->
     @channel? and @from in Channels.findOne({name: @channel})?.bans
@@ -210,7 +211,7 @@ Template.message.helpers
     if @mentions(Meteor.user()?.username)
       return 'mention'
   isMentioned: ->
-    @channel? and @mentions(Meteor.user()?.username) and @from isnt 'system'
+    @channel? and @mentions(Meteor.user()?.username) and @from isnt 'system' and @type isnt 'action'
   op_status: ->
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
@@ -222,9 +223,9 @@ Template.message.helpers
         return ''
   self: ->
     #@type() is 'self'
-    @from is 'system' or @from is Meteor.user()?.username
+    @from is 'system' or @from is Meteor.user()?.username or @type is 'action'
   info: ->
-    if @from is 'system'
+    if @from is 'system' or @type is 'action'
       return 'info'
   bot: ->
     if @from is 'Idletron'

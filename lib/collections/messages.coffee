@@ -11,7 +11,7 @@ class @Message
   constructor: (doc) ->
     @[k] = doc[k] for k of doc
   mentions: (user) ->
-    @channel? and @from isnt 'system' and regex.nick(user).test(@text) 
+    @channel? and @from isnt 'system' and @type isnt 'action' and regex.nick(user).test(@text) 
   mentioned: ->
     mentions = []
     for nick of Channels.findOne(name:@channel).nicks
@@ -39,13 +39,20 @@ if Meteor.isServer
 Messages.before.insert (userId, doc) ->
   if Meteor.isServer
     if doc.owner isnt 'server'
+      {username} = Meteor.users.findOne(userId)
+
       # Set timestamp from the server.
       doc.createdAt = new Date()
-      # Send message to the IRC server.
-      client[Meteor.users.findOne(userId).username].say doc.channel or doc.to, doc.text
+
+      # Send action to the IRC server.
+      if doc.type is 'action'
+        client[username].action doc.channel or doc.to, doc.text
+      else
+        # Send message to the IRC server.
+        client[username].say doc.channel or doc.to, doc.text
 
     # Manage mentions.
-    if doc.channel? and doc.from isnt 'system'
+    if doc.channel? and doc.from isnt 'system' and doc.type isnt 'action'
       doc.convos = []
       for nick of Channels.findOne(name:doc.channel).nicks
         if regex.nick(nick).test(doc.text) \

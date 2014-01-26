@@ -51,15 +51,13 @@ beepAndNotify = (id, message) ->
 ########## Beeps / Notifications ##########
 
 unread = 0
+$(window).focus -> unread = 0
 
 Messages.find().observeChanges
   added: (id, message) ->
     beepAndNotify(id, message)
     if document.hasFocus()
-      unread = 0
       window.document.title = "Jupe"
     else
       unread += 1
       window.document.title = "(#{unread}) Jupe"
-      
-

@@ -73,6 +73,17 @@ class @Idletron extends Client
               #from: 'Idletron'
               #owner: 'server'
 
+    @on 'action', async (from, to, text, message) =>
+      #FIXME: this won't work.
+      unless Meteor.users.findOne({username: from})
+        Messages.insert
+          channel: to
+          text: "#{from} #{text}"
+          mobile: false
+          createdAt: new Date()
+          from: 'system'
+          owner: 'server'
+
     # Listen for channel list response and populate
     # channel collection with the results.
     @on 'channellist_item', async (data) ->

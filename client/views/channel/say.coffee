@@ -18,21 +18,31 @@ Template.say.events
 
       $('#say-input').val('')
 
-      # Server sends message to IRC before insert.
-      if @channel? # Sending to channel
+      # if /me action
+      if /^\/me(.*)$/.test message # Listen for Wolfram queries.
         Messages.insert
           channel: @channel.name
-          text: message
+          text: "#{Meteor.user().username} #{message.replace /^\/me\s*/g, ''}"
           mobile: Modernizr.touch and $(window).width() < 768
           createdAt: new Date()
           from: Meteor.user().username
-      else # Sending to user
-        Messages.insert
-          text: message
-          mobile: Modernizr.touch and $(window).width() < 768
-          createdAt: new Date()
-          from: Meteor.user().username
-          to: @pm
+          type: 'action'
+      else
+        # Server sends message to IRC before insert.
+        if @channel? # Sending to channel
+          Messages.insert
+            channel: @channel.name
+            text: message
+            mobile: Modernizr.touch and $(window).width() < 768
+            createdAt: new Date()
+            from: Meteor.user().username
+        else # Sending to user
+          Messages.insert
+            text: message
+            mobile: Modernizr.touch and $(window).width() < 768
+            createdAt: new Date()
+            from: Meteor.user().username
+            to: @pm
 
 
 
