@@ -23,7 +23,7 @@ Template.messages.rendered = ->
     , '.message'
 
   $('.messages').bind 'DOMNodeInserted', ->
-    scrollToPlace()
+    Meteor.setTimeout scrollToPlace, 1
 
 Template.messages.helpers
   messages: ->

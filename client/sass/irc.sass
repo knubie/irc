@@ -137,6 +137,8 @@ label.checkbox
   border-color: $silver
   box-shadow: 0 1px 0 rgba(255,255,255,.1)
   .search
+    +mobile-portrait
+      display: none
     float: left
     position: relative
     margin-left: 50px
@@ -155,7 +157,10 @@ label.checkbox
       font-size: 14px
       text-shadow: none
   .navbar-brand
-    color: #FFF
+    img
+      +mobile-landscape-and-below
+        width: 50px
+        height: 21px
   .navbar-nav
     li.open
       background: none
@@ -197,6 +202,9 @@ label.checkbox
   .navbar-toggle
     border-color: $clouds
     background-color: $clouds
+    .icon-bar
+      color: $foreground
+      background-color: $foreground
   .navbar-inverse-toggle, .navbar-toggle:hover
     border-color: $silver
     background-color: $silver
@@ -215,6 +223,9 @@ label.checkbox
   .navbar-toggle
     border-color: $peter-river
     background-color: $peter-river
+    .icon-bar
+      color: white
+      background-color: white
   .navbar-inverse-toggle, .navbar-toggle:hover
     border-color: $belize-hole
     background-color: $belize-hole
@@ -229,6 +240,7 @@ label.checkbox
   padding-bottom: 150px
   img
     box-shadow: 1px 1px 20px 0px rgba(0,0,0,0.35)
+    max-width: 75%
   .container
     text-align: center
     h1
@@ -239,12 +251,15 @@ label.checkbox
       font-weight: bold
     h4
       color: rgba(255,255,255,0.6)
+      margin-bottom: 50px
       +tablet-landscape-and-above
         font-size: 19px
+        margin-bottom: 100px
       font-size: 14px
-      margin-bottom: 100px
     .irssi
       margin-right: 75px
+      +mobile-portrait
+        margin: 0 0 20px 0
 
   +tablet-portrait-and-above
     text-align: left

@@ -65,6 +65,11 @@ Template.header.helpers
       return ''
     else
       return 'home'
+  channel: ->
+    if Session.get('channel')
+      return 'hidden-xs'
+    else
+      return ''
 
 ########## User Profile ##########
 

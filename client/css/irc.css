@@ -136,6 +136,9 @@ label.checkbox {
     float: left;
     position: relative;
     margin-left: 50px; }
+    @media only screen and (min-width: 320px) and (max-width: 567px) {
+      #relay-nav .search {
+        display: none; } }
     #relay-nav .search input {
       border-radius: 13px;
       height: 26px;
@@ -150,8 +153,10 @@ label.checkbox {
       color: #bdc3c7;
       font-size: 14px;
       text-shadow: none; }
-  #relay-nav .navbar-brand {
-    color: white; }
+  @media only screen and (max-width: 767px) {
+    #relay-nav .navbar-brand img {
+      width: 50px;
+      height: 21px; } }
   #relay-nav .navbar-nav li.open {
     background: none; }
   #relay-nav .navbar-nav li.signup > a {
@@ -192,6 +197,9 @@ label.checkbox {
   #relay-nav .navbar-toggle {
     border-color: #ecf0f1;
     background-color: #ecf0f1; }
+    #relay-nav .navbar-toggle .icon-bar {
+      color: #777777;
+      background-color: #777777; }
   #relay-nav .navbar-inverse-toggle, #relay-nav .navbar-toggle:hover {
     border-color: #bdc3c7;
     background-color: #bdc3c7; }
@@ -210,6 +218,9 @@ label.checkbox {
   #relay-nav.home .navbar-toggle {
     border-color: #3498db;
     background-color: #3498db; }
+    #relay-nav.home .navbar-toggle .icon-bar {
+      color: white;
+      background-color: white; }
   #relay-nav.home .navbar-inverse-toggle, #relay-nav.home .navbar-toggle:hover {
     border-color: #2980b9;
     background-color: #2980b9; }
@@ -221,7 +232,8 @@ label.checkbox {
   text-align: center;
   padding-bottom: 150px; }
   .home-top img {
-    box-shadow: 1px 1px 20px 0px rgba(0, 0, 0, 0.35); }
+    box-shadow: 1px 1px 20px 0px rgba(0, 0, 0, 0.35);
+    max-width: 75%; }
   .home-top .container {
     text-align: center; }
     .home-top .container h1 {
@@ -233,13 +245,17 @@ label.checkbox {
           font-size: 114px; } }
     .home-top .container h4 {
       color: rgba(255, 255, 255, 0.6);
-      font-size: 14px;
-      margin-bottom: 100px; }
+      margin-bottom: 50px;
+      font-size: 14px; }
       @media only screen and (min-width: 1024px) {
         .home-top .container h4 {
-          font-size: 19px; } }
+          font-size: 19px;
+          margin-bottom: 100px; } }
     .home-top .container .irssi {
       margin-right: 75px; }
+      @media only screen and (min-width: 320px) and (max-width: 567px) {
+        .home-top .container .irssi {
+          margin: 0 0 20px 0; } }
   @media only screen and (min-width: 768px) {
     .home-top {
       text-align: left; } }
