@@ -58,7 +58,7 @@ Template.say.events
 
         $('#say-input').val("#{matches[1] or ''}#{autoNickList[autoNickIndex]} ")
         if autoNickIndex < autoNickList.length - 1
-          autoNickIndex ++
+          autoNickIndex++
         else
           autoNickIndex = 0
 
