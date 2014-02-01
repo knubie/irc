@@ -176,8 +176,6 @@ Template.message.events
 Template.message.helpers
   joinToPrev: ->
     console.log @text
-    console.log @prev?.from
-    console.log "-----"
     sameChannel = true
     mentioned = true
     prevMentioned = true
@@ -245,3 +243,6 @@ Template.message.helpers
       return 'reverse'
     else
       return ''
+  isAll: ->
+    !Session.get('channel') and @channel?
+
