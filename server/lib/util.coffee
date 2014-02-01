@@ -1,14 +1,14 @@
-#parseString = Npm.require('xml2js').parseString
+parseString = Meteor.require('xml2js').parseString
 request = Npm.require('request')
 @client = {}
 @async = (cb) -> Meteor.bindEnvironment cb, (err) -> console.log err
 @wolfram = {}
 
 wolfram.request = (query, cb) ->
-  request "http://api.wolframalpha.com/v2/query?input=#{encodeURIComponent(query)}&appid=AQLTXA-LU46J2XQ92", (error, response, body) ->
+  request "http://api.wolframalpha.com/v2/query?input=#{encodeURIComponent(query)}&appid=AQLTXA-LU46J2XQ92", async (error, response, body) ->
     if !error and response.statusCode == 200
       # Convert XML response to json
-      parseString body, (error, result) ->
+      parseString body, async (error, result) ->
         if result.queryresult.didyoumeans?
           newQuery = result.queryresult.didyoumeans[0].didyoumean[0]._
           #response "Did you mean #{newQuery}?"

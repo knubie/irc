@@ -5,6 +5,7 @@
     "iron-router": {
       "git": "https://github.com/EventedMind/iron-router",
       "branch": "shark"
-    }
+    },
+    "npm": {}
   }
 }

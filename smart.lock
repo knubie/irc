@@ -7,23 +7,29 @@
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
         "branch": "shark"
-      }
+      },
+      "npm": {}
     },
     "packages": {
       "user-status": {
         "git": "https://github.com/mizzao/meteor-user-status.git",
-        "tag": "v0.1.7",
-        "commit": "b6aa32ef56ba7b55b5f41bcd63cc80b0558e090e"
+        "tag": "v0.2.0",
+        "commit": "e18cc48440710d0ac23bd1a578974f9142226bf4"
       },
       "collection-hooks": {
         "git": "https://github.com/matb33/meteor-collection-hooks.git",
-        "tag": "v0.6.0",
-        "commit": "b563164c78d5ab4ad2258ce06736af6d4f0f33ba"
+        "tag": "v0.6.2",
+        "commit": "29484b2110206be93b01c6d11ce06ec9208de7bd"
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
         "branch": "shark",
-        "commit": "77bd242e7cdc88bd992bfa5ae174419b293a190d"
+        "commit": "4f55d0acc293abb4a9492229e8d2be0ec0e176c1"
+      },
+      "npm": {
+        "git": "https://github.com/arunoda/meteor-npm.git",
+        "tag": "v0.2.6",
+        "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
       }
     }
   }
