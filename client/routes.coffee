@@ -79,7 +79,7 @@ Router.map ->
 
   @route 'mentions',
     path: '/channels/:channel/mentions'
-    template: 'messages'
+    template: 'mentions'
     layoutTemplate: 'channel_layout'
     loadingTemplate: 'loading'
     yieldTemplates:
@@ -89,7 +89,7 @@ Router.map ->
       channel = "##{@params.channel}"
       Session.set 'subPage', 'mentions'
       Session.set 'channel', channel
-    after: ->
+    unload: ->
       channel = "##{@params.channel}"
       update Meteor.users, Meteor.userId()
       , "profile.channels.#{channel}.mentions"

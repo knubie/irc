@@ -6,12 +6,6 @@ Template.mentions.helpers
       sort:
         createdAt: 1
       transform: (doc) ->
-        if prev?._id is doc._id # Same doc.
-          doc.prev = prev.prev # Re-assign `prev`
-        else
-          doc.prev = prev
-          prev = new Message doc
-
         new Message doc
   loadMore: ->
     false
@@ -53,6 +47,7 @@ Template.mention.helpers
   timeAgo: ->
     moment(@createdAt).fromNow()
   readClass: ->
+    console.log @
     if @_id in Meteor.user().profile.channels[@channel].mentions
       return 'mention'
     else
