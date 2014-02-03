@@ -89,4 +89,3 @@ Template.say.helpers
       or (@channel.isModerated() and @channel.nicks[user.username] is '@')
     else
       false
-

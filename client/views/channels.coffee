@@ -211,12 +211,12 @@ Template.users.helpers
     #Meteor.users.findOne({username: @nick})?.profile.online
   awayClass: ->
     if Meteor.users.findOne({username: @nick}) \
-    and not Meteor.users.findOne({username: @nick}).profile.online
+    and not Meteor.users.findOne({username: @nick}).status.online
       return 'away'
     else
       return ''
   awaySince: ->
-    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.profile.awaySince).humanize()
+    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.status.lastLogin).humanize()
   mod: ->
     @flag is '@'
 

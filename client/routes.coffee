@@ -71,7 +71,7 @@ Router.map ->
       handlers.messages = \
       Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE * Session.get('messages.page')
     data: ->
-      console.log 'data'
+      console.log 'loading channel data'
       {
         channel: Channels.findOne({name: "##{@params.channel}"})
         pm: null

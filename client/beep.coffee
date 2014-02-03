@@ -39,6 +39,7 @@ shouldSendNotification = (message) ->
 # createNotification :: NotificationParams -> Notification
 sendNotification = (params) ->
   if params
+    console.log 'sendNotification'
     window.webkitNotifications.createNotification(params.image, params.title, params.text).show()
 
 # dispatchNotification :: Message -> Action(UI)

@@ -231,9 +231,9 @@ Template.message.helpers
   away: ->
     #TODO: make this change the user MODE in irc
     Meteor.users.findOne({username: @from}) \
-    and not Meteor.users.findOne(username: @from).profile.online
+    and not Meteor.users.findOne(username: @from).status.online
   awaySince: ->
-    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.profile.awaySince).humanize()
+    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.status.lastLogin).humanize()
   isChannel: ->
     @channel?.isChannel()
   realName: ->
@@ -245,4 +245,3 @@ Template.message.helpers
       return ''
   isAll: ->
     !Session.get('channel') and @channel?
-

@@ -6,7 +6,9 @@ $foreground: #777
 
 body
   background-color: $clouds
-  padding-top: 66px
+  padding-top: 52px
+  +tablet-portrait-and-above
+    padding-top: 66px
   -webkit-font-smoothing: antialiased
   font-family: Helvetica, sans-serif
   //font-family: 'Open Sans', Helvetica, sans-serif
@@ -137,7 +139,7 @@ label.checkbox
   border-color: $silver
   box-shadow: 0 1px 0 rgba(255,255,255,.1)
   .search
-    +mobile-portrait
+    +tablet-portrait-and-below
       display: none
     float: left
     position: relative
@@ -305,6 +307,9 @@ label.checkbox
   background-color: $clouds
   padding: 25px 0
   color: #aaa
+  font-size: 12px
+  +mobile-landscape-and-above
+    font-size: 14px
 
 // Sign in
 .signin-container, .signup-container
@@ -323,6 +328,9 @@ label.checkbox
     text-align: center
     margin-top: 100px
     color: #999
+    font-size: 12px
+    +mobile-landscape-and-above
+      font-size: 14px
   #signin, #signup
     input
       border: 2px solid $silver
