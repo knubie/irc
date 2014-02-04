@@ -1,4 +1,4 @@
-userListDep = new Deps.Dependency
+@userListDep = new Deps.Dependency
 
 Handlebars.registerHelper 'userList', ->
   userListDep.depend()
