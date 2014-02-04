@@ -1,11 +1,18 @@
 body {
   background-color: #ecf0f1;
   padding-top: 52px;
+  cursor: default;
   -webkit-font-smoothing: antialiased;
   font-family: Helvetica, sans-serif; }
   @media only screen and (min-width: 768px) {
     body {
       padding-top: 66px; } }
+
+a:focus {
+  outline: 0; }
+
+form {
+  margin: 0; }
 
 input.form-control-two {
   -webkit-appearance: none; }
@@ -28,12 +35,10 @@ input.form-control-two {
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s; }
 
 .tooltip {
-  transform: translate(0px, 5px);
   transition: transform ease-in-out 0.15s; }
 
 .tooltip.in {
-  opacity: 0.8;
-  transform: translate(0px, 25px); }
+  opacity: 0.8; }
 
 .tooltip-inner {
   background-color: #2c3e50; }
@@ -45,7 +50,7 @@ input.form-control-two {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
 
 .reverse {
-  -webkit-transform: scale(-1, 1); }
+  transform: scale(-1, 1); }
 
 .underline {
   text-decoration: underline; }
@@ -71,7 +76,7 @@ code {
   box-shadow: 0px 1px 0 0px rgba(0, 0, 0, 0.07);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   -webkit-user-select: none;
-  background-image: -webkit-linear-gradient(white 60%, #f5f7fa 100%); }
+  background-image: linear-gradient(white 60%, #f5f7fa 100%); }
 
 button:focus {
   outline: none; }
@@ -584,26 +589,26 @@ label.checkbox {
     top: -2px;
     padding: 2px 6px;
     font-size: 10px; }
-  .channels li.section {
+  .channels .section {
     color: #bdc3c7;
     text-transform: uppercase;
     font-size: 10px;
     font-weight: 800;
     margin-bottom: -2px;
     margin-top: 22px; }
-  .channels li.channel {
+  .channels .channel {
     padding: 1px 5px;
     margin: -1px 0 -1px -5px;
     border-radius: 5px; }
-    .channels li.channel .hash {
+    .channels .channel .hash {
       color: #bdc3c7; }
-  .channels li.channel:hover {
+  .channels .channel:hover {
     background-color: #e0e4e5; }
-    .channels li.channel:hover .close {
+    .channels .channel:hover .close {
       display: inline-block; }
-  .channels li.channel.selected .glyphicon, .channels li.channel.selected .batch-icon {
+  .channels .channel.selected .glyphicon, .channels .channel.selected .batch-icon {
     color: #3498db; }
-  .channels li.channel.selected .hash {
+  .channels .channel.selected .hash {
     font-weight: 400;
     color: #3498db; }
   .channels .selected > a,
@@ -643,12 +648,15 @@ label.checkbox {
   position: relative;
   transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color, 1s border-color;
   border: 1px solid transparent; }
+  .messages .message a:link {
+    color: #3498db; }
   .messages .message p {
     font-size: 16px;
     line-height: 21px;
     font-weight: 400;
     margin: 0;
-    word-wrap: break-word; }
+    word-wrap: break-word;
+    cursor: text; }
     .messages .message p img {
       max-width: 100%;
       max-height: 70vh; }
@@ -868,12 +876,6 @@ label.checkbox {
   cursor: pointer;
   background-color: #2980b9; }
 
-.messages > li > a:link {
-  color: #3498db; }
-
-form {
-  margin: 0; }
-
 .privacy-print {
   color: rgba(255, 255, 255, 0.3); }
 
@@ -963,42 +965,27 @@ form {
         border-radius: 3px;
         position: relative;
         bottom: 1px; }
-      .user-list li h3 .mod:hover {
-        cursor: default; }
 
-.notification-request-container {
-  text-align: center;
-  color: #777777;
-  margin-top: 50px; }
-  .notification-request-container h3 {
-    font-size: 20px; }
-  .notification-request-container span {
-    position: relative;
-    top: -15px;
-    color: #bbbbbb; }
-  .notification-request-container input {
-    height: 30px;
-    background-color: #3498db;
-    box-shadow: 0 4px 0 #2980b9;
-    border: none;
+.request-notifications-container {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  z-index: 101; }
+
+.request-notifications {
+  position: relative;
+  left: -50%;
+  background-color: #3498db;
+  color: #ecf0f1;
+  padding: 6px 20px 4px;
+  border-radius: 5px;
+  box-shadow: 0 2px 0 #2980b9; }
+  .request-notifications a {
     color: #ecf0f1;
-    font-weight: bold;
-    border-radius: 5px;
-    width: 50px;
-    margin-right: 12px; }
-  .notification-request-container a {
-    height: 30px;
-    background-color: silver;
-    box-shadow: 0 4px 0 concrete;
-    border: none;
-    color: #ecf0f1;
-    font-weight: bold;
-    border-radius: 5px;
-    width: 50px;
-    margin-right: 12px;
-    display: inline-block;
-    padding-top: 4px;
-    box-sizing: border-box; }
+    text-decoration: underline; }
+
+.navbar-fixed-top {
+  z-index: 100; }
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
   background-color: #ecf0f1; }

@@ -48,7 +48,7 @@
 </template>
 
 <template name="header">
-<nav class="navbar navbar-inverse navbar-fixed-top {{home}} {{channel}}" id="relay-nav">
+  <nav class="navbar navbar-inverse navbar-fixed-top {{home}} {{channel}}" id="relay-nav">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".idletron-navbar-collapse">
@@ -93,6 +93,7 @@
       </div>
     </div>
   </nav>
+  {{> notifications}}
 </template>
 
 <template name="loading">
@@ -231,18 +232,12 @@
   {{/page}}
 </template>
 
-<template name="notification">
-  <li id="{{_id}}" data-channel="{{to}}" class="message">
-    <span class="reply">
-      <strong>{{from}}</strong>
-      <button type="button" class="close">&times;</button>
-      {{#if all}}
-        <span class="muted">{{to}}</span>
-      {{/if}}
-    </span>
-    <small class="muted pull-right">{{timeAgo}}</small>
-    <p>{{text}}</p>
-  </li>
+<template name="notifications">
+  <div class="request-notifications-container {{#if hide}}hidden{{/if}}">
+    <div class="request-notifications">
+      <a href="" class="enable">Click here to enable</a> desktop notifications for Jupe.&nbsp;&nbsp;Learn more&nbsp;&nbsp;<a href="" class="hide-me">Hide</a>
+    </div>
+  </div>
 </template>
 
 <template name="user_profile">

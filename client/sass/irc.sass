@@ -7,6 +7,7 @@ $foreground: #777
 body
   background-color: $clouds
   padding-top: 52px
+  cursor: default
   +tablet-portrait-and-above
     padding-top: 66px
   -webkit-font-smoothing: antialiased
@@ -15,6 +16,12 @@ body
   //font-family: 'Roboto', Helvetica, sans-serif
 
 // Random shit
+
+a:focus
+  outline: 0
+
+form 
+  margin: 0
 
 input.form-control-two
   -webkit-appearance: none
@@ -36,11 +43,9 @@ input.form-control-two
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
 
 .tooltip
-  transform: translate(0px, 5px)
   transition: transform ease-in-out .15s
 .tooltip.in
   opacity: 0.8
-  transform: translate(0px, 25px)
 .tooltip-inner
   background-color: $midnight-blue
 .tooltip.top .tooltip-arrow
@@ -50,7 +55,7 @@ input.form-control-two
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace
 
 .reverse
-  -webkit-transform: scale(-1, 1)
+  transform: scale(-1, 1)
 
 .underline
   text-decoration: underline
@@ -76,7 +81,7 @@ code
   box-shadow: 0px 1px 0 0px rgba(0, 0, 0, 0.07)
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
   -webkit-user-select: none
-  background-image: -webkit-linear-gradient(#ffffff 60%, #f5f7fa 100%)
+  background-image: linear-gradient(#ffffff 60%, #f5f7fa 100%)
 
 button:focus
   outline: none
@@ -580,24 +585,24 @@ label.checkbox
       top: -2px
       padding: 2px 6px
       font-size: 10px
-  li.section
+  .section
     color: $silver
     text-transform: uppercase
     font-size: 10px
     font-weight: 800
     margin-bottom: -2px
     margin-top: 22px
-  li.channel
+  .channel
     padding: 1px 5px
     margin: -1px 0 -1px -5px
     border-radius: 5px
     .hash
       color: $silver
-  li.channel:hover
+  .channel:hover
     background-color: #e0e4e5
     .close 
       display: inline-block
-  li.channel.selected
+  .channel.selected
     .glyphicon, .batch-icon
       color: $peter-river
     .hash
@@ -642,12 +647,15 @@ label.checkbox
     position: relative
     transition: .15s left, .15s opacity, .15s background-color, .15s color, 1s border-color
     border: 1px solid transparent
+    a:link 
+      color: #3498DB
     p
       font-size: 16px
       line-height: 21px
       font-weight: 400
       margin: 0
       word-wrap: break-word
+      cursor: text
       //font-family: 'Open Sans'
       img
         max-width: 100%
@@ -881,11 +889,6 @@ label.checkbox
   cursor: pointer
   background-color: $belize-hole
 
-.messages > li > a:link 
-  color: #3498DB
-form 
-  margin: 0
-
 .privacy-print
   color: rgba(255,255,255,0.3)
 
@@ -976,51 +979,34 @@ form
         border-radius: 3px
         position: relative
         bottom: 1px
-      .mod:hover
-        cursor: default
 
 
-.notification-request-container
-  text-align: center
-  color: $foreground
-  margin-top: 50px
-  h3
-    font-size: 20px
-  span
-    position: relative
-    top: -15px
-    color: #bbb
-  input
-    height: 30px
-    background-color: #3498DB
-    box-shadow: 0 4px 0 #2980B9
-    border: none
-    color: #ECF0F1
-    font-weight: bold
-    border-radius: 5px
-    width: 50px
-    margin-right: 12px
+.request-notifications-container
+  position: fixed
+  top: 50px
+  left: 50%
+  z-index: 101
+
+.request-notifications
+  position: relative
+  left: -50%
+  background-color: $peter-river
+  color: $clouds
+  padding: 6px 20px 4px
+  border-radius: 5px
+  box-shadow: 0 2px 0 #2980B9
   a
-    height: 30px
-    background-color: silver
-    box-shadow: 0 4px 0 concrete
-    border: none
-    color: #ECF0F1
-    font-weight: bold
-    border-radius: 5px
-    width: 50px
-    margin-right: 12px
-    display: inline-block
-    padding-top: 4px
-    box-sizing: border-box
+    color: $clouds
+    text-decoration: underline
+
+.navbar-fixed-top
+  z-index: 100
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus
   background-color: $clouds
 
 .badge-important
   background-color: $peter-river
-
-
 
 .btn-two
   display: inline-block

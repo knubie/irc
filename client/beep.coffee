@@ -6,7 +6,6 @@ beep = (message) ->
   if Meteor.user().profile.sounds \
   and notIgnored(message) \
   and message.from isnt Meteor.user().username
-    console.log 'ok play it'
     $('#beep')[0].play() # Play beep sound
   return message
 
@@ -39,8 +38,9 @@ shouldSendNotification = (message) ->
 # createNotification :: NotificationParams -> Notification
 sendNotification = (params) ->
   if params
-    console.log 'sendNotification'
-    window.webkitNotifications.createNotification(params.image, params.title, params.text).show()
+    new Notification params.title,
+      body: params.text
+    #window.webkitNotifications.createNotification(params.image, params.title, params.text).show()
 
 # dispatchNotification :: Message -> Action(UI)
 dispatchNotification = _.compose sendNotification, shouldSendNotification
@@ -52,13 +52,13 @@ beepAndNotify = (id, message) ->
 ########## Beeps / Notifications ##########
 
 unread = 0
-$(window).focus -> unread = 0
+$(window).focus ->
+  window.document.title = "Jupe"
+  unread = 0
 
 Messages.find().observeChanges
   added: (id, message) ->
     beepAndNotify(id, message)
-    if document.hasFocus()
-      window.document.title = "Jupe"
-    else
+    if !document.hasFocus() and handlers.messages?.ready()
       unread += 1
       window.document.title = "(#{unread}) Jupe"

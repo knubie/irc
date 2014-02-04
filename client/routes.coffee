@@ -61,17 +61,14 @@ Router.map ->
     before: ->
       channel = "##{@params.channel}"
       Session.set 'channel', channel
-      Session.set 'subPage', null
       if Meteor.user() and not Meteor.user().profile.channels[channel]?
         Meteor.call 'join', Meteor.user().username, channel
     unload: ->
       Session.set 'channel', null
     waitOn: ->
-      console.log 'wait on channel'
       handlers.messages = \
       Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE * Session.get('messages.page')
     data: ->
-      console.log 'loading channel data'
       {
         channel: Channels.findOne({name: "##{@params.channel}"})
         pm: null
@@ -91,6 +88,7 @@ Router.map ->
       Session.set 'channel', channel
     unload: ->
       channel = "##{@params.channel}"
+      Session.set 'subPage', null
       update Meteor.users, Meteor.userId()
       , "profile.channels.#{channel}.mentions"
       , (mentions) -> return []
@@ -114,6 +112,8 @@ Router.map ->
       channel = "##{@params.channel}"
       Session.set 'subPage', 'settings'
       Session.set 'channel', channel
+    unload: ->
+      Session.set 'subPage', null
     data: ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"})

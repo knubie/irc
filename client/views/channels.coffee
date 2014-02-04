@@ -1,16 +1,3 @@
-userListDep = new Deps.Dependency
-
-Handlebars.registerHelper 'userList', ->
-  userListDep.depend()
-  localStorage.getItem("#{Session.get 'channel'}.userList") is 'true'
-
-Handlebars.registerHelper 'channelCol', ->
-  userListDep.depend()
-  if @channel? and localStorage.getItem("#{Session.get 'channel'}.userList") is 'true'
-    '8'
-  else
-    '10'
-
 Template.channelHeader.helpers
   channelURL: ->
     @channel?.name.match(/^(#)?(.*)$/)[2]
@@ -144,7 +131,7 @@ Template.channel.events
 Template.channel.helpers
   selected: ->
     if @channel?.name is @name then 'selected' else ''
-    #if Session.equals 'channel.name', "#{@}" then 'selected' else ''
+    #if Session.equals 'channel', @name then 'selected' else ''
   private: ->
     ch = Channels.findOne(name: @name)
     if ch?
@@ -196,29 +183,7 @@ Template.pm.events
     if @name is @pm
       Router.go 'home'
 
-########## Users ##########
-
-Template.users.helpers
-  users: ->
-    if @channel?
-      ({nick, realName: Meteor.users.findOne(username:nick)?.profile.realName or 'Real Name', flag} for nick, flag of @channel.nicks).sort()
-    #query = {}
-    #query["profile.channels.#{@name}"] = {$exists: true}
-    #Meteor.users.find(query)
-  away: ->
-    Meteor.users.findOne({username: @nick}) \
-    and not Meteor.users.findOne({username: @nick}).profile.online
-    #Meteor.users.findOne({username: @nick})?.profile.online
-  awayClass: ->
-    if Meteor.users.findOne({username: @nick}) \
-    and not Meteor.users.findOne({username: @nick}).status.online
-      return 'away'
-    else
-      return ''
-  awaySince: ->
-    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.status.lastLogin).humanize()
-  mod: ->
-    @flag is '@'
+########## Settings ##########
 
 Template.settings.helpers
   channelURL: ->

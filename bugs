@@ -2,8 +2,9 @@
 - After the messages get reloaded, new messages are always joined to preivous.
 - http://imgur.com/a/ds8xH
 - loading earlier messages messes up the ui.
-- mention count should go away after viewing the message on the channel.
 - kick doesn't work
 - change timestamp to twitter-style
 - scrollbar shows up when new messages are inserted
 - seperate say input from messages.
+- add support for UPPERCASE file extensions e.g. image.GIF
+- make private messages send notification, and have blue message count badge, and change the browser window's title a la gmail chat.

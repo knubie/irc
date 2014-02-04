@@ -43,6 +43,4 @@ Template.account.events
       $set: 'profile.inlineMedia': not Meteor.user().profile.inlineMedia
 
   'click label.checkbox[for="sendNotifications"]': (e,t) ->
-    if window.webkitNotifications.checkPermission() is 1 and not Meteor.user().profile.notifications
-      webkitNotifications.requestPermission()
     Meteor.users.update(Meteor.userId(), $set: 'profile.notifications': not Meteor.user().profile.notifications)

@@ -71,6 +71,22 @@ Template.header.helpers
     else
       return ''
 
+Template.notifications.helpers
+  hide: ->
+    Notification.permission isnt 'default' or
+    Meteor.user().profile.notifications is off
+
+Template.notifications.events
+  'click .enable': (e,t) ->
+    e.preventDefault()
+    Notification.requestPermission()
+    $('.request-notifications-container').fadeOut(200)
+  'click .hide-me': (e,t) ->
+    e.preventDefault()
+    Meteor.users.update(Meteor.userId(), $set: 'profile.notifications': false)
+    $('.request-notifications-container').fadeOut(200)
+
+
 ########## User Profile ##########
 
 Template.user_profile.helpers
@@ -82,3 +98,4 @@ Template.user_profile.helpers
     Channels.findOne({name: "#{@}"}).topic
   channel_url: ->
     @match(/^(.)(.*)$/)[2]
+
