@@ -20,7 +20,7 @@ Template.users.helpers
     #Meteor.users.find(query)
   away: ->
     Meteor.users.findOne({username: @nick}) \
-    and not Meteor.users.findOne({username: @nick}).profile.online
+    and not Meteor.users.findOne({username: @nick}).status?.online
     #Meteor.users.findOne({username: @nick})?.profile.online
   awayClass: ->
     if Meteor.users.findOne({username: @nick}) \
