@@ -73,6 +73,7 @@ Template.header.helpers
 
 Template.notifications.helpers
   hide: ->
+    not Meteor.user() or
     Notification.permission isnt 'default' or
     Meteor.user().profile.notifications is off
 
