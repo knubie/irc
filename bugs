@@ -8,3 +8,4 @@
 - seperate say input from messages.
 - add support for UPPERCASE file extensions e.g. image.GIF
 - make private messages send notification, and have blue message count badge, and change the browser window's title a la gmail chat.
+- fix regexps, eg two `codes` and URLS inside of ``
