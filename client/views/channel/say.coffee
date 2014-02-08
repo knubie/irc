@@ -24,7 +24,7 @@ Template.say.events
           from: Meteor.user().username
           type: 'action'
       else if /^\/msg(.*)$/.test message
-        pmregex = /^\/msg\s(.*)\s(.*)$/
+        pmregex = /^\/msg\s(\S*)\s(.*)$/
         if pmregex.test message
           Messages.insert
             text: message.match(pmregex)[2]
