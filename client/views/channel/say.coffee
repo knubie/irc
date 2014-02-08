@@ -23,6 +23,17 @@ Template.say.events
           createdAt: new Date()
           from: Meteor.user().username
           type: 'action'
+      else if /^\/msg(.*)$/.test message
+        pmregex = /^\/msg\s(.*)\s(.*)$/
+        if pmregex.test message
+          Messages.insert
+            text: message.match(pmregex)[2]
+            mobile: Modernizr.touch and $(window).width() < 768
+            createdAt: new Date()
+            from: Meteor.user().username
+            to: message.match(pmregex)[1]
+          Router.go('messages', {user: message.match(pmregex)[1]})
+ 
       else
         # Server sends message to IRC before insert.
         if @channel? # Sending to channel
