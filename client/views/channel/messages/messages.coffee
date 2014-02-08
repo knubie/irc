@@ -76,13 +76,14 @@ Template.messages.events
 ########## Message ##########
 
 Template.message.rendered = ->
-  # Remove mentions that are rendered.
-  if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
-    update Meteor.users, Meteor.userId()
-    , "profile.channels.#{@data.channel}.mentions"
-    , (mentions) ->
-      mentions.splice i, 1
-      return mentions
+  if @data.channel?
+    # Remove mentions that are rendered.
+    if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
+      update Meteor.users, Meteor.userId()
+      , "profile.channels.#{@data.channel}.mentions"
+      , (mentions) ->
+        mentions.splice i, 1
+        return mentions
 
   # Get message text.
   p = $(@find('p'))

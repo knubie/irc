@@ -12,7 +12,10 @@ beep = (message) ->
 # notIgnored :: Messages -> Boolean
 notIgnored = (message) ->
   # Not in ignore-list
-  message.from not in Meteor.user().profile.channels[message.channel].ignore
+  if message.channel?
+    message.from not in Meteor.user().profile.channels[message.channel].ignore
+  else
+    true
 
 # isMentioned :: Messages -> Boolean
 isMentioned = (message) ->
@@ -22,16 +25,18 @@ isMentioned = (message) ->
 
 # notIgnored :: Messages -> Boolean
 isPM = (message) ->
-  not message.channel.isChannel()
+  not message.channel?
 
 # shouldSendNotification :: Message -> NotificationParams
 shouldSendNotification = (message) ->
+  console.log 'is pm:'
+  console.log isPM(message)
   if Meteor.user().profile.notifications \
   and message.from isnt Meteor.user().username \
   and (isMentioned(message) or isPM(message))
     return {
-      image: 'icon.png'
-      title: "#{message.from} (#{message.channel})"
+      image: ''
+      title: "#{message.from} (#{if message.channel? then message.channel else 'Private message'})"
       text: message.text
     }
 
@@ -58,6 +63,7 @@ $(window).focus ->
 
 Messages.find().observeChanges
   added: (id, message) ->
+    console.log 'new message'
     beepAndNotify(id, message)
     if !document.hasFocus() and handlers.messages?.ready()
       unread += 1

@@ -126,7 +126,7 @@ Router.map ->
     template: 'channelPage'
     layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
-    before: ->
+    after: ->
       Session.set 'subPage', 'messages'
       {pms} = Meteor.user().profile
       pms[@params.user] = {unread: 0} unless @params.user of pms
