@@ -130,7 +130,7 @@ Template.message.events
         ignore.push @from
         _.uniq ignore
 
-  'click .reimplementme': (e, t) -> #TODO: reimplement this
+  'click': (e, t) -> #TODO: reimplement this
     if Session.equals('channel.name', 'all') and not $(e.target).is('strong')
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
@@ -142,16 +142,15 @@ Template.message.events
         $messagesFromOtherChannels.slideToggle 400, =>
           if @channel.isChannel()
             channel = @channel.match(/^(#)?(.*)$/)[2]
-            Router.go 'channelPage', {channel}
+            Router.go 'channel', {channel}
           else
-            Router.go "/messages/#{@from}"
+            Router.go 'messages', {user:@from}
       else # No messages to slideToggle
         if @channel.isChannel()
           channel = @channel.match(/^(#)?(.*)$/)[2]
-          Router.go 'channelPage', {channel}
+          Router.go 'channel', {channel}
         else
-          page "/messages/#{@channel}"
-          Router.go "/messages/#{@from}"
+          Router.go 'messages', {user:@from}
 
   'click .convo': (e, t) ->
     $('.message')
@@ -175,6 +174,13 @@ Template.message.events
         _.uniq bans
 
 Template.message.helpers
+  attrs: ->
+    return {
+      "id": @_id
+      "data-nick": @from
+      "data-channel": @channel
+      "class": "message #{offline()} #{mention()} #{bot} #{info}"
+    }
   joinToPrev: ->
     sameChannel = true
     mentioned = true
@@ -245,3 +251,6 @@ Template.message.helpers
       return ''
   isAll: ->
     !Session.get('channel') and @channel?
+  realName: ->
+    console.log @from
+    Meteor.users.findOne({username: @from})?.profile.realName

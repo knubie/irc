@@ -23,14 +23,12 @@ isMentioned = (message) ->
   # Username appears in message text.
   and regex.nick(Meteor.user().username).test(message.text)
 
-# notIgnored :: Messages -> Boolean
+# isPM :: Messages -> Boolean
 isPM = (message) ->
   not message.channel?
 
 # shouldSendNotification :: Message -> NotificationParams
 shouldSendNotification = (message) ->
-  console.log 'is pm:'
-  console.log isPM(message)
   if Meteor.user().profile.notifications \
   and message.from isnt Meteor.user().username \
   and (isMentioned(message) or isPM(message))
@@ -45,7 +43,6 @@ sendNotification = (params) ->
   if params
     new Notification params.title,
       body: params.text
-    #window.webkitNotifications.createNotification(params.image, params.title, params.text).show()
 
 # dispatchNotification :: Message -> Action(UI)
 dispatchNotification = _.compose sendNotification, shouldSendNotification

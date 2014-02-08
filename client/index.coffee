@@ -99,4 +99,3 @@ Template.user_profile.helpers
     Channels.findOne({name: "#{@}"}).topic
   channel_url: ->
     @match(/^(.)(.*)$/)[2]
-
