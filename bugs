@@ -10,3 +10,4 @@
 - make private messages send notification, and have blue message count badge, and change the browser window's title a la gmail chat.
 - fix regexps, eg two `codes` and URLS inside of ``
 - dont' show notification if message's channel/sender has focus
+- fix autocomplete, make original word last in array, address pressing tab with no matches

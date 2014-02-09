@@ -131,7 +131,7 @@ Template.message.events
         _.uniq ignore
 
   'click': (e, t) -> #TODO: reimplement this
-    if Session.equals('channel.name', 'all') and not $(e.target).is('strong')
+    if Session.equals('channel', null) and not $(e.target).is('strong')
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $messagesFromOtherChannels = \
@@ -160,7 +160,6 @@ Template.message.events
     #TODO: Hide messages mentioning other users.
 
   'click .kick': (e, t) ->
-    console.log @
     Meteor.call 'kick', Meteor.user(), @channel, @from
 
   'click .ban': (e, t) ->
@@ -252,5 +251,4 @@ Template.message.helpers
   isAll: ->
     !Session.get('channel') and @channel?
   realName: ->
-    console.log @from
     Meteor.users.findOne({username: @from})?.profile.realName

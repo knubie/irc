@@ -2,6 +2,12 @@ body {
   background-color: #ecf0f1;
   padding-top: 52px;
   cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   -webkit-font-smoothing: antialiased;
   font-family: Helvetica, sans-serif; }
   @media only screen and (min-width: 768px) {
@@ -656,10 +662,19 @@ label.checkbox {
     font-weight: 400;
     margin: 0;
     word-wrap: break-word;
-    cursor: text; }
+    cursor: text;
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text; }
     .messages .message p img {
       max-width: 100%;
-      max-height: 60vh; }
+      max-height: 70vh; }
+      @media only screen and (min-width: 768px) {
+        .messages .message p img {
+          max-height: 60vh; } }
     .messages .message p a {
       font-weight: 400; }
   .messages .message .reply, .messages .message small, .messages .message p {
@@ -755,8 +770,8 @@ label.checkbox {
 .messages .info {
   background-color: rgba(0, 0, 0, 0);
   box-shadow: none;
-  padding-top: 0px;
-  padding-bottom: 0px; }
+  padding-top: 8px;
+  padding-bottom: 8px; }
   .messages .info .reply, .messages .info .actions {
     display: none; }
   .messages .info p {

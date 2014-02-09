@@ -15,9 +15,6 @@ Template.users.helpers
   users: ->
     if @channel?
       ({nick, realName: Meteor.users.findOne(username:nick)?.profile.realName, flag} for nick, flag of @channel.nicks).sort()
-    #query = {}
-    #query["profile.channels.#{@name}"] = {$exists: true}
-    #Meteor.users.find(query)
   away: ->
     Meteor.users.findOne({username: @nick}) \
     and not Meteor.users.findOne({username: @nick}).status?.online

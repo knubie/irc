@@ -1,10 +1,18 @@
 Router.map ->
   @route 'home',
     path: '/'
-    layoutTemplate: 'main_layout'
+    layoutTemplate: do ->
+      if Meteor.user()
+        'channel_layout'
+      else
+        'main_layout'
     loadingTemplate: 'loading'
     before: ->
       Session.set 'subPage', 'messages'
+      if Meteor.user()
+        @layoutTemplate = 'channel_layout'
+      else
+        @layoutTemplate = 'main_layout'
     waitOn: ->
       if Meteor.user()
         channels = (channel for channel of Meteor.user().profile.channels)
@@ -19,7 +27,8 @@ Router.map ->
       }
     action: ->
       if Meteor.user()
-        @render('channelPage', {to: 'custom'})
+        @render('channels', {to: 'channels'})
+        @render('messages')
       else
         @render()
 

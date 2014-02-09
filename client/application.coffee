@@ -1,15 +1,11 @@
 ########## Defaults ##########
 
-Session.setDefault 'channel.name', 'all' #Current channel.
 Session.setDefault 'channel.id', null # Current channel id
 Session.setDefault 'scroll', 0 # Scroll position
 Session.setDefault 'messages.page', 1 # Messages handler pagination
-Session.setDefault 'messages.rendered', false
-Session.setDefault 'joinAfterLogin', null # Which channel to join after signing up or logging in.
 Session.setDefault 'channel', null
 Session.setDefault 'pm', null
-Session.setDefault 'nickstart', null
-
+Session.setDefault 'joinAfterLogin', null # Which channel to join after signing up or logging in.
 
 ########## Subscriptions ##########
 
