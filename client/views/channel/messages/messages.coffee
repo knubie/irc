@@ -1,6 +1,12 @@
 ########## Messages ##########
 
 Template.messages.rendered = ->
+  # Set up AppScroll to mimic native scrolling iOS
+  new AppScroll
+    toolbar: document.getElementsByClassName('channel-header')[0]
+    scroller: document.getElementsByClassName('messages')[0]
+  .on()
+
   $('body').tooltip
     selector: '[data-toggle=tooltip]'
   # Set up listeners for scroll position

@@ -4,9 +4,41 @@
 
 $foreground: #777
 
++tablet-portrait-and-below
+
+  html
+    height: 100%
+    body
+      height: 100%
+      .container
+        height: 100%
+        .row
+          height: 100%
+
+  .messages
+    overflow: auto
+    position: fixed
+    top: 45px
+    bottom: 54px
+    right: 0
+    left: 0
+    padding: 15px 15px 0
+    -webkit-overflow-scrolling: touch
+
+  .messages > *
+    -webkit-transform: translateZ(0px)
+    transform: translateZ(0px)
+
+  .input-container
+    background-color: $clouds
+    position: fixed
+    bottom: 0
+    left: 0
+    right: 0
+    padding: 10px 15px !important
+
 body
   background-color: $clouds
-  padding-top: 52px
   cursor: default
   -webkit-touch-callout: none
   -webkit-user-select: none
@@ -14,6 +46,7 @@ body
   -moz-user-select: none
   -ms-user-select: none
   user-select: none
+  padding-top: 52px
   +tablet-portrait-and-above
     padding-top: 66px
   -webkit-font-smoothing: antialiased

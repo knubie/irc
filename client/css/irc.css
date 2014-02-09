@@ -1,6 +1,36 @@
+@media only screen and (max-width: 767px) {
+  html {
+    height: 100%; }
+    html body {
+      height: 100%; }
+      html body .container {
+        height: 100%; }
+        html body .container .row {
+          height: 100%; }
+
+  .messages {
+    overflow: auto;
+    position: fixed;
+    top: 45px;
+    bottom: 54px;
+    right: 0;
+    left: 0;
+    padding: 15px 15px 0;
+    -webkit-overflow-scrolling: touch; }
+
+  .messages > * {
+    -webkit-transform: translateZ(0px);
+    transform: translateZ(0px); }
+
+  .input-container {
+    background-color: #ecf0f1;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 15px !important; } }
 body {
   background-color: #ecf0f1;
-  padding-top: 52px;
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -8,6 +38,7 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  padding-top: 52px;
   -webkit-font-smoothing: antialiased;
   font-family: Helvetica, sans-serif; }
   @media only screen and (min-width: 768px) {
