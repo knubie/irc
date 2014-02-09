@@ -774,6 +774,13 @@ label.checkbox {
     font-weight: bold;
     text-transform: uppercase;
     font-size: 10px; }
+  .messages .message iframe {
+    width: 260px;
+    height: 195px; }
+    @media only screen and (min-width: 768px) {
+      .messages .message iframe {
+        width: 400px;
+        height: 300px; } }
 .messages .message:hover .actions {
   display: inline; }
 .messages .message:hover .muted.time {

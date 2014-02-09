@@ -4,6 +4,7 @@
 
 $foreground: #777
 
+// iOS scroll hack
 +tablet-portrait-and-below
 
   html
@@ -778,6 +779,12 @@ label.checkbox
       font-weight: bold
       text-transform: uppercase
       font-size: 10px
+    iframe
+      width: 260px
+      height: 195px
+      +tablet-portrait-and-above
+        width: 400px
+        height: 300px
   .message:hover
     .actions
       display: inline

@@ -104,7 +104,7 @@ Template.message.rendered = ->
         </a>
       """
     else if youtubeMatch and youtubeMatch[1].length is 11 and Meteor.user().profile.inlineMedia
-      "<iframe width=\"480\" height=\"360\" src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
+      "<iframe src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
     else # All other links
       "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
   # Linkify nicks.
