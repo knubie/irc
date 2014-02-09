@@ -1,13 +1,7 @@
-- Changing the topic reloads the messages.
-- After the messages get reloaded, new messages are always joined to preivous.
-- http://imgur.com/a/ds8xH
-- loading earlier messages messes up the ui.
 - kick doesn't work
 - change timestamp to twitter-style
 - scrollbar shows up when new messages are inserted
 - seperate say input from messages.
-- add support for UPPERCASE file extensions e.g. image.GIF
-- make private messages send notification, and have blue message count badge, and change the browser window's title a la gmail chat.
+- make private messages have blue message count badge, and change the browser window's title a la gmail chat.
 - fix regexps, eg two `codes` and URLS inside of ``
-- dont' show notification if message's channel/sender has focus
 - fix autocomplete, make original word last in array, address pressing tab with no matches

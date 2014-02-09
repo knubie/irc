@@ -91,7 +91,7 @@ Template.message.rendered = ->
   # Linkify & Imagify URLs.
   ptext = ptext.replace regex.url, (str) ->
     youtubeMatch = str.match regex.youtube
-    if Meteor.user().profile.inlineMedia and str.match /\.(?:jpe?g|gif|png)/
+    if Meteor.user().profile.inlineMedia and str.match /\.(?:jpe?g|gif|png)/i
       """
         <a href="#{str}" target="_blank">
           <img onload="scrollToPlace();" src="#{str}" alt=""/>
