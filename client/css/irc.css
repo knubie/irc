@@ -96,7 +96,8 @@ code {
   color: #777777;
   font-size: 14px;
   border: 1px solid #e1e1e8;
-  background-color: #f7f7f9; }
+  background-color: #f7f7f9;
+  white-space: pre-line; }
 
 .btn-primary {
   background-color: #3498db; }
