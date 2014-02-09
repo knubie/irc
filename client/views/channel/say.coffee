@@ -61,21 +61,23 @@ Template.say.events
       e.preventDefault()
       # matches[0] == original message, [1] == Everythig before the partial nick, [2] == the partial nick.
       if matches = message.match nickregex
-        if autoNickList < 1
+        if autoNickList.length < 1
           nicks = (nick for nick of @channel.nicks)
           autoNickList = nicks.filter (nick, i, arr) ->
             nick.match(new RegExp("^#{matches[2]}", 'i'))
           autoNickList.push matches[2] # append the original partial nick to the end of the list.
 
-        $('#say-input').val("#{matches[1] or ''}#{autoNickList[autoNickIndex]} ")
-        if autoNickIndex < autoNickList.length - 1
-          autoNickIndex++
-        else
-          autoNickIndex = 0
+        if autoNickList.length > 1
+          $('#say-input').val("#{matches[1] or ''}#{autoNickList[autoNickIndex]} ")
+          if autoNickIndex < autoNickList.length - 1
+            autoNickIndex++
+          else
+            autoNickIndex = 0
 
     else # Any other key
       i = 0
       autoNickList = []
+      autoNickIndex = 0
 
 Template.say.rendered = ->
   # Auto-focus 'say' input.
