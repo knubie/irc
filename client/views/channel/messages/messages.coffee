@@ -91,6 +91,16 @@ Template.message.rendered = ->
         mentions.splice i, 1
         return mentions
 
+  if @data.to is Meteor.user().username
+    # Remove mentions that are rendered.
+    if (i = Meteor.user().profile.pms[@data.from].unread.indexOf(@data._id)) > -1
+      console.log "read #{@data.text}"
+      update Meteor.users, Meteor.userId()
+      , "profile.pms.#{@data.from}.unread"
+      , (unread) ->
+        unread.splice i, 1
+        return unread
+
   # Get message text.
   p = $(@find('p'))
   ptext = p.html()

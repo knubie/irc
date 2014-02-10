@@ -132,9 +132,12 @@ Router.map ->
 
   @route 'messages',
     path: '/messages/:user'
-    template: 'channelPage'
-    layoutTemplate: 'main_layout'
+    template: 'messages'
+    layoutTemplate: 'channel_layout'
     loadingTemplate: 'loading'
+    yieldTemplates:
+      'channels': {to: 'channels'}
+      'say': {to: 'say'}
     after: ->
       Session.set 'subPage', 'messages'
       {pms} = Meteor.user().profile

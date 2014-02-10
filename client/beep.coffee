@@ -32,7 +32,7 @@ shouldSendNotification = (message) ->
   if Meteor.user().profile.notifications and
   message.from isnt Meteor.user().username and
   (isPM(message) or isMentioned(message)) and
-  !document.hasFocus() # or !Session.equals('channel', message.channel
+  (!document.hasFocus() or !Session.equals('channel', message.channel))
     return {
       image: ''
       title: "#{message.from} (#{if message.channel? then message.channel else 'Private message'})"

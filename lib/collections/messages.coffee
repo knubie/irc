@@ -51,6 +51,21 @@ Messages.before.insert (userId, doc) ->
         # Send message to the IRC server.
         client[username].say doc.channel or doc.to, doc.text
 
+    if doc.to? and user = Meteor.users.findOne(username:doc.to)
+      unless doc.from of user.profile.pms
+        update Meteor.users, user._id
+        , "profile.pms"
+        , (pms) ->
+          pms = {} unless pms? #TODO: remove this
+          pms[doc.from] = {unread: []}
+          return pms
+      update Meteor.users, user._id
+      , "profile.pms.#{doc.from}.unread"
+      , (unread) ->
+        console.log 'udpating unread'
+        unread.push doc._id unless doc._id in unread
+        return unread
+
     # Manage mentions.
     if doc.channel? and doc.from isnt 'system' and doc.type isnt 'action'
       doc.convos = []
@@ -67,3 +82,5 @@ Messages.before.insert (userId, doc) ->
             , (mentions) ->
               mentions.push doc._id unless doc._id in mentions
               return mentions
+
+

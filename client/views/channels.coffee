@@ -159,10 +159,7 @@ Template.pm.helpers
     #if Session.equals 'channel.name', "#{@}" then 'selected' else ''
     if @pm is @name then 'selected' else ''
   unread: ->
-    Messages.find
-      channel: "#{@}"
-      read: false
-    .fetch().length or ''
+    Meteor.user().profile.pms[@name].unread?.length or ''
   #unread_mentions: ->
     #if Meteor.user()
       #ignore_list = Meteor.user().profile.channels["#{@}"].ignore

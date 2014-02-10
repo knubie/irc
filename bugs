@@ -4,4 +4,3 @@
 - seperate say input from messages.
 - make private messages have blue message count badge, and change the browser window's title a la gmail chat.
 - fix regexps, eg two `codes` and URLS inside of ``
-- fix autocomplete, make original word last in array, address pressing tab with no matches

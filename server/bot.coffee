@@ -251,17 +251,6 @@ class @Bot extends Client
             createdAt: new Date()
             owner: 'server'
 
-        # Add sender to user's PMs list unless it's already there.
-        user = Meteor.users.findOne(@_id)
-        unless to of user.profile.pms
-          update Meteor.users, @_id
-          , "profile.pms"
-          , (pms) ->
-            unless pms?
-              pms = {}
-            pms[from] = {unread: 0}
-            return pms
-
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick', 'quit']
       @on event, async (channel) => @send 'NAMES', channel
