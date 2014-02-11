@@ -62,7 +62,6 @@ Messages.before.insert (userId, doc) ->
       update Meteor.users, user._id
       , "profile.pms.#{doc.from}.unread"
       , (unread) ->
-        console.log 'udpating unread'
         unread.push doc._id unless doc._id in unread
         return unread
 
@@ -77,10 +76,10 @@ Messages.before.insert (userId, doc) ->
             doc.convos.push nick
 
             # Update the mentioned user's profile with a new Message.
-            update Meteor.users, user._id
-            , "profile.channels.#{doc.channel}.mentions"
-            , (mentions) ->
-              mentions.push doc._id unless doc._id in mentions
-              return mentions
+            #update Meteor.users, user._id
+            #, "profile.channels.#{doc.channel}.mentions"
+            #, (mentions) ->
+              #mentions.push doc._id unless doc._id in mentions
+              #return mentions
 
 
