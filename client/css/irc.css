@@ -676,6 +676,11 @@ label.checkbox {
         padding-left: 14px;
         height: 30px; }
 
+.channel-message {
+  color: #777777;
+  font-size: 18px;
+  font-family: Roboto; }
+
 .messages .message {
   background-color: white;
   border-radius: 3px;

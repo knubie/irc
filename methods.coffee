@@ -32,11 +32,12 @@ Meteor.methods
     update Meteor.users, Meteor.userId()
     , "profile.channels.#{channel}"
     , (channel) ->
-      channel ?= 
+      channel ?=
         ignore: []
         verbose: false
         unread: []
         mentions: []
+        kicked: false
 
 
     return newChannel._id or null

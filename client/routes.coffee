@@ -71,6 +71,7 @@ Router.map ->
       channel = "##{@params.channel}"
       Session.set 'channel', channel
       if Meteor.user() and not Meteor.user().profile.channels[channel]?
+        console.log 'joining'
         Meteor.call 'join', Meteor.user().username, channel
     unload: ->
       Session.set 'channel', null
@@ -82,6 +83,15 @@ Router.map ->
         channel: Channels.findOne({name: "##{@params.channel}"})
         pm: null
       }
+    action: ->
+      channel = "##{@params.channel}"
+      if Meteor.user() and Meteor.user().profile.channels[channel].kicked
+        @render('kicked')
+        @render('channels', {to: 'channels'})
+        @render('channelHeader', {to: 'header'})
+        @render('users', {to: 'users'})
+      else
+        @render()
 
   @route 'mentions',
     path: '/channels/:channel/mentions'

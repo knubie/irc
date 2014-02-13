@@ -260,7 +260,7 @@ class @Bot extends Client
         # Remove channel from user's channel list
         update Meteor.users, @_id, "profile.channels"
         , (channels) ->
-          delete channels[channel]
+          channels[channel].kicked = true
           return channels
 
     @on 'raw', async (msg) =>
