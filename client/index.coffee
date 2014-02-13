@@ -15,8 +15,11 @@ Template.signup.events
       if error
         alert error.reason
       else
-        # Add account to hector
-        Meteor.call 'remember', username, password, Meteor.userId()
+        Meteor.call 'connect', username, _id, [
+          '#welcome'
+          '#changelog'
+          '#issues'
+        ]
         if Session.get('joinAfterLogin')
           channel = Session.get('joinAfterLogin').match(/^(.)(.*)$/)[2]
           Router.go 'channel', {channel}

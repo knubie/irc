@@ -2,14 +2,6 @@ if Meteor.isServer
   exec = Npm.require('child_process').exec
 
 Meteor.methods
-  remember: (username, password, _id) ->
-    if Meteor.isServer
-      if _id?
-        exec "cd $HECTOR_PATH; hector identity remember #{username} '#{password.replace(/'/gi, "\\$&")}'", async ->
-
-          Meteor.call 'connect', username, _id, ['#welcome', '#changelog', '#issues']
-      return null
-
   connect: (username, _id, channels) ->
     if Meteor.isServer
       client[username] ?= new Bot {_id, username}
