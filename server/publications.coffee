@@ -1,4 +1,6 @@
-Meteor.publish 'users', -> Meteor.users.find()
+Meteor.publish 'users', ->
+  Meteor.users.find({}, fields: emails: 0)
+
 Meteor.publish 'publicChannels', ->
   #Channels.find {private: {$ne: true}}
   Channels.find modes: $nin: ['s', 'i']
