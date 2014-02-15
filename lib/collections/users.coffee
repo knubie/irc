@@ -7,6 +7,9 @@
 #       mode: String
 
 if Meteor.isServer
+  #Accounts.config
+    #sendVerificationEmail: true
+
   Accounts.onCreateUser (options, user) ->
     # Create defaults
     profile =

@@ -59,13 +59,16 @@ Template.say.events
       e.preventDefault()
     if keyCode is 9 # Tab
       e.preventDefault()
-      # matches[0] == original message, [1] == Everythig before the partial nick, [2] == the partial nick.
+      # matches[0] == original message,
+      # [1] == Everythig before the partial nick,
+      # [2] == the partial nick.
       if matches = message.match nickregex
         if autoNickList.length < 1
           nicks = (nick for nick of @channel.nicks)
           autoNickList = nicks.filter (nick, i, arr) ->
             nick.match(new RegExp("^#{matches[2]}", 'i'))
-          autoNickList.push matches[2] # append the original partial nick to the end of the list.
+          # append the original partial nick to the end of the list.
+          autoNickList.push matches[2]
 
         if autoNickList.length > 1
           $('#say-input').val("#{matches[1] or ''}#{autoNickList[autoNickIndex]} ")

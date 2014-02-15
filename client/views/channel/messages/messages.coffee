@@ -122,14 +122,12 @@ Template.message.rendered = ->
     for nick of Channels.findOne(name: @data.channel).nicks
       ptext = ptext.replace regex.nick(nick), "$1<a href=\"/users/$2\">$2</a>$3"
   # Markdownify other stuff.
-  while regex.code.test ptext
-    ptext = ptext.replace regex.code, '$1$2<code>$3</code>$4'
-  while regex.bold.test ptext
-    ptext = ptext.replace regex.bold, '$1$2<strong>$3</strong>$4'
-  while regex.underline.test ptext
-    ptext = ptext.replace regex.underline, '$1$2<span class="underline">$3</span>$4'
-  while regex.channel.test ptext
-    ptext = ptext.replace regex.channel, ' <a href="/channels/$1">#$1</a>'
+  ptext = ptext.replace(/`([^`]*)`/g, "<code>$1</code>")
+  ptext = ptext.replace(/\*\*([^\*]*)\*\*/g, "<strong>$1</strong>")
+  ptext = ptext.replace(/\*([^\*]*)\*/g, "<em>$1</em>")
+  ptext = ptext.replace(/_([^_]*)_/g, '<span class="underline">$1</span>')
+  ptext = ptext.replace(/#(\d*[a-zA-Z_]+)/g, '<a href="/channels/$1">#$1</a>')
+
   p.html(ptext)
 
 Template.message.events
