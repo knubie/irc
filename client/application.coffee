@@ -54,6 +54,7 @@ Meteor.startup ->
   if Session.equals 'scroll', 0
   #if ($(window).scrollTop() + $(window).height()) >= $(document).height()
     $(window).scrollTop $(document).height()
+    $('.messages').scrollTop $('.messages')[0].scrollHeight
   #$(window).scrollTop \
     #$(document).height() - $(window).height() - Session.get('scroll')
     #

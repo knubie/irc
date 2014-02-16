@@ -1,13 +1,4 @@
 @media only screen and (max-width: 767px) {
-  html {
-    height: 100%; }
-    html body {
-      height: 100%; }
-      html body .container {
-        height: 100%; }
-        html body .container .row {
-          height: 100%; }
-
   .messages {
     overflow: auto;
     position: fixed;
