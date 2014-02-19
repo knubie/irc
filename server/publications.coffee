@@ -1,5 +1,5 @@
 Meteor.publish 'users', ->
-  Meteor.users.find({}, fields: emails: 0)
+  Meteor.users.find({}, fields: emails: 0, services: 0)
 
 Meteor.publish 'publicChannels', ->
   #Channels.find {private: {$ne: true}}

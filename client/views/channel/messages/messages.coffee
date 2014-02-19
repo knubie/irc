@@ -1,3 +1,34 @@
+regexps =
+  code: regex.code
+  url: regex.url
+  channel: regex.channel
+
+parse = (str) ->
+  strings = [{text: str}]
+  for name, regexp of regexps
+    for string, i in strings
+      if not string.token? and matches = string.text.match regexp
+        results = []
+        start = 0
+        for match in matches
+          matchIndex = string.text.indexOf match
+
+          first = string.text.slice start, matchIndex
+          second = string.text.slice matchIndex, (matchIndex + match.length)
+          third = string.text.slice (matchIndex + match.length)
+
+          results.pop()
+          results.push {text: first}
+          results.push {text: second, token: name}
+          results.push {text: third} if third.length > 0
+
+          start = matchIndex + match.length
+
+        strings[i] = results
+        strings = _.flatten strings
+
+  return strings
+
 ########## Messages ##########
 
 Template.messages.rendered = ->
@@ -82,6 +113,7 @@ Template.messages.events
 ########## Message ##########
 
 Template.message.rendered = ->
+  scrollToPlace()
   if @data.channel?
     # Remove mentions that are rendered.
     if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
@@ -103,32 +135,38 @@ Template.message.rendered = ->
 
   # Get message text.
   p = $(@find('p'))
-  ptext = p.html()
-  # Linkify & Imagify URLs.
-  ptext = ptext.replace regex.url, (str) ->
-    youtubeMatch = str.match regex.youtube
-    if Meteor.user().profile.inlineMedia and str.match /\.(?:jpe?g|gif|png)/i
-      """
-        <a href="#{str}" target="_blank">
-          <img onload="scrollToPlace();" src="#{str}" alt=""/>
-        </a>
-      """
-    else if youtubeMatch and youtubeMatch[1].length is 11 and Meteor.user().profile.inlineMedia
-      "<iframe src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
-    else # All other links
-      "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
-  # Linkify nicks.
-  if @data.channel?.isChannel()
-    for nick of Channels.findOne(name: @data.channel).nicks
-      ptext = ptext.replace regex.nick(nick), "$1<a href=\"/users/$2\">$2</a>$3"
-  # Markdownify other stuff.
-  ptext = ptext.replace(/`([^`]*)`/g, "<code>$1</code>")
-  ptext = ptext.replace(/\*\*([^\*]*)\*\*/g, "<strong>$1</strong>")
-  ptext = ptext.replace(/\*([^\*]*)\*/g, "<em>$1</em>")
-  ptext = ptext.replace(/_([^_]*)_/g, '<span class="underline">$1</span>')
-  ptext = ptext.replace(/#(\d*[a-zA-Z_]+)/g, '<a href="/channels/$1">#$1</a>')
+  message = p.html()
 
-  p.html(ptext)
+  ptext = for string in parse(message)
+    switch string.token
+      when 'code'
+        string.text.replace(/`([^`]*)`/g, "<code>$1</code>")
+      when 'url'
+        string.text.replace regexps.url, (str) ->
+          youtubeMatch = str.match regex.youtube
+          if Meteor.user().profile.inlineMedia and str.match /\.(?:jpe?g|gif|png)/i
+            """
+              <a href="#{str}" target="_blank">
+                <img onload="scrollToPlace();" src="#{str}" alt=""/>
+              </a>
+            """
+          else if youtubeMatch and
+          youtubeMatch[1].length is 11 and
+          Meteor.user().profile.inlineMedia
+            "<iframe src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
+          else # All other links
+            "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
+      when 'channel'
+        string.text.replace(/#(\d*[a-zA-Z_]+)/g, '<a href="/channels/$1">#$1</a>')
+      else
+        if @data.channel?
+          for nick of Channels.findOne(name: @data.channel).nicks
+            string.text.replace regex.nick(nick), "$1<a href=\"/users/$2\">$2</a>$3"
+        string.text.replace(/\*\*([^\*]*)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*([^\*]*)\*/g, "<em>$1</em>")
+        .replace(/_([^_]*)_/g, '<span class="underline">$1</span>')
+
+  p.html(ptext.join(''))
 
 Template.message.events
   'click .reply-action': ->
