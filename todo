@@ -1,7 +1,6 @@
 - change timestamp to twitter-style
 - seperate say input from messages.
 - make private messages change the browser window's title a la gmail chat.
-- fix regexps, eg two `codes` and URLS inside of ``
 - Meteor over https
 - implement srp auth on irc server
 - flood protection

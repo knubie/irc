@@ -137,14 +137,19 @@ Template.message.rendered = ->
   p = $(@find('p'))
   message = p.html()
 
+  embedGist = false
+  gistMatch = null
+
   ptext = for string in parse(message)
     switch string.token
       when 'code'
         string.text.replace(/`([^`]*)`/g, "<code>$1</code>")
       when 'url'
-        string.text.replace regexps.url, (str) ->
+        string.text.replace regexps.url, (str) =>
           youtubeMatch = str.match regex.youtube
-          if Meteor.user().profile.inlineMedia and str.match /\.(?:jpe?g|gif|png)/i
+          gistMatch = str.match regex.gist
+          if Meteor.user().profile.inlineMedia and
+          str.match /\.(?:jpe?g|gif|png)/i
             """
               <a href="#{str}" target="_blank">
                 <img onload="scrollToPlace();" src="#{str}" alt=""/>
@@ -154,6 +159,11 @@ Template.message.rendered = ->
           youtubeMatch[1].length is 11 and
           Meteor.user().profile.inlineMedia
             "<iframe src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
+          else if gistMatch and
+          gistMatch[2].length is 7 and
+          Meteor.user().profile.inlineMedia
+            embedGist = true
+            return ''
           else # All other links
             "<a href=\"#{str}\" target=\"_blank\">#{str}</a>"
       when 'channel'
@@ -167,6 +177,35 @@ Template.message.rendered = ->
         .replace(/_([^_]*)_/g, '<span class="underline">$1</span>')
 
   p.html(ptext.join(''))
+  if embedGist is true
+    gistFrame = document.createElement("iframe")
+    gistFrame.setAttribute("style", "width: 100%; height: 350px; border: none;")
+    @find('p').appendChild(gistFrame)
+    gistFrameDoc = gistFrame.document
+
+    if gistFrame.contentDocument
+      gistFrameDoc = gistFrame.contentDocument
+    else if gistFrame.contentWindow
+      gistFrameDoc = gistFrame.contentWindow.document
+
+    gistFrameDoc.open()
+    html =
+    """
+      <html>
+        <head>
+          <style type="text/css">
+            table { font-size: 14px; }
+            .gist-data { max-height: 300px; }
+          </style>
+        </head>
+        <body>
+          <script src="https://gist.github.com/#{gistMatch[1]}/#{gistMatch[2]}.js">
+          </script>
+        </body>
+      </html>
+    """
+    gistFrameDoc.writeln(html)
+    gistFrameDoc.close()
 
 Template.message.events
   'click .reply-action': ->
