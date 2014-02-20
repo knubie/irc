@@ -42,6 +42,12 @@ a:focus {
 form {
   margin: 0; }
 
+.gist {
+  font-size: 14px; }
+
+.file-data {
+  max-height: 350px; }
+
 input.form-control-two {
   -webkit-appearance: none; }
   @media only screen and (min-width: 768px) {
