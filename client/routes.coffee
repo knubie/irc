@@ -70,8 +70,8 @@ Router.map ->
     before: ->
       channel = "##{@params.channel}"
       Session.set 'channel', channel
-      if Meteor.user() and not Meteor.user().profile.channels[channel]?
-        console.log 'joining'
+      if Meteor.user() and
+      not Meteor.user().profile.channels[channel]?
         Meteor.call 'join', Meteor.user().username, channel
     unload: ->
       Session.set 'channel', null

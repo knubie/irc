@@ -257,7 +257,6 @@ class @Bot extends Client
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
       if nick is @username
-        # Remove channel from user's channel list
         update Meteor.users, @_id, "profile.channels"
         , (channels) ->
           channels[channel].kicked = true

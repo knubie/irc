@@ -130,7 +130,6 @@ Template.message.rendered = ->
   if @data.to is Meteor.user().username
     # Remove mentions that are rendered.
     if (i = Meteor.user().profile.pms[@data.from].unread.indexOf(@data._id)) > -1
-      console.log "read #{@data.text}"
       update Meteor.users, Meteor.userId()
       , "profile.pms.#{@data.from}.unread"
       , (unread) ->
@@ -161,7 +160,7 @@ Template.message.rendered = ->
           Meteor.user().profile.inlineMedia
             "<iframe src=\"//www.youtube.com/embed/#{youtubeMatch[1]}\" frameborder=\"0\" allowfullscreen></iframe>"
           else if gistMatch and
-          gistMatch[2].length is 7 and
+          gistMatch[2].length is 7 and # or 20
           Meteor.user().profile.inlineMedia
             "<script id=\"#{gistMatch[2]}\" src=\"https://gist.github.com/#{gistMatch[1]}/#{gistMatch[2]}.json?callback=gist\"></script>"
           else # All other links

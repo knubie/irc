@@ -185,3 +185,16 @@ Template.pm.events
 Template.settings.helpers
   channelURL: ->
     @channel.name.match(/^(#)?(.*)$/)[2]
+
+########## Kicked ##########
+
+Template.kicked.events
+  'click .rejoin': ->
+    console.log @channel.name
+    update Meteor.users, Meteor.userId(), "profile.channels"
+    , (channels) =>
+      channels[@channel.name].kicked = no
+      return channels
+    Meteor.call 'join', Meteor.user().username, @channel.name
+
+
