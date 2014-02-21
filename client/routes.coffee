@@ -150,9 +150,6 @@ Router.map ->
       'say': {to: 'say'}
     after: ->
       Session.set 'subPage', 'messages'
-      {pms} = Meteor.user().profile
-      pms[@params.user] = {unread: 0} unless @params.user of pms
-      Meteor.users.update Meteor.userId(), $set: {'profile.pms': pms}
     waitOn: ->
       handlers.messages = \
       Meteor.subscribe 'privateMessages', @params.user, PERPAGE

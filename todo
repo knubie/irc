@@ -12,3 +12,4 @@
 - user's channel list getting out of sync with irc server.
 - Add founder(+q ~), away(+a *) and bot(+b $) user modes
 - show unread messages next to channel
+- fix error on sign out
