@@ -1,0 +1,28 @@
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+/* Extra small devices (phones, 480px and down) */
+/* Small devices (tablets, 768px and up) */
+/* Medium devices (desktops, 992px and up) */
+/* Large devices (large desktops, 1200px and up) */
+@media (max-width: 767px) {
+  .messages {
+    overflow: auto;
+    position: fixed;
+    top: 45px;
+    bottom: 54px;
+    right: 0;
+    left: 0;
+    padding: 15px 15px 0;
+    -webkit-overflow-scrolling: touch; }
+
+  .messages > * {
+    -webkit-transform: translateZ(0px);
+    transform: translateZ(0px); }
+
+  .input-container {
+    background-color: #ecf0f1;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 15px !important; } }

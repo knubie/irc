@@ -2,33 +2,6 @@
 @import "prefixes"
 @import "colors"
 
-$foreground: #777
-
-// iOS scroll hack
-+tablet-portrait-and-below
-
-  .messages
-    overflow: auto
-    position: fixed
-    top: 45px
-    bottom: 54px
-    right: 0
-    left: 0
-    padding: 15px 15px 0
-    -webkit-overflow-scrolling: touch
-
-  .messages > *
-    -webkit-transform: translateZ(0px)
-    transform: translateZ(0px)
-
-  .input-container
-    background-color: $clouds
-    position: fixed
-    bottom: 0
-    left: 0
-    right: 0
-    padding: 10px 15px !important
-
 body
   background-color: $clouds
   cursor: default
@@ -39,151 +12,24 @@ body
   -ms-user-select: none
   user-select: none
   padding-top: 52px
-  +tablet-portrait-and-above
+  +screen-sm
     padding-top: 66px
   -webkit-font-smoothing: antialiased
   font-family: Helvetica, sans-serif
   //font-family: 'Open Sans', Helvetica, sans-serif
   //font-family: 'Roboto', Helvetica, sans-serif
 
-// Random shit
-
-a:focus
-  outline: 0
-
-form 
-  margin: 0
-
-.gist
-  font-size: 12px
-
-.file-data
-  max-height: 350px
-
-input.form-control-two
-  -webkit-appearance: none
-  +tablet-portrait-and-above
-    // TODO: what's up with this?
-    outline: none
-.form-control-two
-  display: block
-  width: 100%
-  height: 34px
-  padding: 6px 12px
-  font-size: 14px
-  line-height: 1.428571429
-  color: #555
-  vertical-align: middle
-  background-color: #fff
-  border-radius: 4px
-  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
-
-.tooltip
-  transition: transform ease-in-out .15s
-.tooltip.in
-  opacity: 0.8
-.tooltip-inner
-  background-color: $midnight-blue
-.tooltip.top .tooltip-arrow
-  border-top-color: $midnight-blue
-
-.fixed-width
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace
-
-.reverse
-  transform: scale(-1, 1)
-
-.underline
-  text-decoration: underline
-
-code
-  color: $foreground
-  font-size: 14px
-  border: 1px solid #e1e1e8
-  background-color: #f7f7f9
-  white-space: pre-line
-
-.btn-primary
-  background-color: $peter-river
-
-.rdio-button
-  color: $foreground
-  border: 1px solid #b8c3c9
-  line-height: 26px
-  display: inline-block
-  padding: 0 10px
-  cursor: pointer
-  border-radius: 4px
-  background-clip: padding-box
-  box-shadow: 0px 1px 0 0px rgba(0, 0, 0, 0.07)
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
-  -webkit-user-select: none
-  background-image: linear-gradient(#ffffff 60%, #f5f7fa 100%)
-
-button:focus
-  outline: none
-
-a
-  color: $peter-river
-
-.thumbnail
-  background-color: white
-
-input.form-control::-webkit-input-placeholder
-  color: rgba(0, 0, 0, 0.3)
-input.form-control
-  border: 2px solid $silver
-  box-shadow: none
-  -webkit-appearance: none
-input.form-control:hover
-  border-color: $concrete
-  -webkit-appearance: none
-input.form-control:focus
-  border-color: $peter-river
-  box-shadow: none
-  -webkit-appearance: none
-
-label
-  color: $foreground
-label.checkbox
-  color: $foreground
-  line-height: 16px
-  margin-bottom: 25px
-  p
-    font-weight: normal
-
-.modal-backdrop.in
-  opacity: 0.5
-  filter: alpha(opacity=50)
-
-.btn-primary-outline
-  color: $peter-river
-  border: 1px solid $peter-river
-  background-color: transparent
-  font-size: 10px
-  text-transform: uppercase
-  font-weight: 700
-  letter-spacing: 1px
-  .glyphicon-plus
-    font-size: 8px
-    top: -1px
-
-.btn-primary-outline:hover
-  color: white
-  background-color: $peter-river
-  border: 1px solid $peter-river
-
-
-// Nav
+////////// Nav //////////
 #relay-nav
   background-color: $clouds
   text-shadow: 0 -1px 0 rgba(0,0,0,.15)
   border-color: $silver
   box-shadow: 0 1px 0 rgba(255,255,255,.1)
+  z-index: 100
   .search
-    +tablet-portrait-and-below
-      display: none
+    +screen-sm
+      display: block
+    display: none
     float: left
     position: relative
     margin-left: 50px
@@ -203,7 +49,7 @@ label.checkbox
       text-shadow: none
   .navbar-brand
     img
-      +mobile-landscape-and-below
+      +screen-xs
         width: 50px
         height: 21px
   .navbar-nav
@@ -275,8 +121,7 @@ label.checkbox
     border-color: $belize-hole
     background-color: $belize-hole
 
-
-// Sign up
+////////// Home //////////
 .home-top
   background-color: $peter-river
   color: #798795
@@ -289,7 +134,7 @@ label.checkbox
   .container
     text-align: center
     h1
-      +tablet-landscape-and-above
+      +screen-md
         font-size: 114px
       font-size: 64px
       color: white
@@ -297,21 +142,21 @@ label.checkbox
     h4
       color: rgba(255,255,255,0.6)
       margin-bottom: 50px
-      +tablet-landscape-and-above
+      +screen-md
         font-size: 19px
         margin-bottom: 100px
       font-size: 14px
     .irssi
-      margin-right: 75px
-      +mobile-portrait
-        margin: 0 0 20px 0
+      margin: 0 0 20px 0
+      +screen-sm
+        margin: 0 75px 0 0
 
-  +tablet-portrait-and-above
+  +screen-sm
     text-align: left
-  +desktop
+  +screen-lg
     font-size: 21px
   h1
-    +tablet-landscape-and-above
+    +screen-md
       font-size: 60px
       letter-spacing: -1px
     color: #FFF
@@ -346,15 +191,7 @@ label.checkbox
         .glyphicon, .batch-icon
           color: #AAA
 
-.footer
-  background-color: $clouds
-  padding: 25px 0
-  color: #aaa
-  font-size: 12px
-  +mobile-landscape-and-above
-    font-size: 14px
-
-// Sign in
+////////// Sign in / Sign up //////////
 .signin-container, .signup-container
   color: $foreground
   .centerer
@@ -371,8 +208,8 @@ label.checkbox
     text-align: center
     margin-top: 100px
     color: #999
-    font-size: 12px
-    +mobile-landscape-and-above
+    font-size: 11px
+    +screen-sm
       font-size: 14px
   #signin, #signup
     input
@@ -401,22 +238,10 @@ label.checkbox
       position: relative
       top: 10px
 
-// Message input
-.input-container
-  //position: fixed
-  padding: 15px
-  #say-input
-    border: 2px solid $silver
-    box-shadow: none
-  #say-input:hover
-    border-color: $concrete
-  #say-input:focus
-    border-color: $peter-river
-  
-// Channels
+////////// Channels //////////
 .channel-container
   overflow: hidden
-  +tablet-portrait-and-above
+  +screen-md
     padding-top: 100px
   .alert
     text-align: center
@@ -477,7 +302,7 @@ label.checkbox
     .channel-breadcrumb
       color: $foreground
       margin-top: 4px
-      +mobile-landscape-and-above
+      +screen-md
         margin: 0
       h3
         display: inline
@@ -493,7 +318,7 @@ label.checkbox
       font-size: 14px
       color: #666
       margin-top: 5px
-      +tablet-portrait-and-above
+      +screen-sm
         display: block
       .topic-edit, .topic-edit > a
         color: $silver
@@ -502,12 +327,12 @@ label.checkbox
     .channel-settings, .channel-notifications
       position: absolute
       top: 15px
-      +tablet-portrait-and-above
+      +screen-sm
         top: 17px
       color: $foreground
       font-size: 21px
       display: none
-      +tablet-portrait-and-above
+      +screen-sm
         right: 150px
         font-size: 14px
         display: block
@@ -515,13 +340,13 @@ label.checkbox
         position: relative
         top: 1px
       .hidden-xs
-        +tablet-portrait-and-above
+        +screen-sm
           display: inline!important
       .batch-icon
         color: #BDC3C7
         font-size: 19px
         margin-right: 6px
-        +tablet-portrait-and-above
+        +screen-sm
           font-size: 14px
       .badge
         padding: 2px 4px 1px
@@ -530,14 +355,14 @@ label.checkbox
         position: absolute
         left: 9px
         top: 4px
-        +tablet-portrait-and-above
+        +screen-sm
           left: 7px
           top: -1px
     .channel-settings
       right: 15px
     .channel-notifications
       right: 40px
-      +tablet-portrait-and-above
+      +screen-sm
         right: 105px
     .channel-settings:hover, .channel-notifications:hover, .channel-settings.active, .channel-notifications.active
       color: $peter-river
@@ -584,10 +409,6 @@ label.checkbox
           background-color: $silver
 
 .channels
-  @media screen and (min-width: 992px)
-    width: 132px
-  @media screen and (min-width: 1200px)
-    width: 165px
   color: $foreground
   list-style: none
   font-size: 14px
@@ -597,7 +418,11 @@ label.checkbox
   margin: 0
   margin-top: 25px
   position: fixed
-  +mobile-portrait
+  +screen-md
+    width: 132px
+  +screen-lg
+    width: 165px
+  +screen-xs
     width: 100%
     position: relative
     display: none
@@ -673,12 +498,82 @@ label.checkbox
         padding-left: 14px
         height: 30px
 
-.channel-message
+.settings-panel
   color: $foreground
-  font-size: 18px
-  font-family: Roboto
+  .disclaimer
+    font-style: italic
+    
+  #topic-form-settings, #ignore-form-settings
+    label
+      display: block
+    input.form-control
+      display: inline-block
+    input[type="text"]
+      width: 290px
+    button.btn-default
+      border: none
+      background-color: $silver
+      color: white
+      margin-left: 5px
+  #channel-modes
+    border-top: 1px solid $clouds
+    margin-top: 25px
+    padding-top: 10px
 
-// Messages
+////////// Users //////////
+.user-list
+  list-style: none
+  padding: 0
+  position: fixed
+  margin-top: 100px
+  width: 15%
+  height: calc(100% - 240px)
+  overflow-y: scroll
+  li
+    margin-bottom: 9px
+    color: $silver
+    position: relative
+    font-size: 11px
+    h3
+      font-size: 14px
+      margin: 0
+      a
+        color: #777
+      a:hover
+        color: $peter-river
+      a.away
+        color: $silver
+      a.away:hover
+        color: $peter-river
+      .glyphicon
+        font-size: 12px
+        top: 0
+      .mod
+        color: $clouds
+        background-color: $silver
+        font-weight: bold
+        font-size: 10px
+        padding: 0 2px 1px
+        border-radius: 3px
+        position: relative
+        bottom: 1px
+
+////////// Message input //////////
+.input-container
+  //position: fixed
+  padding: 15px
+  #say-input
+    border: 2px solid $silver
+    box-shadow: none
+  #say-input:hover
+    border-color: $concrete
+  #say-input:focus
+    border-color: $peter-river
+  .typeahead.dropdown-menu
+    top: auto!important
+    bottom: 60px!important
+
+////////// Messages //////////
 .messages
   .message
     background-color: #fff
@@ -709,7 +604,7 @@ label.checkbox
       img
         max-width: 100%
         max-height: 70vh
-        +tablet-portrait-and-above
+        +screen-sm
           max-height: 60vh
       a
         font-weight: 400
@@ -785,7 +680,7 @@ label.checkbox
     iframe
       width: 260px
       height: 195px
-      +tablet-portrait-and-above
+      +screen-sm
         width: 400px
         height: 300px
   .message:hover
@@ -839,7 +734,7 @@ label.checkbox
     .divider
       border-bottom: 1px solid rgba(0,0,0,0.02)
 
-// User Profile
+////////// User Profile //////////
 .user-profile
   position: relative
   top: 25px
@@ -867,7 +762,7 @@ label.checkbox
           margin: 0 0 12px 0
           font-weight: normal
 
-// Explore
+////////// Explore //////////
 .channel-list
   list-style: none
   margin-top: 25px
@@ -900,255 +795,20 @@ label.checkbox
 .explore-nav
   margin-top: 25px
 
-.typeahead.dropdown-menu
-  top: auto!important
-  bottom: 60px!important
-
-.twitter-typeahead
-  width: 100%
-  .tt-hint
-    display: block
-    height: 34px
-    padding: 6px 12px
-    font-size: 14px
-    line-height: 1.428571429
-    border: 2px solid transparent
-    border-radius: 4px
-    color: #BDC3C7
-    width: 100%
-  .hint-small
-    height: 30px
-    padding: 5px 10px
-    font-size: 12px
-    border-radius: 3px
-    line-height: 1.5
-  .hint-large
-    height: 45px
-    padding: 10px 16px
-    font-size: 18px
-    border-radius: 6px
-    line-height: 1.33
-  .tt-dropdown-menu
-    position: absolute
-    bottom: 28px
-    background-color: $peter-river
-    color: #FFF
-    padding: 5px 14px
-    border-radius: 5px
-    width: 100%
-
-.notifications > .message
-  color: #ECF0F1
-  background-color: #3498DB
-  box-shadow: 0 2px 0 #2980B9
-
-.notifications > .message:hover
-  cursor: pointer
-  background-color: $belize-hole
-
-.privacy-print
-  color: rgba(255,255,255,0.3)
-
-.badge-info
-  background-color: $silver
-  margin-left: 6px
-  vertical-align: bottom
-  margin-bottom: 1px
-  color: white
-  text-shadow: none
-
-.page-head
-  position: fixed
-  top: 0
-  left: 200px
-  padding: 20px
-  background-color: #ecf0f1
-  z-index: 99
-  width: calc(100% \- 200px)
-  box-shadow: 0px 2px 4px rgba(0,0,0,0.1)
-  box-sizing: border-box
-  a
-    margin-right: 97px
-    color: $foreground
-    transition: .15s left, .15s opacity, .15s background-color, .15s color
-  a:hover
-    color: $peter-river
-    text-decoration: none
-  i
-    margin: 0 10px
-    font-size: 16px
-    color: $foreground
-.settings-panel
-  color: $foreground
-  .disclaimer
-    font-style: italic
-    
-  #topic-form-settings, #ignore-form-settings
-    label
-      display: block
-    input.form-control
-      display: inline-block
-    input[type="text"]
-      width: 290px
-    button.btn-default
-      border: none
-      background-color: $silver
-      color: white
-      margin-left: 5px
-  #channel-modes
-    border-top: 1px solid $clouds
-    margin-top: 25px
-    padding-top: 10px
-
-.user-list
-  list-style: none
-  padding: 0
-  position: fixed
-  margin-top: 100px
-  width: 15%
-  height: calc(100% - 240px)
-  overflow-y: scroll
-  li
-    margin-bottom: 9px
-    color: $silver
-    position: relative
-    font-size: 11px
-    h3
-      font-size: 14px
-      margin: 0
-      a
-        color: #777
-      a:hover
-        color: $peter-river
-      a.away
-        color: $silver
-      a.away:hover
-        color: $peter-river
-      .glyphicon
-        font-size: 12px
-        top: 0
-      .mod
-        color: $clouds
-        background-color: $silver
-        font-weight: bold
-        font-size: 10px
-        padding: 0 2px 1px
-        border-radius: 3px
-        position: relative
-        bottom: 1px
-
-
+////////// Notifications //////////
 .request-notifications-container
   position: fixed
   top: 50px
   left: 50%
   z-index: 101
-
-.request-notifications
-  position: relative
-  left: -50%
-  background-color: $peter-river
-  color: $clouds
-  padding: 6px 20px 4px
-  border-radius: 5px
-  box-shadow: 0 2px 0 #2980B9
-  a
+  .request-notifications
+    position: relative
+    left: -50%
+    background-color: $peter-river
     color: $clouds
-    text-decoration: underline
-
-.navbar-fixed-top
-  z-index: 100
-
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus
-  background-color: $clouds
-
-.badge-important
-  background-color: $peter-river
-
-.btn-two
-  display: inline-block
-  *display: inline
-  padding: 4px 12px
-  margin-bottom: 0
-  *margin-left: .3em
-  font-size: 14px
-  line-height: 20px
-  color: #333333
-  text-align: center
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75)
-  vertical-align: middle
-  cursor: pointer
-  background-color: #f5f5f5
-  *background-color: #e6e6e6
-  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6)
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6))
-  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6)
-  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6)
-  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6)
-  background-repeat: repeat-x
-  border: 1px solid #cccccc
-  *border: 0
-  border-color: #e6e6e6 #e6e6e6 #bfbfbf
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
-  border-bottom-color: #b3b3b3
-  -webkit-border-radius: 4px
-  -moz-border-radius: 4px
-  border-radius: 4px
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0)
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)
-  *zoom: 1
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)
-  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)
-
-.btn-two:hover,
-.btn-two:focus,
-.btn-two:active,
-.btn-two.active,
-.btn-two.disabled,
-.btn-two[disabled]
-  color: #333333
-  background-color: #e6e6e6
-  *background-color: #d9d9d9
-
-.btn-two:active,
-.btn-two.active
-  background-color: #cccccc \9
-
-.btn-two:first-child
-  *margin-left: 0
-
-.btn-two:hover,
-.btn-two:focus
-  color: #333333
-  text-decoration: none
-  background-position: 0 -15px
-  -webkit-transition: background-position 0.1s linear
-  -moz-transition: background-position 0.1s linear
-  -o-transition: background-position 0.1s linear
-  transition: background-position 0.1s linear
-
-.btn-two:focus
-  outline: thin dotted #333
-  outline: 5px auto -webkit-focus-ring-color
-  outline-offset: -2px
-
-
-.btn-two.active,
-.btn-two:active
-  background-image: none
-  outline: 0
-  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)
-  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)
-
-
-.btn-two.disabled,
-.btn-two[disabled]
-  cursor: default
-  background-image: none
-  opacity: 0.65
-  filter: alpha(opacity=65)
-  -webkit-box-shadow: none
-  -moz-box-shadow: none
-  box-shadow: none
+    padding: 6px 20px 4px
+    border-radius: 5px
+    box-shadow: 0 2px 0 #2980B9
+    a
+      color: $clouds
+      text-decoration: underline

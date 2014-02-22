@@ -19,6 +19,8 @@ Deps.autorun ->
     channels = (channel for channel of Meteor.user().profile.channels)
   # Subscribed to joined channels (including private channels)
   if Meteor.user()
+    console.log 'sub joined channels'
+    console.log Meteor.user()
     handlers.joinedChannels = Meteor.subscribe 'joinedChannels'
 
 ########## Startup ##########

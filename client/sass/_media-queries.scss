@@ -1,14 +1,66 @@
-// Media Queries in Sass 3.2
+//== Media queries breakpoints
 //
-// These mixins make media queries a breeze with Sass.
-// The media queries from mobile up until desktop all
-// trigger at different points along the way
-//
-// And important point to remember is that and width
-// over the portrait width is considered to be part of the
-// landscape width. This allows us to capture widths of devices
-// that might not fit the dimensions exactly. This means the break
-// points are seamless.
+//## Define the breakpoints at which your layout will change, adapting to different screen sizes.
+
+// Extra small screen / phone
+// Note: Deprecated $screen-xs and $screen-phone as of v3.0.1
+$screen-xs: 480px !default;
+$screen-xs-min: $screen-xs !default;
+$screen-phone: $screen-xs-min !default;
+
+// Small screen / tablet
+// Note: Deprecated $screen-sm and $screen-tablet as of v3.0.1
+$screen-sm: 768px !default;
+$screen-sm-min: $screen-sm !default;
+$screen-tablet: $screen-sm-min !default;
+
+// Medium screen / desktop
+// Note: Deprecated $screen-md and $screen-desktop as of v3.0.1
+$screen-md: 992px !default;
+$screen-md-min: $screen-md !default;
+$screen-desktop: $screen-md-min !default;
+
+// Large screen / wide desktop
+// Note: Deprecated $screen-lg and $screen-lg-desktop as of v3.0.1
+$screen-lg: 1200px !default;
+$screen-lg-min: $screen-lg !default;
+$screen-lg-desktop: $screen-lg-min !default;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max: ($screen-sm-min - 1) !default;
+$screen-sm-max: ($screen-md-min - 1) !default;
+$screen-md-max: ($screen-lg-min - 1) !default;
+
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Extra small devices (phones, 480px and down) */
+@mixin screen-xs {
+  @media (max-width: $screen-xs-max) {
+    @content;
+  }
+}
+
+/* Small devices (tablets, 768px and up) */
+@mixin screen-sm {
+  @media (min-width: $screen-sm-min) {
+    @content;
+  }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@mixin screen-md {
+  @media (min-width: $screen-md-min) {
+    @content;
+  }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@mixin screen-lg {
+  @media (min-width: $screen-lg-min) {
+    @content;
+  }
+}
 
 $mq-mobile-portrait		: 320px !default;
 $mq-mobile-landscape	: 568px !default;

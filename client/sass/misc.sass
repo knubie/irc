@@ -1,0 +1,141 @@
+@import "media-queries"
+@import "colors"
+
+a:focus
+  outline: 0
+
+form 
+  margin: 0
+
+.gist
+  font-size: 12px
+
+.file-data
+  max-height: 350px
+
+input.form-control-two
+  -webkit-appearance: none
+  +screen-sm
+    // TODO: what's up with this?
+    outline: none
+.form-control-two
+  display: block
+  width: 100%
+  height: 34px
+  padding: 6px 12px
+  font-size: 14px
+  line-height: 1.428571429
+  color: #555
+  vertical-align: middle
+  background-color: #fff
+  border-radius: 4px
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+
+.tooltip
+  transition: transform ease-in-out .15s
+.tooltip.in
+  opacity: 0.8
+.tooltip-inner
+  background-color: $midnight-blue
+.tooltip.top .tooltip-arrow
+  border-top-color: $midnight-blue
+
+.fixed-width
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace
+
+.reverse
+  transform: scale(-1, 1)
+
+.underline
+  text-decoration: underline
+
+code
+  color: $foreground
+  font-size: 14px
+  border: 1px solid #e1e1e8
+  background-color: #f7f7f9
+  white-space: pre-line
+
+.btn-primary
+  background-color: $peter-river
+
+.rdio-button
+  color: $foreground
+  border: 1px solid #b8c3c9
+  line-height: 26px
+  display: inline-block
+  padding: 0 10px
+  cursor: pointer
+  border-radius: 4px
+  background-clip: padding-box
+  box-shadow: 0px 1px 0 0px rgba(0, 0, 0, 0.07)
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
+  -webkit-user-select: none
+  background-image: linear-gradient(#ffffff 60%, #f5f7fa 100%)
+
+button:focus
+  outline: none
+
+a
+  color: $peter-river
+
+.thumbnail
+  background-color: white
+
+input.form-control::-webkit-input-placeholder
+  color: rgba(0, 0, 0, 0.3)
+input.form-control
+  border: 2px solid $silver
+  box-shadow: none
+  -webkit-appearance: none
+input.form-control:hover
+  border-color: $concrete
+  -webkit-appearance: none
+input.form-control:focus
+  border-color: $peter-river
+  box-shadow: none
+  -webkit-appearance: none
+
+label
+  color: $foreground
+label.checkbox
+  color: $foreground
+  line-height: 16px
+  margin-bottom: 25px
+  p
+    font-weight: normal
+
+.modal-backdrop.in
+  opacity: 0.5
+  filter: alpha(opacity=50)
+
+.btn-primary-outline
+  color: $peter-river
+  border: 1px solid $peter-river
+  background-color: transparent
+  font-size: 10px
+  text-transform: uppercase
+  font-weight: 700
+  letter-spacing: 1px
+  .glyphicon-plus
+    font-size: 8px
+    top: -1px
+
+.btn-primary-outline:hover
+  color: white
+  background-color: $peter-river
+  border: 1px solid $peter-river
+
+.badge-info
+  background-color: $silver
+  margin-left: 6px
+  vertical-align: bottom
+  margin-bottom: 1px
+  color: white
+  text-shadow: none
+
+.badge-important
+  background-color: $peter-river
+
+

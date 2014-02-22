@@ -1,0 +1,27 @@
+@import "media-queries"
+@import "colors"
+
+// iOS scroll hack
++screen-xs
+  .messages
+    overflow: auto
+    position: fixed
+    top: 45px
+    bottom: 54px
+    right: 0
+    left: 0
+    padding: 15px 15px 0
+    -webkit-overflow-scrolling: touch
+
+  .messages > *
+    -webkit-transform: translateZ(0px)
+    transform: translateZ(0px)
+
+  .input-container
+    background-color: $clouds
+    position: fixed
+    bottom: 0
+    left: 0
+    right: 0
+    padding: 10px 15px !important
+
