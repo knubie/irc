@@ -1,5 +1,7 @@
 parseString = Meteor.require('xml2js').parseString
 request = Npm.require('request')
+Cleverbot = Meteor.require('cleverbot-node')
+@cleverbot = new Cleverbot
 @client = {}
 @async = (cb) -> Meteor.bindEnvironment cb, (err) -> console.log err
 @wolfram = {}

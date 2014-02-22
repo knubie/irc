@@ -56,14 +56,15 @@ class @Idletron extends Client
               from: 'Idletron'
               owner: 'server'
           else
-            @say to, "I don't know."
-            Messages.insert
-              channel: to
-              text: "I don't know."
-              mobile: false
-              createdAt: new Date()
-              from: 'Idletron'
-              owner: 'server'
+            cleverbot.write query, async (response) =>
+              @say to, response.message
+              Messages.insert
+                channel: to
+                text: response.message
+                mobile: false
+                createdAt: new Date()
+                from: 'Idletron'
+                owner: 'server'
 
     @on 'action', async (from, to, text, message) =>
       #FIXME: this won't work.
