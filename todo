@@ -13,3 +13,4 @@
 - Add founder(+q ~), away(+a *) and bot(+b $) user modes
 - show unread messages next to channel
 - fix error on sign out
+
