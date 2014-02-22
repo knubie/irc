@@ -61,8 +61,11 @@ $(window).focus ->
 
 Messages.find().observeChanges
   added: (id, message) ->
-    console.log 'new message'
-    beepAndNotify(id, message)
-    if !document.hasFocus() and handlers.messages?.ready()
-      unread += 1
-      window.document.title = "(#{unread}) Jupe"
+    if handlers.messages?.ready() and handlers.allMessages?.ready()
+      beepAndNotify(id, message)
+      if !document.hasFocus()
+        unread += 1
+        window.document.title = "(#{unread}) Jupe"
+      unless Session.equals 'channel', message.channel
+        channelUnread = Session.get("#{message.channel}.unread") or 0
+        Session.set("#{message.channel}.unread", channelUnread + 1)

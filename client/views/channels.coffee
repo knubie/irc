@@ -47,7 +47,6 @@ Template.channelHeader.events
   'click .dropdown-menu input': (e,t) -> e.stopPropagation()
 
   'click .user-count': (e,t) ->
-    #TODO: move this to local storage.
     if $('.user-list-container').is(':visible')
       localStorage.setItem "#{@channel.name}.userList", false
       userListDep.changed()
@@ -147,8 +146,7 @@ Template.channel.helpers
   url: ->
     @name.match(/^(.)(.*)$/)[2]
   unread: ->
-    if Meteor.user()
-      Meteor.user().profile.channels[@name].unread.length or ''
+    Session.get("#{@name}.unread") or ''
   unread_mentions: ->
     if Meteor.user()
       Meteor.user().profile.channels[@name].mentions?.length or ''

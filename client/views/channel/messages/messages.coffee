@@ -63,6 +63,9 @@ Template.messages.rendered = ->
         $('.message').removeClass 'faded'
     , '.message'
 
+  # Remove unread messages
+  Session.set("#{@channel}.unread", 0)
+
   $('.messages').bind 'DOMNodeInserted', ->
     scrollToPlace()
 

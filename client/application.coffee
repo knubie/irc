@@ -14,13 +14,12 @@ Session.setDefault 'joinAfterLogin', null # Which channel to join after signing 
   publicChannels: Meteor.subscribe 'publicChannels'
 
 Deps.autorun ->
-  # Subscribe to all messages feed.
   if Meteor.user()?
+    # Subscribe to all messages feed.
     channels = (channel for channel of Meteor.user().profile.channels)
-  # Subscribed to joined channels (including private channels)
-  if Meteor.user()
-    console.log 'sub joined channels'
-    console.log Meteor.user()
+    handlers.allMessages = Meteor.subscribe 'messages', channels, PERPAGE
+
+    # Subscribed to joined channels (including private channels)
     handlers.joinedChannels = Meteor.subscribe 'joinedChannels'
 
 ########## Startup ##########
