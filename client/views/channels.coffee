@@ -1,6 +1,10 @@
 Template.channelHeader.helpers
   channelURL: ->
     @channel?.name.match(/^(#)?(.*)$/)[2]
+  mentionsPath: ->
+    Router.routes['mentions'].path({channel: @channel?.name.match(/^.(.*)$/)[1]})
+  settingsPath: ->
+    Router.routes['settings'].path({channel: @channel?.name.match(/^.(.*)$/)[1]})
   op_status: ->
     @channel?.nicks?[Meteor.user()?.username] is '@'
   unread_mentions: ->
@@ -143,8 +147,10 @@ Template.channel.helpers
       'm' in ch.modes
     else
       no
-  url: ->
+  hashlessName: ->
     @name.match(/^(.)(.*)$/)[2]
+  url: ->
+    Router.routes['channel'].path({channel: @name.match(/^.(.*)$/)[1]})
   unread: ->
     Session.get("#{@name}.unread") or ''
   unread_mentions: ->
@@ -181,8 +187,8 @@ Template.pm.events
 ########## Settings ##########
 
 Template.settings.helpers
-  channelURL: ->
-    @channel.name.match(/^(#)?(.*)$/)[2]
+  channelPath: ->
+    Router.routes['channel'].path({channel: @channel.name.match(/^.(.*)$/)[1]})
 
 ########## Kicked ##########
 

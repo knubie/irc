@@ -50,7 +50,7 @@
         <div class="topic">
           {{channel.topic}}
           {{#if op_status}}
-            <span class="topic-edit">&mdash; <a href="#">Edit</a></span>
+            <span class="topic-edit">&mdash; <a href="">Edit</a></span>
           {{/if}}
         </div>
         <form id="topic-form">
@@ -58,12 +58,12 @@
           <a href="#" class="cancel">cancel</a>
         </form>
         {{#if currentUser}}
-          <a href="/channels/{{channelURL}}/mentions" class="channel-notifications {{mentionsActive}}">
+          <a href="{{mentionsPath}}" class="channel-notifications {{mentionsActive}}">
             <span class="batch-icon">&#xf132;</span>
             <span class="badge">{{unread_mentions}}</span>
             <span class="hidden-xs">Mentions</span>
           </a>
-          <a href="/channels/{{channelURL}}/settings" class="channel-settings {{settingsActive}}">
+          <a href="{{settingsPath}}" class="channel-settings {{settingsActive}}">
             <span class="glyphicon glyphicon-cog"></span>
             <span class="hidden-xs">Settings</span>
           </a>
@@ -87,12 +87,12 @@
             <li class="divider"></li>
             <li class="dropdown-header">This Channel</li>
             <li>
-              <a href="/channels/{{channelURL}}/mentions">
+              <a href="{{mentionsPath}}">
                 Mentions
               </a>
             </li>
             <li>
-              <a href="/channels/{{channelURL}}/settings">
+              <a href="{{settingsPath}}">
                 Channel Settings
               </a>
             </li>
@@ -155,15 +155,13 @@
 <template name="channel">
   <li class="channel {{selected}}">
     {{#if private}}
-      <!--<span class="glyphicon glyphicon-lock"></i>-->
       <span class="batch-icon">&#xf0c2;</span>
     {{/if}}
     {{#if readonly}}
-      <!--<span class="glyphicon glyphicon-lock"></i>-->
       <span class="batch-icon">&#xf178;</span>
     {{/if}}
-    <a href="/channels/{{url}}">
-      <span class="hash">#</span>{{url}}
+    <a href="{{url}}">
+      <span class="hash">#</span>{{hashlessName}}
       <span class="badge badge-info">{{unread}}</span>
       <span class="badge badge-important">{{unread_mentions}}</span>
     </a>
@@ -183,7 +181,7 @@
 </template>
 
 <template name="settings">
-  <a href="/channels/{{channelURL}}">&larr; Back to messages</a>
+  <a href="{{channelPath}}">&larr; Back to messages</a>
   <br/>
   <br/>
   {{#if op_status}}

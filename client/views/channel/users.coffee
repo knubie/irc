@@ -29,3 +29,6 @@ Template.users.helpers
     moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.status?.lastLogin).humanize()
   mod: ->
     @flag is '@'
+  path: ->
+    Router.routes.user.path(user: @nick)
+

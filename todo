@@ -13,4 +13,5 @@
 - Add founder(+q ~), away(+a *) and bot(+b $) user modes
 - show unread messages next to channel
 - fix error on sign out
-
+- add www.jupe.io
+- when clicking a message on 'all messages' it drops down an input to reply. clicking reply on the message does the same but prepends @nickname to the fron to fthe input

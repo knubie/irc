@@ -48,7 +48,8 @@ Router.map ->
     waitOn: ->
       Meteor.subscribe 'publicChannels'
 
-  @route 'users/:user',
+  @route 'user',
+    path: 'users/:user'
     layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
     template: 'user_profile'
