@@ -5,7 +5,12 @@ Session.setDefault 'scroll', 0 # Scroll position
 Session.setDefault 'messages.page', 1 # Messages handler pagination
 Session.setDefault 'channel', null
 Session.setDefault 'pm', null
-Session.setDefault 'joinAfterLogin', null # Which channel to join after signing up or logging in.
+Session.setDefault 'joinAfterLogin', null # Channel to join after signup/login
+
+########## Dependenies ##########
+
+@timeAgoDep = new Deps.Dependency # Rerendering message timestamp
+@userListDep = new Deps.Dependency # Show/hide user list
 
 ########## Subscriptions ##########
 

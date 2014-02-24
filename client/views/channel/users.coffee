@@ -1,5 +1,3 @@
-@userListDep = new Deps.Dependency
-
 Handlebars.registerHelper 'userList', ->
   userListDep.depend()
   localStorage.getItem("#{Session.get 'channel'}.userList") is 'true'

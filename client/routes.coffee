@@ -74,7 +74,12 @@ Router.map ->
       if Meteor.user() and
       not Meteor.user().profile.channels[channel]?
         Meteor.call 'join', Meteor.user().username, channel
+      @timeAgoInterval = Meteor.setInterval ->
+        timeAgoDep.changed()
+      , 60000
     unload: ->
+      console.log @
+      Meteor.clearInterval @timeAgoInterval
       Session.set 'channel', null
     waitOn: ->
       handlers.messages = \

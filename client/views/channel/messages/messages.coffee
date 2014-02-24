@@ -266,6 +266,8 @@ Template.message.helpers
     else
       false
   timeAgo: ->
+    timeAgoDep.depend()
+    console.log 'render timeAgo'
     moment(@createdAt).fromNow()
   offline: ->
     if @channel? \
