@@ -64,10 +64,15 @@
           {{#unless channel}}
             <span class="pm-icon batch-icon {{reverseArrow}}">&#xf158;</span>
           {{/unless}}
-          <a href="/users/{{from}}" class="{{operator}}">
+          <a href="/users/{{from}}">
             <strong>{{realName}}</strong>
           </a>
           <span class="muted">@{{from}}</span>
+          {{#if operator}}
+            <span class="mod">
+              Operator
+            </span>
+          {{/if}}
           {{#if away}}
             <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
           {{/if}}

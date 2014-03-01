@@ -32,15 +32,6 @@ class @Bot extends Client
       channel = Channels.find_or_create name
       Channels.update channel, $set: {users, topic}
 
-    # Listen for 'names' requests.
-    @on 'names', async (channel, nicks) =>
-      # Count the number of nicks in the nicks_in object
-      users = (user for user of nicks).length
-      # Update Channel.nicks with the nicks object sent from the network.
-      Channels.update
-        name: channel
-      , {$set: {nicks, users}}
-
     #@on 'join', async (channel, nick, message) =>
       #unless Channels.findOne({name: channel}).nicks[nick]? \
       #or nick is @username \
@@ -67,10 +58,6 @@ class @Bot extends Client
             mobile: false
             createdAt: new Date()
             owner: 'server'
-
-    # Send a NAMES request when users joins, parts, or changes nick.
-    for event in ['join', 'part', 'nick', 'kick', 'quit']
-      @on event, async (channel) => @send 'NAMES', channel
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
       if nick is @username

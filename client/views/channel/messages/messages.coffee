@@ -281,11 +281,7 @@ Template.message.helpers
     if @channel?.isChannel() and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   operator: ->
-    if @channel?.isChannel()
-      if Channels.findOne(name: @channel).nicks[@from] is '@'
-        return 'operator'
-      else
-        return ''
+    @channel? and Channels.findOne(name: @channel).nicks[@from] is '@'
   self: ->
     #@type() is 'self'
     @from is 'system' or @from is Meteor.user()?.username or @type is 'action'

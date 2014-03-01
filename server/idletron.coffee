@@ -116,6 +116,7 @@ class @Idletron extends Client
 
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick', 'quit']
+      console.log 'joined'
       @on event, async (channel) => @send 'NAMES', channel
 
     @on 'part', async (channel, nick, reason, message) =>
