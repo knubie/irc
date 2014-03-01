@@ -87,11 +87,13 @@ Template.say.rendered = ->
   $('#say-input').focus() unless Modernizr.touch
 
   # Create array of nicks for autocomplete.
-  nicks = ({username: nick} for nick of @data.channel?.nicks) ? []
+  getName = (nick) ->
+    Meteor.users.findOne({username: nick})?.profile.realName or ''
+  nicks = ({username: nick, name: getName(nick)} for nick of @data.channel?.nicks) ? []
   $('#say-input').mention
     delimiter: '@'
     sensitive: true
-    queryBy: ['username']
+    queryBy: ['name', 'username']
     users: nicks
 
 Template.say.helpers

@@ -65,9 +65,9 @@
             <span class="pm-icon batch-icon {{reverseArrow}}">&#xf158;</span>
           {{/unless}}
           <a href="/users/{{from}}" class="{{operator}}">
-            <strong>{{from}}</strong>
+            <strong>{{realName}}</strong>
           </a>
-          <span class="muted">{{realName}}</span>
+          <span class="muted">@{{from}}</span>
           {{#if away}}
             <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
           {{/if}}
