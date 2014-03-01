@@ -56,13 +56,12 @@ Messages.before.insert (userId, doc) ->
         update Meteor.users, user._id
         , "profile.pms"
         , (pms) ->
-          pms = {} unless pms? #TODO: remove this
           pms[doc.from] = {unread: []}
           return pms
       update Meteor.users, user._id
       , "profile.pms.#{doc.from}.unread"
       , (unread) ->
-        unread = [] unless isArray(unread)
+        unread = [] unless isArray(unread) # only mattykins left
         unread.push doc._id unless doc._id in unread
         return unread
 

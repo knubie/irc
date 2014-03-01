@@ -7,11 +7,15 @@
 - Disconnect after inactivity
 - Send email verification
 - Add /join, /part
-- fix regexps (e.g. underline inside of link)
 - nicklist doesn't update (e.g. join with lingo, quit (not part))
 - user's channel list getting out of sync with irc server.
 - Add founder(+q ~), away(+a *) and bot(+b $) user modes
-- show unread messages next to channel
+- show unread messages next to channel*
 - fix error on sign out
 - add www.jupe.io
 - when clicking a message on 'all messages' it drops down an input to reply. clicking reply on the message does the same but prepends @nickname to the fron to fthe input
+- add sound toggle, media toggle to channel header
+- add @ support for nicknames when using commands
+- fix @ autocomplete:
+  - type @mat, choose @matt, continue typing, then hit enter. it will change to @Mattykins
+  - touch doesn't work for selecting nicks

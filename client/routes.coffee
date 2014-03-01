@@ -77,8 +77,9 @@ Router.map ->
       @timeAgoInterval = Meteor.setInterval ->
         timeAgoDep.changed()
       , 60000
+    after: ->
+      Session.set("##{@params.channel}.unread", 0)
     unload: ->
-      console.log @
       Meteor.clearInterval @timeAgoInterval
       Session.set 'channel', null
     waitOn: ->
@@ -156,6 +157,13 @@ Router.map ->
       'say': {to: 'say'}
     after: ->
       Session.set 'subPage', 'messages'
+      if Meteor.user()
+        unless @params.user of Meteor.user().profile.pms
+          update Meteor.users, Meteor.userId()
+          , "profile.pms"
+          , (pms) =>
+            pms[@params.user] = {unread: []}
+            return pms
     waitOn: ->
       handlers.messages = \
       Meteor.subscribe 'privateMessages', @params.user, PERPAGE

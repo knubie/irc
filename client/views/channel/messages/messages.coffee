@@ -63,9 +63,6 @@ Template.messages.rendered = ->
         $('.message').removeClass 'faded'
     , '.message'
 
-  # Remove unread messages
-  Session.set("#{@channel}.unread", 0)
-
   $('.messages').bind 'DOMNodeInserted', ->
     scrollToPlace()
 
@@ -267,7 +264,6 @@ Template.message.helpers
       false
   timeAgo: ->
     timeAgoDep.depend()
-    console.log 'render timeAgo'
     moment(@createdAt).fromNow()
   offline: ->
     if @channel? \
