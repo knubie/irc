@@ -1,17 +1,15 @@
 Meteor.startup ->
 
-  # first, remove configuration entry in case service is already configured
-  Accounts.loginServiceConfiguration.remove
-    service: "github"
-
-  Accounts.loginServiceConfiguration.insert
-    service: "weibo"
-    clientId: "20da6e29dafcf36ad05a"
-    secret: "d11c42acaba2bc3a9f847c1aa46657b193ab5f6c"
-
   Meteor.users.find().forEach (user) ->
-    # Connect to IRC
-    Meteor.call 'connect', user.username, user._id
+    # if lastLogin was less than 30 days ago.
+    if (lastLogin = (new Date().getTime() - Meteor.users.findOne({username: user.username}).status.lastLogin)/1000/60/60/24) < 30
+      # Connect to IRC
+      Meteor.call 'connect', user.username, user._id
+      #FIXME: why won't this work?
+      #Meteor.setTimeout ->
+        #Meteor.call 'disconnect', user.username
+      #, 30*1000*60*60*24 - lastLogin
+
 
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.
@@ -43,10 +41,12 @@ Meteor.startup ->
     #for channel in Channels.find().fetch()
       #client.idletron.join channel.name
 
-# When user loses session (closes window, etc)
-UserStatus.on "sessionLogin", (userId, sessionId, ipAddr) ->
-  # Do anything here?
-
 # When user renews session (reopens window, etc)
+UserStatus.on "sessionLogin", (info) ->
+  user = Meteor.users.findOne(info.userId)
+  if user.profile.connection is off
+    Meteor.call 'connect', user.username, user._id
+
+# When user loses session (closes window, etc)
 UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
   Meteor.users.update userId, $set: 'profile.awaySince': (new Date()).getTime()
