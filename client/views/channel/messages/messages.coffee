@@ -300,7 +300,7 @@ Template.message.helpers
     Meteor.users.findOne({username: @from}) \
     and not Meteor.users.findOne(username: @from).status?.online
   awaySince: ->
-    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @from)?.status?.lastLogin).humanize()
+    moment.duration(new Date().getTime() - Meteor.users.findOne(username: @from)?.status?.lastLogin).humanize()
   isChannel: ->
     @channel?.isChannel()
   realName: ->

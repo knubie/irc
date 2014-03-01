@@ -62,7 +62,7 @@ Template.header.events
 
 Template.header.helpers
   username: ->
-    Meteor.user().username
+    Meteor.user().profile.realName or Meteor.user().username
   home: ->
     if Meteor.user()?
       return ''
