@@ -85,24 +85,13 @@ class @Idletron extends Client
       Channels.update channel, $set: {users, topic}
 
     # Listen for 'names' requests.
-    #@on 'names', async (channel, nicks_in) =>
-      ##TODO: Either add rpl_isupport to hector, or remove from node-irc
-      #console.log "names==========#{channel}"
-      #console.log nicks_in
-      #nicks = {}
-      #for nick, status of nicks_in
-        #match = nick.match(/^(.)(.*)$/)
-        #if match
-          #if match[1] is '@'
-            #nicks[match[2]] = match[1]
-          #else
-            #nicks[nick] = ''
-      ## Count the number of nicks in the nicks_in object
-      #users = (user for user of nicks).length
-      ## Update Channel.nicks with the nicks object sent from the network.
-      #Channels.update
-        #name: channel
-      #, {$set: {nicks, users}}
+    @on 'names', async (channel, nicks) =>
+      # Count the number of nicks in the nicks_in object
+      users = (user for user of nicks).length
+      # Update Channel.nicks with the nicks object sent from the network.
+      Channels.update
+        name: channel
+      , {$set: {nicks, users}}
 
     @on 'kick', async (channel, nick, kicker, reason, message) =>
       text = "#{nick} was kicked by #{kicker}."
@@ -116,7 +105,6 @@ class @Idletron extends Client
 
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick', 'quit']
-      console.log 'joined'
       @on event, async (channel) => @send 'NAMES', channel
 
     @on 'part', async (channel, nick, reason, message) =>

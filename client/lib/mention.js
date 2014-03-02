@@ -1,29 +1,3 @@
-// Copyright (c) 2013 Jacob Kelley
-// Copyright (C) 2013 Bijan Ebrahimi <bijanebrahimi@lavabit.com>
-//      overriding delimiter
-//      optional key/name/image object variable name 
-//      removed already mentions objects from emptyQuery result
-//      fixed unclosed mention menu bug
-// 
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-// 
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 ;(function($) {
     $.fn.extend({
         mention: function(options) {
@@ -175,12 +149,12 @@
                             _linkHtml.append('<img class="mention_image" src="' + item[settings.image] + '">');
                         }
                         if (item[settings.name]) {
-                            _linkHtml.append('<b class="mention_name">' + item[settings.name] + '</b>');
+                            _linkHtml.append('<b class="mention_name needsclick">' + item[settings.name] + '</b>');
                         }
                         if (item[settings.key]) {
                             _linkHtml.append('<span class="mention_username"> ' + (item['delimiter'] ? item['delimiter'] : settings.delimiter) + item[settings.key] + '</span>');
                         }
-                        i.find('a').attr('data-delimiter', (item['delimiter'] ? item['delimiter'] : settings.delimiter)).html(that.highlighter(_linkHtml.html()));
+                        i.find('a').addClass('needsclick').attr('data-delimiter', (item['delimiter'] ? item['delimiter'] : settings.delimiter)).html(that.highlighter(_linkHtml.html()));
                         return i[0];
                     });
                     items.first().addClass('active');

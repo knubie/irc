@@ -1,6 +1,5 @@
 class @Bot extends Client
   constructor: ({@_id, @username}) ->
-    console.log 'new bot'
     super 'localhost', @username,
       port: 6667
       userName: @username
@@ -83,7 +82,6 @@ class @Bot extends Client
     #@on 'message#', async (from, to, text, message) =>
 
   connect: (channels) ->
-    console.log 'connect'
     # Connect to the IRC network.
     super async =>
       console.log "connected #{@username}"

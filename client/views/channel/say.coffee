@@ -94,7 +94,8 @@ Template.say.rendered = ->
   nicks = ({username: nick, name: getName(nick)} for nick of @data.channel?.nicks) ? []
   nicks.push channels
   nicks = _.flatten nicks
-  console.log nicks
+  nicks.push {username: 'kick', delimiter: '/'}
+  nicks.push {username: 'msg', delimiter: '/'}
   $('#say-input').mention
     delimiter: '@'
     sensitive: true

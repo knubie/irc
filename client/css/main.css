@@ -310,6 +310,10 @@ body {
       @media (min-width: 992px) {
         .channel-container .channel-header .channel-breadcrumb {
           margin: 0; } }
+      .channel-container .channel-header .channel-breadcrumb .batch-icon {
+        color: #bdc3c7;
+        font-size: 18px;
+        margin-right: 4px; }
       .channel-container .channel-header .channel-breadcrumb h3 {
         display: inline;
         font-size: 20px; }

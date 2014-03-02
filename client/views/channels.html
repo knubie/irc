@@ -41,6 +41,12 @@
         <span class="icon-bar"></span>
       </button>
       <div class="channel-breadcrumb">
+        {{#if private}}
+          <span class="batch-icon">&#xf0c2;</span>
+        {{/if}}
+        {{#if readonly}}
+          <span class="batch-icon">&#xf178;</span>
+        {{/if}}
         <h3>{{channel.name}}</h3>
         <span class="slash">&nbsp;/&nbsp;</span>
         <span class="glyphicon glyphicon-user"></span>

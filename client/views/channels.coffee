@@ -19,6 +19,18 @@ Template.channelHeader.helpers
       return 'active'
     else
       return ''
+  private: ->
+    ch = Channels.findOne(name: @channel?.name)
+    if ch?
+      's' in ch.modes or 'i' in ch.modes
+    else
+      no
+  readonly: ->
+    ch = Channels.findOne(name: @channel?.name)
+    if ch?
+      'm' in ch.modes
+    else
+      no
 
 Template.channelHeader.events
   'click .topic-edit > a': (e, t) ->

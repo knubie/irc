@@ -48,7 +48,6 @@ Template.messages.rendered = ->
   if Modernizr.touch
     $(window).off 'touchmove'
     $(window).on 'touchmove', rememberScrollPosition
-    $('.message').addClass('touch')
   $(window).off 'scroll'
   $(window).scroll rememberScrollPosition
 
@@ -310,3 +309,8 @@ Template.message.helpers
     !Session.get('channel') and @channel?
   realName: ->
     Meteor.users.findOne({username: @from})?.profile.realName
+  touch: ->
+    if Modernizr.touch
+      'touch'
+    else
+      ''
