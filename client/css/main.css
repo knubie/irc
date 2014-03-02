@@ -48,7 +48,7 @@ body {
       color: #bdc3c7;
       font-size: 14px;
       text-shadow: none; }
-  @media (max-width: 767px) {
+  @media (max-width: 480px) {
     #relay-nav .navbar-brand img {
       width: 50px;
       height: 21px; } }
@@ -205,7 +205,7 @@ body {
     margin-bottom: 50px; }
   .signin-container footer, .signup-container footer {
     text-align: center;
-    margin-top: 100px;
+    margin: 100px 0 20px;
     color: #999999;
     font-size: 11px; }
     @media (min-width: 768px) {
@@ -227,15 +227,18 @@ body {
     transition: background-color ease-in-out 0.15s;
     margin-top: 15px;
     padding: 10px;
-    max-width: 200px; }
+    width: 50%; }
   .signin-container #signin .btn:focus, .signin-container #signup .btn:focus, .signup-container #signin .btn:focus, .signup-container #signup .btn:focus {
     background-color: #2980b9; }
   .signin-container #signin .forgot, .signin-container #signin .github, .signin-container #signup .forgot, .signin-container #signup .github, .signup-container #signin .forgot, .signup-container #signin .github, .signup-container #signup .forgot, .signup-container #signup .github {
-    width: 200px;
+    width: 50%;
     text-align: center;
     display: inline-block;
     position: relative;
     top: 10px; }
+  @media (max-width: 480px) {
+    .signin-container #signup .github, .signin-container #signup .btn, .signup-container #signup .github, .signup-container #signup .btn {
+      width: 100%; } }
 
 .channel-container {
   overflow: hidden; }
@@ -431,7 +434,7 @@ body {
   @media (min-width: 1200px) {
     .channels {
       width: 165px; } }
-  @media (max-width: 767px) {
+  @media (max-width: 480px) {
     .channels {
       width: 100%;
       position: relative;

@@ -89,11 +89,19 @@ Template.say.rendered = ->
   # Create array of nicks for autocomplete.
   getName = (nick) ->
     Meteor.users.findOne({username: nick})?.profile.realName or ''
+  channels = for channel in Channels.find().fetch()
+    {username: channel.name.match(/^(.)(.*)$/)[2], delimiter: '#'}
   nicks = ({username: nick, name: getName(nick)} for nick of @data.channel?.nicks) ? []
+  nicks.push channels
+  nicks = _.flatten nicks
+  console.log nicks
   $('#say-input').mention
     delimiter: '@'
     sensitive: true
     queryBy: ['name', 'username']
+    emptyQuery: true
+    typeaheadOpts:
+      items: 10 # Max number of items you want to show
     users: nicks
 
 Template.say.helpers

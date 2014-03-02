@@ -10,8 +10,6 @@ Meteor.startup ->
         #Meteor.call 'disconnect', user.username
       #, 30*1000*60*60*24 - lastLogin
 
-
-  #12345678
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.
   client.idletron = new Idletron 'Idletron'
@@ -22,7 +20,6 @@ Meteor.startup ->
       do (channel) ->
         # Bot joins the channel first.
         client.idletron.join channel.name, async ->
-          console.log channel.nicks
           for nick, mode of channel.nicks
             do (nick, mode) ->
               if client[nick]? and nick isnt client.idletron.nick

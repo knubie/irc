@@ -36,7 +36,7 @@ $screen-md-max: ($screen-lg-min - 1) !default;
 
 /* Extra small devices (phones, 480px and down) */
 @mixin screen-xs {
-  @media (max-width: $screen-xs-max) {
+  @media (max-width: $screen-xs) {
     @content;
   }
 }
