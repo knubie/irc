@@ -332,7 +332,7 @@ body
         color: $silver
     .glyphicon
       color: $silver
-    .channel-settings, .channel-notifications
+    .channel-settings, .channel-notifications, .channel-mute
       position: absolute
       top: 15px
       +screen-sm
@@ -369,10 +369,10 @@ body
     .channel-settings
       right: 15px
     .channel-notifications
-      right: 40px
-      +screen-sm
-        right: 105px
-    .channel-settings:hover, .channel-notifications:hover, .channel-settings.active, .channel-notifications.active
+      right: 105px
+    .channel-mute
+      right: 220px
+    .channel-settings:hover, .channel-notifications:hover, .channel-settings.active, .channel-notifications.active, .channel-mute:hover
       color: $peter-river
       text-decoration: none
       .batch-icon, .glyphicon

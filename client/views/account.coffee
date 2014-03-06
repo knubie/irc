@@ -24,13 +24,11 @@ Template.account.helpers
 
 Template.account.events
   'submit #real-name-settings': (e,t) ->
-    console.log 'real name submission.'
     e.preventDefault()
     if Meteor.user().profile.realName?
       if (realNameValue = t.find('#realNameForm').value) isnt Meteor.user().profile.realName
         Meteor.users.update(Meteor.userId(), $set: 'profile.realName': realNameValue)
     else
-      console.log 'no real name'
       realNameValue = t.find('#realNameForm').value
       Meteor.users.update(Meteor.userId(), $set: 'profile.realName': realNameValue)
 

@@ -64,6 +64,10 @@
           <a href="#" class="cancel">cancel</a>
         </form>
         {{#if currentUser}}
+          <a href="" class="channel-mute {{settingsActive}}">
+            <span class="glyphicon glyphicon-{{muted}}"></span>
+            <span class="hidden-xs">{{muteText}}</span>
+          </a>
           <a href="{{mentionsPath}}" class="channel-notifications {{mentionsActive}}">
             <span class="batch-icon">&#xf132;</span>
             <span class="badge">{{unread_mentions}}</span>

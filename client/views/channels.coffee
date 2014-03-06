@@ -31,6 +31,17 @@ Template.channelHeader.helpers
       'm' in ch.modes
     else
       no
+  muted: ->
+    if Meteor.user().profile.sounds
+      return 'volume-up'
+    else
+      return 'volume-off'
+  muteText: ->
+    if Meteor.user().profile.sounds
+      return 'Mute'
+    else
+      return 'Unmute'
+
 
 Template.channelHeader.events
   'click .topic-edit > a': (e, t) ->
@@ -87,6 +98,10 @@ Template.channelHeader.events
     #TODO: create some kind of explicit disconnect.
     #Meteor.call 'disconnect', Meteor.user().username
     Meteor.logout -> Router.go 'home'
+
+  'click .channel-mute': ->
+    Meteor.users.update Meteor.userId(),
+      $set: 'profile.sounds': not Meteor.user().profile.sounds
 
       
 ########## Channels ##########

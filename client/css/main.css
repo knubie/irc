@@ -335,34 +335,34 @@ body {
         color: #bdc3c7; }
     .channel-container .channel-header .glyphicon {
       color: #bdc3c7; }
-    .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+    .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications, .channel-container .channel-header .channel-mute {
       position: absolute;
       top: 15px;
       color: #777777;
       font-size: 21px;
       display: none; }
       @media (min-width: 768px) {
-        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications, .channel-container .channel-header .channel-mute {
           top: 17px; } }
       @media (min-width: 768px) {
-        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications {
+        .channel-container .channel-header .channel-settings, .channel-container .channel-header .channel-notifications, .channel-container .channel-header .channel-mute {
           right: 150px;
           font-size: 14px;
           display: block; } }
-      .channel-container .channel-header .channel-settings .glyphicon, .channel-container .channel-header .channel-notifications .glyphicon {
+      .channel-container .channel-header .channel-settings .glyphicon, .channel-container .channel-header .channel-notifications .glyphicon, .channel-container .channel-header .channel-mute .glyphicon {
         position: relative;
         top: 1px; }
       @media (min-width: 768px) {
-        .channel-container .channel-header .channel-settings .hidden-xs, .channel-container .channel-header .channel-notifications .hidden-xs {
+        .channel-container .channel-header .channel-settings .hidden-xs, .channel-container .channel-header .channel-notifications .hidden-xs, .channel-container .channel-header .channel-mute .hidden-xs {
           display: inline !important; } }
-      .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
+      .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon, .channel-container .channel-header .channel-mute .batch-icon {
         color: #bdc3c7;
         font-size: 19px;
         margin-right: 6px; }
         @media (min-width: 768px) {
-          .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon {
+          .channel-container .channel-header .channel-settings .batch-icon, .channel-container .channel-header .channel-notifications .batch-icon, .channel-container .channel-header .channel-mute .batch-icon {
             font-size: 14px; } }
-      .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
+      .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge, .channel-container .channel-header .channel-mute .badge {
         padding: 2px 4px 1px;
         font-size: 9px;
         background-color: #3498db;
@@ -370,20 +370,19 @@ body {
         left: 9px;
         top: 4px; }
         @media (min-width: 768px) {
-          .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge {
+          .channel-container .channel-header .channel-settings .badge, .channel-container .channel-header .channel-notifications .badge, .channel-container .channel-header .channel-mute .badge {
             left: 7px;
             top: -1px; } }
     .channel-container .channel-header .channel-settings {
       right: 15px; }
     .channel-container .channel-header .channel-notifications {
-      right: 40px; }
-      @media (min-width: 768px) {
-        .channel-container .channel-header .channel-notifications {
-          right: 105px; } }
-    .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover, .channel-container .channel-header .channel-settings.active, .channel-container .channel-header .channel-notifications.active {
+      right: 105px; }
+    .channel-container .channel-header .channel-mute {
+      right: 220px; }
+    .channel-container .channel-header .channel-settings:hover, .channel-container .channel-header .channel-notifications:hover, .channel-container .channel-header .channel-settings.active, .channel-container .channel-header .channel-notifications.active, .channel-container .channel-header .channel-mute:hover {
       color: #3498db;
       text-decoration: none; }
-      .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon, .channel-container .channel-header .channel-settings.active .batch-icon, .channel-container .channel-header .channel-settings.active .glyphicon, .channel-container .channel-header .channel-notifications.active .batch-icon, .channel-container .channel-header .channel-notifications.active .glyphicon {
+      .channel-container .channel-header .channel-settings:hover .batch-icon, .channel-container .channel-header .channel-settings:hover .glyphicon, .channel-container .channel-header .channel-notifications:hover .batch-icon, .channel-container .channel-header .channel-notifications:hover .glyphicon, .channel-container .channel-header .channel-settings.active .batch-icon, .channel-container .channel-header .channel-settings.active .glyphicon, .channel-container .channel-header .channel-notifications.active .batch-icon, .channel-container .channel-header .channel-notifications.active .glyphicon, .channel-container .channel-header .channel-mute:hover .batch-icon, .channel-container .channel-header .channel-mute:hover .glyphicon {
         color: rgba(52, 152, 219, 0.5); }
     .channel-container .channel-header .channel-invite {
       display: none;
