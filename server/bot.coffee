@@ -100,6 +100,7 @@ class @Bot extends Client
 
   join: (channel, cb) ->
     check channel, validChannelName
+    @channels = @channels or []
     # Join the channel.
     if cb?
       super channel, async(cb) #TODO: double check that join was successful
@@ -108,6 +109,8 @@ class @Bot extends Client
 
     # Request channel modes
     @send 'MODE', channel
+
+    @channels.push(channel) unless channel in @channels
 
   say: (target, text) ->
     #check channel, validChannelName
@@ -118,6 +121,7 @@ class @Bot extends Client
     check channel, validChannelName
     super channel, async =>
       @send 'NAMES', channel
+      @channels.splice(@channels.indexOf(channel), 1)
 
   kick: (channel, username, reason = '') ->
     @send 'KICK', channel, username, reason

@@ -22,25 +22,26 @@ Meteor.methods
       #joinIRC
       #addJoinMessage
 
-    newChannel = Channels.find_or_create(channel)
-    # Join the channel in IRC.
-    if Meteor.isServer
-      unless 's' in newChannel.modes or 'i' in newChannel.modes
-        client[username]?.join channel, async ->
-          client.idletron.join channel
-    # Update user's channels object
-    update Meteor.users, Meteor.userId()
-    , "profile.channels.#{channel}"
-    , (channel) ->
-      channel ?=
-        ignore: []
-        verbose: false
-        unread: []
-        mentions: []
-        kicked: false
+    if channel not in client[username]?.channels
+      newChannel = Channels.find_or_create(channel)
+      # Join the channel in IRC.
+      if Meteor.isServer
+        unless 's' in newChannel.modes or 'i' in newChannel.modes
+          client[username]?.join channel, async ->
+            client.idletron.join channel
+      # Update user's channels object
+      update Meteor.users, Meteor.userId()
+      , "profile.channels.#{channel}"
+      , (channel) ->
+        channel ?=
+          ignore: []
+          verbose: false
+          unread: []
+          mentions: []
+          kicked: false
 
 
-    return newChannel._id or null
+    return newChannel?._id or null
 
   part: (username, channel) ->
     check username, validUsername

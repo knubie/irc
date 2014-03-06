@@ -71,9 +71,7 @@ Router.map ->
     before: ->
       channel = "##{@params.channel}"
       Session.set 'channel', channel
-      if Meteor.user() and
-      not Meteor.user().profile.channels[channel]?
-        Meteor.call 'join', Meteor.user().username, channel
+      Meteor.call 'join', Meteor.user().username, channel if Meteor.user()
       @timeAgoInterval = Meteor.setInterval ->
         timeAgoDep.changed()
       , 60000
