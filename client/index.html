@@ -25,18 +25,18 @@
     <div class="row">
       <div class="col-sm-2">
         {{#if currentUser}}
-          {{> yield "channels"}}
+          {{> yield region="channels"}}
         {{/if}}
       </div>
       <div class="channel-container col-sm-{{channelCol}}">
-        {{> yield "header"}}
+        {{> yield region="header"}}
         {{> yield}}
       </div>
       {{#if userList}}
-        {{> yield "users"}}
+        {{> yield region="users"}}
       {{/if}}
       {{#if currentUser}}
-        {{> yield "say"}}
+        {{> yield region="say"}}
       {{/if}}
     </div>
   </div>

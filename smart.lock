@@ -6,9 +6,10 @@
       "collection-hooks": {},
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
-        "branch": "shark"
+        "branch": "blaze-integration"
       },
-      "npm": {}
+      "npm": {},
+      "blaze-layout": {}
     },
     "packages": {
       "user-status": {
@@ -23,13 +24,18 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
-        "branch": "shark",
-        "commit": "4f55d0acc293abb4a9492229e8d2be0ec0e176c1"
+        "branch": "blaze-integration",
+        "commit": "6fd133401bb6de65a30ba148f7d61ea1b4dc9b43"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "tag": "v0.1.0",
+        "commit": "b3a0d4f4c5cde42af06a125137d7abe9edef899c"
       }
     }
   }
