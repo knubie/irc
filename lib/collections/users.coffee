@@ -10,6 +10,28 @@ if Meteor.isServer
   #Accounts.config
     #sendVerificationEmail: true
 
+  class User
+    constructor: (doc) ->
+      @[k] = doc[k] for k of doc
+    join: (channel) ->
+      newChannel = Channels.find_or_create(channel)
+      # Join the channel in IRC.
+      if Meteor.isServer
+        unless 's' in newChannel.modes or 'i' in newChannel.modes
+          client[username]?.join channel, async ->
+            client.idletron.join channel
+
+      if channel not of @profile.channels
+        update Meteor.users, @_id
+        , "profile.channels.#{channel}"
+        , (channel) ->
+          channel ?=
+            ignore: []
+            verbose: false
+            unread: []
+            mentions: []
+            kicked: false
+
   Accounts.onCreateUser (options, user) ->
     # Create defaults
     profile =

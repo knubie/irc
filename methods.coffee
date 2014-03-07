@@ -13,32 +13,32 @@ Meteor.methods
       client[username].disconnect()
 
   join: (username, channel) ->
-    check username, validUsername
-    check channel, validChannelName
-
     #join = _.compose addChannel, addUserChannel, joinIRC, addJoinMessage
     #addChannel
     #addUserChannel
       #joinIRC
       #addJoinMessage
+    check username, validUsername
 
-    if channel not of client[username]?.chans
-      newChannel = Channels.find_or_create(channel)
+    if Meteor.isServer
       # Join the channel in IRC.
-      if Meteor.isServer
+      if channel not of client[username]?.chans
+        newChannel = Channels.find_or_create(channel)
         unless 's' in newChannel.modes or 'i' in newChannel.modes
           client[username]?.join channel, async ->
             client.idletron.join channel
-      # Update user's channels object
-      update Meteor.users, Meteor.userId()
-      , "profile.channels.#{channel}"
-      , (channel) ->
-        channel ?=
-          ignore: []
-          verbose: false
-          unread: []
-          mentions: []
-          kicked: false
+    else # isClient
+      if channel not of Meteor.user().profile.channels
+        # Update user's channels object
+        update Meteor.users, Meteor.userId()
+        , "profile.channels.#{channel}"
+        , (channel) ->
+          channel ?=
+            ignore: []
+            verbose: false
+            unread: []
+            mentions: []
+            kicked: false
 
 
     return newChannel?._id or null
