@@ -22,7 +22,7 @@ Meteor.methods
       #joinIRC
       #addJoinMessage
 
-    if channel not in client[username]?.channels
+    if channel not of client[username]?.chans
       newChannel = Channels.find_or_create(channel)
       # Join the channel in IRC.
       if Meteor.isServer
