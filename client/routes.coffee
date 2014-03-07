@@ -60,7 +60,6 @@ Router.map ->
 
   @route 'channel',
     path: '/channels/:channel'
-    loadingTemplate: 'loading'
     layoutTemplate: 'channel_layout'
     template: 'messages'
     yieldTemplates:
@@ -175,3 +174,6 @@ Router.map ->
   @route 'tos',
     path: '/tos'
     layoutTemplate: 'tos'
+
+Router.before ->
+  @render('loading') if not @ready()
