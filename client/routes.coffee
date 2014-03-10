@@ -1,11 +1,7 @@
 Router.map ->
   @route 'home',
     path: '/'
-    layoutTemplate: do ->
-      if Meteor.user()
-        'channel_layout'
-      else
-        'main_layout'
+    layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
     before: ->
       Session.set 'subPage', 'messages'
@@ -26,7 +22,9 @@ Router.map ->
         subpage: 'messages'
       }
     action: ->
+      console.log @
       if Meteor.user()
+        @layoutTemplate = 'channel_layout'
         @render('channels', {to: 'channels'})
         @render('messages')
       else
@@ -69,6 +67,7 @@ Router.map ->
       'users': {to: 'users'}
     before: ->
       channel = "##{@params.channel}"
+      @render('loading') if not @ready()
       Session.set 'channel', channel
       Meteor.call 'join', Meteor.user().username, channel if Meteor.user()
       @timeAgoInterval = Meteor.setInterval ->
@@ -89,13 +88,19 @@ Router.map ->
       }
     action: ->
       channel = "##{@params.channel}"
-      if Meteor.user() and Meteor.user().profile.channels[channel].kicked
-        @render('kicked')
+      if @ready()
+        if Meteor.user() and Meteor.user().profile.channels[channel].kicked
+          @render('kicked')
+          @render('channels', {to: 'channels'})
+          @render('channelHeader', {to: 'header'})
+          @render('users', {to: 'users'})
+        else
+          @render()
+      else
+        @render('loading')
         @render('channels', {to: 'channels'})
         @render('channelHeader', {to: 'header'})
         @render('users', {to: 'users'})
-      else
-        @render()
 
   @route 'mentions',
     path: '/channels/:channel/mentions'
@@ -174,6 +179,3 @@ Router.map ->
   @route 'tos',
     path: '/tos'
     layoutTemplate: 'tos'
-
-Router.before ->
-  @render('loading') if not @ready()

@@ -2,7 +2,8 @@
 
 Template.mentions.helpers
   mentions: ->
-    Messages.find {},
+    selector = {channel: Session.get('channel'), convos: $in: [Meteor.user().username]}
+    Messages.find selector,
       sort:
         createdAt: 1
       transform: (doc) ->
