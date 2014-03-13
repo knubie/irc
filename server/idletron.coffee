@@ -26,6 +26,15 @@ class @Idletron extends Client
     # Log raw messages sent from the network.
     #@on 'raw', (msg) -> console.log msg
 
+    #@on 'join', async (channel, nick, message) =>
+      #unless Channels.findOne({name: channel}).nicks[nick]?
+        #Messages.insert
+          #owner: 'server'
+          #channel: channel
+          #text: "#{nick} has joined the channel."
+          #createdAt: new Date()
+          #from: 'system'
+
     # Sets the channel topic.
     @on 'topic', async (channel, topic, nick, message) ->
       Channels.update {name: channel}, $set: {topic}
@@ -102,6 +111,12 @@ class @Idletron extends Client
         text: text
         createdAt: new Date()
         from: 'system'
+
+      if user = Meteor.users.findOne({username: nick})
+        update Meteor.users, user._id, "profile.channels"
+        , (channels) ->
+          channels[channel].kicked = true
+          return channels
 
     # Send a NAMES request when users joins, parts, or changes nick.
     for event in ['join', 'part', 'nick', 'kick', 'quit']

@@ -17,28 +17,17 @@ Meteor.startup ->
   client.idletron.connect async ->
     # For every channel.
     for channel in Channels.find().fetch()
-      do (channel) ->
-        # Bot joins the channel first.
-        client.idletron.join channel.name, async ->
-          for nick, mode of channel.nicks
-            do (nick, mode) ->
-              if client[nick]? and nick isnt client.idletron.nick
-                # Then users join.
-                client[nick].join channel.name, async ->
-                  # bot ops user if he/she is an op
-                  if mode is '@'
-                    client.idletron.send 'MODE', channel.name, '+o', nick
-          if channel.modes.length > 0
-            client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
-
-  # Create a new Idletron bot, which automatically gets added to all channels.
-  # The purpose of this bot is to record messages, etc to the database.
-  #client.idletron = new Idletron
-  ## Connect the bot to the server.
-  #client.idletron.connect async ->
-    ## Join all channels in the database.
-    #for channel in Channels.find().fetch()
-      #client.idletron.join channel.name
+      # Bot joins the channel first.
+      client.idletron.join channel.name, async ->
+        for nick, mode of channel.nicks
+          if client[nick]? and nick isnt client.idletron.nick
+            # Then users join.
+            client[nick].join channel.name, async ->
+              # bot ops user if he/she is an op
+              if mode is '@'
+                client.idletron.send 'MODE', channel.name, '+o', nick
+        if channel.modes.length > 0
+          client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
 
 # When user renews session (reopens window, etc)
 UserStatus.on "sessionLogin", (info) ->

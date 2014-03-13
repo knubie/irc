@@ -106,7 +106,6 @@ Router.map ->
     path: '/channels/:channel/mentions'
     template: 'mentions'
     layoutTemplate: 'channel_layout'
-    loadingTemplate: 'loading'
     yieldTemplates:
       'channels': {to: 'channels'}
       'channelHeader': {to: 'header'}

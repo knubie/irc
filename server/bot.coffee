@@ -8,15 +8,10 @@ class @Bot extends Client
       autoConnect: no
       autoRejoin: no
 
+    # Set max listeners to unlimited.
+    @setMaxListeners 0
     # Remove all previous listeners just in case.
-    @removeAllListeners [
-      'error'
-      'message'
-      'names'
-      'join'
-      'part'
-      'nick'
-    ]
+    @removeAllListeners ['error', 'message']
 
     # Log errors sent from the network.
     @on 'error', async (msg) -> Log.error msg
@@ -24,29 +19,9 @@ class @Bot extends Client
     # Log raw messages sent from the network.
     #@on 'raw', (msg) -> console.log msg
 
-    # Listen for channel list response and populate
-    # channel collection with the results.
-    @on 'channellist_item', async (data) ->
-      {name, users, topic} = data
-      channel = Channels.find_or_create name
-      Channels.update channel, $set: {users, topic}
-
-    #@on 'join', async (channel, nick, message) =>
-      #unless Channels.findOne({name: channel}).nicks[nick]? \
-      #or nick is @username \
-      #or nick is 'Idletron'
-        #Messages.insert
-          #owner: @_id
-          #channel: channel
-          #text: "#{nick} has joined the channel."
-          #createdAt: (new Date()).getTime()
-          #from: 'system'
-          #convo: ''
-          #read: false
-
     # Listen for incoming messages.
     @on 'message', async (from, to, text, message) =>
-      if not to.isChannel() and from isnt @username
+      if to is @username
         #FIXME: this won't work.
         unless Meteor.users.findOne({username: from})
           # Server sends message to IRC before insert.
@@ -57,29 +32,6 @@ class @Bot extends Client
             mobile: false
             createdAt: new Date()
             owner: 'server'
-
-    @on 'kick', async (channel, nick, kicker, reason, message) =>
-      if nick is @username
-        update Meteor.users, @_id, "profile.channels"
-        , (channels) ->
-          channels[channel].kicked = true
-          return channels
-
-    @on 'raw', async (msg) =>
-      if msg.command is 'MODE'
-        @send 'MODE', msg.args[0]
-
-      if msg.command is 'rpl_channelmodeis'
-        modes = msg.args[2].split('')
-        modes.shift()
-        Channels.update {name: msg.args[1]}, $set: {modes}
-
-      if msg.command is 'err_passwdmismatch'
-        #TODO: Notify user of error, redirect to login.
-        Meteor.users.update @_id, $set: 'services.resume.loginTokens' : []
-
-    # Listen for incoming messages.
-    #@on 'message#', async (from, to, text, message) =>
 
   connect: (channels) ->
     # Connect to the IRC network.
