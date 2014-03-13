@@ -17,17 +17,24 @@ Meteor.startup ->
   client.idletron.connect async ->
     # For every channel.
     for channel in Channels.find().fetch()
-      # Bot joins the channel first.
-      client.idletron.join channel.name, async ->
-        for nick, mode of channel.nicks
-          if client[nick]? and nick isnt client.idletron.nick
-            # Then users join.
-            client[nick].join channel.name, async ->
-              # bot ops user if he/she is an op
-              if mode is '@'
-                client.idletron.send 'MODE', channel.name, '+o', nick
-        if channel.modes.length > 0
-          client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
+      do (channel) ->
+        # Bot joins the channel first.
+        client.idletron.join channel.name, async ->
+          for nick, mode of channel.nicks
+            do (nick, mode) ->
+              if client[nick]? and nick isnt client.idletron.nick
+                # Then users join.
+                client[nick].join channel.name, async ->
+                  # bot ops user if he/she is an op
+                  if mode is '@'
+                    client.idletron.send 'MODE', channel.name, '+o', nick
+          Meteor.users.find().forEach (user) ->
+            if channel of user.profile.channels
+              if client[user.username]?
+                # Then users join.
+                client[user.username].join channel.name
+          if channel.modes.length > 0
+            client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
 
 # When user renews session (reopens window, etc)
 UserStatus.on "sessionLogin", (info) ->
