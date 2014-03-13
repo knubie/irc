@@ -29,7 +29,7 @@ Meteor.startup ->
                   if mode is '@'
                     client.idletron.send 'MODE', channel.name, '+o', nick
           Meteor.users.find().forEach (user) ->
-            if channel of user.profile.channels
+            if channel.name of user.profile.channels
               if client[user.username]?
                 # Then users join.
                 client[user.username].join channel.name
