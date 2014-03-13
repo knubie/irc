@@ -28,11 +28,6 @@ Meteor.startup ->
                   # bot ops user if he/she is an op
                   if mode is '@'
                     client.idletron.send 'MODE', channel.name, '+o', nick
-          Meteor.users.find().forEach (user) ->
-            if channel.name of user.profile.channels
-              if client[user.username]?
-                # Then users join.
-                client[user.username].join channel.name
           if channel.modes.length > 0
             client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
 
