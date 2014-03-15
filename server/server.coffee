@@ -2,13 +2,16 @@ Meteor.startup ->
 
   Meteor.users.find().forEach (user) ->
     # if lastLogin was less than 30 days ago.
-    if (lastLogin = (new Date().getTime() - Meteor.users.findOne({username: user.username}).status.lastLogin)/1000/60/60/24) < 30
+    if (new Date().getTime() - user.status.lastLogin)/1000/60/60/24 < 30
       # Connect to IRC
       Meteor.call 'connect', user.username, user._id
       #FIXME: why won't this work?
       #Meteor.setTimeout ->
         #Meteor.call 'disconnect', user.username
       #, 30*1000*60*60*24 - lastLogin
+    else
+      if user.profile.connection is on
+        Meteor.users.update user._id, $set: {'profile.connection': off}
 
   # Create a new Idletron bot, which automatically gets added to all channels.
   # The purpose of this bot is to record messages, etc to the database.
