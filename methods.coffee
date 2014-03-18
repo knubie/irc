@@ -20,6 +20,7 @@ Meteor.methods
       #addJoinMessage
     check username, validUsername
 
+    user = Meteor.users.findOne({username})
     if Meteor.isServer
       # Join the channel in IRC.
       if channel not of client[username]?.chans
@@ -27,18 +28,17 @@ Meteor.methods
         unless 's' in newChannel.modes or 'i' in newChannel.modes
           client[username]?.join channel, async ->
             client.idletron.join channel
-    else # isClient
-      if channel not of Meteor.user().profile.channels
-        # Update user's channels object
-        update Meteor.users, Meteor.userId()
-        , "profile.channels.#{channel}"
-        , (channel) ->
-          channel ?=
-            ignore: []
-            verbose: false
-            unread: []
-            mentions: []
-            kicked: false
+    if channel not of user.profile.channels
+      # Update user's channels object
+      update Meteor.users, user._id
+      , "profile.channels.#{channel}"
+      , (channel) ->
+        channel ?=
+          ignore: []
+          verbose: false
+          unread: []
+          mentions: []
+          kicked: false
 
 
     return newChannel?._id or null
@@ -116,3 +116,9 @@ Meteor.methods
       client[user.username].send 'TOPIC', channel.name, topic
     if channel.nicks[user.username] is '@'
       Channels.update channelId, $set: {topic}
+
+  send: (command, username, args...) ->
+    check command, String
+    if Meteor.isServer
+      client[username].send command, args...
+

@@ -25,12 +25,11 @@ Template.account.helpers
 Template.account.events
   'submit #real-name-settings': (e,t) ->
     e.preventDefault()
-    if Meteor.user().profile.realName?
-      if (realNameValue = t.find('#realNameForm').value) isnt Meteor.user().profile.realName
-        Meteor.users.update(Meteor.userId(), $set: 'profile.realName': realNameValue)
-    else
-      realNameValue = t.find('#realNameForm').value
+    realNameValue = t.find('#realNameForm').value
+    if realNameValue isnt Meteor.user().profile.realName
       Meteor.users.update(Meteor.userId(), $set: 'profile.realName': realNameValue)
+      Meteor.call 'send', 'REALNAME', Meteor.user().username, realNameValue
+
 
   'click label.checkbox[for="playSounds"]': (e,t) ->
     Meteor.users.update Meteor.userId(),

@@ -4,7 +4,7 @@ class @Bot extends Client
       port: 6667
       userName: @username
       password: process.env.HECTOR_KEY
-      realName: 'N/A'
+      realName: @user().profile.realName or 'N/A'
       autoConnect: no
       autoRejoin: no
 
