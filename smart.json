@@ -4,12 +4,8 @@
     "collection-hooks": {},
     "iron-router": {
       "git": "https://github.com/EventedMind/iron-router",
-      "branch": "blaze-integration"
+      "branch": "dev"
     },
-    "npm": {},
-    "blaze-layout": {
-      "git": "https://github.com/EventedMind/blaze-layout",
-      "branch": "devel"
-    }
+    "npm": {}
   }
 }

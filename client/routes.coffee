@@ -65,7 +65,7 @@ Router.map ->
       'channelHeader': {to: 'header'}
       'say': {to: 'say'}
       'users': {to: 'users'}
-    before: ->
+    onBeforeAction: ->
       channel = "##{@params.channel}"
       @render('loading') if not @ready()
       Session.set 'channel', channel
@@ -73,9 +73,9 @@ Router.map ->
       @timeAgoInterval = Meteor.setInterval ->
         timeAgoDep.changed()
       , 60000
-    after: ->
+    onAfterAction: ->
       Session.set("##{@params.channel}.unread", 0)
-    unload: ->
+    onStop: ->
       Meteor.clearInterval @timeAgoInterval
       Session.set 'channel', null
     waitOn: ->
@@ -89,7 +89,7 @@ Router.map ->
     action: ->
       channel = "##{@params.channel}"
       if @ready()
-        if Meteor.user() and Meteor.user().profile.channels[channel].kicked
+        if Meteor.user() and Meteor.user().profile.channels[channel]?.kicked
           @render('kicked')
           @render('channels', {to: 'channels'})
           @render('channelHeader', {to: 'header'})
