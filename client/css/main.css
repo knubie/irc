@@ -222,6 +222,8 @@ body {
     border-color: #95a5a6; }
   .signin-container #signin input:focus, .signin-container #signup input:focus, .signup-container #signin input:focus, .signup-container #signup input:focus {
     border-color: #3498db; }
+  .signin-container #signin input.parsley-error, .signin-container #signup input.parsley-error, .signup-container #signin input.parsley-error, .signup-container #signup input.parsley-error {
+    border-color: #e74c3c; }
   .signin-container #signin .btn, .signin-container #signup .btn, .signup-container #signin .btn, .signup-container #signup .btn {
     border: none;
     transition: background-color ease-in-out 0.15s;
@@ -810,3 +812,10 @@ body {
     .request-notifications-container .request-notifications a {
       color: #ecf0f1;
       text-decoration: underline; }
+
+.parsley-errors-list {
+  margin-top: -10px; }
+  .parsley-errors-list li {
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 13px; }

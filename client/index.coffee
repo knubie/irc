@@ -33,6 +33,8 @@ Template.signup.events
 
 Template.signup.rendered = ->
   $(@find('#signup-email')).focus()
+  new Parsley @find('#signup'),
+    trigger: 'blur'
 
 Template.login.events
   'submit #signin': (e,t) ->

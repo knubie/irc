@@ -204,15 +204,15 @@
       <form id="signup" role="signup">
         <div class="form-group">
           <label for="signup-username">Email</label>
-          <input class="form-control" autocapitalize="off" autocorrect="off" type="text" id="signup-email" tabindex="1">
+          <input class="form-control" autocapitalize="off" autocorrect="off" type="email" required id="signup-email" tabindex="1">
         </div>
         <div class="form-group">
           <label for="signup-username">Username</label>
-          <input class="form-control" autocapitalize="off" autocorrect="off" type="text" id="signup-username" tabindex="1">
+          <input class="form-control" autocapitalize="off" autocorrect="off" type="text" required id="signup-username" tabindex="1" data-parsley-maxlength="15">
         </div>
         <div class="form-group">
           <label for="signup-password">Password</label>
-          <input class="form-control" type="password" id="signup-password" tabindex="2">
+          <input class="form-control" type="password" required id="signup-password" tabindex="2">
         </div>
         <button class="form-control btn btn-primary" type="submit" tabindex="3">
           <strong>

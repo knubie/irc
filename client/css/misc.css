@@ -87,6 +87,10 @@ button:focus {
 a {
   color: #3498db; }
 
+ul {
+  list-style: none;
+  padding: 0; }
+
 .thumbnail {
   background-color: white; }
 

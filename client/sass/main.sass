@@ -223,6 +223,8 @@ body
       border-color: $concrete
     input:focus
       border-color: $peter-river
+    input.parsley-error
+      border-color: $alizarin
     .btn
       border: none
       transition: background-color ease-in-out .15s
@@ -823,3 +825,11 @@ body
     a
       color: $clouds
       text-decoration: underline
+
+////////// Parsley //////////
+.parsley-errors-list
+  margin-top: -10px
+  li
+    font-weight: bold
+    color: $alizarin
+    font-size: 13px

@@ -58,7 +58,6 @@ if Meteor.isServer
       if userId is doc._id and fields.every((f) -> f is 'sounds' or f is 'notifications' or f is 'realName')
         true
     remove: -> false
-
     
   Accounts.validateNewUser (user) ->
     check user.username, String
@@ -77,7 +76,7 @@ if Meteor.isServer
       throw new Meteor.Error 403, "Username must have at least one character."
 
   Accounts.validateNewUser (user) ->
-    if user.username.length < 10
+    if user.username.length < 15
       return true
     else
-      throw new Meteor.Error 403, "Username must be less than 10 characters."
+      throw new Meteor.Error 403, "Username must be less than 15 characters."
