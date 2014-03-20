@@ -228,13 +228,15 @@ Template.message.helpers
     sameChannel = true
     mentioned = true
     prevMentioned = true
-    @prev = Messages.findOne
-      createdAt:
-        $lt: @createdAt
-    ,
-      sort:
-        createdAt: -1
-      limit: 1
+    @prev = Deps.nonreactive =>
+      Messages.findOne
+        createdAt:
+          $lt: @createdAt
+      ,
+        sort:
+          createdAt: -1
+        limit: 1
+    console.log @prev
     if @prev?.channel?
       sameChannel = @prev.channel is @channel
       mentioned = not @mentions(Meteor.user()?.username)
