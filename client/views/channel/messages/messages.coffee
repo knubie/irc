@@ -68,36 +68,20 @@ Template.messages.rendered = ->
 Template.messages.helpers
   messages: ->
     limit = (PERPAGE * Session.get('messages.page'))
-    prev = null
     if @channel?
       selector = {channel: @channel.name}
     else if @pm?
       selector = {$or: [{to:@pm, from:Meteor.user().username}, {from:@pm, to:Meteor.user().username}]}
     else
       selector = {}
-    #FIXME: this breaks the template engine.
     if Meteor.user()? and @channel?
       selector.from =
         $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
 
-    Messages.find selector,
-      sort:
-        createdAt: 1
-      transform: (doc) ->
-        # Sometimes transform gets called multiple times
-        # when a new doc gets added. In that case, 'prev' and 'doc'
-        # are the same object. We need to prevent docs
-        # from assigning previous to themselves.
-        if prev?._id is doc._id # Same doc.
-          doc.prev = prev.prev # Re-assign `prev`
-        else
-          doc.prev = prev
-          prev = new Message doc
-
-        new Message doc
+    Messages.find selector, sort: createdAt: 1
 
   loadMore: ->
-    false
+    true
     #TODO: loadMore loads the messages in reverse order as they are originally loaded.
     #limit = (PERPAGE * Session.get('messages.page'))
     #selector = if @channel? then {channel: @channel.name} else {}
@@ -244,6 +228,14 @@ Template.message.helpers
     sameChannel = true
     mentioned = true
     prevMentioned = true
+    @prev = Messages.findOne
+      createdAt:
+        $lt: @createdAt
+    ,
+      sort:
+        createdAt: -1
+      limit: 1
+    console.log @prev
     if @prev?.channel?
       sameChannel = @prev.channel is @channel
       mentioned = not @mentions(Meteor.user()?.username)
@@ -295,6 +287,7 @@ Template.message.helpers
     Meteor.users.findOne({username: @from}) \
     and not Meteor.users.findOne(username: @from).status?.online
   awaySince: ->
+    timeAgoDep.depend()
     moment.duration(new Date().getTime() - (Meteor.users.findOne(username: @from)?.status?.lastLogin - TimeSync.serverOffset())).humanize()
   isChannel: ->
     @channel?.isChannel()
