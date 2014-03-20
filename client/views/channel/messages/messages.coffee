@@ -235,7 +235,6 @@ Template.message.helpers
       sort:
         createdAt: -1
       limit: 1
-    console.log @prev
     if @prev?.channel?
       sameChannel = @prev.channel is @channel
       mentioned = not @mentions(Meteor.user()?.username)
