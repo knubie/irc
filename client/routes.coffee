@@ -3,7 +3,7 @@ Router.map ->
     path: '/'
     layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
-    before: ->
+    onBeforeAction: ->
       Session.set 'subPage', 'messages'
       if Meteor.user()
         @layoutTemplate = 'channel_layout'
@@ -109,11 +109,11 @@ Router.map ->
     yieldTemplates:
       'channels': {to: 'channels'}
       'channelHeader': {to: 'header'}
-    before: ->
+    onBeforeAction: ->
       channel = "##{@params.channel}"
       Session.set 'subPage', 'mentions'
       Session.set 'channel', channel
-    unload: ->
+    onStop: ->
       channel = "##{@params.channel}"
       Session.set 'subPage', null
       update Meteor.users, Meteor.userId()
@@ -135,11 +135,11 @@ Router.map ->
     yieldTemplates:
       'channels': {to: 'channels'}
       'channelHeader': {to: 'header'}
-    before: ->
+    onBeforeAction: ->
       channel = "##{@params.channel}"
       Session.set 'subPage', 'settings'
       Session.set 'channel', channel
-    unload: ->
+    onStop: ->
       Session.set 'subPage', null
     data: ->
       {
@@ -156,7 +156,7 @@ Router.map ->
     yieldTemplates:
       'channels': {to: 'channels'}
       'say': {to: 'say'}
-    after: ->
+    onAfterAction: ->
       Session.set 'subPage', 'messages'
       if Meteor.user()
         unless @params.user of Meteor.user().profile.pms
