@@ -35,11 +35,10 @@ Meteor.startup ->
             client.idletron.send 'MODE', channel.name, "+#{channel.modes}"
 
 # When user renews session (reopens window, etc)
-#UserStatus.on "sessionLogin", (info) ->
-  #user = Meteor.users.findOne(info.userId)
-  #if user.profile.connection is off
-    #Meteor.call 'connect', user.username, user._id
+UserStatus.events.on "connectionLogin", (info) ->
+  user = Meteor.users.findOne(info.userId)
+  if user.profile.connection is off
+    Meteor.call 'connect', user.username, user._id
 
-## When user loses session (closes window, etc)
-#UserStatus.on "sessionLogout", (userId, sessionId, ipAddr) ->
-  #Meteor.users.update userId, $set: 'profile.awaySince': (new Date()).getTime()
+# When user loses session (closes window, etc)
+#UserStatus.events.on "connectionLogout", (info) ->

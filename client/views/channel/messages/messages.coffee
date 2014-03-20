@@ -263,7 +263,7 @@ Template.message.helpers
       false
   timeAgo: ->
     timeAgoDep.depend()
-    moment(@createdAt).fromNow()
+    moment(@createdAt - TimeSync.serverOffset()).fromNow()
   offline: ->
     if @channel? \
     and @from not of Channels.findOne({name: @channel})?.nicks \
@@ -295,7 +295,7 @@ Template.message.helpers
     Meteor.users.findOne({username: @from}) \
     and not Meteor.users.findOne(username: @from).status?.online
   awaySince: ->
-    moment.duration(new Date().getTime() - Meteor.users.findOne(username: @from)?.status?.lastLogin).humanize()
+    moment.duration(new Date().getTime() - (Meteor.users.findOne(username: @from)?.status?.lastLogin - TimeSync.serverOffset())).humanize()
   isChannel: ->
     @channel?.isChannel()
   realName: ->

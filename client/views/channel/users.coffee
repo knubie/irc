@@ -24,7 +24,15 @@ Template.users.helpers
     else
       return ''
   awaySince: ->
-    moment.duration((new Date()).getTime() - Meteor.users.findOne(username: @nick)?.status?.lastLogin).humanize()
+    #moment(Meteor.users.findOne(username: @nick)?.status.lastLogin).fromNow()
+    timeAgoDep.depend()
+    moment.duration(
+      new Date().getTime() - (
+        Meteor.users.findOne(
+          username: @nick
+        )?.status?.lastLogin - TimeSync.serverOffset()
+      )
+    ).humanize()
   mod: ->
     @flag is '@'
   path: ->
