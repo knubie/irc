@@ -70,6 +70,10 @@
           {{#if currentUser}}
             <li>
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								
+								{{#if avatar}}
+									<img src="{{avatar}}" class="avatar" width="30" height="30" alt />
+								{{/if}}
                 {{username}}<div class="line"></div><span class="caret"></span>
               </a>
               <ul class="dropdown-menu">

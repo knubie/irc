@@ -18,6 +18,11 @@ class @Message
       if @mentions nick
         mentions.push nick
     return mentions
+  avatar: ->
+    if user = Meteor.users.findOne(username: @from)
+      return Gravatar.imageUrl user.emails[0].address
+    else
+      ''
 
 @Messages = new Meteor.Collection 'messages',
   transform: (doc) -> new Message doc
@@ -80,5 +85,3 @@ Messages.before.insert (userId, doc) ->
             , (mentions) ->
               mentions.push doc._id unless doc._id in mentions
               return mentions
-
-

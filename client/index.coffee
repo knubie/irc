@@ -75,6 +75,9 @@ Template.header.helpers
       return 'hidden-xs'
     else
       return ''
+  avatar: ->
+    Gravatar.imageUrl Meteor.user().emails[0].address
+
 
 Template.notifications.helpers
   hide: ->

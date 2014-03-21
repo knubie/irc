@@ -819,3 +819,7 @@ body {
     font-weight: bold;
     color: #e74c3c;
     font-size: 13px; }
+
+.avatar {
+  border-radius: 15px;
+  margin-right: 2px; }

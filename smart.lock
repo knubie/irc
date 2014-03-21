@@ -8,7 +8,8 @@
         "git": "https://github.com/EventedMind/iron-router",
         "branch": "dev"
       },
-      "npm": {}
+      "npm": {},
+      "gravatar": {}
     },
     "packages": {
       "user-status": {
@@ -24,12 +25,17 @@
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
         "branch": "dev",
-        "commit": "78f133d79e805fba387e80318645347d82ff9b3d"
+        "commit": "4c009c81621caac5de9a25cc0a6e998e7edf23f3"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "gravatar": {
+        "git": "https://github.com/tmeasday/meteor-gravatar.git",
+        "tag": "v0.0.4",
+        "commit": "d1052ff4401725c23fb199c0e0a36e29b926bc22"
       },
       "timesync": {
         "git": "https://github.com/mizzao/meteor-timesync.git",
@@ -40,6 +46,16 @@
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "branch": "master",
         "commit": "2664f817844fba0fab0455a79bc62782c9091ad0"
+      },
+      "crypto-md5": {
+        "git": "https://github.com/oortcloud/meteor-crypto-md5.git",
+        "tag": "v3.1.2.2",
+        "commit": "75bbb3eeace302122d3554a6212a6fe92553fa18"
+      },
+      "crypto-base": {
+        "git": "https://github.com/oortcloud/meteor-crypto-base.git",
+        "tag": "v3.1.2.1",
+        "commit": "5df8d82a0595553415bbfae2930c6ecbeece5794"
       }
     }
   }
