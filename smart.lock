@@ -24,7 +24,7 @@
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
         "branch": "dev",
-        "commit": "34d308a7930a9e55f9a36947ed1d76ef86c3b129"
+        "commit": "78f133d79e805fba387e80318645347d82ff9b3d"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",

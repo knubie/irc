@@ -62,8 +62,8 @@ Template.messages.rendered = ->
         $('.message').removeClass 'faded'
     , '.message'
 
-  $('.messages').bind 'DOMNodeInserted', ->
-    scrollToPlace()
+  #$('.messages').bind 'DOMNodeInserted', ->
+    #scrollToPlace()
 
 Template.messages.helpers
   messages: ->
@@ -225,18 +225,18 @@ Template.message.helpers
       "class": "message #{offline()} #{mention()} #{bot} #{info}"
     }
   joinToPrev: ->
+    console.log 'join'
     sameChannel = true
     mentioned = true
     prevMentioned = true
-    @prev = Deps.nonreactive =>
-      Messages.findOne
+    if handlers.messages.ready()
+      @prev = Messages.findOne
         createdAt:
           $lt: @createdAt
       ,
         sort:
           createdAt: -1
         limit: 1
-    console.log @prev
     if @prev?.channel?
       sameChannel = @prev.channel is @channel
       mentioned = not @mentions(Meteor.user()?.username)

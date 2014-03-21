@@ -6,6 +6,8 @@ Session.setDefault 'messages.page', 1 # Messages handler pagination
 Session.setDefault 'channel', null
 Session.setDefault 'pm', null
 Session.setDefault 'joinAfterLogin', null # Channel to join after signup/login
+Session.setDefault 'message length', 0
+Session.setDefault 'last message', ''
 
 ########## Dependenies ##########
 
@@ -54,16 +56,25 @@ Meteor.startup ->
   if ($(window).scrollTop() + $(window).height()) >= $(document).height()
     Session.set 'scroll', 0
   else
-    Session.set 'scroll', $(document).height() - $(window).scrollTop() + $(window).height()
+    Session.set 'scroll', $(document).height() - ($(window).scrollTop() + $(window).height())
 
 @scrollToPlace = ->
   if Session.equals 'scroll', 0
-  #if ($(window).scrollTop() + $(window).height()) >= $(document).height()
     $(window).scrollTop $(document).height()
     $('.messages').scrollTop $('.messages')[0].scrollHeight
-  #$(window).scrollTop \
-    #$(document).height() - $(window).height() - Session.get('scroll')
-    #
+  else
+    if not Session.equals('message length', $('.message').length)
+      Session.set 'message length', $('.message').length
+      # From top
+      if Session.equals('last message', $('.message').last().attr('id'))
+        # Stay in place
+        $(window).scrollTop($(document).height() - $(window).height() - Session.get('scroll'))
+      # From bottom
+      else
+        # Do nothing
+        Session.set 'last message', $('.message').last().attr('id') 
+
+
 @stayInPlace = ->
   $(window).scrollTop $(document).height() - Session.get('scroll') - $(window).height()
 
