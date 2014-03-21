@@ -13,7 +13,6 @@ Meteor.methods
       client[username].disconnect()
 
   join: (username, channel) ->
-    console.log client
     #join = _.compose addChannel, addUserChannel, joinIRC, addJoinMessage
     #addChannel
     #addUserChannel

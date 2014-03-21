@@ -7,7 +7,7 @@ Meteor.publish 'publicChannels', ->
 
 Meteor.publish 'joinedChannels', ->
   query = {}
-  username = Meteor.users.findOne(@userId).username
+  username = Meteor.users.findOne(@userId)?.username
   query["nicks.#{username}"] = {$exists: true}
   Channels.find query
 
