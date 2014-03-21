@@ -229,7 +229,8 @@ Template.message.helpers
     sameChannel = true
     mentioned = true
     prevMentioned = true
-    if handlers.messages.ready()
+    messagesHandler = handlers.messages or handlers.allMessages
+    if messagesHandler.ready()
       @prev = Messages.findOne
         createdAt:
           $lt: @createdAt

@@ -4,17 +4,20 @@ Router.map ->
     layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
     onBeforeAction: ->
+      if Meteor.user()
+        @redirect 'loggedInHome'
+
+  @route 'loggedInHome',
+    path: '/'
+    layoutTemplate: 'channel_layout'
+    loadingTemplate: 'loading'
+    onBeforeAction: ->
+      unless Meteor.user()
+        @redirect 'home'
       Session.set 'subPage', 'messages'
-      if Meteor.user()
-        @layoutTemplate = 'channel_layout'
-      else
-        @layoutTemplate = 'main_layout'
     waitOn: ->
-      if Meteor.user()
-        channels = (channel for channel of Meteor.user().profile.channels)
-        Meteor.subscribe 'messages', channels, PERPAGE
-      else
-        return {ready: -> true}
+      channels = (channel for channel of Meteor.user().profile.channels)
+      Meteor.subscribe 'messages', channels, PERPAGE
     data: ->
       {
         channel: null
@@ -22,13 +25,9 @@ Router.map ->
         subpage: 'messages'
       }
     action: ->
-      console.log @
-      if Meteor.user()
-        @layoutTemplate = 'channel_layout'
+      if @ready()
         @render('channels', {to: 'channels'})
         @render('messages')
-      else
-        @render()
 
   @route 'login',
     layoutTemplate: 'account_layout'
