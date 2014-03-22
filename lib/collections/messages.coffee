@@ -76,7 +76,8 @@ Messages.before.insert (userId, doc) ->
       for nick of Channels.findOne(name:doc.channel).nicks
         if regex.nick(nick).test(doc.text) \
         and user = Meteor.users.findOne(username:nick)
-          if doc.from not in user.profile.channels[doc.channel].ignore
+          if doc.from not in user.profile.channels[doc.channel].ignore \
+          and doc.from isnt user.username
             # Push the nick to the Message's convo array.
             doc.convos.push nick
 
