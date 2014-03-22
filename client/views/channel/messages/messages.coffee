@@ -62,8 +62,8 @@ Template.messages.rendered = ->
         $('.message').removeClass 'faded'
     , '.message'
 
-  #$('.messages').bind 'DOMNodeInserted', ->
-    #scrollToPlace()
+  $('.messages').bind 'DOMNodeInserted', ->
+    scrollToPlace()
 
 Template.messages.helpers
   messages: ->
@@ -225,7 +225,6 @@ Template.message.helpers
       "class": "message #{offline()} #{mention()} #{bot} #{info}"
     }
   joinToPrev: ->
-    console.log 'join'
     sameChannel = true
     mentioned = true
     prevMentioned = true
