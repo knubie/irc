@@ -8,6 +8,10 @@ Template.say.events
     keyCode = e.keyCode or e.which
     message = t.find('#say-input').value
 
+  'keydown #say': (e, t) ->
+    keyCode = e.keyCode or e.which
+    message = t.find('#say-input').value
+
     if keyCode is 13 # Enter
       e.preventDefault()
       nickPartialMatch = null
@@ -50,13 +54,6 @@ Template.say.events
             createdAt: new Date()
             from: Meteor.user().username
             to: @pm
-
-  'keydown #say': (e, t) ->
-    keyCode = e.keyCode or e.which
-    message = t.find('#say-input').value
-
-    if keyCode is 13 # Enter
-      e.preventDefault()
     if keyCode is 9 # Tab
       e.preventDefault()
       # matches[0] == original message,
