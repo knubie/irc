@@ -245,37 +245,25 @@ Template.message.helpers
     and sameChannel and mentioned and prevMentioned \
     and @from isnt 'system' and @type isnt 'action' \
     and @prev.type isnt 'action'
-  isConvo: ->
-    if @channel?
-      mentions = []
-      for nick of Channels.findOne(name:@channel).nicks
-        if @mentions(nick)
-          mentions.push nick
-      mentions.length is 1 and @from isnt 'system' and @type isnt 'action'
-    else
-      false
   timeAgo: ->
     timeAgoDep.depend()
     moment(@createdAt - TimeSync.serverOffset()).fromNow()
   offline: ->
     if @channel? \
-    and @from not of Channels.findOne({name: @channel})?.nicks \
-    and @from isnt 'system' and @type isnt 'action'
+    and @from isnt 'system' and @type isnt 'action' \
+    and @from not of Channels.findOne({name: @channel})?.nicks
       return 'offline'
   banned: ->
     @channel? and @from in Channels.findOne({name: @channel})?.bans
   mention: ->
-    if @mentions(Meteor.user()?.username)
+    if @convos? and Meteor.user()?.username in @convos
       return 'mention'
-  isMentioned: ->
-    @channel? and @mentions(Meteor.user()?.username) and @from isnt 'system' and @type isnt 'action'
   op_status: ->
-    if @channel?.isChannel() and Meteor.user()
+    if @channel? and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   operator: ->
     @channel? and Channels.findOne(name: @channel).nicks[@from] is '@'
   self: ->
-    #@type() is 'self'
     @from is 'system' or @from is Meteor.user()?.username or @type is 'action'
   info: ->
     if @from is 'system' or @type is 'action'
@@ -284,16 +272,10 @@ Template.message.helpers
     if @from is 'Idletron'
       return 'bot'
   away: ->
-    #TODO: make this call /away in IRC
-    Meteor.users.findOne({username: @from}) \
-    and not Meteor.users.findOne(username: @from).status?.online
+    not Meteor.users.findOne(username: @from)?.status?.online
   awaySince: ->
     timeAgoDep.depend()
     moment.duration(new Date().getTime() - (Meteor.users.findOne(username: @from)?.status?.lastLogin - TimeSync.serverOffset())).humanize()
-  isChannel: ->
-    @channel?.isChannel()
-  realName: ->
-    Meteor.users.findOne(username:@from)?.profile.realName or ''
   reverseArrow: ->
     if @from is Meteor.user().username
       return 'reverse'
