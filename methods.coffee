@@ -121,4 +121,3 @@ Meteor.methods
     check command, String
     if Meteor.isServer
       client[username].send command, args...
-

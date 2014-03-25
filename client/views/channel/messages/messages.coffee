@@ -78,14 +78,24 @@ Template.messages.helpers
       selector.from =
         $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
 
-    Messages.find selector, sort: createdAt: 1
+    Messages.find selector,
+      sort:
+        createdAt: 1
+      limit: limit
+      skip: PERPAGE
+      transform: (doc) ->
+        doc.prev = Messages.findOne
+          createdAt:
+            $lt: doc.createdAt
+        ,
+          sort:
+            createdAt: -1
+        new Message doc
+
 
   loadMore: ->
-    true
-    #TODO: loadMore loads the messages in reverse order as they are originally loaded.
-    #limit = (PERPAGE * Session.get('messages.page'))
-    #selector = if @channel? then {channel: @channel.name} else {}
-    #Messages.find(selector).fetch().length == limit
+    $('.message').length < Messages.find().count()
+
   url_channel: ->
     @channel.name.match(/^(#)?(.*)$/)[2]
 
@@ -225,18 +235,10 @@ Template.message.helpers
       "class": "message #{offline()} #{mention()} #{bot} #{info}"
     }
   joinToPrev: ->
+    console.log 'jointoprev'
     sameChannel = true
     mentioned = true
     prevMentioned = true
-    messagesHandler = handlers.messages or handlers.allMessages
-    if messagesHandler.ready()
-      @prev = Messages.findOne
-        createdAt:
-          $lt: @createdAt
-      ,
-        sort:
-          createdAt: -1
-        limit: 1
     if @prev?.channel?
       sameChannel = @prev.channel is @channel
       mentioned = not @mentions(Meteor.user()?.username)

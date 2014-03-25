@@ -75,6 +75,8 @@ body {
     color: #777777;
     padding: 23px 15px;
     text-shadow: none; }
+    #relay-nav .navbar-nav > li > a.dropdown-toggle {
+      margin: -5px 0; }
     #relay-nav .navbar-nav > li > a .caret {
       border-top-color: #777777;
       border-bottom-color: #777777; }

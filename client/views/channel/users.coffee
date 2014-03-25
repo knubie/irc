@@ -24,7 +24,6 @@ Template.users.helpers
     else
       return ''
   awaySince: ->
-    #moment(Meteor.users.findOne(username: @nick)?.status.lastLogin).fromNow()
     timeAgoDep.depend()
     moment.duration(
       new Date().getTime() - (

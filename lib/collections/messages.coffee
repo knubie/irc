@@ -11,19 +11,7 @@ class @Message
   constructor: (doc) ->
     @[k] = doc[k] for k of doc
   mentions: (user) ->
-    @channel? and @from isnt 'system' and @type isnt 'action' and regex.nick(user).test(@text) 
-  mentioned: ->
-    mentions = []
-    for nick of Channels.findOne(name:@channel).nicks
-      if @mentions nick
-        mentions.push nick
-    return mentions
-  avatar: ->
-    false
-    #if user = Meteor.users.findOne(username: @from)
-      #return Gravatar.imageUrl user.emails[0].address
-    #else
-      #''
+    @convos and user in @convos
 
 @Messages = new Meteor.Collection 'messages',
   transform: (doc) -> new Message doc
@@ -45,17 +33,17 @@ if Meteor.isServer
 Messages.before.insert (userId, doc) ->
   if Meteor.isServer
     if doc.owner isnt 'server'
-      {username} = Meteor.users.findOne(userId)
+      user = Meteor.users.findOne(userId)
 
       # Set timestamp from the server.
       doc.createdAt = new Date()
 
       # Send action to the IRC server.
       if doc.type is 'action'
-        client[username].action doc.channel or doc.to, doc.text
+        client[user.username].action doc.channel or doc.to, doc.text
       else
         # Send message to the IRC server.
-        client[username].say doc.channel or doc.to, doc.text
+        client[user.username].say doc.channel or doc.to, doc.text
 
     if doc.to? and user = Meteor.users.findOne(username:doc.to)
       unless doc.from of user.profile.pms
