@@ -627,6 +627,10 @@ body {
     margin-bottom: 5px;
     box-sizing: content-box;
     color: #bdc3c7; }
+    .messages .message .reply .avatar {
+      position: relative;
+      bottom: 3px;
+      margin-bottom: -2px; }
     .messages .message .reply .normal {
       display: none; }
     .messages .message .reply .operator {
@@ -655,7 +659,7 @@ body {
       bottom: 1px;
       margin-right: 5px; }
   .messages .message .muted.time {
-    color: rgba(0, 0, 0, 0);
+    color: transparent;
     font-size: 12px; }
   .messages .message .divider {
     width: 100%;
@@ -721,7 +725,7 @@ body {
 .messages .join {
   margin-top: -20px; }
 .messages .info {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: transparent;
   box-shadow: none;
   padding-top: 8px;
   padding-bottom: 8px; }
@@ -825,3 +829,5 @@ body {
 .avatar {
   border-radius: 15px;
   margin-right: 2px; }
+
+/*# sourceMappingURL=main.css.map */

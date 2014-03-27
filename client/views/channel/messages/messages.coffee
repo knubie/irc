@@ -291,3 +291,5 @@ Template.message.helpers
       'touch'
     else
       ''
+  avatar: ->
+    Meteor.users.findOne(username: @from)?.avatar

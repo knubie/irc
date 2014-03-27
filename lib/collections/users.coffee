@@ -31,6 +31,8 @@ if Meteor.isServer
             unread: []
             mentions: []
             kicked: false
+    avatar: ->
+      Gravatar.imageUrl @emails[0].address
 
   Accounts.onCreateUser (options, user) ->
     # Create defaults

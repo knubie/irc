@@ -1,5 +1,9 @@
 Meteor.publish 'users', ->
-  Meteor.users.find({}, fields: emails: 0, services: 0)
+  Meteor.users.find().forEach (user) =>
+    user.avatar = Gravatar.imageUrl user.emails[0].address
+    delete user.emails
+    delete user.services
+    @added 'users', user._id, user
 
 Meteor.publish 'publicChannels', ->
   #Channels.find {private: {$ne: true}}
