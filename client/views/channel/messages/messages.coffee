@@ -81,7 +81,6 @@ Template.messages.helpers
     Messages.find selector,
       sort:
         createdAt: 1
-      limit: limit
       skip: PERPAGE
       transform: (doc) ->
         doc.prev = Messages.findOne
