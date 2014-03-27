@@ -103,8 +103,10 @@ Template.user_profile.helpers
   joined: ->
     moment(@createdAt).format('MMMM Do YYYY')
   channels: ->
-    (channel for channel of @profile.channels)
+    (channel for channel of @profile?.channels)
   topic: ->
     Channels.findOne({name: "#{@}"}).topic
   channel_url: ->
     @match(/^(.)(.*)$/)[2]
+  avatar: ->
+    "#{@avatar}?s=250"
