@@ -1,1 +1,1 @@
-sass: sass --watch client/sass:client/css
+sass: sass --watch --sourcemap client/sass:client/css
