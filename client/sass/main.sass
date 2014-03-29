@@ -213,7 +213,7 @@ body
     font-size: 11px
     +screen-sm
       font-size: 14px
-  #signin, #signup
+  #signin, #signup, #forgot-password
     input
       border: 2px solid $silver
       box-shadow: none
@@ -235,7 +235,7 @@ body
       width: 50%
     .btn:focus
       background-color: $belize-hole
-    .forgot, .github
+    .forgot, .github, .back-to-login
       width: 50%
       text-align: center
       display: inline-block
@@ -245,6 +245,13 @@ body
     .github, .btn
       +screen-xs
         width: 100%
+  #forgot-password
+    .form-group
+      margin-top: 30px
+    .back-to-login:before
+      content: "◂"
+      font-size: 16px
+      margin-right: 6px
 
 ////////// Channels //////////
 .channel-container

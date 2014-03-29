@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 /* Extra small devices (phones, 480px and down) */
@@ -213,28 +214,28 @@ body {
     @media (min-width: 768px) {
       .signin-container footer, .signup-container footer {
         font-size: 14px; } }
-  .signin-container #signin input, .signin-container #signup input, .signup-container #signin input, .signup-container #signup input {
+  .signin-container #signin input, .signin-container #signup input, .signin-container #forgot-password input, .signup-container #signin input, .signup-container #signup input, .signup-container #forgot-password input {
     border: 2px solid #bdc3c7;
     box-shadow: none;
     margin-bottom: 15px; }
-  .signin-container #signin input, .signin-container #signin button, .signin-container #signup input, .signin-container #signup button, .signup-container #signin input, .signup-container #signin button, .signup-container #signup input, .signup-container #signup button {
+  .signin-container #signin input, .signin-container #signin button, .signin-container #signup input, .signin-container #signup button, .signin-container #forgot-password input, .signin-container #forgot-password button, .signup-container #signin input, .signup-container #signin button, .signup-container #signup input, .signup-container #signup button, .signup-container #forgot-password input, .signup-container #forgot-password button {
     padding: 8px 12px;
     height: auto; }
-  .signin-container #signin input:hover, .signin-container #signup input:hover, .signup-container #signin input:hover, .signup-container #signup input:hover {
+  .signin-container #signin input:hover, .signin-container #signup input:hover, .signin-container #forgot-password input:hover, .signup-container #signin input:hover, .signup-container #signup input:hover, .signup-container #forgot-password input:hover {
     border-color: #95a5a6; }
-  .signin-container #signin input:focus, .signin-container #signup input:focus, .signup-container #signin input:focus, .signup-container #signup input:focus {
+  .signin-container #signin input:focus, .signin-container #signup input:focus, .signin-container #forgot-password input:focus, .signup-container #signin input:focus, .signup-container #signup input:focus, .signup-container #forgot-password input:focus {
     border-color: #3498db; }
-  .signin-container #signin input.parsley-error, .signin-container #signup input.parsley-error, .signup-container #signin input.parsley-error, .signup-container #signup input.parsley-error {
+  .signin-container #signin input.parsley-error, .signin-container #signup input.parsley-error, .signin-container #forgot-password input.parsley-error, .signup-container #signin input.parsley-error, .signup-container #signup input.parsley-error, .signup-container #forgot-password input.parsley-error {
     border-color: #e74c3c; }
-  .signin-container #signin .btn, .signin-container #signup .btn, .signup-container #signin .btn, .signup-container #signup .btn {
+  .signin-container #signin .btn, .signin-container #signup .btn, .signin-container #forgot-password .btn, .signup-container #signin .btn, .signup-container #signup .btn, .signup-container #forgot-password .btn {
     border: none;
     transition: background-color ease-in-out 0.15s;
     margin-top: 15px;
     padding: 10px;
     width: 50%; }
-  .signin-container #signin .btn:focus, .signin-container #signup .btn:focus, .signup-container #signin .btn:focus, .signup-container #signup .btn:focus {
+  .signin-container #signin .btn:focus, .signin-container #signup .btn:focus, .signin-container #forgot-password .btn:focus, .signup-container #signin .btn:focus, .signup-container #signup .btn:focus, .signup-container #forgot-password .btn:focus {
     background-color: #2980b9; }
-  .signin-container #signin .forgot, .signin-container #signin .github, .signin-container #signup .forgot, .signin-container #signup .github, .signup-container #signin .forgot, .signup-container #signin .github, .signup-container #signup .forgot, .signup-container #signup .github {
+  .signin-container #signin .forgot, .signin-container #signin .github, .signin-container #signin .back-to-login, .signin-container #signup .forgot, .signin-container #signup .github, .signin-container #signup .back-to-login, .signin-container #forgot-password .forgot, .signin-container #forgot-password .github, .signin-container #forgot-password .back-to-login, .signup-container #signin .forgot, .signup-container #signin .github, .signup-container #signin .back-to-login, .signup-container #signup .forgot, .signup-container #signup .github, .signup-container #signup .back-to-login, .signup-container #forgot-password .forgot, .signup-container #forgot-password .github, .signup-container #forgot-password .back-to-login {
     width: 50%;
     text-align: center;
     display: inline-block;
@@ -243,6 +244,12 @@ body {
   @media (max-width: 480px) {
     .signin-container #signup .github, .signin-container #signup .btn, .signup-container #signup .github, .signup-container #signup .btn {
       width: 100%; } }
+  .signin-container #forgot-password .form-group, .signup-container #forgot-password .form-group {
+    margin-top: 30px; }
+  .signin-container #forgot-password .back-to-login:before, .signup-container #forgot-password .back-to-login:before {
+    content: "◂";
+    font-size: 16px;
+    margin-right: 6px; }
 
 .channel-container {
   overflow: hidden; }

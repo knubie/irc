@@ -12,7 +12,7 @@ Template.signup.events
     email = t.find('#signup-email').value
     password = t.find('#signup-password').value
     _id = Accounts.createUser {username, email, password}, (error) ->
-      if error
+      if error?
         alert error.reason
       else
         Meteor.call 'connect', username, _id, [
@@ -33,7 +33,7 @@ Template.signup.events
 
 Template.signup.rendered = ->
   $(@find('#signup-email')).focus()
-  new Parsley @find('#signup'),
+  new Parsley '#signup',
     trigger: 'blur'
 
 Template.login.events
@@ -57,9 +57,22 @@ Template.login.rendered = ->
 Template.forgotPassword.events
   'submit #forgot-password': (e,t) ->
     e.preventDefault()
-    email = t.find('#forgot-password-email').value
-    Accounts.forgotPassword {email}, ->
-      alert('password reset email sent.')
+    username = email = t.find('#forgot-password-email').value
+    parsleyInput = new Parsley '#forgot-password-email'
+    $('#forgot-password-email').on 'keypress', ->
+      ParsleyUI.removeError parsleyInput, 'userNotFound'
+      console.log 'change'
+
+    callback = (error) ->
+      if error?
+        ParsleyUI.addError parsleyInput, 'userNotFound', error.reason
+      else
+        alert('password reset email sent.')
+
+    if '@' in email
+      Accounts.forgotPassword {email}, callback
+    else
+      Meteor.call 'sendResetPasswordEmailFromUsername', username, callback
 
 Template.forgotPassword.rendered = ->
   $(@find('#forgot-password-username')).focus()

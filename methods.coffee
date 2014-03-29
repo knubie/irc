@@ -121,3 +121,9 @@ Meteor.methods
     check command, String
     if Meteor.isServer
       client[username].send command, args...
+
+  sendResetPasswordEmailFromUsername: (username) ->
+    if user = Meteor.users.findOne {username}
+      Accounts.sendResetPasswordEmail user._id
+    else
+      throw new Meteor.Error 403, "User not found"
