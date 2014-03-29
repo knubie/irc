@@ -5,7 +5,8 @@ Meteor.startup ->
 
   Accounts.urls.resetPassword = (token) ->
     Meteor.absoluteUrl "reset-password/#{token}"
-  #
+  
+  Accounts.emailTemplates.from = 'accounts@jupe.io'
   #Accounts.emailTemplates =
     #from: 'accounts@jupe.io'
     #siteName: 'jupe.io'
