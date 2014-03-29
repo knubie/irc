@@ -1,5 +1,20 @@
 Meteor.startup ->
 
+  # Initialize mail
+  process.env.MAIL_URL = 'smtp://postmaster%40jupe.io:0a-z-0l5nxq8@smtp.mailgun.org:587'
+
+  Accounts.urls.resetPassword = (token) ->
+    Meteor.absoluteUrl "reset-password/#{token}"
+  #
+  #Accounts.emailTemplates =
+    #from: 'accounts@jupe.io'
+    #siteName: 'jupe.io'
+    #resetPassword:
+      #subject: (user) ->
+        #"Reset your jupe.io password"
+
+
+
   Meteor.users.find().forEach (user) ->
     # if lastLogin was less than 30 days ago.
     if (new Date().getTime() - user.status.lastLogin)/1000/60/60/24 < 30

@@ -25,7 +25,7 @@
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router",
         "branch": "dev",
-        "commit": "1f65add04c5a83c2d8ebf750953c30e92a78d913"
+        "commit": "05f34bc48c4cad9fdaa366c1ddcabe6980232ece"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
@@ -44,8 +44,8 @@
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
-        "branch": "master",
-        "commit": "2664f817844fba0fab0455a79bc62782c9091ad0"
+        "tag": "v0.2.2",
+        "commit": "8bc53798fe5965669ae67c72f91829fcfdceabfd"
       },
       "crypto-md5": {
         "git": "https://github.com/oortcloud/meteor-crypto-md5.git",

@@ -54,6 +54,28 @@ Template.login.events
 Template.login.rendered = ->
   $(@find('#signin-username')).focus()
 
+Template.forgotPassword.events
+  'submit #forgot-password': (e,t) ->
+    e.preventDefault()
+    email = t.find('#forgot-password-email').value
+    Accounts.forgotPassword {email}, ->
+      alert('password reset email sent.')
+
+Template.forgotPassword.rendered = ->
+  $(@find('#forgot-password-username')).focus()
+
+Template.resetPassword.events
+  'submit #reset-password': (e,t) ->
+    e.preventDefault()
+    password = t.find('#reset-password-input').value
+    Accounts.resetPassword Session.get('token'), password, -> Router.go 'home'
+
+    Accounts.forgotPassword {email}, ->
+      alert('password reset email sent.')
+
+Template.resetPassword.rendered = ->
+  $(@find('#reset-password-input')).focus()
+
 ########## Header ##########
 
 Template.header.events

@@ -177,3 +177,14 @@ Router.map ->
   @route 'tos',
     path: '/tos'
     layoutTemplate: 'tos'
+
+  @route 'forgotPassword',
+    path: '/forgot-password'
+    layoutTemplate: 'account_layout'
+
+  @route 'resetPassword',
+    path: '/reset-password/:token'
+    layoutTemplate: 'account_layout'
+    onBeforeAction: ->
+      Session.set 'token', @params.token
+
