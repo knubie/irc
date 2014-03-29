@@ -61,7 +61,6 @@ Template.forgotPassword.events
     parsleyInput = new Parsley '#forgot-password-email'
     $('#forgot-password-email').on 'keypress', ->
       ParsleyUI.removeError parsleyInput, 'userNotFound'
-      console.log 'change'
 
     callback = (error) ->
       if error?

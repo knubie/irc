@@ -144,7 +144,7 @@ Template.message.rendered = ->
           str.match /\.(?:jpe?g|gif|png)/i
             """
               <a href="#{str}" target="_blank">
-                <img onload="scrollToPlace();" src="#{str}" alt=""/>
+                <img onload="scrollToPlace();" onerror="$(this).replaceWith(this.src);" src="#{str}" alt=""/>
               </a>
             """
           else if youtubeMatch and
