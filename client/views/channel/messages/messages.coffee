@@ -77,7 +77,10 @@ Template.messages.helpers
     if @pm?
       selector['$or'] = [{to:@pm, from:Meteor.user()?.username}, {from:@pm, to:Meteor.user()?.username}]
 
-    skip = Math.max(Messages.find(selector).count() - PERPAGE)
+    skip = 0
+    Deps.nonreactive ->
+      skip = Math.max(Messages.find(selector).count() - PERPAGE)
+
     Session.set('skip', skip)
 
     Messages.find selector,
