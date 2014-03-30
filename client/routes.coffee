@@ -166,7 +166,7 @@ Router.map ->
             return pms
     waitOn: ->
       handlers.messages = \
-      Meteor.subscribe 'privateMessages', @params.user, PERPAGE
+      Meteor.subscribe 'privateMessages', @params.user, PERPAGE * (Session.get('messages.page') + 1)
     data: ->
       {
         channel: null

@@ -68,20 +68,22 @@ Template.messages.rendered = ->
 Template.messages.helpers
   messages: ->
     limit = (PERPAGE * Session.get('messages.page'))
+    selector = {}
     if @channel?
-      selector = {channel: @channel.name}
-    else if @pm?
-      selector = {$or: [{to:@pm, from:Meteor.user().username}, {from:@pm, to:Meteor.user().username}]}
-    else
-      selector = {}
-    if Meteor.user()? and @channel?
-      selector.from =
-        $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
+      selector.channel = @channel.name
+      if Meteor.user()?
+        selector.from =
+          $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
+    if @pm?
+      selector['$or'] = [{to:@pm, from:Meteor.user()?.username}, {from:@pm, to:Meteor.user()?.username}]
+
+    skip = Math.max(Messages.find(selector).count() - PERPAGE)
+    Session.set('skip', skip)
 
     Messages.find selector,
       sort:
         createdAt: 1
-      skip: PERPAGE
+      skip: skip
       transform: (doc) ->
         doc.prev = Messages.findOne
           createdAt:
@@ -91,9 +93,8 @@ Template.messages.helpers
             createdAt: -1
         new Message doc
 
-
   loadMore: ->
-    $('.message').length < Messages.find().count()
+    Session.get('skip') > 0
 
   url_channel: ->
     @channel.name.match(/^(#)?(.*)$/)[2]
