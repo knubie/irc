@@ -1,4 +1,5 @@
 Meteor.publish 'users', ->
+  #Todo: limit to current channel
   Meteor.users.find({}, fields: emails: 0, services: 0)
   #Meteor.users.find().forEach (user) =>
     #user.avatar = Gravatar.imageUrl user.emails[0].address
@@ -7,7 +8,7 @@ Meteor.publish 'users', ->
     #@added 'users', user._id, user
 
 Meteor.publish 'publicChannels', ->
-  #Channels.find {private: {$ne: true}}
+  #TODO: Add limit and pagination
   Channels.find modes: $nin: ['s', 'i']
 
 Meteor.publish 'joinedChannels', ->
@@ -17,8 +18,8 @@ Meteor.publish 'joinedChannels', ->
   Channels.find query
 
 Meteor.publish 'messages', (channel, limit) ->
-  # If subscribing to all channels, the channel argument will be an
-  # array of channels.
+  # If subscribing to all channels, the channel
+  # argument will be an array of channels.
   if isArray channel
     selector = {$in: channel}
   else # Otherwise just subscribe to a single channel.
