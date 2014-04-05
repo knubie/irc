@@ -74,16 +74,9 @@ Template.messages.helpers
     if @pm?
       selector['$or'] = [{to:@pm, from:Meteor.user()?.username}, {from:@pm, to:Meteor.user()?.username}]
 
-    skip = 0
-    Deps.nonreactive ->
-      skip = Math.max(Messages.find(selector).count() - PERPAGE)
-
-    Session.set('skip', skip)
-
     Messages.find selector,
       sort:
         createdAt: 1
-      skip: skip
       #transform: (doc) ->
         #doc.prev = Messages.findOne
           #createdAt:
@@ -94,7 +87,8 @@ Template.messages.helpers
         #new Message doc
 
   loadMore: ->
-    Session.get('skip') > 0
+    true
+    #Session.get('skip') > 0
 
   url_channel: ->
     @channel.name.match(/^(#)?(.*)$/)[2]

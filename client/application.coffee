@@ -8,7 +8,7 @@ Session.setDefault 'pm', null
 Session.setDefault 'joinAfterLogin', null # Channel to join after signup/login
 Session.setDefault 'message length', 0
 Session.setDefault 'last message', ''
-Session.setDefault 'skip', 0
+#Session.setDefault 'skip', 0
 
 ########## Dependenies ##########
 
@@ -38,6 +38,10 @@ Meteor.startup ->
 
   # When window loses focus, incoming message causes title to change.
   $(window).on 'focus', -> window.document.title = "Jupe"
+
+  # Initialize tooltips
+  $('body').tooltip
+    selector: '[data-toggle=tooltip]'
 
 # Store scroll position in a session variable. This keeps the scroll
 # position in place when receiving new messages, unless the user is

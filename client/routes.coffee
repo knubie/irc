@@ -79,7 +79,7 @@ Router.map ->
       Session.set 'channel', null
     waitOn: ->
       handlers.messages = \
-      Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE * (Session.get('messages.page') + 1)
+      Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE * Session.get('messages.page')
     data: ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"})
