@@ -74,17 +74,7 @@ Template.messages.helpers
     if @pm?
       selector['$or'] = [{to:@pm, from:Meteor.user()?.username}, {from:@pm, to:Meteor.user()?.username}]
 
-    Messages.find selector,
-      sort:
-        createdAt: 1
-      #transform: (doc) ->
-        #doc.prev = Messages.findOne
-          #createdAt:
-            #$lt: doc.createdAt
-        #,
-          #sort:
-            #createdAt: -1
-        #new Message doc
+    Messages.find selector, sort: createdAt: 1
 
   loadMore: ->
     true
@@ -112,10 +102,9 @@ Template.message.rendered = ->
   and not $msg.hasClass('mention') \
   and not $prev.hasClass('mention')
     $msg.addClass('join')
-    $msg.find('.reply').remove()
-    $msg.find('.actions').remove()
-    $msg.prepend('<div class="divider"></div>')
-  scrollToPlace()
+    .prepend('<div class="divider"></div>')
+    .find('.reply, .actions').remove()
+
   #if @data.channel?
     ## Remove mentions that are rendered.
     #if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
@@ -174,6 +163,8 @@ Template.message.rendered = ->
         .replace(/_([^_]*)_/g, '<span class="underline">$1</span>')
 
   p.html(ptext.join(''))
+
+  scrollToPlace()
 
 Template.message.events
   'click .reply-action': ->

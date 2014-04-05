@@ -8,7 +8,6 @@ Session.setDefault 'pm', null
 Session.setDefault 'joinAfterLogin', null # Channel to join after signup/login
 Session.setDefault 'message length', 0
 Session.setDefault 'last message', ''
-#Session.setDefault 'skip', 0
 
 ########## Dependenies ##########
 
