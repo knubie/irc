@@ -29,7 +29,7 @@ Template.users.helpers
       new Date().getTime() - (
         Meteor.users.findOne(
           username: @nick
-        )?.status?.lastLogin - TimeSync.serverOffset()
+        )?.status?.awaySince - TimeSync.serverOffset()
       )
     ).humanize()
   mod: ->

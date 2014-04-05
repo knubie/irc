@@ -273,7 +273,13 @@ Template.message.helpers
     not Meteor.users.findOne(username: @from)?.status?.online
   awaySince: ->
     timeAgoDep.depend()
-    moment.duration(new Date().getTime() - (Meteor.users.findOne(username: @from)?.status?.lastLogin - TimeSync.serverOffset())).humanize()
+    moment.duration(
+      new Date().getTime() - (
+        Meteor.users.findOne(
+          username: @from
+        )?.status?.awaySince - TimeSync.serverOffset()
+      )
+    ).humanize()
   reverseArrow: ->
     if @from is Meteor.user().username
       return 'reverse'

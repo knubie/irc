@@ -14,8 +14,6 @@ Meteor.startup ->
       #subject: (user) ->
         #"Reset your jupe.io password"
 
-
-
   Meteor.users.find().forEach (user) ->
     # if lastLogin was less than 30 days ago.
     if (new Date().getTime() - user.status.lastLogin)/1000/60/60/24 < 30
@@ -53,8 +51,12 @@ Meteor.startup ->
 # When user renews session (reopens window, etc)
 UserStatus.events.on "connectionLogin", (info) ->
   user = Meteor.users.findOne(info.userId)
+  console.log user.username + 'connection login'
   if user.profile.connection is off
     Meteor.call 'connect', user.username, user._id
 
 # When user loses session (closes window, etc)
-#UserStatus.events.on "connectionLogout", (info) ->
+UserStatus.events.on "connectionLogout", (info) ->
+  user = Meteor.users.findOne(info.userId)
+  console.log user.username + 'connection logout'
+  Meteor.users.update info.userId, $set: 'status.awaySince': new Date().getTime()
