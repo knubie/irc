@@ -41,92 +41,78 @@
 </template>
 
 <template name="message">
-  {{#if joinToPrev}}
-    <li
-      id="{{_id}}"
-      data-nick="{{from}}"
-      data-channel="{{channel}}"
-      class="message join {{offline}} {{mention}} {{bot}} {{info}}"
-    >
-      <div class="divider"></div>
-      <small class="muted pull-right time">{{timeAgo}}</small>
-      <p>{{text}}</p>
-    </li>
-  {{else}}
-    <li
-      id="{{_id}}"
-      data-nick="{{from}}"
-      data-channel="{{channel}}"
-      class="message {{offline}} {{mention}} {{bot}} {{info}} {{touch}}"
-    >
-      {{#unless bot}}
-        <span class="reply">
-          {{#unless channel}}
-            <span class="pm-icon batch-icon {{reverseArrow}}">&#xf158;</span>
-          {{/unless}}
-          {{#if avatar}}
-            <img src="{{avatar}}" class="avatar" width="20" height="20" alt />
-          {{/if}}
-          <a href="/users/{{from}}">
-            <strong>{{realName}}</strong>
-          </a>
-          <span class="muted">@{{from}}</span>
-          {{#if operator}}
-            <span class="mod">
-              Operator
-            </span>
-          {{/if}}
-          {{#if away}}
-            <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
-          {{/if}}
-          {{#if mobile}}
-            <span class="glyphicon glyphicon-phone" data-toggle="tooltip" title="Sent from mobile"></span>
-          {{/if}}
-          {{#if isAll}}
-            <span class="muted">{{channel}}</span>
-          {{/if}}
-          {{#if banned}}
-            <span class="banned">banned</span>
-          {{/if}}
-        </span>
-        {{#unless self}}
-          {{#if currentUser}}
+  <li
+    id="{{_id}}"
+    data-nick="{{from}}"
+    data-channel="{{channel}}"
+    class="message {{offline}} {{mention}} {{bot}} {{info}} {{touch}}"
+  >
+    {{#unless bot}}
+      <span class="reply">
+        {{#unless channel}}
+          <span class="pm-icon batch-icon {{reverseArrow}}">&#xf158;</span>
+        {{/unless}}
+        {{#if avatar}}
+          <img src="{{avatar}}" class="avatar" width="20" height="20" alt />
+        {{/if}}
+        <a href="/users/{{from}}">
+          <strong>{{realName}}</strong>
+        </a>
+        <span class="muted">@{{from}}</span>
+        {{#if operator}}
+          <span class="mod">
+            Operator
+          </span>
+        {{/if}}
+        {{#if away}}
+          <span class="glyphicon glyphicon-time" data-toggle="tooltip" title="Away for {{awaySince}}"></span>
+        {{/if}}
+        {{#if mobile}}
+          <span class="glyphicon glyphicon-phone" data-toggle="tooltip" title="Sent from mobile"></span>
+        {{/if}}
+        {{#if isAll}}
+          <span class="muted">{{channel}}</span>
+        {{/if}}
+        {{#if banned}}
+          <span class="banned">banned</span>
+        {{/if}}
+      </span>
+      {{#unless self}}
+        {{#if currentUser}}
+          <div class="actions">
+            <div class="action reply-action">
+              <span class="glyphicon glyphicon-share-alt"></span>
+              Reply
+            </div>
             &nbsp;
-            <div class="actions">
-              <div class="action reply-action">
-                <span class="glyphicon glyphicon-share-alt"></span>
-                Reply
+            <div class="action ignore-action">
+              <span class="glyphicon glyphicon-volume-off"></span>
+              Ignore
+            </div>
+            {{#if op_status}}
+              &nbsp;
+              <div class="action kick">
+                <span class="glyphicon glyphicon-share"></span>
+                Kick
               </div>
               &nbsp;
-              <div class="action ignore-action">
-                <span class="glyphicon glyphicon-volume-off"></span>
-                Ignore
+              <div class="action ban">
+                <span class="glyphicon glyphicon-ban-circle"></span>
+                Ban
               </div>
-              {{#if op_status}}
-                &nbsp;
-                <div class="action kick">
-                  <span class="glyphicon glyphicon-share"></span>
-                  Kick
-                </div>
-                &nbsp;
-                <div class="action ban">
-                  <span class="glyphicon glyphicon-ban-circle"></span>
-                  Ban
-                </div>
-              {{/if}}
-            </div>
-          {{/if}}
-        {{/unless}}
+            {{/if}}
+          </div>
+        {{/if}}
       {{/unless}}
-      <small class="muted pull-right time">{{timeAgo}}</small>
-      <p>{{text}}</p>
-      {{#if convos}}
-        <div class="action convo">
-          <span class="batch-icon">&#xf000;</span>
-          View conversation
-        </div>
-      {{/if}}
-    </li>
-  {{/if}}
+    {{/unless}}
+    <small class="muted pull-right time">{{timeAgo}}</small>
+    <p>{{text}}</p>
+    {{#if convos}}
+      <div class="action convo">
+        <span class="batch-icon">&#xf000;</span>
+        View conversation
+      </div>
+    {{/if}}
+  </li>
 </template>
 

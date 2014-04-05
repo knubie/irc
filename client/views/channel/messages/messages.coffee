@@ -42,14 +42,12 @@ Template.messages.rendered = ->
     scroller: document.getElementsByClassName('messages')[0]
   .on()
 
-  $('body').tooltip
-    selector: '[data-toggle=tooltip]'
   # Set up listeners for scroll position
   if Modernizr.touch
     $(window).off 'touchmove'
     $(window).on 'touchmove', rememberScrollPosition
   $(window).off 'scroll'
-  $(window).scroll rememberScrollPosition
+  $(window).on 'scroll', rememberScrollPosition
 
   # Hover isolates messages from like channels
   unless @channel?
@@ -67,13 +65,12 @@ Template.messages.rendered = ->
 
 Template.messages.helpers
   messages: ->
-    limit = (PERPAGE * Session.get('messages.page'))
     selector = {}
     if @channel?
       selector.channel = @channel.name
       if Meteor.user()?
         selector.from =
-          $nin: Meteor.user().profile.channels["#{@channel.name}"].ignore
+          $nin: Meteor.user().profile.channels[@channel.name].ignore
     if @pm?
       selector['$or'] = [{to:@pm, from:Meteor.user()?.username}, {from:@pm, to:Meteor.user()?.username}]
 
@@ -87,14 +84,14 @@ Template.messages.helpers
       sort:
         createdAt: 1
       skip: skip
-      transform: (doc) ->
-        doc.prev = Messages.findOne
-          createdAt:
-            $lt: doc.createdAt
-        ,
-          sort:
-            createdAt: -1
-        new Message doc
+      #transform: (doc) ->
+        #doc.prev = Messages.findOne
+          #createdAt:
+            #$lt: doc.createdAt
+        #,
+          #sort:
+            #createdAt: -1
+        #new Message doc
 
   loadMore: ->
     Session.get('skip') > 0
@@ -113,15 +110,26 @@ Template.messages.events
 ########## Message ##########
 
 Template.message.rendered = ->
+  $msg = @$('.message')
+  $prev = $msg.prev()
+  if $msg.data('nick') is $prev.data('nick') \
+  and not $msg.hasClass('info') \
+  and not $prev.hasClass('info') \
+  and not $msg.hasClass('mention') \
+  and not $prev.hasClass('mention')
+    $msg.addClass('join')
+    $msg.find('.reply').remove()
+    $msg.find('.actions').remove()
+    $msg.prepend('<div class="divider"></div>')
   scrollToPlace()
-  if @data.channel?
-    # Remove mentions that are rendered.
-    if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
-      update Meteor.users, Meteor.userId()
-      , "profile.channels.#{@data.channel}.mentions"
-      , (mentions) ->
-        mentions.splice i, 1
-        return mentions
+  #if @data.channel?
+    ## Remove mentions that are rendered.
+    #if (i = Meteor.user().profile.channels[@data.channel].mentions.indexOf(@data._id)) > -1
+      #update Meteor.users, Meteor.userId()
+      #, "profile.channels.#{@data.channel}.mentions"
+      #, (mentions) ->
+        #mentions.splice i, 1
+        #return mentions
 
   if @data.to is Meteor.user().username
     # Remove mentions that are rendered.
@@ -238,18 +246,18 @@ Template.message.helpers
       "class": "message #{offline()} #{mention()} #{bot} #{info}"
     }
   joinToPrev: ->
-    console.log 'jointoprev'
-    sameChannel = true
-    mentioned = true
-    prevMentioned = true
-    if @prev?.channel?
-      sameChannel = @prev.channel is @channel
-      mentioned = not @mentions(Meteor.user()?.username)
-      prevMentioned = not @prev.mentions(Meteor.user()?.username)
-    @prev? and @prev.from is @from \
-    and sameChannel and mentioned and prevMentioned \
-    and @from isnt 'system' and @type isnt 'action' \
-    and @prev.type isnt 'action'
+    false
+    #sameChannel = yes
+    #mentioned = no
+    #prevMentioned = no
+    #if @prev?.channel?
+      #sameChannel = @prev.channel is @channel
+      #mentioned = @mentions(Meteor.user()?.username)
+      #prevMentioned = @prev.mentions(Meteor.user()?.username)
+    #@prev? and @prev.from is @from \
+    #and sameChannel and not mentioned and not prevMentioned \
+    #and @from isnt 'system' and @type isnt 'action' \
+    #and @prev.type isnt 'action'
   timeAgo: ->
     timeAgoDep.depend()
     moment(@createdAt - TimeSync.serverOffset()).fromNow()
