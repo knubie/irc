@@ -822,23 +822,31 @@ body
   margin-top: 25px
 
 ////////// Notifications //////////
-.request-notifications-container
+.alert-container
   position: fixed
   top: 50px
   left: 50%
   z-index: 101
-  .request-notifications
+  .alert
+    border: none
+    border-radius: 5px
+    color: $clouds
     position: relative
     left: -50%
-    background-color: $peter-river
-    color: $clouds
     padding: 6px 20px 4px
-    border-radius: 5px
-    box-shadow: 0 2px 0 #2980B9
+    margin: 0
     a
       color: $clouds
       text-decoration: underline
-
+  .alert-info
+    box-shadow: 0 2px 0 #2980B9
+    background-color: $peter-river
+  .alert-warning
+    color: white
+    box-shadow: 0 2px 0 $pomegranate
+    background-color: $alizarin
+    a
+      color: white
 ////////// Parsley //////////
 .parsley-errors-list
   margin-top: -10px

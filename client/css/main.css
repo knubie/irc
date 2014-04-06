@@ -809,22 +809,31 @@ body {
 .explore-nav {
   margin-top: 25px; }
 
-.request-notifications-container {
+.alert-container {
   position: fixed;
   top: 50px;
   left: 50%;
   z-index: 101; }
-  .request-notifications-container .request-notifications {
+  .alert-container .alert {
+    border: none;
+    border-radius: 5px;
+    color: #ecf0f1;
     position: relative;
     left: -50%;
-    background-color: #3498db;
-    color: #ecf0f1;
     padding: 6px 20px 4px;
-    border-radius: 5px;
-    box-shadow: 0 2px 0 #2980b9; }
-    .request-notifications-container .request-notifications a {
+    margin: 0; }
+    .alert-container .alert a {
       color: #ecf0f1;
       text-decoration: underline; }
+  .alert-container .alert-info {
+    box-shadow: 0 2px 0 #2980b9;
+    background-color: #3498db; }
+  .alert-container .alert-warning {
+    color: white;
+    box-shadow: 0 2px 0 #c0392b;
+    background-color: #e74c3c; }
+    .alert-container .alert-warning a {
+      color: white; }
 
 .parsley-errors-list {
   margin-top: -10px; }

@@ -97,6 +97,7 @@
     </div>
   </nav>
   {{> notifications}}
+  {{> connectionLost}}
 </template>
 
 <template name="loading">
@@ -278,9 +279,17 @@
 </template>
 
 <template name="notifications">
-  <div class="request-notifications-container {{#if hide}}hidden{{/if}}">
-    <div class="request-notifications">
+  <div class="alert-container {{#if hide}}hidden{{/if}}">
+    <div class="alert alert-info">
       <a href="" class="enable">Click here to enable</a> desktop notifications for Jupe.&nbsp;&nbsp;Learn more&nbsp;&nbsp;<a href="" class="hide-me">Hide</a>
+    </div>
+  </div>
+</template>
+
+<template name="connectionLost">
+  <div class="alert-container {{#if hide}}hidden{{/if}}">
+    <div class="alert alert-warning">
+      Connection lost.&nbsp;&nbsp;<a href="" class="reconnect">Reconnect</a>
     </div>
   </div>
 </template>

@@ -112,6 +112,7 @@ Template.header.helpers
   avatar: ->
     Gravatar.imageUrl Meteor.user().emails[0].address
 
+########## Notifications ##########
 
 Template.notifications.helpers
   hide: ->
@@ -129,6 +130,21 @@ Template.notifications.events
     e.preventDefault()
     Meteor.users.update(Meteor.userId(), $set: 'profile.notifications': false)
     $('.request-notifications-container').fadeOut(200)
+
+########## Connection Status ##########
+
+Template.connectionLost.helpers
+  hide: ->
+    Meteor.status().connected
+
+Template.connectionLost.events
+  'click .enable': (e,t) ->
+    e.preventDefault()
+    Notification.requestPermission()
+    $('.request-notifications-container').fadeOut(200)
+  'click .reconnect': (e,t) ->
+    e.preventDefault()
+    Meteor.reconnect()
 
 
 ########## User Profile ##########
