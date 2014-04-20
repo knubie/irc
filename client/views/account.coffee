@@ -2,25 +2,25 @@ Template.account.data = -> Meteor.user()
 
 Template.account.helpers
   soundsChecked: ->
-    if @profile.sounds
+    if @profile?.sounds
       return 'checked'
     else
       return ''
 
   notificationsChecked: ->
-    if @profile.notifications
+    if @profile?.notifications
       return 'checked'
     else
       return ''
 
   mediaChecked: ->
-    if @profile.inlineMedia
+    if @profile?.inlineMedia
       return 'checked'
     else
       return ''
 
   realNameValue: ->
-    @profile.realName or ''
+    @profile?.realName or ''
 
 Template.account.events
   'submit #real-name-settings': (e,t) ->
@@ -29,7 +29,6 @@ Template.account.events
     if realNameValue isnt Meteor.user().profile.realName
       Meteor.users.update(Meteor.userId(), $set: 'profile.realName': realNameValue)
       Meteor.call 'send', 'REALNAME', Meteor.user().username, realNameValue
-
 
   'click label.checkbox[for="playSounds"]': (e,t) ->
     Meteor.users.update Meteor.userId(),

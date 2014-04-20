@@ -82,7 +82,8 @@ Router.map ->
       Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE * Session.get('messages.page')
     data: ->
       {
-        channel: Channels.findOne({name: "##{@params.channel}"})
+        channel: Channels.findOne({name: "##{@params.channel}"}) or \
+          {name: "##{@params.channel}", private: true}
         pm: null
       }
     action: ->
@@ -93,6 +94,10 @@ Router.map ->
           @render('channels', {to: 'channels'})
           @render('channelHeader', {to: 'header'})
           @render('users', {to: 'users'})
+        else if Meteor.user() and not Channels.findOne({name: channel})
+          @render('kicked')
+          @render('channels', {to: 'channels'})
+          @render('channelHeader', {to: 'header'})
         else
           @render()
       else

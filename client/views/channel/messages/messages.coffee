@@ -127,12 +127,15 @@ Template.message.rendered = ->
   p = $(@find('p'))
   message = p.html()
 
+  #FIXME @Mention `code`
+  #FIXME mention user with underscore at the end of nick
   ptext = for string in parse(message)
     switch string.token
       when 'code'
         string.text.replace(/`([^`]*)`/g, "<code>$1</code>")
       when 'url'
         string.text.replace regexps.url, (str) =>
+          #FIXME: this matches vine links
           youtubeMatch = str.match regex.youtube
           gistMatch = str.match regex.gist
           if Meteor.user().profile.inlineMedia and
