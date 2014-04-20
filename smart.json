@@ -7,6 +7,7 @@
       "branch": "dev"
     },
     "npm": {},
-    "gravatar": {}
+    "gravatar": {},
+    "fast-render": {}
   }
 }
