@@ -2,25 +2,10 @@ Router.map ->
   @route 'home',
     path: '/'
     layoutTemplate: 'main_layout'
-    loadingTemplate: 'loading'
-    waitOn: ->
-      channels = (channel for channel of Meteor.user().profile.channels)
-      Meteor.subscribe 'messages', channels, PERPAGE
-    data: ->
-      {
-        channel: null
-        pm: null
-        subpage: 'messages'
-      }
     action: ->
       if Meteor.user()
-        Session.set 'subPage', 'messages'
-        if @ready()
-          @setLayout 'channel_layout'
-          @render('channels', {to: 'channels'})
-          @render('messages')
+        @redirect('all channels')
       else
-        @setLayout 'main_layout'
         @render 'home'
 
   @route 'login',
@@ -37,22 +22,38 @@ Router.map ->
     layoutTemplate: 'main_layout'
     loadingTemplate: 'loading'
     waitOn: ->
-      Meteor.subscribe 'publicChannels'
+      handlers.publicChannels ?= Meteor.subscribe 'publicChannels'
 
   @route 'user',
     path: 'users/:user'
     layoutTemplate: 'main_layout'
-    loadingTemplate: 'loading'
     template: 'user_profile'
-    waitOn: ->
-      Meteor.subscribe 'publicChannels'
+    loadingTemplate: 'loading'
     data: ->
       Meteor.users.findOne(username: @params.user)
+
+  @route 'all channels',
+    path: '/'
+    layoutTemplate: 'channel_layout'
+    template: 'messages'
+    fastRender: true
+    yieldTemplates:
+      'channels': {to: 'channels'}
+    waitOn: ->
+      [ handlers.allMessages
+        handlers.publicChannels ]
+    action: ->
+      if @ready()
+        @render()
+      else
+        @render('loading')
+        @render('channels', {to: 'channels'})
 
   @route 'channel',
     path: '/channels/:channel'
     layoutTemplate: 'channel_layout'
     template: 'messages'
+    fastRender: true
     yieldTemplates:
       'channels': {to: 'channels'}
       'channelHeader': {to: 'header'}
@@ -60,20 +61,27 @@ Router.map ->
       'users': {to: 'users'}
     onBeforeAction: ->
       channel = "##{@params.channel}"
-      @render('loading') if not @ready()
-      Session.set 'channel', channel
-      Meteor.call 'join', Meteor.user().username, channel if Meteor.user()
-      @timeAgoInterval = Meteor.setInterval ->
-        timeAgoDep.changed()
-      , 60000
+      if Meteor.isClient
+        Session.set 'channel', channel
+        Meteor.call 'join', Meteor.user().username, channel if Meteor.user()
+        @timeAgoInterval = Meteor.setInterval ->
+          timeAgoDep.changed()
+        , 60000
     onAfterAction: ->
-      Session.set("##{@params.channel}.unread", 0)
+      if Meteor.isClient
+        Session.set("##{@params.channel}.unread", 0)
     onStop: ->
-      Meteor.clearInterval @timeAgoInterval
-      Session.set 'channel', null
+      if Meteor.isClient
+        Meteor.clearInterval @timeAgoInterval
+        Session.set 'channel', null
     waitOn: ->
-      handlers.messages = \
-      Meteor.subscribe 'messages', "##{@params.channel}", PERPAGE * Session.get('messages.page')
+      messages = null
+      joinedChannels = null
+      if Meteor.isClient
+        messages = handlers.messages["##{@params.channel}"]
+        {joinedChannels} = handlers
+      [ messages
+        joinedChannels ?= Meteor.subscribe 'joinedChannels']
     data: ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"}) or \
@@ -82,18 +90,24 @@ Router.map ->
       }
     action: ->
       channel = "##{@params.channel}"
+      isKicked = false
+      isPrivate = false
+      if Meteor.isClient
+        isKicked = Meteor.user()?.profile.channels[channel]?.kicked
+        ifPrivate = Meteor.user() and not Channels.findOne({name: channel})
       if @ready()
-        if Meteor.user() and Meteor.user().profile.channels[channel]?.kicked
-          @render('kicked')
-          @render('channels', {to: 'channels'})
-          @render('channelHeader', {to: 'header'})
-          @render('users', {to: 'users'})
-        else if Meteor.user() and not Channels.findOne({name: channel})
-          @render('kicked')
-          @render('channels', {to: 'channels'})
-          @render('channelHeader', {to: 'header'})
-        else
-          @render()
+        if Meteor.isClient
+          if isKicked
+            @render('kicked')
+            @render('channels', {to: 'channels'})
+            @render('channelHeader', {to: 'header'})
+            @render('users', {to: 'users'})
+          else if isPrivate
+            @render('kicked')
+            @render('channels', {to: 'channels'})
+            @render('channelHeader', {to: 'header'})
+          else
+            @render()
       else
         @render('loading')
         @render('channels', {to: 'channels'})
@@ -130,6 +144,7 @@ Router.map ->
     path: '/channels/:channel/settings'
     layoutTemplate: 'channel_layout'
     loadingTemplate: 'loading'
+    fastRender: true
     yieldTemplates:
       'channels': {to: 'channels'}
       'channelHeader': {to: 'header'}
@@ -139,6 +154,11 @@ Router.map ->
       Session.set 'channel', channel
     onStop: ->
       Session.set 'subPage', null
+    waitOn: ->
+      joinedChannels = null
+      if Meteor.isClient
+        {joinedChannels} = handlers
+      joinedChannels ?= Meteor.subscribe 'joinedChannels'
     data: ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"})

@@ -118,6 +118,7 @@ Meteor.methods
       Channels.update channelId, $set: {topic}
 
   send: (command, username, args...) ->
+    #FIXME: check if client is logged in
     check command, String
     if Meteor.isServer
       client[username].send command, args...

@@ -1,3 +1,10 @@
+TOP PRIORITY:
+- subscribe to all messages to remove channel loader ( or user submanager)
+- secure the Methods.send method
+- only ops should be able to change channel topic
+- changing nick produces double users.
+- investigate Latency compensation now works automatically in cases where you insert multiple documents from a method. This one's been on the roadmap for awhile. https://trello.com/c/moiiS2rP/57-pattern-for-creating-multiple-database-records-from-a-method
+
 - change timestamp to twitter-style
 - seperate say input from messages.
 - make private messages change the browser window's title a la gmail chat.
@@ -9,7 +16,6 @@
 - Add founder(+q ~), away(+a *) and bot(+b $) user modes
 - fix error on sign out
 - when clicking a message on 'all messages' it drops down an input to reply. clicking reply on the message does the same but prepends @nickname to the fron to fthe input
-- add sound toggle, media toggle to channel header
 - add @ support for nicknames when using commands
 - fix @ autocomplete:
   - type @mat, choose @matt, continue typing, then hit enter. it will change to @Mattykins

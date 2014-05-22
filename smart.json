@@ -2,10 +2,7 @@
   "packages": {
     "user-status": {},
     "collection-hooks": {},
-    "iron-router": {
-      "git": "https://github.com/EventedMind/iron-router",
-      "branch": "dev"
-    },
+    "iron-router": {},
     "npm": {},
     "gravatar": {},
     "fast-render": {}

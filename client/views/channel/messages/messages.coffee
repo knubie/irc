@@ -77,7 +77,7 @@ Template.messages.helpers
     Messages.find selector, sort: createdAt: 1
 
   loadMore: ->
-    true
+    Messages.find().count() >= PERPAGE * Session.get('messages.page')
     #Session.get('skip') > 0
 
   url_channel: ->
@@ -94,16 +94,7 @@ Template.messages.events
 ########## Message ##########
 
 Template.message.rendered = ->
-  $msg = @$('.message')
-  $prev = $msg.prev()
-  if $msg.data('nick') is $prev.data('nick') \
-  and not $msg.hasClass('info') \
-  and not $prev.hasClass('info') \
-  and not $msg.hasClass('mention') \
-  and not $prev.hasClass('mention')
-    $msg.addClass('join')
-    .prepend('<div class="divider"></div>')
-    .find('.reply, .actions').remove()
+  @$('.message').css('left', "0%")
 
   #if @data.channel?
     ## Remove mentions that are rendered.
@@ -233,6 +224,46 @@ Template.message.helpers
       "data-channel": @channel
       "class": "message #{offline()} #{mention()} #{bot} #{info}"
     }
+  away: ->
+    not Meteor.users.findOne(username: @from)?.status?.online
+  awaySince: ->
+    timeAgoDep.depend()
+    moment.duration(
+      new Date().getTime() - (
+        Meteor.users.findOne(
+          username: @from
+        )?.status?.awaySince - TimeSync.serverOffset()
+      )
+    ).humanize()
+  banned: ->
+    @channel? and @from in Channels.findOne({name: @channel})?.bans
+  bot: ->
+    if @from is 'Idletron'
+      return 'bot'
+  conjoined: ->
+    sameChannel = yes
+    mentioned = no
+    prevMentioned = no
+    prev = Messages.findOne
+      createdAt:
+        $lt: @createdAt
+    ,
+      sort:
+        createdAt: -1
+
+    if prev?.channel?
+      sameChannel = prev.channel is @channel
+      mentioned = @mentions(Meteor.user()?.username)
+      prevMentioned = prev.mentions(Meteor.user()?.username)
+    prev? and prev.from is @from \
+    and sameChannel and not mentioned and not prevMentioned \
+    and @from isnt 'system' and @type isnt 'action' \
+    and prev.type isnt 'action'
+  info: ->
+    if @from is 'system' or @type is 'action'
+      return 'info'
+  isAll: ->
+    !Session.get('channel') and @channel?
   joinToPrev: ->
     false
     #sameChannel = yes
@@ -246,56 +277,33 @@ Template.message.helpers
     #and sameChannel and not mentioned and not prevMentioned \
     #and @from isnt 'system' and @type isnt 'action' \
     #and @prev.type isnt 'action'
-  timeAgo: ->
-    timeAgoDep.depend()
-    moment(@createdAt - TimeSync.serverOffset()).fromNow()
-  offline: ->
-    if @channel? \
-    and @from isnt 'system' and @type isnt 'action' \
-    and @from not of Channels.findOne({name: @channel})?.nicks
-      return 'offline'
-  banned: ->
-    @channel? and @from in Channels.findOne({name: @channel})?.bans
   mention: ->
     if @convos? and Meteor.user()?.username in @convos
       return 'mention'
+  offline: ->
+    if @channel? \
+    and @from isnt 'system' and @type isnt 'action' \
+    and @from not of Channels.findOne({name: @channel}).nicks
+      return 'offline'
   op_status: ->
     if @channel? and Meteor.user()
       Channels.findOne(name: @channel).nicks[Meteor.user().username] is '@'
   operator: ->
     @channel? and Channels.findOne(name: @channel).nicks[@from] is '@'
-  self: ->
-    @from is 'system' or @from is Meteor.user()?.username or @type is 'action'
-  info: ->
-    if @from is 'system' or @type is 'action'
-      return 'info'
-  bot: ->
-    if @from is 'Idletron'
-      return 'bot'
-  away: ->
-    not Meteor.users.findOne(username: @from)?.status?.online
-  awaySince: ->
-    timeAgoDep.depend()
-    moment.duration(
-      new Date().getTime() - (
-        Meteor.users.findOne(
-          username: @from
-        )?.status?.awaySince - TimeSync.serverOffset()
-      )
-    ).humanize()
+  realName: ->
+    Meteor.users.findOne({username: @from})?.profile.realName
   reverseArrow: ->
     if @from is Meteor.user().username
       return 'reverse'
     else
       return ''
-  isAll: ->
-    !Session.get('channel') and @channel?
-  realName: ->
-    Meteor.users.findOne({username: @from})?.profile.realName
+  self: ->
+    @from is 'system' or @from is Meteor.user()?.username or @type is 'action'
   touch: ->
     if Modernizr.touch
       'touch'
     else
       ''
-  avatar: ->
-    Meteor.users.findOne(username: @from)?.avatar
+  timeAgo: ->
+    timeAgoDep.depend()
+    moment(@createdAt - TimeSync.serverOffset()).fromNow(true)

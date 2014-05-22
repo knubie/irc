@@ -215,6 +215,7 @@ Template.pm.events
 
 Template.settings.helpers
   channelPath: ->
+    console.log @
     Router.routes['channel'].path({channel: @channel.name.match(/^.(.*)$/)[1]})
 
 ########## Kicked ##########

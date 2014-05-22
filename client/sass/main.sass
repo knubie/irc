@@ -256,6 +256,7 @@ body
 ////////// Channels //////////
 .channel-container
   overflow: hidden
+  transition: ease 0.25s width
   +screen-md
     padding-top: 100px
   .alert
@@ -602,8 +603,9 @@ body
     padding: 10px 12px
     color: $foreground
     position: relative
-    transition: .15s left, .15s opacity, .15s background-color, .15s color, 1s border-color
+    transition: ease .25s left, .15s opacity, .15s background-color, .15s color, 1s border-color
     border: 1px solid transparent
+    //left: 100%
     a:link 
       color: #3498DB
     p
@@ -623,6 +625,7 @@ body
       img
         max-width: 100%
         max-height: 70vh
+        display: block
         +screen-sm
           max-height: 50vh
       a
@@ -670,9 +673,12 @@ body
       //border-bottom: 1px solid #ccc
       //cursor: pointer
     .muted.time
-      color: rgba(0,0,0,0)
+      color: rgba(0,0,0,0.2)
       font-size: 12px
+      +screen-sm
+        color: rgba(0,0,0,0)
     .divider
+      display: none
       width: 100%
       border-bottom: 1px solid #ECF0F1
       margin: 0 0 10px 0
@@ -738,6 +744,14 @@ body
       border-bottom: 1px solid rgba(0,0,0,0.02)
   .join
     margin-top: -20px
+    left: 0
+    .actions, .reply
+      display: none
+    .divider
+      display: block
+  .join:hover
+    .actions
+      display: none
   .info
     background-color: rgba(0,0,0,0)
     box-shadow: none

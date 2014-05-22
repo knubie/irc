@@ -252,7 +252,8 @@ body {
     margin-right: 6px; }
 
 .channel-container {
-  overflow: hidden; }
+  overflow: hidden;
+  transition: ease 0.25s width; }
   @media (min-width: 992px) {
     .channel-container {
       padding-top: 100px; } }
@@ -601,7 +602,7 @@ body {
   padding: 10px 12px;
   color: #777777;
   position: relative;
-  transition: 0.15s left, 0.15s opacity, 0.15s background-color, 0.15s color, 1s border-color;
+  transition: ease 0.25s left, 0.15s opacity, 0.15s background-color, 0.15s color, 1s border-color;
   border: 1px solid transparent; }
   .messages .message a:link {
     color: #3498db; }
@@ -620,7 +621,8 @@ body {
     user-select: text; }
     .messages .message p img {
       max-width: 100%;
-      max-height: 70vh; }
+      max-height: 70vh;
+      display: block; }
       @media (min-width: 768px) {
         .messages .message p img {
           max-height: 50vh; } }
@@ -666,9 +668,13 @@ body {
       bottom: 1px;
       margin-right: 5px; }
   .messages .message .muted.time {
-    color: transparent;
+    color: rgba(0, 0, 0, 0.2);
     font-size: 12px; }
+    @media (min-width: 768px) {
+      .messages .message .muted.time {
+        color: transparent; } }
   .messages .message .divider {
+    display: none;
     width: 100%;
     border-bottom: 1px solid #ecf0f1;
     margin: 0 0 10px 0; }
@@ -730,7 +736,14 @@ body {
 .messages .offline .divider {
   border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
 .messages .join {
-  margin-top: -20px; }
+  margin-top: -20px;
+  left: 0; }
+  .messages .join .actions, .messages .join .reply {
+    display: none; }
+  .messages .join .divider {
+    display: block; }
+.messages .join:hover .actions {
+  display: none; }
 .messages .info {
   background-color: transparent;
   box-shadow: none;

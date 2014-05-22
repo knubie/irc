@@ -1,5 +1,6 @@
 Template.settings.helpers
   op_status: ->
+    console.log @
     @channel.nicks[Meteor.user().username] is '@'
   ignore_list: ->
     Meteor.user().profile.channels[@channel.name]?.ignore

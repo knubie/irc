@@ -15,3 +15,5 @@ npm
 /crypto-base
 /timesync
 /fast-render
+/user-status
+/collection-hooks

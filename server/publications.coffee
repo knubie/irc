@@ -17,6 +17,16 @@ Meteor.publish 'joinedChannels', ->
   query["nicks.#{username}"] = {$exists: true}
   Channels.find query
 
+Meteor.publish 'allMessages', (userId, limit) ->
+  channels = (channel for channel of Meteor.users.findOne(userId).profile.channels)
+  handle = Messages.find({channel: {$in: channels}}, {limit: limit, sort: createdAt: -1})
+  .observeChanges
+    added: (id, fields) =>
+      @added 'messages', id, fields
+
+  @ready()
+  @onStop -> handle.stop()
+
 Meteor.publish 'messages', (channel, limit) ->
   # If subscribing to all channels, the channel
   # argument will be an array of channels.

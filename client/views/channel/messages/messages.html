@@ -45,8 +45,9 @@
     id="{{_id}}"
     data-nick="{{from}}"
     data-channel="{{channel}}"
-    class="message {{offline}} {{mention}} {{bot}} {{info}} {{touch}}"
+    class="message {{offline}} {{mention}} {{bot}} {{info}} {{touch}} {{#if conjoined}}join{{/if}}"
   >
+    <div class="divider"></div>
     {{#unless bot}}
       <span class="reply">
         {{#unless channel}}

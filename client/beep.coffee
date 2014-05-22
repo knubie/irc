@@ -61,7 +61,7 @@ $(window).focus ->
 
 Messages.find().observeChanges
   added: (id, message) ->
-    if handlers.messages?.ready() and handlers.allMessages?.ready()
+    if handlers.messages[Session.get('channel')]?.ready()
       beepAndNotify(id, message)
       if !document.hasFocus()
         unread += 1

@@ -15,14 +15,24 @@ Session.setDefault 'joinAfterLogin', null # Channel to join after signup/login
 ########## Subscriptions ##########
 
 @handlers =
+  messages: {}
+  allMessages: null
+  joinedChannels: null
+  publicChannels: null
   user: Meteor.subscribe 'users'
-  publicChannels: Meteor.subscribe 'publicChannels'
+  #publicChannels: Meteor.subscribe 'publicChannels'
 
 Deps.autorun ->
+  console.log 'autorun sub'
+  console.log PERPAGE * Session.get('messages.page')
   if Meteor.user()?
     # Subscribe to all messages feed.
     channels = (channel for channel of Meteor.user().profile.channels)
-    handlers.allMessages = Meteor.subscribe 'messages', channels, PERPAGE
+    for channel in channels
+      console.log "Subscribe to #{channel}"
+      handlers.messages[channel] = \
+        Meteor.subscribe 'messages', channel, PERPAGE * Session.get('messages.page')
+    handlers.allMessages = Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
 
     # Subscribed to joined channels (including private channels)
     handlers.joinedChannels = Meteor.subscribe 'joinedChannels'
@@ -64,3 +74,12 @@ Meteor.startup ->
 @isElementInViewport = (el) ->
   rect = el.getBoundingClientRect()
   rect.top >= 160 && rect.left >= 0 && rect.bottom <= $(window).height()
+
+########## Moment Config ##########
+#moment.lang 'en',
+  #relativeTime:
+    #s: '%ds'
+    #m: 'm'
+    #mm: '%dm'
+    #h: 'h'
+    #hh: '%dh'
