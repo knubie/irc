@@ -36,7 +36,7 @@ Router.map ->
     path: '/'
     layoutTemplate: 'channel_layout'
     template: 'messages'
-    fastRender: true
+    #fastRender: true
     yieldTemplates:
       'channels': {to: 'channels'}
     waitOn: ->
@@ -53,7 +53,7 @@ Router.map ->
     path: '/channels/:channel'
     layoutTemplate: 'channel_layout'
     template: 'messages'
-    fastRender: true
+    #fastRender: true
     yieldTemplates:
       'channels': {to: 'channels'}
       'channelHeader': {to: 'header'}
