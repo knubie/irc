@@ -49,8 +49,7 @@ sendNotification = (params) ->
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
 beepAndNotify = (id, message) ->
-  if handlers.messages?.ready()
-    _.compose(dispatchNotification, beep) message
+  _.compose(dispatchNotification, beep) message
 
 ########## Beeps / Notifications ##########
 
@@ -61,7 +60,7 @@ $(window).focus ->
 
 Messages.find().observeChanges
   added: (id, message) ->
-    if handlers.messages[Session.get('channel')]?.ready()
+    if handlers.messages[Session.get('channel')].ready()
       beepAndNotify(id, message)
       if !document.hasFocus()
         unread += 1
