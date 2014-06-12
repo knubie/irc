@@ -4,7 +4,6 @@
     "collection-hooks": {},
     "iron-router": {},
     "npm": {},
-    "gravatar": {},
-    "fast-render": {}
+    "gravatar": {}
   }
 }

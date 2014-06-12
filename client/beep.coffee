@@ -48,23 +48,8 @@ sendNotification = (params) ->
 # dispatchNotification :: Message -> Action(UI)
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
-beepAndNotify = (id, message) ->
+@beepAndNotify = (id, message) ->
   _.compose(dispatchNotification, beep) message
 
 ########## Beeps / Notifications ##########
 
-unread = 0
-$(window).focus ->
-  window.document.title = "Jupe"
-  unread = 0
-
-Messages.find().observeChanges
-  added: (id, message) ->
-    if handlers.messages[Session.get('channel')].ready()
-      beepAndNotify(id, message)
-      if !document.hasFocus()
-        unread += 1
-        window.document.title = "(#{unread}) Jupe"
-      unless Session.equals 'channel', message.channel
-        channelUnread = Session.get("#{message.channel}.unread") or 0
-        Session.set("#{message.channel}.unread", channelUnread + 1)

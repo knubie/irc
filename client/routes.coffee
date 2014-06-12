@@ -1,10 +1,13 @@
+Router.configure
+  loadingTemplate: 'loading'
+
 Router.map ->
   @route 'home',
     path: '/'
     layoutTemplate: 'main_layout'
     action: ->
       if Meteor.user()
-        @redirect('all channels')
+        @redirect 'all channels'
       else
         @render 'home'
 
@@ -40,14 +43,26 @@ Router.map ->
     yieldTemplates:
       'channels': {to: 'channels'}
     waitOn: ->
-      [ handlers.allMessages
-        handlers.publicChannels ]
+      [ handlers.allMessages()
+        handlers.joinedChannels() ]
     action: ->
       if @ready()
         @render()
+        query = Messages.find(channel: "##{@params.channel}")
+        init = true
+        query.observeChanges
+          added: (id, message) =>
+            unless init
+              beepAndNotify(id, message)
+              unless document.hasFocus()
+                unread += 1
+                window.document.title = "(#{unread}) Jupe"
+              unless Session.equals 'channel', message.channel
+                channelUnread = Session.get("#{message.channel}.unread") or 0
+                Session.set("#{message.channel}.unread", channelUnread + 1)
+        init = false
       else
         @render('loading')
-        @render('channels', {to: 'channels'})
 
   @route 'channel',
     path: '/channels/:channel'
@@ -68,20 +83,13 @@ Router.map ->
           timeAgoDep.changed()
         , 60000
     onAfterAction: ->
-      if Meteor.isClient
-        Session.set("##{@params.channel}.unread", 0)
     onStop: ->
       if Meteor.isClient
         Meteor.clearInterval @timeAgoInterval
         Session.set 'channel', null
     waitOn: ->
-      messages = null
-      joinedChannels = null
-      if Meteor.isClient
-        messages = handlers.messages["##{@params.channel}"]
-        {joinedChannels} = handlers
-      [ messages
-        joinedChannels ?= Meteor.subscribe 'joinedChannels']
+      [ handlers._messages("##{@params.channel}")
+        handlers.joinedChannels()]
     data: ->
       {
         channel: Channels.findOne({name: "##{@params.channel}"}) or \
@@ -90,29 +98,36 @@ Router.map ->
       }
     action: ->
       channel = "##{@params.channel}"
-      isKicked = false
-      isPrivate = false
-      if Meteor.isClient
-        isKicked = Meteor.user()?.profile.channels[channel]?.kicked
-        ifPrivate = Meteor.user() and not Channels.findOne({name: channel})
       if @ready()
-        if Meteor.isClient
-          if isKicked
-            @render('kicked')
-            @render('channels', {to: 'channels'})
-            @render('channelHeader', {to: 'header'})
-            @render('users', {to: 'users'})
-          else if isPrivate
-            @render('kicked')
-            @render('channels', {to: 'channels'})
-            @render('channelHeader', {to: 'header'})
-          else
-            @render()
+        isKicked = Meteor.user()?.profile.channels[channel]?.kicked
+        isPrivate = Meteor.user() and not Channels.findOne({name: channel})
+        if isKicked
+          @render('kicked')
+        else if isPrivate
+          @render('kicked')
+        else
+          @render()
+          Session.set("##{@params.channel}.unread", 0)
+          unread = 0
+          $(window).focus ->
+            window.document.title = "Jupe"
+
+            unread = 0
+          query = Messages.find(channel: "##{@params.channel}")
+          init = true
+          query.observeChanges
+            added: (id, message) =>
+              unless init
+                beepAndNotify(id, message)
+                unless document.hasFocus()
+                  unread += 1
+                  window.document.title = "(#{unread}) Jupe"
+                unless Session.equals 'channel', message.channel
+                  channelUnread = Session.get("#{message.channel}.unread") or 0
+                  Session.set("#{message.channel}.unread", channelUnread + 1)
+          init = false
       else
-        @render('loading')
-        @render('channels', {to: 'channels'})
-        @render('channelHeader', {to: 'header'})
-        @render('users', {to: 'users'})
+        @render 'loading'
 
   @route 'mentions',
     path: '/channels/:channel/mentions'

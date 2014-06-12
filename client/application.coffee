@@ -16,26 +16,31 @@ Session.setDefault 'joinAfterLogin', null # Channel to join after signup/login
 
 @handlers =
   messages: {}
-  allMessages: null
-  joinedChannels: null
+  _messages: (channel) ->
+    Meteor.subscribe 'messages', channel, \
+    PERPAGE * Session.get('messages.page')
+  joinedChannels: ->
+    Meteor.subscribe 'joinedChannels'
+  allMessages: ->
+    Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
   publicChannels: null
   user: Meteor.subscribe 'users'
   #publicChannels: Meteor.subscribe 'publicChannels'
 
-Deps.autorun ->
-  console.log 'autorun sub'
-  console.log PERPAGE * Session.get('messages.page')
-  if Meteor.user()?
-    # Subscribe to all messages feed.
-    channels = (channel for channel of Meteor.user().profile.channels)
-    for channel in channels
-      console.log "Subscribe to #{channel}"
-      handlers.messages[channel] = \
-        Meteor.subscribe 'messages', channel, PERPAGE * Session.get('messages.page')
-    handlers.allMessages = Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
+@subscribeToChannelsAndMessages = ->
+  # Subscribe to all message feeds.
+  channels = (channel for channel of Meteor.user().profile.channels)
+  for channel in channels
+    handlers.messages[channel] = \
+      # FIXME: have specific page variable for each channel
+      Meteor.subscribe 'messages', channel, \
+      PERPAGE * Session.get('messages.page')
 
-    # Subscribed to joined channels (including private channels)
-    handlers.joinedChannels = Meteor.subscribe 'joinedChannels'
+  # Subscribe to all messages
+  handlers.allMessages = Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
+
+  # Subscribe to joined channels (including private channels)
+  handlers.joinedChannels = Meteor.subscribe 'joinedChannels'
 
 ########## Startup ##########
 
