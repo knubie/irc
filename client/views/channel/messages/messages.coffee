@@ -50,7 +50,7 @@ Template.messages.rendered = ->
   $(window).on 'scroll', rememberScrollPosition
 
   # Hover isolates messages from like channels
-  unless @channel?
+  unless @data.channel?
     $(document).on
       mouseenter: ->
         $(".message")
@@ -65,12 +65,13 @@ Template.messages.rendered = ->
 
 Template.messages.helpers
   messages: ->
+    console.log @
     selector = {}
     if @channel?
-      selector.channel = @channel.name
+      selector.channel = @channel().name
       if Meteor.user()?
         selector.from =
-          $nin: Meteor.user().profile.channels[@channel.name].ignore
+          $nin: Meteor.user().profile.channels[@channel().name].ignore
     if @pm?
       selector['$or'] = [{to:@pm, from:Meteor.user()?.username}, {from:@pm, to:Meteor.user()?.username}]
 
@@ -81,7 +82,7 @@ Template.messages.helpers
     #Session.get('skip') > 0
 
   url_channel: ->
-    @channel.name.match(/^(#)?(.*)$/)[2]
+    @channel().name.match(/^(#)?(.*)$/)[2]
 
 Template.messages.events
   'click .load-more': (e,t) ->
@@ -89,7 +90,7 @@ Template.messages.events
 
   'click .login-from-channel': (e,t) ->
     # Remember this channel so we can join it after logging in
-    Session.set('joinAfterLogin', @channel.name)
+    Session.set('joinAfterLogin', @channel().name)
 
 ########## Message ##########
 
@@ -169,7 +170,7 @@ Template.message.events
   'click .ignore-action': ->
     if confirm("Are you sure you want to ignore #{@from}? (You can un-ignore them later in your channel settings.)")
       update Meteor.users, Meteor.userId()
-      , "profile.channels.#{@channel}.ignore"
+      , "profile.channels.#{@channel()}.ignore"
       , (ignore) =>
         ignore.push @from
         _.uniq ignore
@@ -179,19 +180,19 @@ Template.message.events
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $messagesFromOtherChannels = \
-        $('.message').not("[data-channel='#{@channel}']")
-      ch = Channels.findOne {name: @channel}
+        $('.message').not("[data-channel='#{@channel()}']")
+      ch = Channels.findOne {name: @channel()}
       # If there are any message to slideToggle...
       if $messagesFromOtherChannels.length > 0 and not Modernizr.touch
         $messagesFromOtherChannels.slideToggle 400, =>
-          if @channel.isChannel()
-            channel = @channel.match(/^(#)?(.*)$/)[2]
+          if @channel().isChannel()
+            channel = @channel().match(/^(#)?(.*)$/)[2]
             Router.go 'channel', {channel}
           else
             Router.go 'messages', {user:@from}
       else # No messages to slideToggle
-        if @channel.isChannel()
-          channel = @channel.match(/^(#)?(.*)$/)[2]
+        if @channel().isChannel()
+          channel = @channel().match(/^(#)?(.*)$/)[2]
           Router.go 'channel', {channel}
         else
           Router.go 'messages', {user:@from}
@@ -204,13 +205,13 @@ Template.message.events
     #TODO: Hide messages mentioning other users.
 
   'click .kick': (e, t) ->
-    Meteor.call 'kick', Meteor.user(), @channel, @from
+    Meteor.call 'kick', Meteor.user(), @channel(), @from
 
   'click .ban': (e, t) ->
     if confirm("Are you sure you want to ban #{@from} from the channel? (You can un-ban them later in the channel settings.)")
-      Meteor.call 'kick', Meteor.user(), @channel, @from, ''
-      Meteor.call 'mode', Meteor.user(), @channel, '+b', @from
-      update Channels, Channels.findOne({name: @channel})._id
+      Meteor.call 'kick', Meteor.user(), @channel(), @from, ''
+      Meteor.call 'mode', Meteor.user(), @channel(), '+b', @from
+      update Channels, Channels.findOne({name: @channel()})._id
       , "bans"
       , (bans) =>
         bans.push @from

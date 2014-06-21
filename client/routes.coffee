@@ -89,11 +89,12 @@ Router.map ->
         Session.set 'channel', null
     waitOn: ->
       [ handlers._messages("##{@params.channel}")
-        handlers.joinedChannels()]
+        handlers.joinedChannels() ]
     data: ->
       {
-        channel: Channels.findOne({name: "##{@params.channel}"}) or \
-          {name: "##{@params.channel}", private: true}
+        channel: => Channels.findOne name: "##{@params.channel}"
+        #channel: Channels.findOne({name: "##{@params.channel}"}) or \
+          #{name: "##{@params.channel}", private: true}
         pm: null
       }
     action: ->
@@ -158,8 +159,8 @@ Router.map ->
   @route 'settings',
     path: '/channels/:channel/settings'
     layoutTemplate: 'channel_layout'
-    loadingTemplate: 'loading'
-    fastRender: true
+    template: 'settings'
+    #fastRender: true
     yieldTemplates:
       'channels': {to: 'channels'}
       'channelHeader': {to: 'header'}
@@ -170,16 +171,18 @@ Router.map ->
     onStop: ->
       Session.set 'subPage', null
     waitOn: ->
-      joinedChannels = null
-      if Meteor.isClient
-        {joinedChannels} = handlers
-      joinedChannels ?= Meteor.subscribe 'joinedChannels'
+      handlers.joinedChannels()
     data: ->
       {
-        channel: Channels.findOne({name: "##{@params.channel}"})
+        channel: => Channels.findOne name: "##{@params.channel}"
         pm: null
         subpage: 'settings'
       }
+    action: ->
+      if @ready()
+        @render()
+      else
+        @render 'loading'
 
   @route 'messages',
     path: '/messages/:user'

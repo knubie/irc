@@ -21,7 +21,7 @@ Template.say.events
       # if /me action
       if /^\/me(.*)$/.test message
         Messages.insert
-          channel: @channel.name
+          channel: @channel().name
           text: "#{Meteor.user().username} #{message.replace /^\/me\s*/g, ''}"
           mobile: Modernizr.touch and $(window).width() < 768
           createdAt: new Date()
@@ -40,9 +40,9 @@ Template.say.events
  
       else
         # Server sends message to IRC before insert.
-        if @channel? # Sending to channel
+        if @channel()? # Sending to channel
           Messages.insert
-            channel: @channel.name
+            channel: @channel().name
             text: message
             mobile: Modernizr.touch and $(window).width() < 768
             createdAt: new Date()
@@ -61,7 +61,7 @@ Template.say.events
       # [2] == the partial nick.
       if matches = message.match nickregex
         if autoNickList.length < 1
-          nicks = (nick for nick of @channel.nicks)
+          nicks = (nick for nick of @channel().nicks)
           autoNickList = nicks.filter (nick, i, arr) ->
             nick.match(new RegExp("^#{matches[2]}", 'i'))
           # append the original partial nick to the end of the list.
@@ -107,9 +107,9 @@ Template.say.helpers
     user = Meteor.user()
     if @pm?
       true
-    else if @channel?
-      @channel.hasUser(user.username) \
-      and not @channel.isModerated() \
-      or (@channel.isModerated() and @channel.nicks[user.username] is '@')
+    else if @channel()?
+      @channel().hasUser(user.username) \
+      and not @channel().isModerated() \
+      or (@channel().isModerated() and @channel().nicks[user.username] is '@')
     else
       false

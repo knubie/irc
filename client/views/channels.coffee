@@ -1,14 +1,14 @@
 Template.channelHeader.helpers
   channelURL: ->
-    @channel?.name.match(/^(#)?(.*)$/)[2]
+    @channel()?.name.match(/^(#)?(.*)$/)[2]
   mentionsPath: ->
-    Router.routes['mentions'].path({channel: @channel?.name.match(/^.(.*)$/)[1]})
+    Router.routes['mentions'].path({channel: @channel()?.name.match(/^.(.*)$/)[1]})
   settingsPath: ->
-    Router.routes['settings'].path({channel: @channel?.name.match(/^.(.*)$/)[1]})
+    Router.routes['settings'].path({channel: @channel()?.name.match(/^.(.*)$/)[1]})
   op_status: ->
-    @channel?.nicks?[Meteor.user()?.username] is '@'
+    @channel()?.nicks?[Meteor.user()?.username] is '@'
   unread_mentions: ->
-    Meteor.user().profile.channels[@channel?.name]?.mentions?.length or ''
+    Meteor.user().profile.channels[@channel()?.name]?.mentions?.length or ''
   mentionsActive: ->
     if Session.equals('subPage', 'mentions')
       return 'active'
@@ -20,15 +20,15 @@ Template.channelHeader.helpers
     else
       return ''
   private: ->
-    ch = Channels.findOne(name: @channel?.name)
-    if ch?
-      's' in ch.modes or 'i' in ch.modes
+    console.log @
+    if @channel()?
+      's' in @channel().modes or 'i' in @channel().modes
     else
       no
   readonly: ->
-    ch = Channels.findOne(name: @channel?.name)
-    if ch?
-      'm' in ch.modes
+    ch = Channels.findOne(name: @channel()?.name)
+    if @channel()?
+      'm' in @channel().modes
     else
       no
   muted: ->
@@ -41,7 +41,6 @@ Template.channelHeader.helpers
       return 'Mute'
     else
       return 'Unmute'
-
 
 Template.channelHeader.events
   'click .topic-edit > a': (e, t) ->
@@ -57,7 +56,7 @@ Template.channelHeader.events
   'submit #topic-form': (e,t) ->
     e.preventDefault()
     topic = t.find('#topic-name').value
-    Meteor.call 'topic', Meteor.user(), @channel._id, topic
+    Meteor.call 'topic', Meteor.user(), @channel()._id, topic
     $('.topic').show()
     $('#topic-form').hide()
 
@@ -67,7 +66,7 @@ Template.channelHeader.events
   'submit #invite-form': (e,t) ->
     e.preventDefault()
     username = t.find('#invite-username').value
-    Meteor.call 'invite', Meteor.user(), @channel.name, username
+    Meteor.call 'invite', Meteor.user(), @channel().name, username
     t.find('#invite-username').value = ''
     $('.invite-dropdown').dropdown('toggle')
 
@@ -75,22 +74,22 @@ Template.channelHeader.events
 
   'click .user-count': (e,t) ->
     if $('.user-list-container').is(':visible')
-      localStorage.setItem "#{@channel.name}.userList", false
+      localStorage.setItem "#{@channel().name}.userList", false
       userListDep.changed()
 
       #scrollToPlace() # Keep scroll position when template rerenders
     else
-      localStorage.setItem "#{@channel.name}.userList", true
+      localStorage.setItem "#{@channel().name}.userList", true
       userListDep.changed()
 
       #scrollToPlace() # Keep scroll position when template rerenders
 
   'click .leave-channel': ->
-    Meteor.call 'part', Meteor.user().username, @channel.name
+    Meteor.call 'part', Meteor.user().username, @channel().name
     update Meteor.users, Meteor.userId()
     , "profile.channels"
     , (channels) =>
-      delete channels[@channel.name]
+      delete channels[@channel().name]
       return channels
     Router.go 'home'
   
@@ -103,20 +102,20 @@ Template.channelHeader.events
     Meteor.users.update Meteor.userId(),
       $set: 'profile.sounds': not Meteor.user().profile.sounds
 
-      
 ########## Channels ##########
 
 Template.channels.helpers
   channels: ->
+    console.log @
     if Meteor.user()
       ({name: channel, channel: @channel} for channel of Meteor.user().profile.channels)
     else
-      @channel.name
+      [{name: channel, channel: @channel}]
   pms: ->
     #(pm for pm of Meteor.user().profile.pms)
     ({name: user, pm: @pm} for user of Meteor.user().profile.pms)
   all: ->
-    if @channel or @pm then '' else 'selected'
+    if @channel? or @pm then '' else 'selected'
 
 Template.channels.events
   'click .new-channel-link': (e, t) ->
@@ -155,23 +154,22 @@ Template.channel.events
     , (channels) =>
       delete channels[@name]
       return channels
-    if @name is @channel.name
+    if @name is @channel().name
       Router.go 'home'
 
 Template.channel.helpers
   selected: ->
-    if @channel?.name is @name then 'selected' else ''
+    if @channel?().name is @name then 'selected' else ''
     #if Session.equals 'channel', @name then 'selected' else ''
   private: ->
-    ch = Channels.findOne(name: @name)
-    if ch?
-      's' in ch.modes or 'i' in ch.modes
+    console.log @
+    if @channel?
+      's' in @channel().modes or 'i' in @channel().modes
     else
       no
   readonly: ->
-    ch = Channels.findOne(name: @name)
-    if ch?
-      'm' in ch.modes
+    if @channel?
+      'm' in @channel().modes
     else
       no
   hashlessName: ->
@@ -213,20 +211,15 @@ Template.pm.events
 
 ########## Settings ##########
 
-Template.settings.helpers
-  channelPath: ->
-    console.log @
-    Router.routes['channel'].path({channel: @channel.name.match(/^.(.*)$/)[1]})
-
 ########## Kicked ##########
 
 Template.kicked.events
   'click .rejoin': ->
-    console.log @channel.name
+    console.log @channel().name
     update Meteor.users, Meteor.userId(), "profile.channels"
     , (channels) =>
-      channels[@channel.name].kicked = no
+      channels[@channel().name].kicked = no
       return channels
-    Meteor.call 'join', Meteor.user().username, @channel.name
+    Meteor.call 'join', Meteor.user().username, @channel().name
 
 
