@@ -45,3 +45,6 @@ Template.settings.events
       Meteor.call 'mode', Meteor.user(), @channel().name, '-m'
     else
       Meteor.call 'mode', Meteor.user(), @channel().name, '+m'
+
+Template.settings.rendered = ->
+  $(window).scrollTop 0

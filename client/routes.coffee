@@ -109,24 +109,8 @@ Router.map ->
         else
           @render()
           Session.set("##{@params.channel}.unread", 0)
-          unread = 0
           $(window).focus ->
             window.document.title = "Jupe"
-
-            unread = 0
-          query = Messages.find(channel: "##{@params.channel}")
-          init = true
-          query.observeChanges
-            added: (id, message) =>
-              unless init
-                beepAndNotify(id, message)
-                unless document.hasFocus()
-                  unread += 1
-                  window.document.title = "(#{unread}) Jupe"
-                unless Session.equals 'channel', message.channel
-                  channelUnread = Session.get("#{message.channel}.unread") or 0
-                  Session.set("#{message.channel}.unread", channelUnread + 1)
-          init = false
       else
         @render 'loading'
 

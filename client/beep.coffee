@@ -2,8 +2,8 @@
 
 # beep :: Action(UI)
 beep = (message) ->
-  # Check if sounds are enabled in the user profile.
-  if Meteor.user().profile.sounds \
+  if Session.equals 'channel', message.channel \
+  and Meteor.user().profile.sounds \
   and notIgnored(message) \
   and message.from isnt Meteor.user().username
     $('#beep')[0].play() # Play beep sound
@@ -53,3 +53,20 @@ dispatchNotification = _.compose sendNotification, shouldSendNotification
 
 ########## Beeps / Notifications ##########
 
+init = true
+unread = 0
+$(window).focus ->
+  unread = 0
+  window.document.title = "Jupe"
+Messages.find({}).observeChanges
+  added: (id, message) =>
+    unless init
+      beepAndNotify(id, message)
+      unless document.hasFocus()
+        unread++
+        window.document.title = "(#{unread}) Jupe"
+      unless Session.equals 'channel', message.channel
+        console.log 'unread'
+        channelUnread = Session.get("#{message.channel}.unread") or 0
+        Session.set("#{message.channel}.unread", channelUnread + 1)
+init = false
