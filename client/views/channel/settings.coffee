@@ -7,6 +7,9 @@ Template.settings.helpers
     if 's' in @channel().modes or 'i' in @channel().modes then 'checked' else ''
   readonly_checked: ->
     if 'm' in @channel().modes then 'checked' else ''
+  back: ->
+    Router.routes['channel']
+      .path({channel: @channel().name.match(/^.(.*)$/)[1]})
 
 Template.settings.events
   'submit #topic-form-settings': (e,t) ->
