@@ -65,7 +65,6 @@ Template.messages.rendered = ->
 
 Template.messages.helpers
   messages: ->
-    console.log @
     selector = {}
     if @channel?
       selector.channel = @channel().name

@@ -4,6 +4,7 @@
     "collection-hooks": {},
     "iron-router": {},
     "npm": {},
-    "gravatar": {}
+    "gravatar": {},
+    "subs-manager": {}
   }
 }

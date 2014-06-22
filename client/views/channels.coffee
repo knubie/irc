@@ -20,7 +20,6 @@ Template.channelHeader.helpers
     else
       return ''
   private: ->
-    console.log @
     if @channel()?
       's' in @channel().modes or 'i' in @channel().modes
     else
@@ -106,7 +105,6 @@ Template.channelHeader.events
 
 Template.channels.helpers
   channels: ->
-    console.log @
     if Meteor.user()
       ({name: channel, channel: @channel} for channel of Meteor.user().profile.channels)
     else
@@ -162,7 +160,6 @@ Template.channel.helpers
     if @channel?().name is @name then 'selected' else ''
     #if Session.equals 'channel', @name then 'selected' else ''
   private: ->
-    console.log @
     if @channel?
       's' in @channel().modes or 'i' in @channel().modes
     else

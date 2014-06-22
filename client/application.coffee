@@ -14,10 +14,18 @@ Session.setDefault 'joinAfterLogin', null # Channel to join after signup/login
 
 ########## Subscriptions ##########
 
+subs = new SubsManager
+  # will be cached only 20 recently used subscriptions
+  cacheLimit: 20,
+  # any subscription will be expired after 5 minutes of inactivity
+  expireIn: 5
+
 @handlers =
   messages: {}
   _messages: (channel) ->
-    Meteor.subscribe 'messages', channel, \
+    #Meteor.subscribe 'messages', channel, \
+    #PERPAGE * Session.get('messages.page')
+    subs.subscribe 'messages', channel, \
     PERPAGE * Session.get('messages.page')
   joinedChannels: ->
     Meteor.subscribe 'joinedChannels'
