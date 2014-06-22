@@ -160,15 +160,11 @@ Template.channel.helpers
     if @channel?().name is @name then 'selected' else ''
     #if Session.equals 'channel', @name then 'selected' else ''
   private: ->
-    if @channel?
-      's' in @channel().modes or 'i' in @channel().modes
-    else
-      no
+    channel = Channels.findOne name: @name
+    's' in channel?.modes or 'i' in channel?.modes
   readonly: ->
-    if @channel?
-      'm' in @channel().modes
-    else
-      no
+    channel = Channels.findOne name: @name
+    'm' in channel?.modes
   hashlessName: ->
     @name.match(/^(.)(.*)$/)[2]
   url: ->
@@ -176,8 +172,7 @@ Template.channel.helpers
   unread: ->
     Session.get("#{@name}.unread") or ''
   unread_mentions: ->
-    if Meteor.user()
-      Meteor.user().profile.channels[@name].mentions?.length or ''
+    Meteor.user()?.profile.channels[@name].mentions?.length or ''
 
 Template.pm.helpers
   name: -> @name

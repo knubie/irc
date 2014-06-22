@@ -12,7 +12,7 @@ Handlebars.registerHelper 'channelCol', ->
 Template.users.helpers
   users: ->
     if @channel?
-      ({nick, realName: Meteor.users.findOne(username:nick)?.profile.realName, flag} for nick, flag of @channel.nicks).sort()
+      ({nick, realName: Meteor.users.findOne(username:nick)?.profile.realName, flag} for nick, flag of @channel().nicks).sort()
   away: ->
     Meteor.users.findOne({username: @nick}) \
     and not Meteor.users.findOne({username: @nick}).status?.online
