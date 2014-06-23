@@ -109,8 +109,11 @@ Router.map ->
         else
           @render()
           Session.set("##{@params.channel}.unread", 0)
-          $(window).focus ->
-            window.document.title = "Jupe"
+
+          update Meteor.users, Meteor.userId()
+          , "profile.channels.##{@params.channel}.mentions"
+          , (mentions) ->
+            return []
       else
         @render 'loading'
 
