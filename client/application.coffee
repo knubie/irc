@@ -27,13 +27,23 @@ subs = new SubsManager
     #PERPAGE * Session.get('messages.page')
     subs.subscribe 'messages', channel, \
     PERPAGE * Session.get('messages.page')
-  joinedChannels: ->
-    Meteor.subscribe 'joinedChannels'
-  allMessages: ->
+  _joinedChannels: ->
+    subs.subscribe 'joinedChannels'
+  joinedChannels: subs.subscribe 'joinedChannels'
+  _allMessages: ->
     Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
+  allMessages: Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
   publicChannels: null
   user: Meteor.subscribe 'users'
   #publicChannels: Meteor.subscribe 'publicChannels'
+
+# Subscribe to all message feeds.
+channels = (channel for channel of Meteor.user().profile.channels)
+for channel in channels
+  handlers.messages[channel] = \
+    # FIXME: have specific page variable for each channel
+    Meteor.subscribe 'messages', channel, \
+    PERPAGE * Session.get('messages.page')
 
 @subscribeToChannelsAndMessages = ->
   # Subscribe to all message feeds.

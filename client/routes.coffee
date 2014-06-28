@@ -88,8 +88,8 @@ Router.map ->
         Meteor.clearInterval @timeAgoInterval
         Session.set 'channel', null
     waitOn: ->
-      [ handlers._messages("##{@params.channel}")
-        handlers.joinedChannels() ]
+      [ handlers._messages["##{@params.channel}"]
+        handlers.joinedChannels ]
     data: ->
       {
         channel: => Channels.findOne name: "##{@params.channel}"
