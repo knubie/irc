@@ -22,6 +22,13 @@ subs = new SubsManager
 
 @handlers =
   messages: {}
+  messagesReady: ->
+    ready = true
+    for channel, handler of handlers.messages
+      console.log handler
+      unless handler.ready()
+        ready = false
+    return ready
   _messages: (channel) ->
     #Meteor.subscribe 'messages', channel, \
     #PERPAGE * Session.get('messages.page')
@@ -32,7 +39,7 @@ subs = new SubsManager
   joinedChannels: subs.subscribe 'joinedChannels'
   _allMessages: ->
     Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
-  allMessages: Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
+  #allMessages: Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
   publicChannels: null
   user: Meteor.subscribe 'users'
   #publicChannels: Meteor.subscribe 'publicChannels'

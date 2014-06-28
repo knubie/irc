@@ -114,6 +114,8 @@ Router.map ->
           , "profile.channels.##{@params.channel}.mentions"
           , (mentions) ->
             return []
+
+          observeBeeps()
       else
         @render 'loading'
 

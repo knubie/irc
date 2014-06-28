@@ -2,7 +2,7 @@
 
 # beep :: Action(UI)
 beep = (message) ->
-  if Session.equals 'channel', message.channel \
+  if Session.equals('channel', message.channel) \
   and Meteor.user().profile.sounds \
   and notIgnored(message) \
   and message.from isnt Meteor.user().username
@@ -48,25 +48,27 @@ sendNotification = (params) ->
 # dispatchNotification :: Message -> Action(UI)
 dispatchNotification = _.compose sendNotification, shouldSendNotification
 
-@beepAndNotify = (id, message) ->
+beepAndNotify = (id, message) ->
   _.compose(dispatchNotification, beep) message
 
 ########## Beeps / Notifications ##########
 
-init = true
-unread = 0
-$(window).focus ->
+@observeBeeps = ->
+  init = true
   unread = 0
-  window.document.title = "Jupe"
-Messages.find({}).observeChanges
-  added: (id, message) =>
-    unless init
-      beepAndNotify(id, message)
-      unless document.hasFocus()
-        unread++
-        window.document.title = "(#{unread}) Jupe"
-      unless Session.equals 'channel', message.channel
-        console.log 'unread'
-        channelUnread = Session.get("#{message.channel}.unread") or 0
-        Session.set("#{message.channel}.unread", channelUnread + 1)
-init = false
+  $(window).focus ->
+    console.log 'window focus'
+    unread = 0
+    window.document.title = "Jupe"
+  Messages.find().observeChanges
+    added: (id, message) =>
+      unless init
+        console.log "added #{message.channel}"
+        beepAndNotify(id, message)
+        unless document.hasFocus()
+          unread++
+          window.document.title = "(#{unread}) Jupe"
+        unless Session.equals 'channel', message.channel
+          channelUnread = Session.get("#{message.channel}.unread") or 0
+          Session.set("#{message.channel}.unread", channelUnread + 1)
+  init = false
