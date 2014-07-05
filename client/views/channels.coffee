@@ -161,7 +161,7 @@ Template.channel.helpers
     #if Session.equals 'channel', @name then 'selected' else ''
   private: ->
     channel = Channels.findOne name: @name
-    's' in channel?.modes or 'i' in channel?.modes
+    's' in channel.modes or 'i' in channel.modes
   readonly: ->
     channel = Channels.findOne name: @name
     'm' in channel?.modes
@@ -207,7 +207,6 @@ Template.pm.events
 
 Template.kicked.events
   'click .rejoin': ->
-    console.log @channel().name
     update Meteor.users, Meteor.userId(), "profile.channels"
     , (channels) =>
       channels[@channel().name].kicked = no

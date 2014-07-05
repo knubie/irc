@@ -57,13 +57,11 @@ beepAndNotify = (id, message) ->
   init = true
   unread = 0
   $(window).focus ->
-    console.log 'window focus'
     unread = 0
     window.document.title = "Jupe"
   Messages.find().observeChanges
     added: (id, message) =>
       unless init
-        console.log "added #{message.channel}"
         beepAndNotify(id, message)
         unless document.hasFocus()
           unread++

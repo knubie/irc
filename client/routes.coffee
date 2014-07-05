@@ -191,8 +191,8 @@ Router.map ->
             pms[@params.user] = {unread: []}
             return pms
     waitOn: ->
-      handlers.messages = \
-      Meteor.subscribe 'privateMessages', @params.user, PERPAGE * (Session.get('messages.page') + 1)
+      [ handlers.pms("#{@params.user}")
+        handlers.joinedChannels ]
     data: ->
       {
         channel: null

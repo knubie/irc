@@ -50,7 +50,7 @@ Template.messages.rendered = ->
   $(window).on 'scroll', rememberScrollPosition
 
   # Hover isolates messages from like channels
-  unless @data.channel?
+  unless @data?.channel?
     $(document).on
       mouseenter: ->
         $(".message")

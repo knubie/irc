@@ -29,6 +29,9 @@ subs = new SubsManager
       unless handler.ready()
         ready = false
     return ready
+  pms: (from) ->
+    subs.subscribe 'privateMessages', from, \
+    PERPAGE * Session.get('messages.page')
   _messages: (channel) ->
     #Meteor.subscribe 'messages', channel, \
     #PERPAGE * Session.get('messages.page')
