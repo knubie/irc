@@ -154,7 +154,7 @@ Template.message.rendered = ->
             string.text = string.text.replace regex.nick(nick), "$1<a href=\"/users/$2\">$2</a>$3"
         string.text.replace(/\*\*([^\*]*)\*\*/g, "<strong>$1</strong>")
         .replace(/\*([^\*]*)\*/g, "<em>$1</em>")
-        .replace(/_([^_]*)_/g, '<span class="underline">$1</span>')
+        .replace(/_(?!([^<]+)?>)([^_]*)_(?!([^<]+)?>)/g, '<span class="underline">$2</span>')
 
   p.html(ptext.join(''))
 
