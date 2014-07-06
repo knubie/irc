@@ -43,8 +43,8 @@ Router.map ->
     yieldTemplates:
       'channels': {to: 'channels'}
     waitOn: ->
-      [ handlers.allMessages()
-        handlers.joinedChannels() ]
+      [ handlers._allMessages()
+        handlers._joinedChannels() ]
     action: ->
       if @ready()
         @render()
