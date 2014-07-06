@@ -160,7 +160,7 @@ Router.map ->
     onStop: ->
       Session.set 'subPage', null
     waitOn: ->
-      handlers.joinedChannels()
+      handlers._joinedChannels()
     data: ->
       {
         channel: => Channels.findOne name: "##{@params.channel}"
