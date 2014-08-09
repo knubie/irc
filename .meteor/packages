@@ -15,7 +15,6 @@ collection-hooks
 iron-router
 npm
 http
-blaze-layout
 timesync
 gravatar
 email
