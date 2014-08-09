@@ -36,7 +36,7 @@ class @Bot extends Client
   connect: (channels) ->
     # Connect to the IRC network.
     super async =>
-      console.log "connected #{@username}"
+      console.log "Connected #{@username}"
       Meteor.users.update @_id, $set: {'profile.connection': on}
       # Set connecting status to on.
       if channels?

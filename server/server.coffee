@@ -16,7 +16,7 @@ Meteor.startup ->
 
   Meteor.users.find().forEach (user) ->
     # if lastLogin was less than 30 days ago.
-    if (new Date().getTime() - user.status.lastLogin)/1000/60/60/24 < 30
+    if (new Date().getTime() - user.status.lastLogin.date)/1000/60/60/24 < 30
       # Connect to IRC
       Meteor.call 'connect', user.username, user._id
       #FIXME: why won't this work?
