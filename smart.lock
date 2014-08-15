@@ -7,7 +7,8 @@
       "iron-router": {},
       "npm": {},
       "gravatar": {},
-      "subs-manager": {}
+      "subs-manager": {},
+      "kadira": {}
     },
     "packages": {
       "user-status": {
@@ -39,6 +40,11 @@
         "git": "https://github.com/meteorhacks/subs-manager.git",
         "tag": "v1.0.2",
         "commit": "029236aa004062cc10d8c04e79907d6fe223ecf7"
+      },
+      "kadira": {
+        "git": "https://github.com/meteorhacks/kadira.git",
+        "tag": "v2.4.13",
+        "commit": "1f3c1a427084af5a2eca2e299eb65bc01387df8a"
       },
       "timesync": {
         "git": "https://github.com/mizzao/meteor-timesync.git",

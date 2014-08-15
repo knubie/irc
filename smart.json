@@ -5,6 +5,7 @@
     "iron-router": {},
     "npm": {},
     "gravatar": {},
-    "subs-manager": {}
+    "subs-manager": {},
+    "kadira": {}
   }
 }
