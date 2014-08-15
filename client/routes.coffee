@@ -105,7 +105,7 @@ Router.map ->
         if isKicked
           @render('kicked')
         else if isPrivate
-          @render('kicked')
+          @render('private')
         else
           @render()
           Session.set("##{@params.channel}.unread", 0)

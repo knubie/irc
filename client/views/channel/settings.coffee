@@ -31,7 +31,7 @@ Template.settings.events
 
   'click .close': (e,t) ->
     update Meteor.users, Meteor.userId()
-    , "profile.channels.#{Session.get('channel').name}.ignore"
+    , "profile.channels.#{Session.get('channel')}.ignore"
     , (ignore) => _.reject ignore, (nick) => nick is "#{@}"
 
   'click label.checkbox[for="privateCheckbox"]': (e,t) ->

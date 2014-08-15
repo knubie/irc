@@ -169,7 +169,7 @@ Template.message.events
   'click .ignore-action': ->
     if confirm("Are you sure you want to ignore #{@from}? (You can un-ignore them later in your channel settings.)")
       update Meteor.users, Meteor.userId()
-      , "profile.channels.#{@channel()}.ignore"
+      , "profile.channels.#{@channel}.ignore"
       , (ignore) =>
         ignore.push @from
         _.uniq ignore
@@ -179,19 +179,19 @@ Template.message.events
       # Slide toggle all messages not belonging to clicked channel
       # and set session to the new channel.
       $messagesFromOtherChannels = \
-        $('.message').not("[data-channel='#{@channel()}']")
-      ch = Channels.findOne {name: @channel()}
+        $('.message').not("[data-channel='#{@channel}']")
+      ch = Channels.findOne {name: @channel}
       # If there are any message to slideToggle...
       if $messagesFromOtherChannels.length > 0 and not Modernizr.touch
         $messagesFromOtherChannels.slideToggle 400, =>
-          if @channel().isChannel()
-            channel = @channel().match(/^(#)?(.*)$/)[2]
+          if @channel.isChannel()
+            channel = @channel.match(/^(#)?(.*)$/)[2]
             Router.go 'channel', {channel}
           else
             Router.go 'messages', {user:@from}
       else # No messages to slideToggle
-        if @channel().isChannel()
-          channel = @channel().match(/^(#)?(.*)$/)[2]
+        if @channel.isChannel()
+          channel = @channel.match(/^(#)?(.*)$/)[2]
           Router.go 'channel', {channel}
         else
           Router.go 'messages', {user:@from}
@@ -204,13 +204,14 @@ Template.message.events
     #TODO: Hide messages mentioning other users.
 
   'click .kick': (e, t) ->
-    Meteor.call 'kick', Meteor.user(), @channel(), @from
+    console.log "Click kick"
+    Meteor.call 'kick', Meteor.user(), @channel, @from
 
   'click .ban': (e, t) ->
     if confirm("Are you sure you want to ban #{@from} from the channel? (You can un-ban them later in the channel settings.)")
-      Meteor.call 'kick', Meteor.user(), @channel(), @from, ''
-      Meteor.call 'mode', Meteor.user(), @channel(), '+b', @from
-      update Channels, Channels.findOne({name: @channel()})._id
+      Meteor.call 'kick', Meteor.user(), @channel, @from, ''
+      Meteor.call 'mode', Meteor.user(), @channel, '+b', @from
+      update Channels, Channels.findOne({name: @channel})._id
       , "bans"
       , (bans) =>
         bans.push @from
