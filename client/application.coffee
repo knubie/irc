@@ -25,7 +25,6 @@ subs = new SubsManager
   messagesReady: ->
     ready = false
     for channel, handler of handlers.messages
-      console.log handler
       if handler.ready()
         ready = true
       else
@@ -50,15 +49,18 @@ subs = new SubsManager
   user: Meteor.subscribe 'users'
   #publicChannels: Meteor.subscribe 'publicChannels'
 
-Deps.autorun ->
-  if Meteor.user()?
-    # Subscribe to all message feeds.
-    channels = (channel for channel of Meteor.user().profile.channels)
-    for channel in channels
-      handlers.messages[channel] = \
-        # FIXME: have specific page variable for each channel
-        Meteor.subscribe 'messages', channel, \
-        PERPAGE * Session.get('messages.page')
+#Deps.autorun ->
+  #if Meteor.user()?
+    ## Subscribe to all message feeds.
+    #channels = (channel for channel of Meteor.user().profile.channels)
+    #for channel in channels
+      #handlers.messages[channel] = \
+        ## FIXME: have specific page variable for each channel
+        #Meteor.subscribe 'messages', channel, \
+        #PERPAGE * Session.get('messages.page')
+      #console.log handlers.messages[channel].ready()
+    #console.log 'done subscribing to messages'
+    #console.log handlers.messages
 
 @subscribeToChannelsAndMessages = ->
   # Subscribe to all message feeds.
