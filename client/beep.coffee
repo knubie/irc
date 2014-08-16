@@ -53,13 +53,13 @@ beepAndNotify = (id, message) ->
 
 ########## Beeps / Notifications ##########
 
+init = true
+unread = 0
+$(window).focus ->
+  unread = 0
+  window.document.title = "Jupe"
 Deps.autorun ->
-  if handlers.messagesReady()
-    init = true
-    unread = 0
-    $(window).focus ->
-      unread = 0
-      window.document.title = "Jupe"
+  if handlers.allMessages.ready()
     Messages.find().observeChanges
       added: (id, message) =>
         unless init

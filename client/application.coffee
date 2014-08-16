@@ -45,7 +45,7 @@ subs = new SubsManager
   joinedChannels: subs.subscribe 'joinedChannels'
   _allMessages: ->
     Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
-  #allMessages: Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
+  allMessages: Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
   publicChannels: null
   user: Meteor.subscribe 'users'
   #publicChannels: Meteor.subscribe 'publicChannels'
