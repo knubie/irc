@@ -41,7 +41,7 @@ subs = new SubsManager
     PERPAGE * Session.get('messages.page')
   _joinedChannels: ->
     subs.subscribe 'joinedChannels'
-  joinedChannels: subs.subscribe 'joinedChannels'
+  joinedChannels: Meteor.subscribe 'joinedChannels'
   _allMessages: ->
     Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
   allMessages: Meteor.subscribe 'allMessages', Meteor.userId(), PERPAGE
@@ -58,9 +58,6 @@ subs = new SubsManager
         ## FIXME: have specific page variable for each channel
         #Meteor.subscribe 'messages', channel, \
         #PERPAGE * Session.get('messages.page')
-      #console.log handlers.messages[channel].ready()
-    #console.log 'done subscribing to messages'
-    #console.log handlers.messages
 
 @subscribeToChannelsAndMessages = ->
   # Subscribe to all message feeds.
