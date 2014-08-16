@@ -53,20 +53,21 @@ beepAndNotify = (id, message) ->
 
 ########## Beeps / Notifications ##########
 
-@observeBeeps = ->
-  init = true
-  unread = 0
-  $(window).focus ->
+Deps.autorun ->
+  if handlers.messagesReady()
+    init = true
     unread = 0
-    window.document.title = "Jupe"
-  Messages.find().observeChanges
-    added: (id, message) =>
-      unless init
-        beepAndNotify(id, message)
-        unless document.hasFocus()
-          unread++
-          window.document.title = "(#{unread}) Jupe"
-        unless Session.equals 'channel', message.channel
-          channelUnread = Session.get("#{message.channel}.unread") or 0
-          Session.set("#{message.channel}.unread", channelUnread + 1)
-  init = false
+    $(window).focus ->
+      unread = 0
+      window.document.title = "Jupe"
+    Messages.find().observeChanges
+      added: (id, message) =>
+        unless init
+          beepAndNotify(id, message)
+          unless document.hasFocus()
+            unread++
+            window.document.title = "(#{unread}) Jupe"
+          unless Session.equals 'channel', message.channel
+            channelUnread = Session.get("#{message.channel}.unread") or 0
+            Session.set("#{message.channel}.unread", channelUnread + 1)
+    init = false

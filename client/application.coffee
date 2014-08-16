@@ -23,11 +23,14 @@ subs = new SubsManager
 @handlers =
   messages: {}
   messagesReady: ->
-    ready = true
+    ready = false
     for channel, handler of handlers.messages
       console.log handler
-      unless handler.ready()
+      if handler.ready()
+        ready = true
+      else
         ready = false
+        break
     return ready
   pms: (from) ->
     subs.subscribe 'privateMessages', from, \

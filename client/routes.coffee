@@ -45,24 +45,6 @@ Router.map ->
     waitOn: ->
       [ handlers._allMessages()
         handlers._joinedChannels() ]
-    action: ->
-      if @ready()
-        @render()
-        query = Messages.find(channel: "##{@params.channel}")
-        init = true
-        query.observeChanges
-          added: (id, message) =>
-            unless init
-              beepAndNotify(id, message)
-              unless document.hasFocus()
-                unread += 1
-                window.document.title = "(#{unread}) Jupe"
-              unless Session.equals 'channel', message.channel
-                channelUnread = Session.get("#{message.channel}.unread") or 0
-                Session.set("#{message.channel}.unread", channelUnread + 1)
-        init = false
-      else
-        @render('loading')
 
   @route 'channel',
     path: '/channels/:channel'
@@ -88,7 +70,7 @@ Router.map ->
         Meteor.clearInterval @timeAgoInterval
         Session.set 'channel', null
     waitOn: ->
-      [ handlers._messages["##{@params.channel}"]
+      [ handlers._messages("##{@params.channel}")
         handlers.joinedChannels ]
     data: ->
       {
@@ -114,8 +96,6 @@ Router.map ->
           , "profile.channels.##{@params.channel}.mentions"
           , (mentions) ->
             return []
-
-          observeBeeps()
       else
         @render 'loading'
 
