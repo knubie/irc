@@ -120,8 +120,21 @@ class @Idletron extends Client
           return channels
 
     # Send a NAMES request when users joins, parts, or changes nick.
-    for event in ['join', 'part', 'nick', 'kick', 'quit']
-      @on event, async (channel) => @send 'NAMES', channel
+    # TODO: re-write the node irc api to be more consistent
+    @on 'join', async (channel, nick, message) => @send 'NAMES', channel
+    @on 'part', async (channel, nick, reason, message) => @send 'NAMES', channel
+    @on 'nick', async (oldnick, newnick, channels, message) =>
+      for channel in channels
+        @send 'NAMES', channels
+    @on 'kick', async (channel, nick, kicker, reason, message) =>
+      @send 'NAMES', channel
+    @on 'quit', async (nick, reason, channels, message) =>
+      for channel in channels
+        @send 'NAMES', channel
+    #for event in ['join', 'part', 'nick', 'kick', 'quit']
+      #@on event, async (channel, nick, message) =>
+        #console.log "#{event}: #{channel}"
+        #@send 'NAMES', channel
 
     @on 'part', async (channel, nick, reason, message) =>
       ch = Channels.findOne({name: channel})
