@@ -327,6 +327,13 @@ body
       h3
         display: inline
         font-size: 20px
+        +screen-xs
+          max-width: 52%
+          overflow-x: hidden
+          display: inline-block
+          margin: 0
+          height: 23px
+          margin-bottom: -4px
       .channel-name
         color: $foreground
         font-weight: bold
@@ -625,7 +632,7 @@ body
       img
         max-width: 100%
         max-height: 70vh
-        display: block
+        display: inline-block
         +screen-sm
           max-height: 50vh
       a
@@ -849,6 +856,8 @@ body
     left: -50%
     padding: 6px 20px 4px
     margin: 0
+    min-width: 230px
+    text-align: center
     a
       color: $clouds
       text-decoration: underline
